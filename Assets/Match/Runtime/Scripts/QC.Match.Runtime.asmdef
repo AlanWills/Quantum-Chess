@@ -1,0 +1,19 @@
+{
+    "name": "QC.Match.Runtime",
+    "rootNamespace": "QC.Match",
+    "references": [
+        "UnityEditor.UI",
+        "Celeste.Persistence",
+        "Celeste.Components",
+        "Celeste.BoardGame"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

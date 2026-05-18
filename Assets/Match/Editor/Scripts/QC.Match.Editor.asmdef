@@ -1,0 +1,21 @@
+{
+    "name": "QC.Match.Editor",
+    "rootNamespace": "QCEditor.Match",
+    "references": [
+        "UnityEditor.UI",
+        "QC.Match.Runtime",
+        "Celeste.Persistence",
+        "Celeste.Persistence.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

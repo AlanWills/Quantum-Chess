@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a45199dbd4f39f2469ec055d2b2119b7, type: 3}
+  m_Name: StartupLoadJob
+  m_EditorClassIdentifier: Celeste.Loading::Celeste.Loading.MultiLoadJob
+  showOutputInLoadingScreen: 0
+  loadJobs:
+  - {fileID: 11400000, guid: 29a5e2680dd8e4be4b631e5c22cb71d8, type: 2}
+  - {fileID: 11400000, guid: 1b34a0c12c6824721b40686d97e7e398, type: 2}
+  - {fileID: 11400000, guid: deb898c33168f47f28eb69599b7c3ccc, type: 2}
+  - {fileID: 11400000, guid: 541baba3b4f0c4ea18b2620b607bc37e, type: 2}

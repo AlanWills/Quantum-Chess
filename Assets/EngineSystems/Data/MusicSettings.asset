@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cda301e045783ab4cb41d689c6e8ba5e, type: 3}
+  m_Name: MusicSettings
+  m_EditorClassIdentifier: Celeste.Sound::Celeste.Sound.Settings.MusicSettingsUsingAssets
+  musicEnabled: {fileID: 0}
+  shuffleMusic: {fileID: 0}
+  playMusicWithRawClip: {fileID: 0}
+  playMusicWithSettings: {fileID: 0}
+  playMusicOneShotWithRawClip: {fileID: 0}
+  playMusicOneShotWithSettings: {fileID: 0}
+  musicTracks: []

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4793a5c2d128a44ba31ee26e41c83e, type: 3}
+  m_Name: SectionLogSettingsCatalogue
+  m_EditorClassIdentifier: Celeste.Log::Celeste.Log.SectionLogSettingsCatalogue
+  items:
+  - {fileID: 11400000, guid: f7b3df466a40c43408ab7f2cc4f8e782, type: 2}
+  - {fileID: 11400000, guid: ce9bbe571f087ae409aa8a7fef7a0968, type: 2}
+  - {fileID: 11400000, guid: 8dc305e5cbe356447aad736542825bff, type: 2}
+  - {fileID: 11400000, guid: c1ffbf54132750446b200597a9d530b9, type: 2}
+  - {fileID: 11400000, guid: dfa9292d3da307f4180fdde3a8305e8b, type: 2}
+  - {fileID: 11400000, guid: 09254ed17f42e14418a3cb0ba87608ac, type: 2}
+  - {fileID: 11400000, guid: 9a85ffdf82b93554c856bbcbb0a644d7, type: 2}
+  - {fileID: 11400000, guid: d7a2fc045f4216a4f922bb31300c6c43, type: 2}
+  - {fileID: 11400000, guid: bbec8620b698be947913bc0e4ae8328d, type: 2}
+  - {fileID: 11400000, guid: 11080ebaca9a64a4c9905ac0862bba9d, type: 2}
+  importBehaviour: 2

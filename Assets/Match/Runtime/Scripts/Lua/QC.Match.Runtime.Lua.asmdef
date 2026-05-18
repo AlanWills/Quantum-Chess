@@ -1,0 +1,18 @@
+{
+    "name": "QC.Match.Runtime.Lua",
+    "rootNamespace": "QC.Match.Lua",
+    "references": [
+        "QC.Match.Runtime",
+        "UnityEditor.UI",
+        "Celeste.Lua"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
