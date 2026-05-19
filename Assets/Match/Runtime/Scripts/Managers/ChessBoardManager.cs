@@ -5,11 +5,11 @@ using QC.Match.Persistence;
 namespace QC.Match.Managers
 {
     [AddComponentMenu("QC/Match/Board State Manager")]
-    public class BoardStateManager : PersistentSceneManager<BoardStateManager, BoardStateManagerDTO>
+    public class ChessBoardManager : PersistentSceneManager<ChessBoardManager, ChessBoardManagerDTO>
     {
 		#region Properties and Fields
 	
-        public const string FILE_NAME = "BoardStateManager.dat";
+        public const string FILE_NAME = "ChessBoardManager.dat";
 		
         protected override string FileName => FILE_NAME;
 
@@ -17,12 +17,12 @@ namespace QC.Match.Managers
 		
 		#region Save/Load
 
-        protected override BoardStateManagerDTO Serialize()
+        protected override ChessBoardManagerDTO Serialize()
         {
-            return new BoardStateManagerDTO();
+            return new ChessBoardManagerDTO();
         }
 
-        protected override void Deserialize(BoardStateManagerDTO dto)
+        protected override void Deserialize(ChessBoardManagerDTO dto)
         {
         }
 

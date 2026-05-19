@@ -8,18 +8,18 @@ namespace QC.Match
     {
         #region Properties and Fields
         
-        [SerializeField] private BoardState boardState;
+        [SerializeField] private ChessBoard chessBoard;
         
         #endregion
         
         public void Bind(LuaRuntime luaRuntime)
         {
-            luaRuntime.SetEnvironmentVariable(BoardState.kLuaName, boardState);
+            luaRuntime.SetEnvironmentVariable(ChessBoard.kLuaName, chessBoard);
         }
 
         public void Unbind(LuaRuntime luaRuntime)
         {
-            luaRuntime.ClearEnvironmentVariable(BoardState.kLuaName);
+            luaRuntime.ClearEnvironmentVariable(ChessBoard.kLuaName);
         }
     }
 }

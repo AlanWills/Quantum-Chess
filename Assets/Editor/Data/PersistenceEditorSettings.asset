@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d643b044fd7b68b40a798d8b53c61589, type: 3}
   m_Name: PersistenceEditorSettings
   m_EditorClassIdentifier: Celeste.Persistence::Celeste.Persistence.Settings.PersistenceEditorSettings
-  snapshotRecord: {fileID: 0}
+  snapshotRecord: {fileID: 11400000, guid: 027467ab1e1b0b3459e902ce03393db2, type: 2}

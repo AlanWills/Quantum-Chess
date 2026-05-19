@@ -16,7 +16,7 @@ namespace QCEditor.Match.Persistence
         [MenuItem("QC/Save/Files/Delete Board State Save", priority = 100)]
         public static void DeleteBoardStatePersistenceSaveMenuItem()
         {
-            PersistenceUtility.DeletePersistentDataFile(BoardStateManager.FILE_NAME);
+            PersistenceUtility.DeletePersistentDataFile(ChessBoardManager.FILE_NAME);
         }
     }
 }

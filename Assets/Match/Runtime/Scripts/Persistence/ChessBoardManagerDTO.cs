@@ -3,7 +3,7 @@ using System;
 namespace QC.Match.Persistence
 {
     [Serializable]
-    public class BoardStateManagerDTO : Celeste.Persistence.VersionedDTO
+    public class ChessBoardManagerDTO : Celeste.Persistence.VersionedDTO
     {
     }
 }
