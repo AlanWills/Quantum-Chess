@@ -1,13 +1,12 @@
 using System;
 using System.ComponentModel;
-using Celeste.BoardGame.Components;
 using Celeste.Components;
 using UnityEngine;
 
 namespace QC.Match.Components
 {
     [DisplayName("Multiple Piece Type")]
-    public class MultiplePieceTypeComponent : BoardGameObjectComponent, IChessPieceType
+    public class MultiplePieceTypeComponent : ChessBoardObjectComponent, IChessPieceType
     {
         #region Save Data
 

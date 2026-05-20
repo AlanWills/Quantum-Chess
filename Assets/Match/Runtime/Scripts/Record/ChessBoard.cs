@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Celeste.BoardGame.Runtime;
-using Celeste.Events;
+using Celeste.Components;
 using Lua;
+using QC.Match.Catalogue;
+using QC.Match.Event;
+using QC.Match.Objects;
+using QC.Match.Persistence;
 using UnityEngine;
 
 namespace QC.Match.Record
@@ -14,10 +17,95 @@ namespace QC.Match.Record
         #region Properties and Fields
 
         public const string kLuaName = nameof(ChessBoard);
+
+        public IReadOnlyList<ChessBoardObjectInstance> Objects => objects;
+
+        [SerializeField] private ChessBoardObjectCatalogue chessBoardObjectCatalogue;
+
+        [Header("Events")] 
+        [SerializeField] private ChessBoardObjectAddedEvent onChessBoardObjectAdded;
+        [SerializeField] private Celeste.Events.Event onChanged;
         
-        [SerializeField] private BoardGameObjectAddedEvent boardGameObjectAddedEvent;
+        [NonSerialized] private readonly List<ChessBoardObjectInstance> objects = new();
         
-        [NonSerialized] private readonly List<BoardGameObjectRuntime> currentBoardObjects = new(); 
+        #endregion
+
+        public void Initialize()
+        {
+        }
+
+        public void Initialize(ChessBoardDTO chessBoardDTO)
+        {
+            foreach (var chessBoardObjectInstanceDTO in chessBoardDTO.objects)
+            {
+                AddChessBoardObject(chessBoardObjectInstanceDTO);
+            }
+        }
+
+        public void Shutdown()
+        {
+            foreach (ChessBoardObjectInstance chessBoardObjectInstance in objects)
+            {
+                chessBoardObjectInstance.ComponentDataChanged.RemoveListener(OnChessBoardObjectComponentDataChanged);
+                chessBoardObjectInstance.ShutdownComponents();
+            }
+        }
+
+        public void AddChessBoardObject(ChessBoardObject chessBoardObject)
+        {
+            ChessBoardObjectInstance instance = new ChessBoardObjectInstance(chessBoardObject);
+            AddChessBoardObjectInstance(instance);
+        }
+        
+        public void AddChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
+        {
+            ChessBoardObject chessBoardObject = chessBoardObjectCatalogue.MustFindItemByGuid(chessBoardObjectDto.guid);
+            if (chessBoardObject == null)
+            {
+                return;
+            }
+
+            ChessBoardObjectInstance instance = new ChessBoardObjectInstance(chessBoardObject);
+            instance.LoadComponents(chessBoardObjectDto.components.ToLookup());
+            
+            AddChessBoardObjectInstance(instance);
+        }
+
+        private void AddChessBoardObjectInstance(ChessBoardObjectInstance instance)
+        {
+            instance.ComponentDataChanged.AddListener(OnChessBoardObjectComponentDataChanged);
+            objects.Add(instance);
+            
+            onChessBoardObjectAdded?.Invoke(new ChessBoardObjectAddedArgs(instance));
+        }
+
+        public ChessBoardDTO Serialize()
+        {
+            return new ChessBoardDTO(this);
+        }
+        
+        #region Callback
+
+        private void OnChessBoardObjectComponentDataChanged()
+        {
+            onChanged?.Invoke();
+        }
+        
+        #endregion
+        
+        #region Lua
+
+        [LuaMember("addChessBoardObject")]
+        private void AddChessBoardObject(int guid)
+        {
+            ChessBoardObject chessBoardObject = chessBoardObjectCatalogue.MustFindItemByGuid(guid);
+            if (chessBoardObject == null)
+            {
+                return;
+            }
+            
+            AddChessBoardObject(chessBoardObject);
+        }
         
         #endregion
     }

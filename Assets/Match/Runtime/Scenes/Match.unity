@@ -119,6 +119,82 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &277367573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 277367575}
+  - component: {fileID: 277367574}
+  - component: {fileID: 277367576}
+  m_Layer: 0
+  m_Name: ChessBoardView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &277367574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277367573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23abf69a14db4ab29b01d9f86c800f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
+  chessBoardObjectView: {fileID: 3060440209623685418, guid: 591a202a8876743f891312cdb90e1ee3, type: 3}
+  viewRoot: {fileID: 757022416}
+--- !u!4 &277367575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277367573}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &277367576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277367573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec80dc6fe68e4fd18b0e7bb6b88735b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Event.ChessBoardObjectAddedEventListener
+  gameEvent: {fileID: 11400000, guid: 8be6f3500e146484080931ca9cfcf2d7, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 277367574}
+        m_TargetAssemblyTypeName: QC.Match.Visuals.ChessBoardView, QC.Match.Runtime
+        m_MethodName: OnChessBoardObjectAdded
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &306734261
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d3b565b228d4d0eb1bf7dc8e8791ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime.Lua::QC.Match.MatchLuaBindings
-  boardState: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
 --- !u!4 &537746226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5744840686107370326, guid: 63214e18bc183496e94b73fa41e3ada0, type: 3}
@@ -177,13 +253,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 274581747571458175, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_Size.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_Origin.x
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.size
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[0].first.x
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[0].first.y
@@ -191,7 +279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[1].first.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[1].first.y
@@ -199,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[2].first.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[2].first.y
@@ -207,7 +295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[3].first.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[3].first.y
@@ -215,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[4].first.x
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[4].first.y
@@ -223,7 +311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[5].first.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[5].first.y
@@ -231,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[6].first.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[6].first.y
@@ -239,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[7].first.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[7].first.y
@@ -247,7 +335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[8].first.x
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[8].first.y
@@ -255,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[9].first.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[9].first.y
@@ -263,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[10].first.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[10].first.y
@@ -271,7 +359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[11].first.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[11].first.y
@@ -279,7 +367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[12].first.x
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[12].first.y
@@ -287,7 +375,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[13].first.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[13].first.y
@@ -295,7 +383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[14].first.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[14].first.y
@@ -303,7 +391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[15].first.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.data[15].first.y
@@ -583,35 +671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4665301835576576605, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Name
-      value: BoardTilemap
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
+      value: ChessBoardTilemap
       objectReference: {fileID: 0}
     - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -634,6 +694,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+--- !u!4 &757022416 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 830247996249216611, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+  m_PrefabInstance: {fileID: 757022415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &875973173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -822,8 +887,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1580313333}
   - component: {fileID: 1580313334}
+  - component: {fileID: 1580313335}
   m_Layer: 0
-  m_Name: BoardStateManager
+  m_Name: ChessBoardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -859,6 +925,36 @@ MonoBehaviour:
   snapshotRecord: {fileID: 11400000, guid: 027467ab1e1b0b3459e902ce03393db2, type: 2}
   loadOnAwake: 1
   loadOnStart: 0
+  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+--- !u!114 &1580313335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580313332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c2c167d8138f94b8f96ff1b82578d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.EventListener
+  gameEvent: {fileID: 11400000, guid: 4e25277a0481c4017a82684017b3f00c, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1580313334}
+        m_TargetAssemblyTypeName: QC.Match.Managers.ChessBoardManager, QC.Match.Runtime
+        m_MethodName: Save
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &2704217917382501527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -940,4 +1036,5 @@ SceneRoots:
   - {fileID: 1497964437}
   - {fileID: 2704217917382501527}
   - {fileID: 1580313333}
+  - {fileID: 277367575}
   - {fileID: 757022415}

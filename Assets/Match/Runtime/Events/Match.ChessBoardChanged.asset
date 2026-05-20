@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbb3897c39e01458bb0cd0f7bc3aafe6, type: 3}
-  m_Name: Match.BoardState
-  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Record.BoardState
+  m_Script: {fileID: 11500000, guid: 5ee88001fcc83c64e81253193b024439, type: 3}
+  m_Name: Match.ChessBoardChanged
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.Event
+  helpText: 

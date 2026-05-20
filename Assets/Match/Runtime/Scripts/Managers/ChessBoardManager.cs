@@ -1,11 +1,14 @@
+using Celeste.BoardGame;
+using Celeste.BoardGame.Catalogue;
 using UnityEngine;
 using Celeste.Persistence;
 using QC.Match.Persistence;
+using QC.Match.Record;
 
 namespace QC.Match.Managers
 {
-    [AddComponentMenu("QC/Match/Board State Manager")]
-    public class ChessBoardManager : PersistentSceneManager<ChessBoardManager, ChessBoardManagerDTO>
+    [AddComponentMenu("QC/Match/Chess Board Manager")]
+    public class ChessBoardManager : PersistentSceneManager<ChessBoardManager, ChessBoardDTO>
     {
 		#region Properties and Fields
 	
@@ -13,21 +16,36 @@ namespace QC.Match.Managers
 		
         protected override string FileName => FILE_NAME;
 
+        [SerializeField] private ChessBoard chessBoard;
+
+		#endregion
+		
+		#region Unity Methods
+
+		protected override void OnDestroy()
+		{
+			chessBoard.Shutdown();
+			
+			base.OnDestroy();
+		}
+
 		#endregion
 		
 		#region Save/Load
 
-        protected override ChessBoardManagerDTO Serialize()
+        protected override ChessBoardDTO Serialize()
         {
-            return new ChessBoardManagerDTO();
+	        return chessBoard.Serialize();
         }
 
-        protected override void Deserialize(ChessBoardManagerDTO dto)
+        protected override void Deserialize(ChessBoardDTO dto)
         {
+	        chessBoard.Initialize(dto);
         }
 
         protected override void SetDefaultValues()
         {
+	        chessBoard.Initialize();
         }
 		
 		#endregion

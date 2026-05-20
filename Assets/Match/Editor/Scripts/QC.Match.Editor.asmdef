@@ -5,7 +5,11 @@
         "UnityEditor.UI",
         "QC.Match.Runtime",
         "Celeste.Persistence",
-        "Celeste.Persistence.Editor"
+        "Celeste.Components",
+        "Celeste.Persistence.Editor",
+        "Celeste.DataStructures.Editor",
+        "Celeste.Components.Editor",
+        "Celeste.Tools.Editor"
     ],
     "includePlatforms": [
         "Editor"

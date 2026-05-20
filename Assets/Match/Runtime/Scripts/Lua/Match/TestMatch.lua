@@ -1,0 +1,1 @@
+ChessBoard:addChessBoardObject(1)
