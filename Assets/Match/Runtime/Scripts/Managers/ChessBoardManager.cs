@@ -1,5 +1,3 @@
-using Celeste.BoardGame;
-using Celeste.BoardGame.Catalogue;
 using UnityEngine;
 using Celeste.Persistence;
 using QC.Match.Persistence;

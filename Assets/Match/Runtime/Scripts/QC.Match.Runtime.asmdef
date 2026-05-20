@@ -5,7 +5,6 @@
         "UnityEditor.UI",
         "Celeste.Persistence",
         "Celeste.Components",
-        "Celeste.BoardGame",
         "Celeste.DataStructures",
         "Celeste.Events",
         "Celeste.Objects",

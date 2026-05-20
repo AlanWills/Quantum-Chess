@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Celeste.BoardGame.Persistence;
 using QC.Match.Objects;
 using QC.Match.Record;
 
