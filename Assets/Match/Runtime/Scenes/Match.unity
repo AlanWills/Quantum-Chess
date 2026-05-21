@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime.Lua::QC.Match.MatchLuaBindings
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  commandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!4 &537746226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5744840686107370326, guid: 63214e18bc183496e94b73fa41e3ada0, type: 3}
@@ -267,12 +268,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_TileAnchor.x
-      value: 0.5
+      propertyPath: m_Size.x
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_TileAnchor.y
-      value: 0.5
+      propertyPath: m_Size.y
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_Origin.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_Origin.y
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.size
@@ -881,6 +890,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+--- !u!1 &1538463192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1538463193}
+  - component: {fileID: 1538463194}
+  m_Layer: 0
+  m_Name: CommandExecutor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1538463193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538463192}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1538463194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538463192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c73f405e0a4d878e283ecb31b9ac64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.CommandExecutorManager
+  commandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!1 &1580313332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,4 +1095,5 @@ SceneRoots:
   - {fileID: 2704217917382501527}
   - {fileID: 1580313333}
   - {fileID: 277367575}
+  - {fileID: 1538463193}
   - {fileID: 757022415}

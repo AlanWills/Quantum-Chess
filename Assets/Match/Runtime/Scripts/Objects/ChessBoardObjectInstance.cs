@@ -1,5 +1,6 @@
 using System;
 using Celeste.Components;
+using Lua;
 using QC.Match.Components;
 
 namespace QC.Match.Objects
