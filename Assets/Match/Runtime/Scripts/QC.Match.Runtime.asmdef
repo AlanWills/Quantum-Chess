@@ -8,7 +8,9 @@
         "Celeste.DataStructures",
         "Celeste.Events",
         "Celeste.Objects",
-        "Celeste.Tools"
+        "Celeste.Tools",
+        "Lua.Unity",
+        "Celeste.Maths"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

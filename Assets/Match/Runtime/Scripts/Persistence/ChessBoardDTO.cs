@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using QC.Match.Objects;
-using QC.Match.Record;
 
 namespace QC.Match.Persistence
 {

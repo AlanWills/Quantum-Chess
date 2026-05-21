@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdbe3d67dbf3460396b4695bf20541dc, type: 3}
+  m_Name: Match.ChessPieceVisualLookup
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.ChessPieceVisualLookup
+  sprites:
+  - Type: 1
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 3
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 832a6d727d25349f18ff884a907fe788, type: 3}
+  fallbackSprite: {fileID: 21300000, guid: 4f3b6a6d166054a69acce73e9eadae48, type: 3}

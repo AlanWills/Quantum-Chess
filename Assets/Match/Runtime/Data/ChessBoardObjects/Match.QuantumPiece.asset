@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8f95fc3b5344f2ae248453f8785d10, type: 3}
   m_Name: MultiplePieceTypeComponent
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.MultiplePieceTypeComponent
-  startingPieceType: 63
+  startingColour: 0
+  startingPieceType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

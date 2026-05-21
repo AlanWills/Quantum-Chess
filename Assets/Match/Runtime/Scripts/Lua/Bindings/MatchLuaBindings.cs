@@ -1,5 +1,5 @@
 using Celeste.Lua;
-using QC.Match.Record;
+using QC.Match.Objects;
 using UnityEngine;
 
 namespace QC.Match

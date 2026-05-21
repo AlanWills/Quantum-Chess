@@ -17,6 +17,8 @@ namespace QC.Match.Objects
         public ChessBoardObjectInstance(ChessBoardObject chessBoardObject)
         {
             this.chessBoardObject = chessBoardObject;
+            
+            InitializeComponents(chessBoardObject);
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Celeste.Persistence;
 using QC.Match.Persistence;
-using QC.Match.Record;
+using QC.Match.Objects;
 
 namespace QC.Match.Managers
 {

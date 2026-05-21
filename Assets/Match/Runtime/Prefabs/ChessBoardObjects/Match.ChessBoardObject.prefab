@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7147728459824889197}
   - component: {fileID: 327435045101201060}
+  - component: {fileID: 7512510258088982524}
   m_Layer: 0
-  m_Name: 2DSpriteController
+  m_Name: SpriteController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,6 +92,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7512510258088982524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196925443661873791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb864eab734562aeee2ddc98951311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.SpriteChessBoardObjectController
+  spriteRenderer: {fileID: 327435045101201060}
+  visualLookup: {fileID: 11400000, guid: 22dad15b4db2a4efc992233fcbc23095, type: 2}
 --- !u!1 &6674288208208511763
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +137,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7147728459824889197}
+  - {fileID: 6473139524412817127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3060440209623685418
@@ -136,4 +152,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc35074c84ba4e4f822a43ae5c9f5f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardObjectView
-  componentControllers: []
+  componentControllers:
+  - {fileID: 7512510258088982524}
+  - {fileID: 5520695974653223311}
+--- !u!1 &8534685913641255878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6473139524412817127}
+  - component: {fileID: 5520695974653223311}
+  m_Layer: 0
+  m_Name: Grid2DTransformController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6473139524412817127
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8534685913641255878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7459234346702303689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5520695974653223311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8534685913641255878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a25409cc7874e03b3466c874c8b7d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.Grid2DTransformController
+  gridTransform: {fileID: 7459234346702303689}

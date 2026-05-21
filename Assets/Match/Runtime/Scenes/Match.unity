@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &229306734 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1126297415526104675, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+  m_PrefabInstance: {fileID: 757022415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &277367573
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
   chessBoardObjectView: {fileID: 3060440209623685418, guid: 591a202a8876743f891312cdb90e1ee3, type: 3}
-  viewRoot: {fileID: 757022416}
+  viewRoot: {fileID: 229306734}
 --- !u!4 &277367575
 Transform:
   m_ObjectHideFlags: 0
@@ -254,16 +259,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 274581747571458175, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: m_Name
+      value: Layer1 - Board
+      objectReference: {fileID: 0}
+    - target: {fileID: 274581747571458175, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_Size.x
-      value: 9
+      propertyPath: m_TileAnchor.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-      propertyPath: m_Origin.x
-      value: -2
+      propertyPath: m_TileAnchor.y
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_Tiles.Array.size
@@ -694,11 +703,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
---- !u!4 &757022416 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 830247996249216611, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
-  m_PrefabInstance: {fileID: 757022415}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &875973173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -733,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8083884563404844915, guid: 87686155b62231749b1d99fe77b77160, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8083884563404844915, guid: 87686155b62231749b1d99fe77b77160, type: 3}
       propertyPath: m_LocalRotation.w

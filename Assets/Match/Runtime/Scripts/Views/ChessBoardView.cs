@@ -5,7 +5,7 @@ using QC.Match.Event;
 using QC.Match.Objects;
 using UnityEngine;
 
-namespace QC.Match.Visuals
+namespace QC.Match.Views
 {
     public class ChessBoardView : MonoBehaviour
     {
@@ -30,7 +30,7 @@ namespace QC.Match.Visuals
 
         private void CreateChessBoardObjectView(ChessBoardObjectInstance chessBoardObjectInstance)
         {
-            ChessBoardObjectView viewInstance = Instantiate(chessBoardObjectView, viewRoot);
+            ChessBoardObjectView viewInstance = Instantiate(chessBoardObjectView, viewRoot, false);
             viewInstance.Hookup(chessBoardObjectInstance, IRuntimeAddedContext.Empty);
         }
         
