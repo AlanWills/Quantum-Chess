@@ -103,11 +103,16 @@ namespace QC.Match.Objects
             return AddChessBoardObjectInstance(instance);
         }
         
-        public ChessBoardObjectInstance GetChessBoardObjectAt(int x, int y)
+        public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int position)
         {
             return objects.Find(obj => 
                 obj.TryFindComponent(out InterfaceHandle<IGrid2DTransform> grid2DTransform) && 
-                grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == new Vector2Int(x, y));
+                grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == position);
+        }
+        
+        public ChessBoardObjectInstance GetChessBoardObjectAt(int x, int y)
+        {
+            return GetChessBoardObjectAt(new Vector2Int(x, y));
         }
 
         public ChessBoardDTO Serialize()

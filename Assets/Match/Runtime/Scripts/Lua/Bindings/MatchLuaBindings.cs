@@ -10,21 +10,21 @@ namespace QC.Match
         #region Properties and Fields
         
         [SerializeField] private ChessBoard chessBoard;
-        [SerializeField] private CommandExecutor commandExecutor;
+        [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         
         #endregion
         
         public void Bind(LuaRuntime luaRuntime)
         {
             luaRuntime.SetEnvironmentVariable(ChessBoard.kLuaName, chessBoard);
-            luaRuntime.SetEnvironmentVariable(CommandExecutor.kLuaName, commandExecutor);
+            luaRuntime.SetEnvironmentVariable(ChessBoardCommandExecutor.kLuaName, chessBoardCommandExecutor);
             luaRuntime.OpenLibrary(ChessBoardCommandsLibrary.Instance);
         }
 
         public void Unbind(LuaRuntime luaRuntime)
         {
             luaRuntime.ClearEnvironmentVariable(ChessBoard.kLuaName);
-            luaRuntime.ClearEnvironmentVariable(CommandExecutor.kLuaName);
+            luaRuntime.ClearEnvironmentVariable(ChessBoardCommandExecutor.kLuaName);
         }
     }
 }

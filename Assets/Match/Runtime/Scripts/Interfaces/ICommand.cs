@@ -6,8 +6,8 @@ namespace QC.Match
         Finished
     }
     
-    public interface ICommand
+    public interface ICommand<in TArgs>
     {
-        CommandState Execute();
+        CommandState Execute(TArgs args);
     }
 }

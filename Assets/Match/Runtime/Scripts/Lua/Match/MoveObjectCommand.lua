@@ -1,1 +1,4 @@
-ChessBoardCommands.move(ChessBoard, CommandExecutor, 3, 3, 4, 4)
+local startPosition = Vector2Int.new(4, 4)
+local endPosition = Vector2Int.new(2, 2)
+
+ChessBoardCommands.move(ChessBoardCommandExecutor, startPosition, endPosition)

@@ -1,9 +1,9 @@
 namespace QC.Match
 {
-    public interface ICommandExecutor
+    public interface ICommandExecutor<TArgs>
     {
-        void QueueCommand(ICommand command);
+        void QueueCommand(ICommand<TArgs> command);
         
-        void UpdateCommands(float deltaTime);
+        void UpdateCommands(TArgs args);
     }
 }

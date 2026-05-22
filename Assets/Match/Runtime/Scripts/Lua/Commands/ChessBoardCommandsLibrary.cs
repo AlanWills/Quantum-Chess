@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Celeste.Lua;
+using Celeste.Lua.Maths;
 using Lua;
 using Lua.Standard;
 using QC.Match.Commands;
@@ -34,16 +35,12 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoard chessBoard = context.GetArgument<ChessBoard>(0);
-            CommandExecutor commandExecutor = context.GetArgument<CommandExecutor>(1);
-            int xStart = context.GetArgument<int>(2);
-            int yStart = context.GetArgument<int>(3);
-            int xEnd = context.GetArgument<int>(4);
-            int yEnd = context.GetArgument<int>(5);
-
-            ChessBoardObjectInstance chessBoardObjectInstance = chessBoard.GetChessBoardObjectAt(xStart, yStart);
-            MoveChessBoardObjectCommand moveCommand = new MoveChessBoardObjectCommand(chessBoardObjectInstance, new Vector2Int(xEnd, yEnd));
-            commandExecutor.QueueCommand(moveCommand);
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            LuaVector2Int start = context.GetArgument<LuaVector2Int>(1);
+            LuaVector2Int end = context.GetArgument<LuaVector2Int>(2);
+            
+            MoveChessBoardObjectCommand moveCommand = new MoveChessBoardObjectCommand(start.v, end.v);
+            chessBoardCommandExecutor.QueueCommand(moveCommand);
             
             return new ValueTask<int>(context.Return());
         }
