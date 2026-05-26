@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime.Lua::QC.Match.MatchLuaBindings
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!4 &537746226 stripped
 Transform:
@@ -691,6 +692,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChessBoardTilemap
       objectReference: {fileID: 0}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 277367574}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnChessBoardPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 7056762769079907821, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7245312389778062901, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
@@ -901,7 +926,7 @@ GameObject:
   - component: {fileID: 1538463193}
   - component: {fileID: 1538463194}
   m_Layer: 0
-  m_Name: ChessBoardCommandExecutor
+  m_Name: MatchManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -935,6 +960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.CommandExecutorManager
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!1 &1580313332
 GameObject:
@@ -1094,7 +1120,7 @@ SceneRoots:
   - {fileID: 875973173}
   - {fileID: 1497964437}
   - {fileID: 2704217917382501527}
+  - {fileID: 1538463193}
   - {fileID: 1580313333}
   - {fileID: 277367575}
-  - {fileID: 1538463193}
   - {fileID: 757022415}

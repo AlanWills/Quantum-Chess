@@ -3,22 +3,19 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public class MoveChessBoardObjectCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct MoveSelectedChessBoardObjectFromToCommand : ICommand<ChessBoardCommandArgs>
     {
-        private readonly Vector2Int chessBoardObjectStartingPosition;
         private readonly Vector2Int chessBoardObjectEndingPosition;
         
-        public MoveChessBoardObjectCommand(Vector2Int start, Vector2Int end)
+        public MoveSelectedChessBoardObjectFromToCommand(Vector2Int end)
         {
-            chessBoardObjectStartingPosition = start;
             chessBoardObjectEndingPosition = end;
         }
         
         public CommandState Execute(ChessBoardCommandArgs args)
         {
-            ChessBoardObjectInstance chessBoardObjectInstance =
-                args.chessBoard.GetChessBoardObjectAt(chessBoardObjectStartingPosition);
-
+            ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
+            
             if (chessBoardObjectInstance != null)
             {
                 if (chessBoardObjectInstance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
@@ -28,7 +25,7 @@ namespace QC.Match.Commands
             }
             else
             {
-                UnityEngine.Debug.LogAssertion($"Failed to find chess board object at position {chessBoardObjectStartingPosition} when executing move command.");
+                UnityEngine.Debug.LogAssertion($"No selected chess board object when executing move selected object command.");
             }
 
             return CommandState.Finished;

@@ -1,4 +1,11 @@
-local startPosition = Vector2Int.new(4, 4)
-local endPosition = Vector2Int.new(2, 2)
+local MoveObjectCommand = { }
 
-ChessBoardCommands.move(ChessBoardCommandExecutor, startPosition, endPosition)
+function MoveObjectCommand.fromTo(startPosition, endPosition)
+    ChessBoardCommands.moveFromTo(ChessBoardCommandExecutor, startPosition, endPosition)
+end
+
+function MoveObjectCommand.selectedTo(endPosition)
+    ChessBoardCommands.moveSelectedTo(ChessBoardCommandExecutor, endPosition)
+end
+
+return MoveObjectCommand

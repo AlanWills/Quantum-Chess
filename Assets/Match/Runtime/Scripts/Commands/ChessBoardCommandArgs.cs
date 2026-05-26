@@ -4,11 +4,15 @@ namespace QC.Match.Commands
 {
     public readonly struct ChessBoardCommandArgs
     {
-        public readonly ChessBoard chessBoard;
+        public readonly ChessBoard ChessBoard;
+        public readonly ChessBoardObjectSelection Selection; 
 
-        public ChessBoardCommandArgs(ChessBoard chessBoard)
+        public ChessBoardCommandArgs(
+            ChessBoard chessBoard,
+            ChessBoardObjectSelection selection)
         {
-            this.chessBoard = chessBoard;
+            ChessBoard = chessBoard;
+            Selection = selection;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Celeste.Components;
+using Celeste.Input;
 using QC.Match.Event;
 using QC.Match.Objects;
 using UnityEngine;
@@ -39,6 +40,11 @@ namespace QC.Match.Views
         public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
         {
             CreateChessBoardObjectView(args.AddedObject);
+        }
+
+        public void OnChessBoardPressed(InputState inputState)
+        {
+            
         }
         
         #endregion

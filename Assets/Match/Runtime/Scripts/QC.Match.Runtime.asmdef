@@ -10,7 +10,9 @@
         "Celeste.Objects",
         "Celeste.Tools",
         "Lua.Unity",
-        "Celeste.Maths"
+        "Celeste.Maths",
+        "Celeste.Input",
+        "Celeste.FX"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

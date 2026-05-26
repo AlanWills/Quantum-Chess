@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7147728459824889197}
   - component: {fileID: 327435045101201060}
   - component: {fileID: 7512510258088982524}
-  m_Layer: 0
+  - component: {fileID: 7687335474316169094}
+  m_Layer: 7
   m_Name: SpriteController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,6 +107,160 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.SpriteChessBoardObjectController
   spriteRenderer: {fileID: 327435045101201060}
   visualLookup: {fileID: 11400000, guid: 22dad15b4db2a4efc992233fcbc23095, type: 2}
+--- !u!114 &7687335474316169094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196925443661873791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc169ef93d0de0f459f2fa310a730e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.FX::Celeste.FX.Outline
+  rendererToOutline: {fileID: 327435045101201060}
+  graphicToOutline: {fileID: 0}
+  defaultMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  outlineShader: {fileID: 4800000, guid: 03f874ee83dae40d1889371973c3f400, type: 3}
+  outlineThickness: 10
+  outlineColour: {r: 0.119199276, g: 1, b: 0, a: 1}
+--- !u!1 &5958504179553322231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8098126787055782939}
+  - component: {fileID: 3899799489630991662}
+  - component: {fileID: 5333340976139064987}
+  - component: {fileID: 3365258412203920044}
+  m_Layer: 7
+  m_Name: InputController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8098126787055782939
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958504179553322231}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7459234346702303689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &3899799489630991662
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958504179553322231}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &5333340976139064987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958504179553322231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab646f68366d74a42b16366421b6be82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Input::Celeste.Input.InputHandler
+  onPointerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerOver:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerFirstDown:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3365258412203920044}
+        m_TargetAssemblyTypeName: QC.Match.Input.ChessBoardObjectInputController,
+          QC.Match.Runtime
+        m_MethodName: OnPointerDown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPointerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerFirstUp:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3365258412203920044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958504179553322231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba535238c8974b02ac519cba25c982a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Input.ChessBoardObjectInputController
+  commandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!1 &6674288208208511763
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,7 +271,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7459234346702303689}
   - component: {fileID: 3060440209623685418}
-  m_Layer: 0
+  - component: {fileID: 6932556030918379970}
+  m_Layer: 7
   m_Name: Match.ChessBoardObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +294,7 @@ Transform:
   m_Children:
   - {fileID: 7147728459824889197}
   - {fileID: 6473139524412817127}
+  - {fileID: 8098126787055782939}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3060440209623685418
@@ -155,6 +312,37 @@ MonoBehaviour:
   componentControllers:
   - {fileID: 7512510258088982524}
   - {fileID: 5520695974653223311}
+  - {fileID: 3365258412203920044}
+  selectedOutline: {fileID: 7687335474316169094}
+--- !u!114 &6932556030918379970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6674288208208511763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47ce94b2301e451198ec9efafd03c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Events.ChessBoardObjectSelectionChangedEventListener
+  gameEvent: {fileID: 11400000, guid: f2e576355092945229c62a36fbb356e8, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3060440209623685418}
+        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardObjectView, QC.Match.Runtime
+        m_MethodName: OnSelectionChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8534685913641255878
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6473139524412817127}
   - component: {fileID: 5520695974653223311}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grid2DTransformController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
