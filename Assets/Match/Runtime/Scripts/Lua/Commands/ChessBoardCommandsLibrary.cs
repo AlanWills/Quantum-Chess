@@ -54,7 +54,7 @@ namespace QC.Match.Lua
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(1);
             
-            MoveSelectedChessBoardObjectFromToCommand moveSelectedToCommand = new MoveSelectedChessBoardObjectFromToCommand(end.v);
+            MoveSelectedChessBoardObjectToCommand moveSelectedToCommand = new MoveSelectedChessBoardObjectToCommand(end.v);
             chessBoardCommandExecutor.QueueCommand(moveSelectedToCommand);
             
             return new ValueTask<int>(context.Return());

@@ -3,7 +3,8 @@ namespace QC.Match
     public enum CommandState
     {
         Running,
-        Finished
+        Completed,
+        Abandoned
     }
     
     public interface ICommand<in TArgs>

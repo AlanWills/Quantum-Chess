@@ -18,11 +18,11 @@ namespace QC.Match.Commands
             if (chessBoardObjectInstance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(ChessBoardObjectInstance)} at {chessBoardObjectLocation}, but there is no board object there.  Did you mean to clear selection?");
-                return CommandState.Finished;
+                return CommandState.Completed;
             }
             
             args.Selection.CurrentSelectedObject = chessBoardObjectInstance;
-            return CommandState.Finished;
+            return CommandState.Completed;
         }
     }
 }

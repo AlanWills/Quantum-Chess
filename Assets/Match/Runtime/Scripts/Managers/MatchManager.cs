@@ -8,9 +8,9 @@ namespace QC.Match.Managers
     {
         #region Properties and Fields
 
+        [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         [SerializeField] private ChessBoard chessBoard;
         [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
-        [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         
         #endregion
         
@@ -27,6 +27,7 @@ namespace QC.Match.Managers
         private ChessBoardCommandArgs CreateCommandArgs()
         {
             return new ChessBoardCommandArgs(
+                chessBoardCommandExecutor,
                 chessBoard,
                 chessBoardObjectSelection);
         }

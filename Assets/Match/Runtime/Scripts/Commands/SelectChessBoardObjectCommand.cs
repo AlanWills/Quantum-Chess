@@ -16,11 +16,11 @@ namespace QC.Match.Commands
             if (chessBoardObjectInstance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(ChessBoardObjectInstance)} that is null.");
-                return CommandState.Finished;
+                return CommandState.Completed;
             }
             
             args.Selection.CurrentSelectedObject = chessBoardObjectInstance;
-            return CommandState.Finished;
+            return CommandState.Completed;
         }
     }
 }

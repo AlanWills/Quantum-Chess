@@ -115,6 +115,11 @@ namespace QC.Match.Objects
             return GetChessBoardObjectAt(new Vector2Int(x, y));
         }
 
+        public bool RemoveChessBoardObject(ChessBoardObjectInstance instance)
+        {
+            return objects.Remove(instance);
+        }
+
         public ChessBoardDTO Serialize()
         {
             return new ChessBoardDTO(this);

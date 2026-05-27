@@ -155,7 +155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
   chessBoardObjectView: {fileID: 3060440209623685418, guid: 591a202a8876743f891312cdb90e1ee3, type: 3}
+  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   viewRoot: {fileID: 229306734}
+  chessBoardTilemap: {fileID: 1422777168}
 --- !u!4 &277367575
 Transform:
   m_ObjectHideFlags: 0
@@ -858,6 +860,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1839735485 &1422777168 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 2652458628772581263, guid: 5563cbed32f824dcab2ea66314ae9e60, type: 3}
+  m_PrefabInstance: {fileID: 757022415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1497964437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -959,9 +966,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c73f405e0a4d878e283ecb31b9ac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.CommandExecutorManager
+  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
-  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!1 &1580313332
 GameObject:
   m_ObjectHideFlags: 0

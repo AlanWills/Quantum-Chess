@@ -26,7 +26,10 @@ namespace QC.Match.Objects
             }
 
             var currentCommand = commands.Peek();
-            if (currentCommand.Execute(args) == CommandState.Finished)
+            CommandState commandState = currentCommand.Execute(args);
+            
+            if (commandState == CommandState.Completed ||
+                commandState == CommandState.Abandoned)
             {
                 commands.Dequeue();
             }

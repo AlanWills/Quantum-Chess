@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct MoveSelectedChessBoardObjectFromToCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct MoveSelectedChessBoardObjectToCommand : ICommand<ChessBoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectEndingPosition;
         
-        public MoveSelectedChessBoardObjectFromToCommand(Vector2Int end)
+        public MoveSelectedChessBoardObjectToCommand(Vector2Int end)
         {
             chessBoardObjectEndingPosition = end;
         }
@@ -16,19 +16,18 @@ namespace QC.Match.Commands
         {
             ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
             
-            if (chessBoardObjectInstance != null)
+            CommandState commandState = MoveCommandUtils.TryMoveChessBoardObject(
+                args, 
+                chessBoardObjectInstance,
+                chessBoardObjectEndingPosition);
+
+            if (commandState == CommandState.Completed)
             {
-                if (chessBoardObjectInstance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
-                {
-                    grid2DTransform.iFace.SetPosition(grid2DTransform.instance, chessBoardObjectEndingPosition);
-                }
-            }
-            else
-            {
-                UnityEngine.Debug.LogAssertion($"No selected chess board object when executing move selected object command.");
+                // Clear selection on successful move
+                args.Selection.CurrentSelectedObject = null;
             }
 
-            return CommandState.Finished;
+            return commandState;
         }
     }
 }

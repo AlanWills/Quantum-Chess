@@ -19,19 +19,10 @@ namespace QC.Match.Commands
             ChessBoardObjectInstance chessBoardObjectInstance =
                 args.ChessBoard.GetChessBoardObjectAt(chessBoardObjectStartingPosition);
 
-            if (chessBoardObjectInstance != null)
-            {
-                if (chessBoardObjectInstance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
-                {
-                    grid2DTransform.iFace.SetPosition(grid2DTransform.instance, chessBoardObjectEndingPosition);
-                }
-            }
-            else
-            {
-                UnityEngine.Debug.LogAssertion($"Failed to find chess board object at position {chessBoardObjectStartingPosition} when executing move command.");
-            }
-
-            return CommandState.Finished;
+            return MoveCommandUtils.TryMoveChessBoardObject(
+                args, 
+                chessBoardObjectInstance, 
+                chessBoardObjectEndingPosition);
         }
     }
 }
