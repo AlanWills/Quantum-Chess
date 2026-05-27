@@ -31,7 +31,7 @@ namespace QC.Match.Views
 
         public void OnSelectionChanged(ChessBoardObjectSelectionChangedArgs args)
         {
-            RefreshSelectedOutline(args.newSelectedObject);
+            RefreshSelectedOutline(args.NewSelectedObject);
         }
         
         #endregion

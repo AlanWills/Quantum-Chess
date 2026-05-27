@@ -4,15 +4,15 @@ namespace QC.Match.Events
 {
     public readonly struct ChessBoardObjectSelectionChangedArgs
     {
-        public readonly ChessBoardObjectInstance previousSelectedObject;
-        public readonly ChessBoardObjectInstance newSelectedObject;
+        public readonly ChessBoardObjectInstance PreviousSelectedObject;
+        public readonly ChessBoardObjectInstance NewSelectedObject;
         
         public ChessBoardObjectSelectionChangedArgs(
             ChessBoardObjectInstance previousObject,
             ChessBoardObjectInstance newObject)
         {
-            previousSelectedObject = previousObject;
-            newSelectedObject = newObject;
+            PreviousSelectedObject = previousObject;
+            NewSelectedObject = newObject;
         }
     }
 }

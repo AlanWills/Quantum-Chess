@@ -17,7 +17,7 @@ namespace QC.Match.Views
         
         [SerializeField] private ChessBoardObjectView chessBoardObjectView;
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
-        [SerializeField] private Transform viewRoot;
+        [SerializeField] private Transform piecesViewRoot;
         [SerializeField] private Tilemap chessBoardTilemap;
         [SerializeField] private Collider2D hitBoxCollider;
 
@@ -43,7 +43,7 @@ namespace QC.Match.Views
         private void CreateChessBoardObjectView(ChessBoardObjectInstance chessBoardObjectInstance)
         {
             // TODO: Change this to use Object Pooling 
-            ChessBoardObjectView viewInstance = Instantiate(chessBoardObjectView, viewRoot, false);
+            ChessBoardObjectView viewInstance = Instantiate(chessBoardObjectView, piecesViewRoot, false);
             viewInstance.Hookup(chessBoardObjectInstance, IRuntimeAddedContext.Empty);
             chessBoardObjectViews.Add(viewInstance);
         }
@@ -52,7 +52,7 @@ namespace QC.Match.Views
 
         public void OnChessBoardObjectSelectionChanged(ChessBoardObjectSelectionChangedArgs args)
         {
-            hitBoxCollider.enabled = args.newSelectedObject != null;
+            hitBoxCollider.enabled = args.NewSelectedObject != null;
         }
 
         public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
@@ -74,7 +74,7 @@ namespace QC.Match.Views
 
         public void OnChessBoardPressed(InputState inputState)
         {
-            Vector3Int boardPosition = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition) - chessBoardTilemap.origin;
+            Vector3Int boardPosition = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition);
             
             // Board Positions are 1-indexed
             boardPosition.x += 1;

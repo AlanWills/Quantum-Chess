@@ -47,6 +47,9 @@ TagManager:
   - name: Pieces
     uniqueID: 3391117475
     locked: 0
+  - name: Board Overlay
+    uniqueID: 892627515
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
