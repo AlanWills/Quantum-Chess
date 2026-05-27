@@ -9,13 +9,24 @@ namespace QC.Match.Components
     {
         #region Properties and Fields
 
-        [NonSerialized] private bool isInteractable = true;
+        [NonSerialized] private bool isInteractable;
         
         #endregion
         
         public bool IsInteractable(Instance instance)
         {
             return isInteractable;
+        }
+
+        public void SetInteractable(Instance instance, bool interactable)
+        {
+            if (isInteractable == interactable)
+            {
+                return;
+            }
+            
+            isInteractable = interactable;
+            instance.events.ComponentDataChanged.Invoke();
         }
     }
 }

@@ -5,7 +5,7 @@ using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
 using QC.Match.Components;
-using QC.Match.Event;
+using QC.Match.Events;
 using QC.Match.Persistence;
 using UnityEngine;
 
@@ -25,6 +25,7 @@ namespace QC.Match.Objects
 
         [Header("Events")] 
         [SerializeField] private ChessBoardObjectAddedEvent onChessBoardObjectAdded;
+        [SerializeField] private ChessBoardObjectRemovedEvent onChessBoardObjectRemoved;
         [SerializeField] private Celeste.Events.Event onChanged;
         
         [NonSerialized] private readonly List<ChessBoardObjectInstance> objects = new();
@@ -117,7 +118,13 @@ namespace QC.Match.Objects
 
         public bool RemoveChessBoardObject(ChessBoardObjectInstance instance)
         {
-            return objects.Remove(instance);
+            bool result = objects.Remove(instance);
+            if (result)
+            {
+                onChessBoardObjectRemoved?.Invoke(new ChessBoardObjectRemovedArgs(instance));
+            }
+
+            return result;
         }
 
         public ChessBoardDTO Serialize()

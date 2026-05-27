@@ -31,7 +31,7 @@ namespace QC.Match.Commands
             }
             
             bool instanceHasChessPiece = instance.TryFindComponent<IChessPiece>(out var instanceChessPiece);
-            bool endingPositionInstanceHasChessPiece = instance.TryFindComponent<IChessPiece>(out var endingPositionInstanceChessPiece);
+            bool endingPositionInstanceHasChessPiece = endingPositionInstance.TryFindComponent<IChessPiece>(out var endingPositionInstanceChessPiece);
 
             switch (instanceHasChessPiece)
             {

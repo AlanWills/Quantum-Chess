@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "moveFromTo", MoveFromTo));
             functions.Add(new LibraryFunction(kName, "moveSelectedTo", MoveSelectedTo));
             functions.Add(new LibraryFunction(kName, "selectAt", SelectAt));
+            functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -69,6 +71,26 @@ namespace QC.Match.Lua
             
             SelectChessBoardObjectAtCommand selectAtCommand = new SelectChessBoardObjectAtCommand(location.v);
             chessBoardCommandExecutor.QueueCommand(selectAtCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+
+        private ValueTask<int> EnableInputForColour(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            string colourString = context.GetArgument<string>(1);
+
+            if (string.IsNullOrEmpty(colourString) ||
+                !Enum.TryParse(colourString, out ChessPieceColour chessPieceColour))
+            {
+                UnityEngine.Debug.LogAssertion($"Invalid colour: {colourString}.  Ignoring enableInputForColour command...");
+                return new ValueTask<int>(context.Return()); 
+            }
+            
+            EnableInputForChessPieceColourCommand enableInputCommand = new EnableInputForChessPieceColourCommand(chessPieceColour);
+            chessBoardCommandExecutor.QueueCommand(enableInputCommand);
             
             return new ValueTask<int>(context.Return());
         }

@@ -1,6 +1,6 @@
 using QC.Match.Objects;
 
-namespace QC.Match.Event
+namespace QC.Match.Events
 {
     public readonly struct ChessBoardObjectAddedArgs
     {

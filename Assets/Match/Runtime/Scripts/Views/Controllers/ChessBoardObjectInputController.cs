@@ -14,26 +14,41 @@ namespace QC.Match.Input
         private bool IsInteractable => Interface.IsValid && Interface.iFace.IsInteractable(Interface.instance);
         
         [SerializeField] private ChessBoardCommandExecutor commandExecutor;
+        [SerializeField] private Collider2D hitBoxCollider;
         
         #endregion
         
         protected override void DoHookup(IRuntimeAddedContext context)
         {
+            UpdateHitBoxCollider();
         }
 
         protected override void DoShutdown()
         {
         }
-        
+
+        protected override void OnInterfaceDataChanged()
+        {
+            base.OnInterfaceDataChanged();
+            
+            UpdateHitBoxCollider();
+        }
+
+        private void UpdateHitBoxCollider()
+        {
+            hitBoxCollider.enabled = IsInteractable;
+        }
+
         #region Callbacks
 
         public void OnPointerDown(InputState inputState)
         {
             if (!IsInteractable)
             {
+                UnityEngine.Debug.LogAssertion($"{nameof(ChessBoardObjectInputController)} registered hit despite it not being interactable.", gameObject);
                 return;
             }
-
+            
             SelectChessBoardObjectCommand selectChessBoardObjectCommand = new SelectChessBoardObjectCommand(Instance);
             commandExecutor.QueueCommand(selectChessBoardObjectCommand);
         }

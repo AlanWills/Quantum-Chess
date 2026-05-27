@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Input.ChessBoardObjectInputController
   commandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+  hitBoxCollider: {fileID: 3899799489630991662}
 --- !u!1 &6674288208208511763
 GameObject:
   m_ObjectHideFlags: 0

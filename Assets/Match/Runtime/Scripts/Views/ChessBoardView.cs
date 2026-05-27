@@ -4,7 +4,7 @@ using Celeste.Components;
 using Celeste.Input;
 using Celeste.Maths;
 using QC.Match.Commands;
-using QC.Match.Event;
+using QC.Match.Events;
 using QC.Match.Objects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -19,10 +19,16 @@ namespace QC.Match.Views
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         [SerializeField] private Transform viewRoot;
         [SerializeField] private Tilemap chessBoardTilemap;
+        [SerializeField] private Collider2D hitBoxCollider;
 
         [NonSerialized] private readonly List<ChessBoardObjectView> chessBoardObjectViews = new();
         
         #endregion
+
+        public void Setup()
+        {
+            hitBoxCollider.enabled = false;
+        }
 
         public void Shutdown()
         {
@@ -44,9 +50,26 @@ namespace QC.Match.Views
         
         #region Callbacks
 
+        public void OnChessBoardObjectSelectionChanged(ChessBoardObjectSelectionChangedArgs args)
+        {
+            hitBoxCollider.enabled = args.newSelectedObject != null;
+        }
+
         public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
         {
             CreateChessBoardObjectView(args.AddedObject);
+        }
+
+        public void OnChessBoardObjectRemoved(ChessBoardObjectRemovedArgs args)
+        {
+            int viewIndex = chessBoardObjectViews.FindIndex(x => x.Instance == args.RemovedInstance);
+            if (viewIndex >= 0)
+            {
+                // TODO: Change this to use Object Pooling
+                ChessBoardObjectView viewInstance = chessBoardObjectViews[viewIndex];
+                chessBoardObjectViews.RemoveAt(viewIndex);
+                Destroy(viewInstance.gameObject);
+            }
         }
 
         public void OnChessBoardPressed(InputState inputState)

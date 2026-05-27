@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Record.BoardState
   chessBoardObjectCatalogue: {fileID: 11400000, guid: 497d82b2ca63a4c59bcfbd954c056548, type: 2}
   onChessBoardObjectAdded: {fileID: 11400000, guid: 8be6f3500e146484080931ca9cfcf2d7, type: 2}
+  onChessBoardObjectRemoved: {fileID: 11400000, guid: 59728874ce3474efb8110bb616749668, type: 2}
   onChanged: {fileID: 11400000, guid: 4e25277a0481c4017a82684017b3f00c, type: 2}

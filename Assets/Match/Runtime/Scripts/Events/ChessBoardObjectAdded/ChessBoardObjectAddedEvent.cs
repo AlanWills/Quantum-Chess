@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Celeste.Events;
 
-namespace QC.Match.Event
+namespace QC.Match.Events
 {
     [Serializable]
     public class ChessBoardObjectAddedUnityEvent : UnityEvent<ChessBoardObjectAddedArgs> { }
