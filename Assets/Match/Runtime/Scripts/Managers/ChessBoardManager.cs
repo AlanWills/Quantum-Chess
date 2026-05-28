@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Celeste.Persistence;
 using QC.Match.Persistence;
@@ -43,7 +44,7 @@ namespace QC.Match.Managers
 
         protected override void SetDefaultValues()
         {
-	        chessBoard.Initialize();
+	        chessBoard.Initialize(Array.Empty<Vector2Int>());
         }
 		
 		#endregion

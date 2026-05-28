@@ -12,7 +12,8 @@
         "Lua.Unity",
         "Celeste.Maths",
         "Celeste.Input",
-        "Celeste.FX"
+        "Celeste.FX",
+        "Celeste.Lua"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

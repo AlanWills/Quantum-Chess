@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 277367575}
   - component: {fileID: 277367574}
+  - component: {fileID: 277367579}
   - component: {fileID: 277367576}
   - component: {fileID: 277367578}
   - component: {fileID: 277367577}
@@ -258,6 +259,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &277367579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277367573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6400906251c454c5da41810cf0b0cd92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Events.ChessBoardTileAddedEventListener
+  gameEvent: {fileID: 11400000, guid: 6b9eaabc94e3e48d1b192a8eb2aecde4, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 277367574}
+        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+        m_MethodName: OnChessBoardTileAdded
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &306734261
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,7 +385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd3580b9786440a99984ef6c2ad0711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.ChessBoardObjectActionView
-  boardTilemap: {fileID: 690885639}
   actionTilemap: {fileID: 1019234146}
   validMovementTile: {fileID: 11400000, guid: 1458eaeabc25e4af5943804616616fb4, type: 2}
   validAttackTile: {fileID: 11400000, guid: a013e318a21d6432dbe7934edfc68b10, type: 2}

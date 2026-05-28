@@ -47,8 +47,18 @@ namespace QC.Match.Views
             viewInstance.Hookup(chessBoardObjectInstance, IRuntimeAddedContext.Empty);
             chessBoardObjectViews.Add(viewInstance);
         }
+
+        private void AddChessBoardTile(Vector2Int position, TileBase tile)
+        {
+            chessBoardTilemap.SetTile(position.ToVector3Int(), tile);
+        }
         
         #region Callbacks
+
+        public void OnChessBoardTileAdded(ChessBoardTileAddedArgs args)
+        {
+            AddChessBoardTile(args.BoardPosition, args.Tile);
+        }
 
         public void OnChessBoardObjectSelectionChanged(ChessBoardObjectSelectionChangedArgs args)
         {

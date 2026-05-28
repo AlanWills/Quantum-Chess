@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using QC.Match.Objects;
+using UnityEngine;
 
 namespace QC.Match.Persistence
 {
@@ -8,12 +9,18 @@ namespace QC.Match.Persistence
     public class ChessBoardDTO : Celeste.Persistence.VersionedDTO
     {
         public List<ChessBoardObjectDTO> objects = new();
+        public List<Vector2Int> boardPositions = new();
 
         public ChessBoardDTO(ChessBoard chessBoard)
         {
             foreach (ChessBoardObjectInstance chessBoardObjectInstance in chessBoard.Objects)
             {
                 objects.Add(new ChessBoardObjectDTO(chessBoardObjectInstance));
+            }
+
+            foreach (Vector2Int boardPosition in chessBoard.BoardPositions)
+            {
+                boardPositions.Add(boardPosition);
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Celeste.Components;
+using Celeste.Lua.Maths;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
@@ -8,6 +9,7 @@ using QC.Match.Components;
 using QC.Match.Events;
 using QC.Match.Persistence;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace QC.Match.Objects
 {
@@ -20,20 +22,33 @@ namespace QC.Match.Objects
         public const string kLuaName = nameof(ChessBoard);
 
         public IReadOnlyList<ChessBoardObjectInstance> Objects => objects;
+        public IReadOnlyCollection<Vector2Int> BoardPositions => boardPositions;
 
         [SerializeField] private ChessBoardObjectCatalogue chessBoardObjectCatalogue;
+        
+        // Can change these to actual objects
+        [SerializeField] private TileBase blackTile;
+        [SerializeField] private TileBase whiteTile;
 
         [Header("Events")] 
+        [SerializeField] private ChessBoardTileAddedEvent onChessBoardTileAdded;
         [SerializeField] private ChessBoardObjectAddedEvent onChessBoardObjectAdded;
         [SerializeField] private ChessBoardObjectRemovedEvent onChessBoardObjectRemoved;
         [SerializeField] private Celeste.Events.Event onChanged;
         
         [NonSerialized] private readonly List<ChessBoardObjectInstance> objects = new();
+        [NonSerialized] private readonly HashSet<Vector2Int> boardPositions = new();
         
         #endregion
 
-        public void Initialize()
+        public void Initialize(IReadOnlyList<Vector2Int> positions)
         {
+            boardPositions.Clear();
+
+            foreach (Vector2Int position in positions)
+            {
+                AddChessBoardTile(position);
+            }
         }
 
         public void Initialize(ChessBoardDTO chessBoardDTO)
@@ -41,6 +56,13 @@ namespace QC.Match.Objects
             foreach (var chessBoardObjectInstanceDTO in chessBoardDTO.objects)
             {
                 AddChessBoardObject(chessBoardObjectInstanceDTO);
+            }
+
+            boardPositions.Clear();
+
+            foreach (Vector2Int position in chessBoardDTO.boardPositions)
+            {
+                AddChessBoardTile(position);
             }
         }
 
@@ -52,13 +74,15 @@ namespace QC.Match.Objects
                 chessBoardObjectInstance.ShutdownComponents();
             }
         }
-
-        private ChessBoardObjectInstance CreateInstance(ChessBoardObject chessBoardObject)
+        
+        private void AddChessBoardTile(Vector2Int boardPosition)
         {
-            ChessBoardObjectInstance instance = new ChessBoardObjectInstance(chessBoardObject);
-            EnsureInstanceComponentsExist(instance);
-
-            return instance;
+            // Possibly need to expand this to take sprite etc. have some more data
+            TileBase tile = boardPosition.x % 2 == (boardPosition.y % 2 == 0 ? 1 : 0) ? blackTile : whiteTile;
+            
+            boardPositions.Add(boardPosition);
+            onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(boardPosition, tile));
+            onChanged?.Invoke();
         }
         
         private void EnsureInstanceComponentsExist(ChessBoardObjectInstance instance)
@@ -77,7 +101,8 @@ namespace QC.Match.Objects
             objects.Add(instance);
             
             onChessBoardObjectAdded?.Invoke(new ChessBoardObjectAddedArgs(instance));
-
+            onChanged?.Invoke();
+            
             return instance;
         }
 
@@ -142,6 +167,12 @@ namespace QC.Match.Objects
         #endregion
         
         #region Lua
+
+        [LuaMember("addChessBoardTile")]
+        private void AddChessBoardTile(LuaVector2Int boardPosition)
+        {
+            AddChessBoardTile(boardPosition.v);
+        }
 
         [LuaMember("addChessPiece")]
         private void AddChessPiece(int guid, LuaTable config)
