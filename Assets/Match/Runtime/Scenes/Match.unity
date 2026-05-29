@@ -157,6 +157,7 @@ MonoBehaviour:
   piecesViewRoot: {fileID: 1255884393}
   chessBoardTilemap: {fileID: 690885639}
   hitBoxCollider: {fileID: 690885640}
+  chessBoardTilemapChanged: {fileID: 11400000, guid: 1f206a4a1434c4b4185d03e0c81833f1, type: 2}
 --- !u!4 &277367575
 Transform:
   m_ObjectHideFlags: 0
@@ -335,6 +336,157 @@ MonoBehaviour:
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+--- !u!1 &456453836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456453837}
+  - component: {fileID: 456453841}
+  - component: {fileID: 456453840}
+  - component: {fileID: 456453839}
+  - component: {fileID: 456453842}
+  m_Layer: 0
+  m_Name: Events
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &456453837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456453836}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 875973177}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &456453839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456453836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc59c2492bc9b8408bbb68edf4988a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.Vector2EventListener
+  gameEvent: {fileID: 11400000, guid: 5a819ea16b858ac49b37e65c28d077b0, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 875973176}
+        m_TargetAssemblyTypeName: Celeste.Tilemaps.TilemapDrag, Celeste.Tilemaps
+        m_MethodName: EndDrag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456453840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456453836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc59c2492bc9b8408bbb68edf4988a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.Vector2EventListener
+  gameEvent: {fileID: 11400000, guid: 15b9eca4d3a0b3044923f2861faa7254, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 875973176}
+        m_TargetAssemblyTypeName: Celeste.Tilemaps.TilemapDrag, Celeste.Tilemaps
+        m_MethodName: DragUsingMouse
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456453841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456453836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc59c2492bc9b8408bbb68edf4988a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.Vector2EventListener
+  gameEvent: {fileID: 11400000, guid: 13b1cee57fbb72f44a516ef604d57345, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 875973176}
+        m_TargetAssemblyTypeName: Celeste.Tilemaps.TilemapDrag, Celeste.Tilemaps
+        m_MethodName: StartDrag
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456453842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456453836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c2c167d8138f94b8f96ff1b82578d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.EventListener
+  gameEvent: {fileID: 11400000, guid: 1f206a4a1434c4b4185d03e0c81833f1, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 875973176}
+        m_TargetAssemblyTypeName: Celeste.Tilemaps.TilemapDrag, Celeste.Tilemaps
+        m_MethodName: CentreCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &537746226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5744840686107370326, guid: 63214e18bc183496e94b73fa41e3ada0, type: 3}
@@ -427,6 +579,22 @@ TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: 7191675665641619489, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
   m_PrefabInstance: {fileID: 7586440324023284591}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &847570058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b259275c3654f84964377012a4abfec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Tilemaps::Celeste.Tilemaps.TilemapReference
+  helpText: 
+  isConstant: 1
+  constantValue: {fileID: 690885639}
+  referenceValue: {fileID: 0}
 --- !u!1001 &875973173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -493,11 +661,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8083884563404844915, guid: 87686155b62231749b1d99fe77b77160, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 456453837}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1274682420186252991, guid: 87686155b62231749b1d99fe77b77160, type: 3}
       insertIndex: -1
       addedObject: {fileID: 875973175}
+    - targetCorrespondingSourceObject: {fileID: 1274682420186252991, guid: 87686155b62231749b1d99fe77b77160, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 875973176}
   m_SourcePrefab: {fileID: 100100000, guid: 87686155b62231749b1d99fe77b77160, type: 3}
 --- !u!1 &875973174 stripped
 GameObject:
@@ -548,6 +722,25 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &875973176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875973174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca05efff270b7245a977e0649d5b177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Tilemaps::Celeste.Tilemaps.TilemapDrag
+  tilemap: {fileID: 847570058}
+  dragSpeed: {fileID: 1949891019}
+--- !u!4 &875973177 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8083884563404844915, guid: 87686155b62231749b1d99fe77b77160, type: 3}
+  m_PrefabInstance: {fileID: 875973173}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1839735485 &1019234146 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 2619428639064228203, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
@@ -770,6 +963,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1949891019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6294ba561ec44204db04b891314087d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Parameters::Celeste.Parameters.FloatReference
+  helpText: 
+  isConstant: 1
+  constantValue: 1
+  referenceValue: {fileID: 0}
 --- !u!1001 &2704217917382501527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -921,39 +1130,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Size.x
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Size.y
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Origin.x
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Origin.y
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Tiles.Array.size
-      value: 16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_TileAssetArray.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_TileColorArray.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_TileMatrixArray.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_TileSpriteArray.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Tiles.Array.data[0].first.x

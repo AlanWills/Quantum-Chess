@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4dca9494e81e14994cf3479db1217e, type: 3}
   m_Name: SFXSettings
   m_EditorClassIdentifier: Celeste.Sound::Celeste.Sound.Settings.SFXSettingsUsingAssets
-  sfxEnabled: {fileID: 0}
-  playSFXWithRawClip: {fileID: 0}
-  playSFXWithSettings: {fileID: 0}
-  playSFXOneShotWithRawClip: {fileID: 0}
-  playSFXOneShotWithSettings: {fileID: 0}
+  sfxEnabled: {fileID: 11400000, guid: 3eed6292d3a31404d902c0f0c8f58f95, type: 2}
+  playSFXWithRawClip: {fileID: 11400000, guid: ef966062692627148a3dd8fe640184f2, type: 2}
+  playSFXWithSettings: {fileID: 11400000, guid: ae28b226b0f5c24488d154804a34afa7, type: 2}
+  playSFXOneShotWithRawClip: {fileID: 11400000, guid: 48cb7be28c92f1944aed44df0a6c29c2, type: 2}
+  playSFXOneShotWithSettings: {fileID: 11400000, guid: f1ffbf999282feb4abd8cc07f2836f7a, type: 2}

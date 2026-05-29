@@ -21,6 +21,9 @@ namespace QC.Match.Views
         [SerializeField] private Tilemap chessBoardTilemap;
         [SerializeField] private Collider2D hitBoxCollider;
 
+        [Header("Events")] 
+        [SerializeField] private Celeste.Events.Event chessBoardTilemapChanged;
+
         [NonSerialized] private readonly List<ChessBoardObjectView> chessBoardObjectViews = new();
         
         #endregion
@@ -51,6 +54,7 @@ namespace QC.Match.Views
         private void AddChessBoardTile(Vector2Int position, TileBase tile)
         {
             chessBoardTilemap.SetTile(position.ToVector3Int(), tile);
+            chessBoardTilemapChanged.Invoke();
         }
         
         #region Callbacks

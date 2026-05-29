@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Celeste.Components;
 using Celeste.Lua.Maths;
+using Celeste.Persistence.Wrappers;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
@@ -60,9 +61,9 @@ namespace QC.Match.Objects
 
             boardPositions.Clear();
 
-            foreach (Vector2Int position in chessBoardDTO.boardPositions)
+            foreach (SerializableVector2Int position in chessBoardDTO.boardPositions)
             {
-                AddChessBoardTile(position);
+                AddChessBoardTile(position.v);
             }
         }
 
