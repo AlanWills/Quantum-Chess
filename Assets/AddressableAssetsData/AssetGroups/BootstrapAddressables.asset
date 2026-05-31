@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 86df0e01a12c9430f8ff733e9a8eecb6
   m_SerializeEntries:
   - m_GUID: 17fc41ad08e746228578cf1814fb8304
-    m_Address: Assets/Match/Runtime/Scripts/Lua/Match/SelectObjectCommand.lua
+    m_Address: Commands/SelectObjectCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

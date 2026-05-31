@@ -14,9 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.ChessPieceVisualLookup
   sprites:
   - Type: 1
-    Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 37cee19a37c0242ef8c76993087303a7, type: 3}
   - Type: 2
     Colour: 2
     Sprite: {fileID: 21300000, guid: 832a6d727d25349f18ff884a907fe788, type: 3}
+  - Type: 4
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 3423aea292c1f4b03b37443c2f0121c1, type: 3}
+  - Type: 8
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 32146905bfadd45e791f30b97de44dd5, type: 3}
+  - Type: 16
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 5fa10a6f9dca3417f84053e7135ec584, type: 3}
+  - Type: 32
+    Colour: 2
+    Sprite: {fileID: 21300000, guid: 8f0e0a44dbd2a400d8e27af2c437db43, type: 3}
+  - Type: 1
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 2
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 4
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 8
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 1
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+  - Type: 1
+    Colour: 1
+    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
   fallbackSprite: {fileID: 21300000, guid: 4f3b6a6d166054a69acce73e9eadae48, type: 3}
