@@ -99,11 +99,18 @@ namespace QC.Match.Views
             chessBoardCommandExecutor.QueueCommand(clearSelectionCommands);
         }
 
-        public void OnChessBoardActionPressed(InputState inputState)
+        public void OnChessBoardMovementActionPressed(InputState inputState)
         {
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
+        }
+
+        public void OnChessBoardAttackActionPressed(InputState inputState)
+        {
+            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
+            AttackWithSelectedChessBoardObjectCommand attackWithSelectedChessBoardObjectCommand = new AttackWithSelectedChessBoardObjectCommand(position);
+            chessBoardCommandExecutor.QueueCommand(attackWithSelectedChessBoardObjectCommand);
         }
         
         #endregion

@@ -15,19 +15,10 @@ namespace QC.Match.Commands
         public CommandState Execute(ChessBoardCommandArgs args)
         {
             ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
-            
-            CommandState commandState = MoveCommandUtils.TryMoveChessBoardObject(
+            return MoveCommandUtils.TryMoveChessBoardObject(
                 args, 
                 chessBoardObjectInstance,
                 chessBoardObjectEndingPosition);
-
-            if (commandState == CommandState.Completed)
-            {
-                // Clear selection on successful move
-                args.Selection.CurrentSelectedObject = null;
-            }
-
-            return commandState;
         }
     }
 }

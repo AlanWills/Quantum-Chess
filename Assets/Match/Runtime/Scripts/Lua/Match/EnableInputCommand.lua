@@ -1,11 +1,15 @@
-local MoveObjectCommand = { }
+local EnableInputCommand = { }
 
-function MoveObjectCommand.fromTo(startPosition, endPosition)
-    ChessBoardCommands.moveFromTo(ChessBoardCommandExecutor, startPosition, endPosition)
+function EnableInputCommand.forColour(colour)
+    ChessBoardCommands.enableInputForColour(ChessBoardCommandExecutor, colour)
 end
 
-function MoveObjectCommand.selectedTo(endPosition)
-    ChessBoardCommands.moveSelectedTo(ChessBoardCommandExecutor, endPosition)
+function EnableInputCommand.forWhite()
+    EnableInputCommand.forColour("White")
 end
 
-return MoveObjectCommand
+function EnableInputCommand.forBlack()
+    EnableInputCommand.forColour("Black")
+end
+
+return EnableInputCommand

@@ -32,7 +32,10 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "moveFromTo", MoveFromTo));
             functions.Add(new LibraryFunction(kName, "moveSelectedTo", MoveSelectedTo));
             functions.Add(new LibraryFunction(kName, "selectAt", SelectAt));
+            functions.Add(new LibraryFunction(kName, "clearSelection", ClearSelection));
             functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
+            functions.Add(new LibraryFunction(kName, "attackFromTo", AttackFromTo));
+            functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -75,6 +78,17 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
 
+        private ValueTask<int> ClearSelection(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            ClearSelectedChessBoardObjectCommand clearSelectionCommand = new ClearSelectedChessBoardObjectCommand();
+            chessBoardCommandExecutor.QueueCommand(clearSelectionCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+
         private ValueTask<int> EnableInputForColour(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
@@ -91,6 +105,33 @@ namespace QC.Match.Lua
             
             EnableInputForChessPieceColourCommand enableInputCommand = new EnableInputForChessPieceColourCommand(chessPieceColour);
             chessBoardCommandExecutor.QueueCommand(enableInputCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> AttackFromTo(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            LuaVector2Int start = context.GetArgument<LuaVector2Int>(1);
+            LuaVector2Int end = context.GetArgument<LuaVector2Int>(2);
+            
+            AttackWithChessBoardObjectFromToCommand attackFromTo = new AttackWithChessBoardObjectFromToCommand(start.v, end.v);
+            chessBoardCommandExecutor.QueueCommand(attackFromTo);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> AttackWithSelectedTo(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            LuaVector2Int end = context.GetArgument<LuaVector2Int>(1);
+            
+            AttackWithSelectedChessBoardObjectCommand attackWithSelectedTo = new AttackWithSelectedChessBoardObjectCommand(end.v);
+            chessBoardCommandExecutor.QueueCommand(attackWithSelectedTo);
             
             return new ValueTask<int>(context.Return());
         }

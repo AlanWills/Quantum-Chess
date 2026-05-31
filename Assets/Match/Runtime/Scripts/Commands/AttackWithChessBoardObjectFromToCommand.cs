@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct MoveChessBoardObjectFromToCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct AttackWithChessBoardObjectFromToCommand : ICommand<ChessBoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectStartingPosition;
         private readonly Vector2Int chessBoardObjectEndingPosition;
         
-        public MoveChessBoardObjectFromToCommand(Vector2Int start, Vector2Int end)
+        public AttackWithChessBoardObjectFromToCommand(Vector2Int start, Vector2Int end)
         {
             chessBoardObjectStartingPosition = start;
             chessBoardObjectEndingPosition = end;
@@ -19,7 +19,7 @@ namespace QC.Match.Commands
             ChessBoardObjectInstance chessBoardObjectInstance =
                 args.ChessBoard.GetChessBoardObjectAt(chessBoardObjectStartingPosition);
 
-            return MoveCommandUtils.TryMoveChessBoardObject(
+            return AttackCommandUtils.TryAttackWithChessBoardObject(
                 args, 
                 chessBoardObjectInstance, 
                 chessBoardObjectEndingPosition);

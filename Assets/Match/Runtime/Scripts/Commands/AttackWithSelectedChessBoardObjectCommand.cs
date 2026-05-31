@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct MoveSelectedChessBoardObjectToCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct AttackWithSelectedChessBoardObjectCommand : ICommand<ChessBoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectEndingPosition;
         
-        public MoveSelectedChessBoardObjectToCommand(Vector2Int end)
+        public AttackWithSelectedChessBoardObjectCommand(Vector2Int end)
         {
             chessBoardObjectEndingPosition = end;
         }
@@ -15,19 +15,10 @@ namespace QC.Match.Commands
         public CommandState Execute(ChessBoardCommandArgs args)
         {
             ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
-            
-            CommandState commandState = MoveCommandUtils.TryMoveChessBoardObject(
+            return AttackCommandUtils.TryAttackWithChessBoardObject(
                 args, 
                 chessBoardObjectInstance,
                 chessBoardObjectEndingPosition);
-
-            if (commandState == CommandState.Completed)
-            {
-                // Clear selection on successful move
-                args.Selection.CurrentSelectedObject = null;
-            }
-
-            return commandState;
         }
     }
 }

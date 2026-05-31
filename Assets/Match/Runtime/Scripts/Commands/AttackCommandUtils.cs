@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public static class MoveCommandUtils
+    public static class AttackCommandUtils
     {
-        public static CommandState TryMoveChessBoardObject(
+        public static CommandState TryAttackWithChessBoardObject(
             ChessBoardCommandArgs args,
             ChessBoardObjectInstance instance,
             Vector2Int endingPosition)
@@ -22,15 +22,40 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
+            if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+            {
+                UnityEngine.Debug.LogAssertion($"Could not find {nameof(IChessPiece)} component for chess board object when executing move object command.");
+                return CommandState.Abandoned;
+            }
+            
             ChessBoardObjectInstance endingPositionInstance = args.ChessBoard.GetChessBoardObjectAt(endingPosition);
             
             if (endingPositionInstance == null)
             {
-                grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
-                return CommandState.Completed;
+                UnityEngine.Debug.LogAssertion($"Attempting to attack with chess board object at {endingPosition}, but there is no chess board object there.");
+                return CommandState.Abandoned;
             }
+
+            if (!endingPositionInstance.TryFindComponent<IChessPiece>(out var otherChessPiece))
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to attack with chess board object at {endingPosition}, but there is no chess board object there with an {nameof(IChessPiece)} interface.");
+                return CommandState.Abandoned;
+            }
+
+            ChessPieceColour chessPieceColour = chessPiece.iFace.GetPieceColour(chessPiece.instance);
+            if (chessPieceColour == otherChessPiece.iFace.GetPieceColour(otherChessPiece.instance))
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to attack with chess board object at {endingPosition}, but there is a chess board object there with the same colour ({chessPieceColour}).");
+                return CommandState.Abandoned;
+            }
+
+            args.ChessBoard.RemoveChessBoardObject(endingPositionInstance);
+            grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
             
-            return CommandState.Abandoned;
+            // Clear selection on successful attack
+            args.Selection.CurrentSelectedObject = null;
+            
+            return CommandState.Completed;
         }
     }
 }

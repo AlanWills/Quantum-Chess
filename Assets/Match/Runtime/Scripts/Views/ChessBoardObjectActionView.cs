@@ -14,7 +14,8 @@ namespace QC.Match.Views
         #region Properties and Fields
 
         [SerializeField] private ChessBoard chessBoard;
-        [SerializeField] private Tilemap actionTilemap;
+        [SerializeField] private Tilemap movementTilemap;
+        [SerializeField] private Tilemap attackTilemap;
         [SerializeField] private TileBase validMovementTile;
         [SerializeField] private TileBase validAttackTile;
 
@@ -24,8 +25,11 @@ namespace QC.Match.Views
 
         private void UpdateValidActionsForObject(ChessBoardObjectInstance instance)
         {
-            actionTilemap.ClearAllTiles();
-            actionTilemap.CompressBounds();
+            movementTilemap.ClearAllTiles();
+            movementTilemap.CompressBounds();
+            
+            attackTilemap.ClearAllTiles();
+            attackTilemap.CompressBounds();
             
             if (instance == null ||
                 !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) ||
@@ -52,8 +56,8 @@ namespace QC.Match.Views
                     continue;
                 }
                 
-                Vector2Int boardPositionInActionTilemapSpace = validMove + actionTilemap.origin.ToVector2Int();
-                actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validMovementTile);
+                Vector2Int boardPositionInActionTilemapSpace = validMove + movementTilemap.origin.ToVector2Int();
+                movementTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validMovementTile);
             }
             
             boardPositionCache.Clear();
@@ -72,8 +76,8 @@ namespace QC.Match.Views
                     continue;
                 }
                 
-                Vector2Int boardPositionInActionTilemapSpace = validAttack + actionTilemap.origin.ToVector2Int();
-                actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
+                Vector2Int boardPositionInActionTilemapSpace = validAttack + attackTilemap.origin.ToVector2Int();
+                attackTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
             }
             
             boardPositionCache.Clear();

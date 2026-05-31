@@ -592,7 +592,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.ChessBoardObjectActionView
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
-  actionTilemap: {fileID: 1019234146}
+  movementTilemap: {fileID: 1019234146}
+  attackTilemap: {fileID: 678907614}
   validMovementTile: {fileID: 11400000, guid: 1458eaeabc25e4af5943804616616fb4, type: 2}
   validAttackTile: {fileID: 11400000, guid: a013e318a21d6432dbe7934edfc68b10, type: 2}
 --- !u!114 &538604457
@@ -624,6 +625,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1839735485 &678907614 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 2152635852717601418, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+  m_PrefabInstance: {fileID: 7586440324023284591}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1839735485 &690885639 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 8607257239243547606, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
@@ -1208,6 +1214,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 277367574}
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnChessBoardAttackActionPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 911416478762887979, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Name
       value: ChessBoardTilemap
@@ -1226,7 +1256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnChessBoardActionPressed
+      value: OnChessBoardMovementActionPressed
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1235,6 +1265,10 @@ PrefabInstance:
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984266344455712262, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: m_Name
+      value: Layer3 - MovementOverlay
       objectReference: {fileID: 0}
     - target: {fileID: 5135411952546777369, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size
