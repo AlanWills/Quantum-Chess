@@ -248,7 +248,8 @@ namespace QC.Match.Objects
                 {
                     int xPosition = config.GetInt("x");
                     int yPosition = config.GetInt("y");
-                    gridTransform.iFace.SetPosition(gridTransform.instance, xPosition, yPosition);
+                    Vector2Int boardPosition = new Vector2Int(xPosition, yPosition);
+                    gridTransform.iFace.SetPosition(gridTransform.instance, boardPosition);
                 }
                 else
                 {

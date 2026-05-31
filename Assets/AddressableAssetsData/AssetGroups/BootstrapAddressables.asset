@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: BootstrapAddressables
   m_GUID: 86df0e01a12c9430f8ff733e9a8eecb6
   m_SerializeEntries:
+  - m_GUID: 17fc41ad08e746228578cf1814fb8304
+    m_Address: Assets/Match/Runtime/Scripts/Lua/Match/SelectObjectCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4250007028fdc4b23b6c70985a3fb479
     m_Address: Assets/Bootstrap/Jobs/LoadGameSystemsSceneSet.asset
     m_ReadOnly: 0
@@ -50,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - BootstrapAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e04954f1e234d3eb3ec2392ad5e2adc
+    m_Address: Commands/MoveObjectCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aeddded44ecf14a5ca0a8787a898072d
     m_Address: Assets/EngineSystems/Scenes/EngineSystemsSceneSet.asset

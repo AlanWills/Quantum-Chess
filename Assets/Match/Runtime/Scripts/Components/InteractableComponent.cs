@@ -7,25 +7,35 @@ namespace QC.Match.Components
     [DisplayName("Interactable")]
     public class InteractableComponent : ChessBoardObjectComponent, IInteractable
     {
-        #region Properties and Fields
+        #region Data
 
-        [NonSerialized] private bool isInteractable;
+        [Serializable]
+        private class Data : ComponentData
+        {
+            [NonSerialized] public bool isInteractable;
+        }
         
         #endregion
-        
+
+        public override ComponentData CreateData()
+        {
+            return new Data();
+        }
+
         public bool IsInteractable(Instance instance)
         {
-            return isInteractable;
+            return (instance.data as Data).isInteractable;
         }
 
         public void SetInteractable(Instance instance, bool interactable)
         {
-            if (isInteractable == interactable)
+            Data data = instance.data as Data;
+            if (data.isInteractable == interactable)
             {
                 return;
             }
             
-            isInteractable = interactable;
+            data.isInteractable = interactable;
             instance.events.ComponentDataChanged.Invoke();
         }
     }

@@ -89,14 +89,8 @@ namespace QC.Match.Views
 
         public void OnChessBoardPressed(InputState inputState)
         {
-            Vector3Int boardPosition = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition);
-            
-            // Board Positions are 1-indexed
-            boardPosition.x += 1;
-            boardPosition.y += 1;
-            
-            MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand =
-                new MoveSelectedChessBoardObjectToCommand(boardPosition.ToVector2Int());
+            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).CellToBoardSpace();
+            MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
         }
         
