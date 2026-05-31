@@ -57,12 +57,24 @@ namespace QC.Match.Views
             chessBoardTilemap.CompressBounds();
             chessBoardTilemapChanged.Invoke();
         }
+
+        private void RemoveChessBoardTile(Vector2Int position)
+        {
+            chessBoardTilemap.SetTile(position.ToVector3Int(), null);
+            chessBoardTilemap.CompressBounds();
+            chessBoardTilemapChanged.Invoke();
+        }
         
         #region Callbacks
 
         public void OnChessBoardTileAdded(ChessBoardTileAddedArgs args)
         {
             AddChessBoardTile(args.BoardPosition, args.Tile);
+        }
+
+        public void OnChessBoardTileRemoved(ChessBoardTileRemovedArgs args)
+        {
+            RemoveChessBoardTile(args.BoardPosition);
         }
 
         public void OnChessBoardObjectSelectionChanged(ChessBoardObjectSelectionChangedArgs args)

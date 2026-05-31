@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Celeste.Components;
 using Celeste.Lua.Maths;
 using Celeste.Persistence.Wrappers;
@@ -33,6 +34,7 @@ namespace QC.Match.Objects
 
         [Header("Events")] 
         [SerializeField] private ChessBoardTileAddedEvent onChessBoardTileAdded;
+        [SerializeField] private ChessBoardTileRemovedEvent onChessBoardTileRemoved;
         [SerializeField] private ChessBoardObjectAddedEvent onChessBoardObjectAdded;
         [SerializeField] private ChessBoardObjectRemovedEvent onChessBoardObjectRemoved;
         [SerializeField] private Celeste.Events.Event onChanged;
@@ -85,6 +87,16 @@ namespace QC.Match.Objects
             boardPositions.Add(boardPosition);
             onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(boardPosition, tile));
             onChanged?.Invoke();
+        }
+        
+        private void RemoveChessBoardTile(Vector2Int boardPosition)
+        {
+            if (boardPositions.Remove(boardPosition))
+            {
+                boardPositions.Add(boardPosition);
+                onChessBoardTileRemoved?.Invoke(new ChessBoardTileRemovedArgs(boardPosition));
+                onChanged?.Invoke();
+            }
         }
 
         public bool DoesChessBoardTileExist(Vector2Int boardPosition)
@@ -181,6 +193,12 @@ namespace QC.Match.Objects
             for (int i = objects.Count - 1; i >= 0; --i)
             {
                 RemoveChessBoardObject(objects[i]);
+            }
+
+            List<Vector2Int> boardPositionsClone = boardPositions.ToList();
+            foreach (Vector2Int boardPosition in boardPositionsClone)
+            {
+                RemoveChessBoardTile(boardPosition);
             }
         }
 

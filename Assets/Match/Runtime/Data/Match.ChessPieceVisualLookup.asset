@@ -36,17 +36,17 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
   - Type: 2
     Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Sprite: {fileID: 21300000, guid: 4eb5698ae459947dbad0211acc760b57, type: 3}
   - Type: 4
     Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Sprite: {fileID: 21300000, guid: 88952a2fe5471442292d5770af1893ac, type: 3}
   - Type: 8
     Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Sprite: {fileID: 21300000, guid: b7b58db45d217419c8ff4cd2901a415d, type: 3}
   - Type: 16
     Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Sprite: {fileID: 21300000, guid: 0e5a6ca0ed0e44071babc15f02f36b17, type: 3}
   - Type: 32
     Colour: 1
-    Sprite: {fileID: 21300000, guid: 9d277e86c7b25441ea6ab338180eb6b4, type: 3}
+    Sprite: {fileID: 21300000, guid: c236160cef4204a70967039ab5a7f9a4, type: 3}
   fallbackSprite: {fileID: 21300000, guid: 4f3b6a6d166054a69acce73e9eadae48, type: 3}
