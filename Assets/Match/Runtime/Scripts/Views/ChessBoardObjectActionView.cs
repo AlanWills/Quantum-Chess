@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Celeste.Components;
 using Celeste.Maths;
 using QC.Match.Events;
 using QC.Match.Objects;
@@ -9,10 +12,13 @@ namespace QC.Match.Views
     public class ChessBoardObjectActionView : MonoBehaviour
     {
         #region Properties and Fields
-        
+
+        [SerializeField] private ChessBoard chessBoard;
         [SerializeField] private Tilemap actionTilemap;
         [SerializeField] private TileBase validMovementTile;
         [SerializeField] private TileBase validAttackTile;
+
+        [NonSerialized] private readonly List<Vector2Int> boardPositionCache = new();
 
         #endregion
 
@@ -22,18 +28,57 @@ namespace QC.Match.Views
             actionTilemap.CompressBounds();
             
             if (instance == null ||
-                !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
+                !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) ||
+                !instance.TryFindComponent<IObjectActionProvider>(out var actionProvider))
             {
                 return;
             }
+
+            Vector2Int boardPosition = grid2DTransform.iFace.GetPosition(grid2DTransform.instance);
+            CalculateValidMoves(boardPosition, actionProvider);
+            CalculateValidAttacks(boardPosition, actionProvider);
+        }
+
+        private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
+        {
+            boardPositionCache.Clear();
+            actionProvider.iFace.CalculateValidMoves(actionProvider.instance, boardPosition, chessBoard.BoardPositions, boardPositionCache);
+
+            foreach (Vector2Int validMove in boardPositionCache)
+            {
+                if (!chessBoard.DoesChessBoardTileExist(validMove) || 
+                    chessBoard.GetChessBoardObjectAt(validMove) != null)
+                {
+                    continue;
+                }
+                
+                Vector2Int cellPosition = validMove.BoardToCellSpace();
+                Vector2Int boardPositionInActionTilemapSpace = cellPosition + actionTilemap.origin.ToVector2Int();
+                actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validMovementTile);
+            }
             
-            Vector2Int cellPosition = grid2DTransform.iFace.GetPosition(grid2DTransform.instance).BoardToCellSpace();
-            Vector2Int boardPositionInActionTilemapSpace = cellPosition + actionTilemap.origin.ToVector2Int();
+            boardPositionCache.Clear();
+        }
+
+        private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
+        {
+            boardPositionCache.Clear();
+            actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, boardPosition, chessBoard.Objects, boardPositionCache);
+
+            foreach (Vector2Int validAttack in boardPositionCache)
+            {
+                if (!chessBoard.DoesChessBoardTileExist(validAttack) ||
+                    chessBoard.GetChessBoardObjectAt(validAttack) == null)
+                {
+                    continue;
+                }
+
+                Vector2Int cellPosition = validAttack.BoardToCellSpace();
+                Vector2Int boardPositionInActionTilemapSpace = cellPosition + actionTilemap.origin.ToVector2Int();
+                actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
+            }
             
-            actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int() + new Vector3Int(1, 0, 0), validMovementTile);
-            actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int() + new Vector3Int(-1, 0, 0), validMovementTile);
-            actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int() + new Vector3Int(0, 1, 0), validMovementTile);
-            actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int() + new Vector3Int(0, -1, 0), validMovementTile);
+            boardPositionCache.Clear();
         }
         
         #region Callbacks

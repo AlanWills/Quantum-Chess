@@ -85,6 +85,11 @@ namespace QC.Match.Objects
             onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(boardPosition, tile));
             onChanged?.Invoke();
         }
+
+        public bool DoesChessBoardTileExist(Vector2Int boardPosition)
+        {
+            return boardPositions.Contains(boardPosition);
+        }
         
         private void EnsureInstanceComponentsExist(ChessBoardObjectInstance instance)
         {

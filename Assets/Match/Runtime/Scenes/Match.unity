@@ -591,6 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd3580b9786440a99984ef6c2ad0711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.ChessBoardObjectActionView
+  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   actionTilemap: {fileID: 1019234146}
   validMovementTile: {fileID: 11400000, guid: 1458eaeabc25e4af5943804616616fb4, type: 2}
   validAttackTile: {fileID: 11400000, guid: a013e318a21d6432dbe7934edfc68b10, type: 2}
