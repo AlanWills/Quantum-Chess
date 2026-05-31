@@ -91,7 +91,7 @@ MonoBehaviour:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fffb94954dd64ed097824506b9fc9f60
-    m_Address: Assets/Match/Runtime/Scripts/Lua/Match/AttackCommand.lua
+    m_Address: Commands/AttackCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

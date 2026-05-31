@@ -27,7 +27,7 @@ namespace QC.Match.Objects
 
         [SerializeField] private ChessBoardObjectCatalogue chessBoardObjectCatalogue;
         
-        // Can change these to actual objects
+        // Can change these to actual objects in a catalogue
         [SerializeField] private TileBase blackTile;
         [SerializeField] private TileBase whiteTile;
 
@@ -79,7 +79,8 @@ namespace QC.Match.Objects
         private void AddChessBoardTile(Vector2Int boardPosition)
         {
             // Possibly need to expand this to take sprite etc. have some more data
-            TileBase tile = boardPosition.x % 2 == (boardPosition.y % 2 == 0 ? 1 : 0) ? blackTile : whiteTile;
+            bool isEvenYPosition = boardPosition.y % 2 == 0;
+            TileBase tile = boardPosition.x % 2 == (isEvenYPosition ? 1 : 0) ? whiteTile : blackTile;
             
             boardPositions.Add(boardPosition);
             onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(boardPosition, tile));
@@ -173,6 +174,15 @@ namespace QC.Match.Objects
         #endregion
         
         #region Lua
+
+        [LuaMember("clear")]
+        private void Clear()
+        {
+            for (int i = objects.Count - 1; i >= 0; --i)
+            {
+                RemoveChessBoardObject(objects[i]);
+            }
+        }
 
         [LuaMember("addChessBoardTile")]
         private void AddChessBoardTile(LuaVector2Int boardPosition)
