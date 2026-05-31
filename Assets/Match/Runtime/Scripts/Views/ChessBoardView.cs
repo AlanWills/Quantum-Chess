@@ -54,6 +54,7 @@ namespace QC.Match.Views
         private void AddChessBoardTile(Vector2Int position, TileBase tile)
         {
             chessBoardTilemap.SetTile(position.ToVector3Int(), tile);
+            chessBoardTilemap.CompressBounds();
             chessBoardTilemapChanged.Invoke();
         }
         
