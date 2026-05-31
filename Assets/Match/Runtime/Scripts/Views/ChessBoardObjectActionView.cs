@@ -42,7 +42,7 @@ namespace QC.Match.Views
         private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.iFace.CalculateValidMoves(actionProvider.instance, boardPosition, chessBoard.BoardPositions, boardPositionCache);
+            actionProvider.iFace.CalculateValidMoves(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);
 
             foreach (Vector2Int validMove in boardPositionCache)
             {
@@ -62,7 +62,7 @@ namespace QC.Match.Views
         private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, boardPosition, chessBoard.Objects, boardPositionCache);
+            actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);
 
             foreach (Vector2Int validAttack in boardPositionCache)
             {

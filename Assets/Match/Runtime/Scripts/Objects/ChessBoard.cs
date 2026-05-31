@@ -16,7 +16,7 @@ namespace QC.Match.Objects
 {
     [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(ChessBoard), menuName = "QC/Match/Board State")]
-    public partial class ChessBoard : ScriptableObject
+    public partial class ChessBoard : ScriptableObject, IChessBoardLookup
     {
         #region Properties and Fields
 
@@ -135,11 +135,11 @@ namespace QC.Match.Objects
             return AddChessBoardObjectInstance(instance);
         }
         
-        public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int position)
+        public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
         {
             return objects.Find(obj => 
                 obj.TryFindComponent(out InterfaceHandle<IGrid2DTransform> grid2DTransform) && 
-                grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == position);
+                grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == boardPosition);
         }
         
         public ChessBoardObjectInstance GetChessBoardObjectAt(int x, int y)

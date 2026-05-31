@@ -10,12 +10,12 @@ namespace QC.Match
         void CalculateValidMoves(
             Instance instance, 
             Vector2Int currentBoardPosition,
-            IReadOnlyCollection<Vector2Int> boardPositions,
+            IChessBoardLookup chessBoardLookup, 
             IList<Vector2Int> validMoves);
         void CalculateValidAttacks(
             Instance instance, 
             Vector2Int currentBoardPosition,
-            IReadOnlyList<ChessBoardObjectInstance> otherObjects, 
-            IList<Vector2Int> validMoves);
+            IChessBoardLookup chessBoardLookup, 
+            IList<Vector2Int> validAttacks);
     }
 }
