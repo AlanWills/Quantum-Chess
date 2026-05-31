@@ -1211,6 +1211,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChessBoardTilemap
       objectReference: {fileID: 0}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 277367574}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnChessBoardActionPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
+      propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5135411952546777369, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size
       value: 1

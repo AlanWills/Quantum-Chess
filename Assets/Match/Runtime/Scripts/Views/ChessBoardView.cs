@@ -89,6 +89,12 @@ namespace QC.Match.Views
 
         public void OnChessBoardPressed(InputState inputState)
         {
+            ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
+            chessBoardCommandExecutor.QueueCommand(clearSelectionCommands);
+        }
+
+        public void OnChessBoardActionPressed(InputState inputState)
+        {
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).CellToBoardSpace();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
