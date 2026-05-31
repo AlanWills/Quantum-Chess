@@ -53,7 +53,7 @@ namespace QC.Match.Views
 
         private void AddChessBoardTile(Vector2Int position, TileBase tile)
         {
-            chessBoardTilemap.SetTile(position.BoardToCellSpace().ToVector3Int(), tile);
+            chessBoardTilemap.SetTile(position.ToVector3Int(), tile);
             chessBoardTilemap.CompressBounds();
             chessBoardTilemapChanged.Invoke();
         }
@@ -87,6 +87,12 @@ namespace QC.Match.Views
             }
         }
 
+        public void OnChessBoardBackgroundPressed(InputState inputState)
+        {
+            ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
+            chessBoardCommandExecutor.QueueCommand(clearSelectionCommands);
+        }
+
         public void OnChessBoardPressed(InputState inputState)
         {
             ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
@@ -95,7 +101,7 @@ namespace QC.Match.Views
 
         public void OnChessBoardActionPressed(InputState inputState)
         {
-            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).CellToBoardSpace();
+            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
         }

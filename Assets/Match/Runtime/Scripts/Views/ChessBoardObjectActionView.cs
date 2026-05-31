@@ -52,8 +52,7 @@ namespace QC.Match.Views
                     continue;
                 }
                 
-                Vector2Int cellPosition = validMove.BoardToCellSpace();
-                Vector2Int boardPositionInActionTilemapSpace = cellPosition + actionTilemap.origin.ToVector2Int();
+                Vector2Int boardPositionInActionTilemapSpace = validMove + actionTilemap.origin.ToVector2Int();
                 actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validMovementTile);
             }
             
@@ -72,9 +71,8 @@ namespace QC.Match.Views
                 {
                     continue;
                 }
-
-                Vector2Int cellPosition = validAttack.BoardToCellSpace();
-                Vector2Int boardPositionInActionTilemapSpace = cellPosition + actionTilemap.origin.ToVector2Int();
+                
+                Vector2Int boardPositionInActionTilemapSpace = validAttack + actionTilemap.origin.ToVector2Int();
                 actionTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
             }
             
