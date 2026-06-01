@@ -363,6 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d3b565b228d4d0eb1bf7dc8e8791ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime.Lua::QC.Match.MatchLuaBindings
+  matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
@@ -970,8 +971,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1538463193}
   - component: {fileID: 1538463194}
+  - component: {fileID: 1538463195}
   m_Layer: 0
-  m_Name: MatchManager
+  m_Name: MatchStateManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1004,6 +1006,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4c73f405e0a4d878e283ecb31b9ac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.CommandExecutorManager
+  snapshotRecord: {fileID: 11400000, guid: 027467ab1e1b0b3459e902ce03393db2, type: 2}
+  loadOnAwake: 1
+  loadOnStart: 0
+  matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
@@ -1028,6 +1034,35 @@ MonoBehaviour:
       - m_Target: {fileID: 277367574}
         m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
         m_MethodName: Shutdown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1538463195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538463192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c2c167d8138f94b8f96ff1b82578d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.EventListener
+  gameEvent: {fileID: 11400000, guid: a012f45e458c7994a9fc972b20e22521, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1538463194}
+        m_TargetAssemblyTypeName: QC.Match.Managers.MatchManager, QC.Match.Runtime
+        m_MethodName: Save
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

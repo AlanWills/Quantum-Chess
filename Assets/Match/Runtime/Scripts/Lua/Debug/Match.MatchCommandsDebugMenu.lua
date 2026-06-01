@@ -3,14 +3,14 @@ local AttackCommand = require("Commands/AttackCommand.lua")
 local SelectCommand = require("Commands/SelectCommand.lua")
 local EnableInputCommand = require("Commands/EnableInputCommand.lua") 
 
-local ChessBoardCommandsDebugMenu = { }
-ChessBoardCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
-ChessBoardCommandsDebugMenu.toMovePosition = Vector2Int.new(1, 1)
-ChessBoardCommandsDebugMenu.fromAttackPosition = Vector2Int.new(0, 0)
-ChessBoardCommandsDebugMenu.toAttackPosition = Vector2Int.new(1, 1)
-ChessBoardCommandsDebugMenu.selectPosition = Vector2Int.new(0, 0)
+local MatchCommandsDebugMenu = { }
+MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.toMovePosition = Vector2Int.new(1, 1)
+MatchCommandsDebugMenu.fromAttackPosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.toAttackPosition = Vector2Int.new(1, 1)
+MatchCommandsDebugMenu.selectPosition = Vector2Int.new(0, 0)
 
-function ChessBoardCommandsDebugMenu:onDrawMenu()
+function MatchCommandsDebugMenu:onDrawMenu()
     GUILayout.beginSection("Move")
         self.fromMovePosition = GUILayout.vector2IntField("From", self.fromMovePosition)
         self.toMovePosition = GUILayout.vector2IntField("To", self.toMovePosition)
@@ -68,4 +68,4 @@ function ChessBoardCommandsDebugMenu:onDrawMenu()
     GUILayout.endSection()
 end
 
-return ChessBoardCommandsDebugMenu
+return MatchCommandsDebugMenu

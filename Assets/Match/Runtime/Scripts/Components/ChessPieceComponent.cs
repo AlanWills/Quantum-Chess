@@ -9,7 +9,7 @@ using UnityEngine;
 namespace QC.Match.Components
 {
     [DisplayName("Chess Piece Type")]
-    public class ChessPieceComponent : ChessBoardObjectComponent, IChessPiece, IObjectActionProvider
+    public class ChessPieceComponent : ChessBoardObjectComponent, IChessPiece, IObjectActionProvider, IObjectStatus
     {
         #region Save Data
 
@@ -18,6 +18,7 @@ namespace QC.Match.Components
         {
             public ChessPieceColour currentPieceColour;
             public ChessPieceType currentPieceType;
+            public bool hasMoved;
         }
         
         #endregion
@@ -34,7 +35,8 @@ namespace QC.Match.Components
             return new SaveData
             {
                 currentPieceColour = startingColour,
-                currentPieceType = startingPieceType
+                currentPieceType = startingPieceType,
+                hasMoved = false
             };
         }
 
@@ -68,6 +70,16 @@ namespace QC.Match.Components
             }
         }
 
+        public void SetHasMoved(Instance instance, bool hasMoved)
+        {
+            SaveData saveData = instance.data as SaveData;
+            if (saveData.hasMoved != hasMoved)
+            {
+                saveData.hasMoved = hasMoved;
+                instance.events.ComponentDataChanged.Invoke();
+            }
+        }
+
         public void CalculateValidMoves(
             Instance instance, 
             Vector2Int currentBoardPosition, 
@@ -82,6 +94,11 @@ namespace QC.Match.Components
                
                case ChessPieceType.Pawn:
                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1), chessBoardLookup, validMoves);
+
+                   if (!saveData.hasMoved)
+                   {
+                       AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2), chessBoardLookup, validMoves);
+                   }
                    
                    return;
                

@@ -12,12 +12,12 @@ using UnityEngine;
 
 namespace QC.Match.Lua
 {
-    public class ChessBoardCommandsLibrary : ILuaLibrary
+    public class MatchCommandsLibrary : ILuaLibrary
     {
         #region Properties and Fields
 
-        public static readonly ChessBoardCommandsLibrary Instance = new();
-        private const string kName = "ChessBoardCommands";
+        public static readonly MatchCommandsLibrary Instance = new();
+        private const string kName = nameof(MatchCommandsLibrary);
         
         public string Name => kName;
         public IReadOnlyList<LibraryFunction> Functions => functions;
@@ -27,7 +27,7 @@ namespace QC.Match.Lua
         
         #endregion
 
-        private ChessBoardCommandsLibrary()
+        private MatchCommandsLibrary()
         {
             functions.Add(new LibraryFunction(kName, "moveFromTo", MoveFromTo));
             functions.Add(new LibraryFunction(kName, "moveSelectedTo", MoveSelectedTo));
@@ -36,6 +36,8 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
             functions.Add(new LibraryFunction(kName, "attackFromTo", AttackFromTo));
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
+            functions.Add(new LibraryFunction(kName, "setActiveColour", SetActiveColour));
+            functions.Add(new LibraryFunction(kName, "switchActiveColour", SwitchActiveColour));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -123,15 +125,50 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> AttackWithSelectedTo(
-            LuaFunctionExecutionContext context,
+        private ValueTask<int> AttackWithSelectedTo( LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(1);
-            
             AttackWithSelectedChessBoardObjectCommand attackWithSelectedTo = new AttackWithSelectedChessBoardObjectCommand(end.v);
             chessBoardCommandExecutor.QueueCommand(attackWithSelectedTo);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> SetActiveColour(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            string colourString = context.GetArgument<string>(1);
+
+            if (Enum.TryParse(colourString, out ChessPieceColour chessPieceColour))
+            {
+                SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(chessPieceColour);
+                chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
+            }
+            else
+            {
+                UnityEngine.Debug.LogAssertion($"Could not parse colour string '{colourString}' to a vaild chess piece colour enum value.");
+            }
+
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> SwitchActiveColour(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            MatchState matchState = context.GetArgument<MatchState>(1);
+
+            ChessPieceColour newColour = matchState.ActiveColour == ChessPieceColour.White
+                ? ChessPieceColour.Black
+                : ChessPieceColour.White;
+            
+            SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
+            chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
             
             return new ValueTask<int>(context.Return());
         }

@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8220564592176276353, guid: 4076cfa4e01e80041a98f5f46727837c, type: 3}
       propertyPath: m_Name
-      value: RegisterChessBoardCommandsDebugMenu
+      value: RegisterMatchCommandsDebugMenu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -189,5 +189,5 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 988536412}
   - {fileID: 453385583}
+  - {fileID: 988536412}

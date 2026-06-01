@@ -1,11 +1,11 @@
 local SelectCommand = { }
 
 function SelectCommand.at(location)
-    ChessBoardCommands.selectAt(ChessBoardCommandExecutor, location)
+    MatchCommands.selectAt(ChessBoardCommandExecutor, location)
 end
 
 function SelectCommand.clear(location)
-    ChessBoardCommands.clearSelection(ChessBoardCommandExecutor)
+    MatchCommands.clearSelection(ChessBoardCommandExecutor)
 end
 
 return SelectCommand

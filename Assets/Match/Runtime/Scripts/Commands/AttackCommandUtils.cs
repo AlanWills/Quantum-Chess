@@ -54,6 +54,11 @@ namespace QC.Match.Commands
             
             // Clear selection on successful attack
             args.Selection.CurrentSelectedObject = null;
+
+            if (instance.TryFindComponent<IObjectStatus>(out var status))
+            {
+                status.iFace.SetHasMoved(status.instance, true);
+            }
             
             return CommandState.Completed;
         }

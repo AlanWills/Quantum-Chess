@@ -66,6 +66,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4e1f42dc5ee466b84101c6570231b34
+    m_Address: Commands/SetActiveColourCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aeddded44ecf14a5ca0a8787a898072d
     m_Address: Assets/EngineSystems/Scenes/EngineSystemsSceneSet.asset
     m_ReadOnly: 0

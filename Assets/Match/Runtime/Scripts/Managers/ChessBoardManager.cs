@@ -11,7 +11,7 @@ namespace QC.Match.Managers
     {
 		#region Properties and Fields
 	
-        public const string FILE_NAME = "ChessBoardManager.dat";
+        public const string FILE_NAME = "chess_board.dat";
 		
         protected override string FileName => FILE_NAME;
 
