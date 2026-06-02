@@ -49,17 +49,17 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            args.ChessBoard.RemoveChessBoardObject(endingPositionInstance);
             grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
             
-            // Clear selection on successful attack
-            args.Selection.CurrentSelectedObject = null;
-
             if (instance.TryFindComponent<IObjectStatus>(out var status))
             {
                 status.iFace.SetHasMoved(status.instance, true);
             }
             
+            args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
+            args.ChessBoard.RemoveChessBoardObject(endingPositionInstance);
+            args.CommandExecutor.QueueCommand(new SetActiveChessPieceColourCommand(args.MatchState.NextActiveColour));
+
             return CommandState.Completed;
         }
     }

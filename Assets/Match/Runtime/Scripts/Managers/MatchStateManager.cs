@@ -1,5 +1,6 @@
 using Celeste.Persistence;
 using QC.Match.Commands;
+using QC.Match.Events;
 using QC.Match.Objects;
 using QC.Match.Persistence;
 using UnityEngine;
@@ -71,5 +72,14 @@ namespace QC.Match.Managers
                 chessBoard,
                 chessBoardObjectSelection);
         }
+        
+        #region Callbacks
+
+        public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
+        {
+            matchState.UpdateBasedOnActiveColour(args.AddedObject);
+        }
+        
+        #endregion
     }
 }

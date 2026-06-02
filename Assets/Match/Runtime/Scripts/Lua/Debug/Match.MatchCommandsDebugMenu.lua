@@ -2,6 +2,7 @@ local MoveCommand = require("Commands/MoveCommand.lua")
 local AttackCommand = require("Commands/AttackCommand.lua")
 local SelectCommand = require("Commands/SelectCommand.lua")
 local EnableInputCommand = require("Commands/EnableInputCommand.lua") 
+local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 
 local MatchCommandsDebugMenu = { }
 MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
@@ -51,6 +52,22 @@ function MatchCommandsDebugMenu:onDrawMenu()
         
             if GUILayout.button("Clear Selection") then
                 SelectCommand.clear()
+            end
+        GUILayout.endHorizontal()
+    GUILayout.endSection()
+
+    GUILayout.beginSection("Set Active Colour")
+        GUILayout.beginHorizontal()
+            if GUILayout.button("White") then
+                SetActiveColourCommand.toWhite()
+            end
+        
+            if GUILayout.button("Black") then
+                EnableInputCommand.toBlack()
+            end
+        
+            if GUILayout.button("Switch") then
+                EnableInputCommand.switch()
             end
         GUILayout.endHorizontal()
     GUILayout.endSection()

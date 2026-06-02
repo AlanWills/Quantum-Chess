@@ -11,22 +11,14 @@ namespace QC.Match.Commands
         
         public CommandState Execute(ChessBoardCommandArgs args)
         {
-            // Clear the selection when changing what pieces are interactable
-            args.Selection.CurrentSelectedObject = null;
-            
-            foreach (var instance in args.ChessBoard.Objects)
+            var commandState = InputCommandUtils.SetInteractableForColour(args.ChessBoard, colour, true);
+            if (commandState == CommandState.Completed)
             {
-                if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
-                    !instance.TryFindComponent<IInteractable>(out var interactable))
-                {
-                    continue;
-                }
-                
-                bool isOfMatchingColour = piece.iFace.GetPieceColour(piece.instance) == colour;
-                interactable.iFace.SetInteractable(interactable.instance, isOfMatchingColour);
+                // Clear the selection when changing what pieces are interactable
+                args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
             }
-
-            return CommandState.Completed;
+            
+            return commandState;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace QC.Match.Lua
         #region Properties and Fields
 
         public static readonly MatchCommandsLibrary Instance = new();
-        private const string kName = nameof(MatchCommandsLibrary);
+        private const string kName = "MatchCommands";
         
         public string Name => kName;
         public IReadOnlyList<LibraryFunction> Functions => functions;
@@ -162,10 +162,7 @@ namespace QC.Match.Lua
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             MatchState matchState = context.GetArgument<MatchState>(1);
-
-            ChessPieceColour newColour = matchState.ActiveColour == ChessPieceColour.White
-                ? ChessPieceColour.Black
-                : ChessPieceColour.White;
+            ChessPieceColour newColour = matchState.NextActiveColour;
             
             SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
             chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);

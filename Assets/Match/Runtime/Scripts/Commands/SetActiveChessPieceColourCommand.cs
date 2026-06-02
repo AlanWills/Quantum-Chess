@@ -12,6 +12,8 @@
         public CommandState Execute(ChessBoardCommandArgs args)
         {
             args.MatchState.ActiveColour = ActiveColour;
+            args.CommandExecutor.QueueCommand(new EnableInputForChessPieceColourCommand(ActiveColour));
+            args.CommandExecutor.QueueCommand(new DisableInputIfNotChessPieceColourCommand(ActiveColour));
             
             return CommandState.Completed;
         }

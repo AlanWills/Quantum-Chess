@@ -972,6 +972,7 @@ GameObject:
   - component: {fileID: 1538463193}
   - component: {fileID: 1538463194}
   - component: {fileID: 1538463195}
+  - component: {fileID: 1538463196}
   m_Layer: 0
   m_Name: MatchStateManager
   m_TagString: Untagged
@@ -1064,6 +1065,35 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: QC.Match.Managers.MatchManager, QC.Match.Runtime
         m_MethodName: Save
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1538463196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538463192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec80dc6fe68e4fd18b0e7bb6b88735b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Events.ChessBoardObjectAddedEventListener
+  gameEvent: {fileID: 11400000, guid: 8be6f3500e146484080931ca9cfcf2d7, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1538463194}
+        m_TargetAssemblyTypeName: QC.Match.Managers.MatchStateManager, QC.Match.Runtime
+        m_MethodName: OnChessBoardObjectAdded
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

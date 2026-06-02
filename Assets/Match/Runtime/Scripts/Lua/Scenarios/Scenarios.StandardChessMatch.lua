@@ -1,4 +1,4 @@
-local EnableInputCommand = require("Commands/EnableInputCommand.lua")
+local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 
 ChessBoard:clear()
 
@@ -169,4 +169,4 @@ ChessBoard:addChessPiece(1,
     type = "King"
 })
 
-EnableInputCommand.forWhite()
+SetActiveColourCommand.toWhite()

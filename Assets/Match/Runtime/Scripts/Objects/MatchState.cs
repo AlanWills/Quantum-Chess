@@ -29,6 +29,25 @@ namespace QC.Match.Objects
             }
         }
 
+        public ChessPieceColour NextActiveColour
+        {
+            get
+            {
+                switch (activeColour)
+                {
+                    case ChessPieceColour.White:
+                        return ChessPieceColour.Black;
+                    
+                    case ChessPieceColour.Black:
+                        return ChessPieceColour.White;
+                    
+                    case ChessPieceColour.Unknown:
+                    default:
+                        return ChessPieceColour.White;
+                }
+            }
+        }
+
         [Header("Events")] 
         [SerializeField] private ActiveColourChangedEvent activeColourChangedEvent;
         [SerializeField] private Celeste.Events.Event onChanged;
@@ -45,6 +64,16 @@ namespace QC.Match.Objects
         public void Initialize(MatchStateDTO dto)
         {
             activeColour = dto.activeColour;
+        }
+
+        public void UpdateBasedOnActiveColour(ChessBoardObjectInstance chessBoardObjectInstance)
+        {
+            if (chessBoardObjectInstance.TryFindComponent<IInteractable>(out var interactable) &&
+                chessBoardObjectInstance.TryFindComponent<IChessPiece>(out var chessPiece))
+            {
+                bool isActiveColour = chessPiece.iFace.GetPieceColour(chessPiece.instance) == ActiveColour;
+                interactable.iFace.SetInteractable(interactable.instance, isActiveColour);
+            }
         }
 
         public MatchStateDTO Serialize()
