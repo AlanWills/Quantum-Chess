@@ -145,7 +145,7 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b8de2765a954d018560404f158fb06a
-    m_Address: Assets/Match/Runtime/Scripts/Lua/Commands/ClearChessBoardCommand.lua
+    m_Address: Commands/ClearChessBoardCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -20,16 +20,7 @@ namespace QC.Match.Objects
 
         public void UpdateCommands(ChessBoardCommandArgs args)
         {
-            if (commands.Count == 0)
-            {
-                return;
-            }
-
-            var currentCommand = commands.Peek();
-            CommandState commandState = currentCommand.Execute(args);
-            
-            if (commandState == CommandState.Completed ||
-                commandState == CommandState.Abandoned)
+            while (commands.Count > 0 && commands.Peek().Execute(args) != CommandState.Running)
             {
                 commands.Dequeue();
             }
