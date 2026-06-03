@@ -4,7 +4,8 @@
     "references": [
         "QC.Match.Runtime",
         "UnityEditor.UI",
-        "Celeste.Lua"
+        "Celeste.Lua",
+        "Lua.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

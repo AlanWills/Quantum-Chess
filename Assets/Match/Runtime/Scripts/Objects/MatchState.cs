@@ -29,6 +29,9 @@ namespace QC.Match.Objects
             }
         }
 
+        [LuaMember("activeColour")] 
+        private string ActiveColourString => ActiveColour.ToString();
+
         public ChessPieceColour NextActiveColour
         {
             get
@@ -47,6 +50,9 @@ namespace QC.Match.Objects
                 }
             }
         }
+        
+        [LuaMember("nextActiveColour")] 
+        private string NextActiveColourString => NextActiveColour.ToString();
 
         [Header("Events")] 
         [SerializeField] private ActiveColourChangedEvent activeColourChangedEvent;

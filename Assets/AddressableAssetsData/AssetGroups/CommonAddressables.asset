@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: CommonAddressables
   m_GUID: 97e0f998c5fc44012b274bd98b6ddab6
   m_SerializeEntries:
+  - m_GUID: 0c863bf2d789418298fae48eaadad5b3
+    m_Address: Commands/EnableInputCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10ba0f09655a5f243b414d2b64c32ed8
     m_Address: Assets/Celeste/Input/Data/Events/TripleTouch.asset
     m_ReadOnly: 0
@@ -39,8 +44,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17fc41ad08e746228578cf1814fb8304
+    m_Address: Commands/SelectCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 19f3c0a08f26f3d458a39303193882d8
     m_Address: Assets/Celeste/Sound/Data/Events/PlayMusicOneShotWithRawClip.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c71353a31bf431385557647e0b06171
+    m_Address: Assets/Match/Runtime/Scripts/Lua/Commands/RemoveChessPieceCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
@@ -94,6 +110,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 48cb7be28c92f1944aed44df0a6c29c2
     m_Address: Assets/Celeste/Sound/Data/Events/PlaySFXOneShotWithRawClip.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58738d4d8610416eaad59009cfbda9ed
+    m_Address: Commands/AddChessPieceCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
@@ -152,6 +174,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e04954f1e234d3eb3ec2392ad5e2adc
+    m_Address: Commands/MoveCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fcb2e881d8bae8478459cdea4c03987
     m_Address: Assets/Celeste/Sound/Data/Events/PlayMusicWithSettings.asset
     m_ReadOnly: 0
@@ -174,6 +201,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4e1f42dc5ee466b84101c6570231b34
+    m_Address: Commands/SetActiveColourCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a69af8b76035b40e0b04a7aaa13e6969
     m_Address: Assets/EngineSystems/Data/SFXSettings.asset
@@ -239,6 +271,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fffb94954dd64ed097824506b9fc9f60
+    m_Address: Commands/AttackCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 40d2b6e7860a34337b8ed435bd5adaa3, type: 2}

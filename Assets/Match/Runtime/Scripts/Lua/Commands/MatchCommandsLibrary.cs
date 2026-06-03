@@ -6,6 +6,7 @@ using Celeste.Lua;
 using Celeste.Lua.Maths;
 using Lua;
 using Lua.Standard;
+using Lua.Unity;
 using QC.Match.Commands;
 using QC.Match.Objects;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
             functions.Add(new LibraryFunction(kName, "setActiveColour", SetActiveColour));
             functions.Add(new LibraryFunction(kName, "switchActiveColour", SwitchActiveColour));
+            functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
+            functions.Add(new LibraryFunction(kName, "removeChessPiece", RemoveChessPiece));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -157,6 +160,122 @@ namespace QC.Match.Lua
         }
         
         private ValueTask<int> SwitchActiveColour(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            MatchState matchState = context.GetArgument<MatchState>(1);
+            ChessPieceColour newColour = matchState.NextActiveColour;
+            
+            SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
+            chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> AddChessPiece(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int guid = context.GetArgument<int>(1);
+            LuaTable config = context.GetArgument<LuaTable>(2);
+
+            if (config == null)
+            {
+                return new ValueTask<int>(context.Return());
+            }
+
+            ChessPieceColour colour = ChessPieceColour.Unknown;
+            ChessPieceType type = ChessPieceType.None;
+            ChessPieceVerticalDirection verticalDirection = ChessPieceVerticalDirection.Up;
+            Vector2Int position = new();
+            
+            // Colour
+            {
+                string colourString = config.GetString("colour");
+                if (string.IsNullOrEmpty(colourString))
+                {
+                    UnityEngine.Debug.LogAssertion("No colour string provided when attempting to add chess piece.");
+                }
+                else if (!Enum.TryParse(colourString, out colour))
+                {
+                    UnityEngine.Debug.LogAssertion($"Issue attempting to parse the string '{colourString}' as a valid colour.");
+                }
+            }
+
+            // Type
+            {
+                if (!config.TryGetValue("type", out LuaValue typeValue))
+                {
+                    UnityEngine.Debug.LogAssertion("No type string provided when attempting to add chess piece.");
+                }
+                
+                if (typeValue.IsString())
+                {
+                    string typeString = typeValue.As<string>();
+                    if (!Enum.TryParse(typeString, out type))
+                    {
+                        UnityEngine.Debug.LogAssertion($"Issue attempting to parse the string '{typeString}' as a valid type.");
+                    }
+                }
+                else if (typeValue.IsTable())
+                {
+                    LuaTable typeTable = typeValue.As<LuaTable>();
+                        
+                    foreach (var typeString in typeTable)
+                    {
+                        if (Enum.TryParse(typeString.Value.As<string>(), out ChessPieceType subType))
+                        {
+                            type |= subType;
+                        }
+                    }
+                }
+                else
+                {
+                    UnityEngine.Debug.LogAssertion("Inputted value for piece type is not of the correct format.  Expect a string or array of strings.");
+                }
+            }
+
+            // Vertical Direction
+            {
+                if (config.TryGetValue("verticalDirection", out LuaValue verticalDirectionValue) &&
+                    verticalDirectionValue.IsString())
+                {
+                    string verticalDirectionString = verticalDirectionValue.As<string>();
+                    if (!Enum.TryParse(verticalDirectionString, out verticalDirection))
+                    {
+                        UnityEngine.Debug.LogAssertion($"Issue attempting to parse the string '{verticalDirectionString}' as a valid vertical direction.");
+                    }
+                }
+            }
+            
+            // Position
+            {
+                if (config.TryGetValue("position", out LuaValue luaValue))
+                {
+                    LuaVector2Int luaVector2Int = luaValue.As<LuaVector2Int>();
+                    position = luaVector2Int.v;
+                }
+                else
+                {
+                    position.x = config.GetInt("x");
+                    position.y = config.GetInt("y");
+                }
+            }
+
+            AddChessPieceCommand addChessPieceCommand = new AddChessPieceCommand(
+                guid,
+                colour,
+                type,
+                verticalDirection,
+                position);
+            chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> RemoveChessPiece(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {

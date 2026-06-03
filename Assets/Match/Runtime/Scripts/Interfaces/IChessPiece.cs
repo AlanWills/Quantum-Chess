@@ -9,5 +9,6 @@ namespace QC.Match
         
         void SetColour(Instance instance, ChessPieceColour colour);
         void SetType(Instance instance, ChessPieceType type);
+        void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection);
     }
 }

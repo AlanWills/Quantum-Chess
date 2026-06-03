@@ -9,7 +9,10 @@ using UnityEngine;
 namespace QC.Match.Components
 {
     [DisplayName("Chess Piece Type")]
-    public class ChessPieceComponent : ChessBoardObjectComponent, IChessPiece, IObjectActionProvider, IObjectStatus
+    public class ChessPieceComponent : ChessBoardObjectComponent, 
+        IChessPiece, 
+        IObjectActionProvider, 
+        IObjectStatus
     {
         #region Save Data
 
@@ -19,6 +22,7 @@ namespace QC.Match.Components
             public ChessPieceColour currentPieceColour;
             public ChessPieceType currentPieceType;
             public bool hasMoved;
+            public ChessPieceVerticalDirection verticalDirection;
         }
         
         #endregion
@@ -36,7 +40,8 @@ namespace QC.Match.Components
             {
                 currentPieceColour = startingColour,
                 currentPieceType = startingPieceType,
-                hasMoved = false
+                hasMoved = false,
+                verticalDirection = ChessPieceVerticalDirection.Up
             };
         }
 
@@ -70,6 +75,16 @@ namespace QC.Match.Components
             }
         }
 
+        public void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection)
+        {
+            SaveData saveData = instance.data as SaveData;
+            if (saveData.verticalDirection != verticalDirection)
+            {
+                saveData.verticalDirection = verticalDirection;
+                instance.events.ComponentDataChanged.Invoke();
+            }
+        }
+
         public void SetHasMoved(Instance instance, bool hasMoved)
         {
             SaveData saveData = instance.data as SaveData;
@@ -93,11 +108,12 @@ namespace QC.Match.Components
                    return;
                
                case ChessPieceType.Pawn:
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1), chessBoardLookup, validMoves);
+                   int verticalDirection = (int)saveData.verticalDirection;
+                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection), chessBoardLookup, validMoves);
 
                    if (!saveData.hasMoved)
                    {
-                       AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2), chessBoardLookup, validMoves);
+                       AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2 * verticalDirection), chessBoardLookup, validMoves);
                    }
                    
                    return;

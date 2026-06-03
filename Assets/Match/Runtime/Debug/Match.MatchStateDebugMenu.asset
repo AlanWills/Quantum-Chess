@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df2d37b7fa0646bdad161a68f994dcdc, type: 3}
-  m_Name: Match.ChessBoardCommandsDebugMenu
+  m_Name: Match.MatchStateDebugMenu
   m_EditorClassIdentifier: Celeste.Lua::Celeste.Lua.Debug.LuaScriptDebugMenu
-  displayName: Chess Board Commands
+  displayName: Match State
   menuPriority: 0
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   script:
-    Script: {fileID: -6979533126094156877, guid: 8e66b0a3713546b1b19f886f02a3740a, type: 3}
+    Script: {fileID: -6979533126094156877, guid: ba25abc8b45e4e64d812ad3fac94ae5a, type: 3}
     Variables: []
   showAdvancedSettings: 0
   onShowMenuFunctionName: onShowMenu

@@ -3,6 +3,8 @@ local AttackCommand = require("Commands/AttackCommand.lua")
 local SelectCommand = require("Commands/SelectCommand.lua")
 local EnableInputCommand = require("Commands/EnableInputCommand.lua") 
 local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
+local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
+local RemoveChessPieceCommand = require("Commands/RemoveChessPieceCommand.lua")
 
 local MatchCommandsDebugMenu = { }
 MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
@@ -10,6 +12,9 @@ MatchCommandsDebugMenu.toMovePosition = Vector2Int.new(1, 1)
 MatchCommandsDebugMenu.fromAttackPosition = Vector2Int.new(0, 0)
 MatchCommandsDebugMenu.toAttackPosition = Vector2Int.new(1, 1)
 MatchCommandsDebugMenu.selectPosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.addPieceGuid = 0
+MatchCommandsDebugMenu.addPiecePosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.removePiecePosition = Vector2Int.new(0, 0)
 
 function MatchCommandsDebugMenu:onDrawMenu()
     GUILayout.beginSection("Move")
@@ -72,6 +77,28 @@ function MatchCommandsDebugMenu:onDrawMenu()
         GUILayout.endHorizontal()
     GUILayout.endSection()
     
+    GUILayout.beginSection("Add Pieces")
+        self.addPieceGuid = GUILayout.intField("Guid", self.addPieceGuid)
+        self.addPiecePosition = GUILayout.vector2IntField("Position", self.addPiecePosition)
+        
+        self:drawAddPieces("Pawn")
+        self:drawAddPieces("Knight")
+        self:drawAddPieces("Bishop")
+        self:drawAddPieces("Rook")
+        self:drawAddPieces("Queen")
+        self:drawAddPieces("King")
+    GUILayout.endSection()
+    
+    GUILayout.beginSection("Remove Pieces")
+        self.removePiecePosition = GUILayout.vector2IntField("Position", self.removePiecePosition)
+        
+        GUILayout.beginHorizontal()
+            if GUILayout.button("Remove") then
+                RemoveChessPieceCommand.at(self.removePiecePosition)
+            end
+        GUILayout.endHorizontal()
+    GUILayout.endSection()
+    
     GUILayout.beginSection("Enable Input")
         GUILayout.beginHorizontal()
             if GUILayout.button("White") then
@@ -83,6 +110,18 @@ function MatchCommandsDebugMenu:onDrawMenu()
             end
         GUILayout.endHorizontal()
     GUILayout.endSection()
+end
+
+function MatchCommandsDebugMenu:drawAddPieces(type)
+    GUILayout.beginHorizontal()
+        if GUILayout.button("White " .. type) then
+            AddChessPieceCommand.new(self.addPieceGuid, { colour = "White", type = type, position = self.addPiecePosition })
+        end
+    
+        if GUILayout.button("Black " .. type) then
+            AddChessPieceCommand.new(self.addPieceGuid, { colour = "Black", type = type, position = self.addPiecePosition })
+        end
+    GUILayout.endHorizontal()
 end
 
 return MatchCommandsDebugMenu

@@ -16,7 +16,8 @@ for xPos = 1, 8 do
         x = xPos,
         y = 2,
         colour = "White",
-        type = "Pawn"
+        type = "Pawn",
+        verticalDirection = "Up"
     })
 end
 
@@ -26,7 +27,7 @@ ChessBoard:addChessPiece(1,
     x = 1,
     y = 1,
     colour = "White",
-    type = "Rook"
+    type = "Rook",
 })
 
 ChessBoard:addChessPiece(1, 
@@ -96,7 +97,8 @@ for xPos = 1, 8 do
         x = xPos,
         y = 7,
         colour = "Black",
-        type = "Pawn"
+        type = "Pawn",
+        verticalDirection = "Down"
     })
 end
 
