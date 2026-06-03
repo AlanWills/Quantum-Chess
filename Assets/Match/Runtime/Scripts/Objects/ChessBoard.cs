@@ -179,6 +179,20 @@ namespace QC.Match.Objects
             return result;
         }
 
+        public void Clear()
+        {
+            for (int i = objects.Count - 1; i >= 0; --i)
+            {
+                RemoveChessBoardObject(objects[i]);
+            }
+
+            List<Vector2Int> boardPositionsClone = boardPositions.ToList();
+            foreach (Vector2Int boardPosition in boardPositionsClone)
+            {
+                RemoveChessBoardTile(boardPosition);
+            }
+        }
+
         public ChessBoardDTO Serialize()
         {
             return new ChessBoardDTO(this);
@@ -194,22 +208,7 @@ namespace QC.Match.Objects
         #endregion
         
         #region Lua
-
-        [LuaMember("clear")]
-        private void Clear()
-        {
-            for (int i = objects.Count - 1; i >= 0; --i)
-            {
-                RemoveChessBoardObject(objects[i]);
-            }
-
-            List<Vector2Int> boardPositionsClone = boardPositions.ToList();
-            foreach (Vector2Int boardPosition in boardPositionsClone)
-            {
-                RemoveChessBoardTile(boardPosition);
-            }
-        }
-
+        
         [LuaMember("addChessBoardTile")]
         private void AddChessBoardTile(LuaVector2Int boardPosition)
         {

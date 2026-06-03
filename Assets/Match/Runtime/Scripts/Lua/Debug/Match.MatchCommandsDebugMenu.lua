@@ -5,6 +5,7 @@ local EnableInputCommand = require("Commands/EnableInputCommand.lua")
 local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local RemoveChessPieceCommand = require("Commands/RemoveChessPieceCommand.lua")
+local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand")
 
 local MatchCommandsDebugMenu = { }
 MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
@@ -95,6 +96,14 @@ function MatchCommandsDebugMenu:onDrawMenu()
         GUILayout.beginHorizontal()
             if GUILayout.button("Remove") then
                 RemoveChessPieceCommand.at(self.removePiecePosition)
+            end
+        GUILayout.endHorizontal()
+    GUILayout.endSection()
+    
+    GUILayout.beginSection("Board")
+        GUILayout.beginHorizontal()
+            if GUILayout.button("Clear") then
+                ClearChessBoardCommand.new()
             end
         GUILayout.endHorizontal()
     GUILayout.endSection()

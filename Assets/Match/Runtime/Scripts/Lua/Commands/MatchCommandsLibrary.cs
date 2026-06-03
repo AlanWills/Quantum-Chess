@@ -41,6 +41,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "switchActiveColour", SwitchActiveColour));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPiece", RemoveChessPiece));
+            functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -285,6 +286,17 @@ namespace QC.Match.Lua
             
             SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
             chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> ClearChessBoard(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            ClearChessBoardCommand clearChessBoardCommand = new ClearChessBoardCommand();
+            chessBoardCommandExecutor.QueueCommand(clearChessBoardCommand);
             
             return new ValueTask<int>(context.Return());
         }
