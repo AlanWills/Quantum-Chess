@@ -221,6 +221,30 @@ namespace QC.Match.Objects
             return GetChessBoardObjectAt(boardPosition.v) != null;
         }
         
+        [LuaMember("chessPieceExists")]
+        private bool ChessPieceExists(LuaTable luaTable)
+        {
+            string colourString = luaTable.GetString("colour", string.Empty);
+            string typeString = luaTable.GetString("type", string.Empty);
+            ChessPieceColour? colour = null;
+            ChessPieceType? type = null;
+            
+            if (!string.IsNullOrEmpty(colourString) && Enum.TryParse(colourString, out ChessPieceColour chessPieceColour))
+            {
+                colour = chessPieceColour;
+            }
+
+            if (!string.IsNullOrEmpty(typeString) && Enum.TryParse(typeString, out ChessPieceType chessPieceType))
+            {
+                type = chessPieceType;
+            }
+
+            return objects.Exists(x => 
+                x.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                (!colour.HasValue || colour.Value == chessPiece.iFace.GetPieceColour(chessPiece.instance)) &&
+                (!type.HasValue || type.Value == chessPiece.iFace.GetPieceType(chessPiece.instance)));
+        }
+        
         #endregion
     }
 }

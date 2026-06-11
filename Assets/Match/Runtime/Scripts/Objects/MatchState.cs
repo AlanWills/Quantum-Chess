@@ -126,7 +126,7 @@ namespace QC.Match.Objects
             }
 
             var returnValues = await luaRuntime.ExecuteFunctionAsync(checkScenarioWonFunction);
-            return returnValues.Length == 1 && returnValues[0].ToBoolean();
+            return returnValues?.Length == 1 && returnValues[0].ToBoolean();
         }
 
         public async UniTask<bool> IsScenarioLost()
@@ -138,7 +138,7 @@ namespace QC.Match.Objects
             }
             
             var returnValues = await luaRuntime.ExecuteFunctionAsync(checkScenarioLostFunction);
-            return returnValues.Length == 1 && returnValues[0].ToBoolean();
+            return returnValues?.Length == 1 && returnValues[0].ToBoolean();
         }
 
         public void UpdateBasedOnActiveColour(ChessBoardObjectInstance chessBoardObjectInstance)
@@ -156,7 +156,7 @@ namespace QC.Match.Objects
             return new MatchStateDTO(this);
         }
         
-        #region Lua Bindings
+        #region Lua
 
         [LuaMember("startScenario")]
         private async ValueTask StartScenario(string scenarioGuid)

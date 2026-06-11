@@ -162,7 +162,11 @@ function Scenario:setUp()
 end
 
 function Scenario:checkScenarioWon()
-    return ChessBoard:isChessPieceAt(Vector2Int.new(4, 4))
+    return not ChessBoard:chessPieceExists({ colour = "Black", type = "King" })
+end
+
+function Scenario:checkScenarioLost()
+    return not ChessBoard:chessPieceExists({ colour = "White", type = "King" })
 end
 
 return Scenario

@@ -8,6 +8,7 @@ namespace QC.Match.Commands
         {
             bool isScenarioWon = await args.MatchState.IsScenarioWon();
 
+            UnityEngine.Debug.Assert(!isScenarioWon, $"Scenario Won!");
             return CommandState.Completed;
         }
     }

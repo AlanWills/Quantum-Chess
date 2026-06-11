@@ -9,11 +9,15 @@ using UnityEngine;
 
 namespace QC.Match.Objects
 {
+    [LuaObject]
     [CreateAssetMenu(fileName = nameof(MatchScenario), menuName = "QC/Match/Match Scenario")]
-    public class MatchScenario : ScriptableObject, IGuid
+    public partial class MatchScenario : ScriptableObject, IGuid
     {
         #region Properties and Fields
 
+        [LuaMember("name")] private string InternalName => name;
+
+        [LuaMember("guid")]
         public string Guid
         {
             get => guid;

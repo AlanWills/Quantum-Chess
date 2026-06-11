@@ -5,7 +5,7 @@ local EnableInputCommand = require("Commands/EnableInputCommand.lua")
 local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local RemoveChessPieceCommand = require("Commands/RemoveChessPieceCommand.lua")
-local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand")
+local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
 
 local MatchCommandsDebugMenu = { }
 MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)

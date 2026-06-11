@@ -40,7 +40,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "setActiveColour", SetActiveColour));
             functions.Add(new LibraryFunction(kName, "switchActiveColour", SwitchActiveColour));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
-            functions.Add(new LibraryFunction(kName, "removeChessPiece", RemoveChessPiece));
+            functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
         }
         
@@ -276,16 +276,15 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> RemoveChessPiece(
+        private ValueTask<int> RemoveChessPieceAt(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
-            MatchState matchState = context.GetArgument<MatchState>(1);
-            ChessPieceColour newColour = matchState.NextActiveColour;
+            LuaVector2Int position = context.GetArgument<LuaVector2Int>(1);
             
-            SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
-            chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
+            RemoveChessBoardObjectAtCommand removeChessBoardObjectCommand = new RemoveChessBoardObjectAtCommand(position.v);
+            chessBoardCommandExecutor.QueueCommand(removeChessBoardObjectCommand);
             
             return new ValueTask<int>(context.Return());
         }

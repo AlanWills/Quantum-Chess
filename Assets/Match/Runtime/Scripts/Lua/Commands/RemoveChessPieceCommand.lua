@@ -1,7 +1,7 @@
 local RemoveChessPieceCommand = { }
 
 function RemoveChessPieceCommand.at(position)
-    MatchCommands.removeChessPiece(ChessBoardCommandExecutor, position)
+    MatchCommands.removeChessPieceAt(ChessBoardCommandExecutor, position)
 end
 
 return RemoveChessPieceCommand
