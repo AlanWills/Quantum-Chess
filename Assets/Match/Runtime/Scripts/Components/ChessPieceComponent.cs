@@ -102,72 +102,21 @@ namespace QC.Match.Components
             IList<Vector2Int> validMoves)
         {
             SaveData saveData = instance.data as SaveData;
-            switch (saveData.currentPieceType)
+            for (int i = 1; i < (int)ChessPieceTypeExtensions.Everything; i <<= 1)
             {
-               case ChessPieceType.None:
-                   return;
-               
-               case ChessPieceType.Pawn:
-                   int verticalDirection = (int)saveData.verticalDirection;
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection), chessBoardLookup, validMoves);
-
-                   if (!saveData.hasMoved)
-                   {
-                       AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2 * verticalDirection), chessBoardLookup, validMoves);
-                   }
-                   
-                   return;
-               
-               case ChessPieceType.Knight:
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-2, -1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-2, 1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(2, -1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(2, 1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, -2), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 2), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, -2), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 2), chessBoardLookup, validMoves);
-                   
-                   return;
-               
-               case ChessPieceType.Bishop:
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), chessBoardLookup, validMoves);
-                   
-                   return;
-               
-               case ChessPieceType.Rook:
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), chessBoardLookup, validMoves);
-                   
-                   return;
-               
-               case ChessPieceType.Queen:
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), chessBoardLookup, validMoves);
-                   FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), chessBoardLookup, validMoves);
-                   
-                   return;
-               
-               case ChessPieceType.King:
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, -1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 0), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, -1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 0), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, -1), chessBoardLookup, validMoves);
-                   AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1), chessBoardLookup, validMoves);
-                   return;
+                ChessPieceType currentType = (ChessPieceType)i;
+                if (!saveData.currentPieceType.HasFlag(currentType))
+                {
+                    continue;
+                }
+                
+                CalculateValidMoves(
+                    currentType,
+                    (int)saveData.verticalDirection,
+                    saveData.hasMoved,
+                    currentBoardPosition,
+                    chessBoardLookup,
+                    validMoves);
             }
         }
 
@@ -178,67 +127,186 @@ namespace QC.Match.Components
             IList<Vector2Int> validAttacks)
         {
             SaveData saveData = instance.data as SaveData;
-            switch (saveData.currentPieceType)
+            for (int i = 1; i < (int)ChessPieceTypeExtensions.Everything; i <<= 1)
+            {
+                ChessPieceType currentType = (ChessPieceType)i;
+                if (!saveData.currentPieceType.HasFlag(currentType))
+                {
+                    continue;
+                }
+                
+                CalculateValidAttacks(
+                    currentType,
+                    saveData.currentPieceColour,
+                    (int)saveData.verticalDirection,
+                    currentBoardPosition,
+                    chessBoardLookup,
+                    validAttacks);
+            }
+        }
+
+        private static void CalculateValidMoves(
+            ChessPieceType type,
+            int verticalDirection,
+            bool hasMoved,
+            Vector2Int currentBoardPosition, 
+            IChessBoardLookup chessBoardLookup, 
+            IList<Vector2Int> validMoves)
+        {
+            switch (type)
+            {
+                case ChessPieceType.None:
+                    return;
+
+                case ChessPieceType.Pawn:
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection),
+                        chessBoardLookup, validMoves);
+
+                    if (!hasMoved)
+                    {
+                        AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2 * verticalDirection),
+                            chessBoardLookup, validMoves);
+                    }
+
+                    return;
+
+                case ChessPieceType.Knight:
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-2, -1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-2, 1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(2, -1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(2, 1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, -2), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 2), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, -2), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 2), chessBoardLookup,
+                        validMoves);
+
+                    return;
+
+                case ChessPieceType.Bishop:
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), chessBoardLookup, validMoves);
+
+                    return;
+
+                case ChessPieceType.Rook:
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), chessBoardLookup, validMoves);
+
+                    return;
+
+                case ChessPieceType.Queen:
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), chessBoardLookup, validMoves);
+                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), chessBoardLookup, validMoves);
+
+                    return;
+
+                case ChessPieceType.King:
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, -1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 0), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, -1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 0), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, -1), chessBoardLookup,
+                        validMoves);
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1), chessBoardLookup,
+                        validMoves);
+                    return;
+            }
+        }
+
+        private static void CalculateValidAttacks(
+            ChessPieceType type,
+            ChessPieceColour currentColour,
+            int verticalDirection,
+            Vector2Int currentBoardPosition, 
+            IChessBoardLookup chessBoardLookup,
+            IList<Vector2Int> validAttacks)
+        {
+            switch (type)
             {
                 case ChessPieceType.None:
                     return;
                
                 case ChessPieceType.Pawn:
-                    int verticalDirection = (int)saveData.verticalDirection;
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1 * verticalDirection), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1 * verticalDirection), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1 * verticalDirection), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1 * verticalDirection), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
                
                 case ChessPieceType.Knight:
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-2, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-2, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(2, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(2, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, -2), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 2), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, -2), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 2), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-2, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-2, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(2, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(2, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, -2), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 2), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, -2), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 2), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
                
                 case ChessPieceType.Bishop:
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 1), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
                
                 case ChessPieceType.Rook:
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, 1), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
                
                 case ChessPieceType.Queen:
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(-1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiecesInDirection(currentBoardPosition, new Vector2Int(0, 1), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
                
                 case ChessPieceType.King:
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 0), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, -1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 0), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, -1), currentColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, 1), currentColour, chessBoardLookup, validAttacks);
                     
                     return;
             }

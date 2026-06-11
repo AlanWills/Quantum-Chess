@@ -20,7 +20,7 @@ function Scenario:setUp()
         {
             position = Vector2Int.new(xPos, 2),
             colour = "White",
-            type = "Pawn",
+            type = { "Pawn", "Queen" },
             verticalDirection = "Up"
         })
     end

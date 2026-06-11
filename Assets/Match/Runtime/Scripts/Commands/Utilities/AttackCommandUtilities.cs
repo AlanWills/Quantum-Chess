@@ -57,8 +57,10 @@ namespace QC.Match.Commands
                 status.iFace.SetHasMoved(status.instance, true);
             }
             
-            args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
             args.ChessBoard.RemoveChessBoardObject(endingPositionInstance);
+            args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
+            args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
+            args.CommandExecutor.QueueCommand(new CheckScenarioLostCommand());
             args.CommandExecutor.QueueCommand(new SetActiveChessPieceColourCommand(args.MatchState.NextActiveColour));
 
             return UniTask.FromResult(CommandState.Completed);
