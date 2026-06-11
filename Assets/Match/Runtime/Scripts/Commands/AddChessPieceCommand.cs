@@ -1,4 +1,5 @@
-﻿using Lua;
+﻿using Cysharp.Threading.Tasks;
+using Lua;
 using QC.Match.Objects;
 using UnityEngine;
 
@@ -26,25 +27,25 @@ namespace QC.Match.Commands
             Position = position;
         }
         
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
             ChessBoardObjectInstance instance = args.ChessBoard.CreateChessBoardObject(Guid);
             if (instance == null)
             {
                 UnityEngine.Debug.LogError($"Failed to create chess board object with guid {Guid}.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
             {
                 UnityEngine.Debug.LogAssertion($"No {nameof(IChessPiece)} interface found on chess board object {Guid}.  Did you mean to try and add a chess piece?");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
 
             if (!instance.TryFindComponent<IGrid2DTransform>(out var gridTransform))
             {
                 UnityEngine.Debug.LogAssertion($"No {nameof(IGrid2DTransform)} exists, this is a serious issue and should've been injected automatically, as it is a mandatory component.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             chessPiece.iFace.SetColour(chessPiece.instance, Colour);
@@ -53,7 +54,7 @@ namespace QC.Match.Commands
             gridTransform.iFace.SetPosition(gridTransform.instance, Position);
             args.ChessBoard.AddChessBoardObjectInstance(instance);
 
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

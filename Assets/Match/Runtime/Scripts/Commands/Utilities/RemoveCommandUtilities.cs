@@ -1,10 +1,11 @@
-﻿using QC.Match.Objects;
+﻿using Cysharp.Threading.Tasks;
+using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
     public static class RemoveCommandUtilities
     {
-        public static CommandState RemoveChessBoardObject(
+        public static UniTask<CommandState> RemoveChessBoardObject(
             ChessBoardCommandArgs args,
             ChessBoardObjectInstance objectToRemove)
         {
@@ -14,7 +15,7 @@ namespace QC.Match.Commands
             
             args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
 
-            return commandState;
+            return UniTask.FromResult(commandState);
         }
     }
 }

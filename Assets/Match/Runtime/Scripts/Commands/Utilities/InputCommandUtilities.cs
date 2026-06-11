@@ -1,10 +1,11 @@
+using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
     public static class InputCommandUtilities
     {
-        public static CommandState SetInteractableForColour(
+        public static UniTask<CommandState> SetInteractableForColour(
             ChessBoard chessBoard,
             ChessPieceColour colour, 
             bool isInteractable)
@@ -21,10 +22,10 @@ namespace QC.Match.Commands
                 interactable.iFace.SetInteractable(interactable.instance, isInteractable);
             }
 
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
         
-        public static CommandState SetInteractableForNotColour(
+        public static UniTask<CommandState> SetInteractableForNotColour(
             ChessBoard chessBoard,
             ChessPieceColour colour, 
             bool isInteractable)
@@ -41,7 +42,7 @@ namespace QC.Match.Commands
                 interactable.iFace.SetInteractable(interactable.instance, isInteractable);
             }
 
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

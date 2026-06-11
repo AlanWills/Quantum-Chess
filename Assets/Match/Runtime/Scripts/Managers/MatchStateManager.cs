@@ -3,6 +3,7 @@ using System.Collections;
 using Celeste.Assets;
 using Celeste.Coroutines;
 using Celeste.Persistence;
+using Cysharp.Threading.Tasks;
 using QC.Match.Commands;
 using QC.Match.Events;
 using QC.Match.Objects;
@@ -42,12 +43,6 @@ namespace QC.Match.Managers
         {
             onMatchShutdown.Invoke();
         }
-
-        private void Update()
-        {
-            ChessBoardCommandArgs args = CreateCommandArgs();
-            chessBoardCommandExecutor.UpdateCommands(args);
-        }
         
         #endregion
         
@@ -79,10 +74,10 @@ namespace QC.Match.Managers
 
         public IEnumerator LoadAssets()
         {
-            yield return matchState.LoadScenario(lastActiveScenarioGuid).ExecuteAsCoroutine();
-            
+            yield return matchState.LoadScenario(lastActiveScenarioGuid);
+
             ChessBoardCommandArgs args = CreateCommandArgs();
-            yield return chessBoardCommandExecutor.CompleteCommands(args);
+            chessBoardCommandExecutor.BeginProcessing(args);
         }
 
         private ChessBoardCommandArgs CreateCommandArgs()

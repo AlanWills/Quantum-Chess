@@ -1,21 +1,23 @@
-﻿namespace QC.Match.Commands
+﻿using Cysharp.Threading.Tasks;
+
+namespace QC.Match.Commands
 {
     public readonly struct SetActiveChessPieceColourCommand : ICommand<ChessBoardCommandArgs>
     {
-        public readonly ChessPieceColour ActiveColour;
+        private readonly ChessPieceColour ActiveColour;
 
         public SetActiveChessPieceColourCommand(ChessPieceColour activeColour)
         {
             ActiveColour = activeColour;
         }
         
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
             args.MatchState.ActiveColour = ActiveColour;
             args.CommandExecutor.QueueCommand(new EnableInputForChessPieceColourCommand(ActiveColour));
             args.CommandExecutor.QueueCommand(new DisableInputIfNotChessPieceColourCommand(ActiveColour));
             
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

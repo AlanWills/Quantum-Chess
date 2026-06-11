@@ -1,14 +1,15 @@
+using Cysharp.Threading.Tasks;
+
 namespace QC.Match
 {
     public enum CommandState
     {
-        Running,
         Completed,
         Abandoned
     }
     
     public interface ICommand<in TArgs>
     {
-        CommandState Execute(TArgs args);
+        UniTask<CommandState> Execute(TArgs args);
     }
 }

@@ -1,19 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public struct CheckScenarioWonCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct CheckScenarioWonCommand : ICommand<ChessBoardCommandArgs>
     {
-        private Task<bool> isScenarioWonTask;
-        
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
-            isScenarioWonTask ??= args.MatchState.IsScenarioWon();
-
-            while (!isScenarioWonTask.IsCompleted)
-            {
-                return CommandState.Running;
-            }
+            bool isScenarioWon = await args.MatchState.IsScenarioWon();
 
             return CommandState.Completed;
         }

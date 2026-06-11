@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 
 namespace QC.Match.Commands
@@ -11,16 +12,16 @@ namespace QC.Match.Commands
             chessBoardObjectInstance = instance;
         }
         
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
             if (chessBoardObjectInstance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(ChessBoardObjectInstance)} that is null.");
-                return CommandState.Completed;
+                return UniTask.FromResult(CommandState.Completed);
             }
             
             args.Selection.CurrentSelectedObject = chessBoardObjectInstance;
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

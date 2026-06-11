@@ -1,4 +1,5 @@
-﻿using QC.Match.Objects;
+﻿using Cysharp.Threading.Tasks;
+using QC.Match.Objects;
 using UnityEngine;
 
 namespace QC.Match.Commands
@@ -12,13 +13,13 @@ namespace QC.Match.Commands
             BoardPosition = boardPosition;
         }
 
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
             ChessBoardObjectInstance instance = args.ChessBoard.GetChessBoardObjectAt(BoardPosition);
             if (instance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Could not find chess board object at position {BoardPosition}.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             return RemoveCommandUtilities.RemoveChessBoardObject(args, instance);

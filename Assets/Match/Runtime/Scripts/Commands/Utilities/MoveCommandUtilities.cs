@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace QC.Match.Commands
 {
     public static class MoveCommandUtilities
     {
-        public static CommandState TryMoveChessBoardObject(
+        public static UniTask<CommandState> TryMoveChessBoardObject(
             ChessBoardCommandArgs args,
             ChessBoardObjectInstance instance,
             Vector2Int endingPosition)
@@ -13,13 +14,13 @@ namespace QC.Match.Commands
             if (instance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing move command.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             if (!instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
             {
                 UnityEngine.Debug.LogAssertion("Could not find transform component for chess board object when executing move object command.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             ChessBoardObjectInstance endingPositionInstance = args.ChessBoard.GetChessBoardObjectAt(endingPosition);
@@ -27,7 +28,7 @@ namespace QC.Match.Commands
             if (endingPositionInstance != null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to move chess board object to {endingPosition} which already has a piece there.");
-                return CommandState.Abandoned;
+                return UniTask.FromResult(CommandState.Abandoned);
             }
             
             grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
@@ -41,7 +42,7 @@ namespace QC.Match.Commands
             args.CommandExecutor.QueueCommand(new SetActiveChessPieceColourCommand(args.MatchState.NextActiveColour));
             args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
 
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

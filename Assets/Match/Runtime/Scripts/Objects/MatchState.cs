@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Celeste.Lua;
 using Celeste.Tools;
+using Cysharp.Threading.Tasks;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
@@ -100,7 +101,7 @@ namespace QC.Match.Objects
             activeScenarioTable = null;
         }
 
-        public async Task<bool> LoadScenario(string scenarioGuid)
+        public async UniTask<bool> LoadScenario(string scenarioGuid)
         {
             if (string.IsNullOrEmpty(scenarioGuid))
             {
@@ -116,7 +117,7 @@ namespace QC.Match.Objects
             return loadedSuccessfully;
         }
 
-        public async Task<bool> IsScenarioWon()
+        public async UniTask<bool> IsScenarioWon()
         {
             var checkScenarioWonFunction = activeScenarioTable.GetFunction(MatchScenario.kCheckScenarioWonFunctionName);
             if (checkScenarioWonFunction == LuaValue.Nil)
@@ -128,7 +129,7 @@ namespace QC.Match.Objects
             return returnValues.Length == 1 && returnValues[0].ToBoolean();
         }
 
-        public async Task<bool> IsScenarioLost()
+        public async UniTask<bool> IsScenarioLost()
         {
             var checkScenarioLostFunction = activeScenarioTable.GetFunction(MatchScenario.kCheckScenarioLostFunctionName);
             if (checkScenarioLostFunction == LuaValue.Nil)

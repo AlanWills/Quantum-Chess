@@ -15,7 +15,8 @@
         "Celeste.FX",
         "Celeste.Lua",
         "Celeste.Assets",
-        "Celeste.Coroutines"
+        "Celeste.Coroutines",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

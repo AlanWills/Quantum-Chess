@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Lua;
 using QC.Match.Commands;
 using UnityEngine;
@@ -14,36 +13,33 @@ namespace QC.Match.Objects
         #region Properties and Fields
 
         public const string kLuaName = nameof(ChessBoardCommandExecutor);
-
-        [NonSerialized] private readonly Queue<ICommand<ChessBoardCommandArgs>> commands = new();
+        
+        [NonSerialized] private Channel<ICommand<ChessBoardCommandArgs>> commands = Channel.CreateSingleConsumerUnbounded<ICommand<ChessBoardCommandArgs>>();
         
         #endregion
 
-        public void UpdateCommands(ChessBoardCommandArgs args)
+        public void BeginProcessing(ChessBoardCommandArgs args)
         {
-            while (commands.Count > 0 && commands.Peek().Execute(args) != CommandState.Running)
-            {
-                commands.Dequeue();
-            }
+            commands = Channel.CreateSingleConsumerUnbounded<ICommand<ChessBoardCommandArgs>>();
+            ProcessCommandsAsync(args).Forget();
         }
 
-        public IEnumerator CompleteCommands(ChessBoardCommandArgs args)
+        private async UniTask ProcessCommandsAsync(ChessBoardCommandArgs args)
         {
-            while (commands.Count > 0)
+            while (await commands.Reader.WaitToReadAsync())
             {
-                if (commands.Peek().Execute(args) != CommandState.Running)
+                while (commands.Reader.TryRead(out var nextCommand))
                 {
-                    commands.Dequeue();
+                    await nextCommand.Execute(args);
                 }
-
-                yield return null;
             }
         }
         
         [LuaMember("addCommand")]
         public void QueueCommand(ICommand<ChessBoardCommandArgs> command)
         {
-            commands.Enqueue(command);
+            UnityEngine.Debug.Assert(commands != null, $"{nameof(commands)} is still null!  Did you forget to call {nameof(BeginProcessing)}?");
+            commands.Writer.TryWrite(command);
         }
     }
 }

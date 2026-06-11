@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 namespace QC.Match.Commands
 {
     public readonly struct EnableInputForChessPieceColourCommand : ICommand<ChessBoardCommandArgs>
@@ -9,9 +11,10 @@ namespace QC.Match.Commands
             this.colour = colour;
         }
         
-        public CommandState Execute(ChessBoardCommandArgs args)
+        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
-            var commandState = InputCommandUtilities.SetInteractableForColour(args.ChessBoard, colour, true);
+            var commandState = await InputCommandUtilities.SetInteractableForColour(args.ChessBoard, colour, true);
+            
             if (commandState == CommandState.Completed)
             {
                 // Clear the selection when changing what pieces are interactable
