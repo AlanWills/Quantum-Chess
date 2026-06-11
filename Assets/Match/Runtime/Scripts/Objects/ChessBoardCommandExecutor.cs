@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lua;
 using QC.Match.Commands;
@@ -13,7 +14,7 @@ namespace QC.Match.Objects
         #region Properties and Fields
 
         public const string kLuaName = nameof(ChessBoardCommandExecutor);
-        
+
         [NonSerialized] private readonly Queue<ICommand<ChessBoardCommandArgs>> commands = new();
         
         #endregion
@@ -23,6 +24,19 @@ namespace QC.Match.Objects
             while (commands.Count > 0 && commands.Peek().Execute(args) != CommandState.Running)
             {
                 commands.Dequeue();
+            }
+        }
+
+        public IEnumerator CompleteCommands(ChessBoardCommandArgs args)
+        {
+            while (commands.Count > 0)
+            {
+                if (commands.Peek().Execute(args) != CommandState.Running)
+                {
+                    commands.Dequeue();
+                }
+
+                yield return null;
             }
         }
         

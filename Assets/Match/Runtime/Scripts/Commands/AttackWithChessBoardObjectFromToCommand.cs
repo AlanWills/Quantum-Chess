@@ -19,7 +19,7 @@ namespace QC.Match.Commands
             ChessBoardObjectInstance chessBoardObjectInstance =
                 args.ChessBoard.GetChessBoardObjectAt(chessBoardObjectStartingPosition);
 
-            return AttackCommandUtils.TryAttackWithChessBoardObject(
+            return AttackCommandUtilities.TryAttackWithChessBoardObject(
                 args, 
                 chessBoardObjectInstance, 
                 chessBoardObjectEndingPosition);

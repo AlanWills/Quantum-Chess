@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public static class MoveCommandUtils
+    public static class MoveCommandUtilities
     {
         public static CommandState TryMoveChessBoardObject(
             ChessBoardCommandArgs args,
@@ -39,6 +39,7 @@ namespace QC.Match.Commands
             
             args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
             args.CommandExecutor.QueueCommand(new SetActiveChessPieceColourCommand(args.MatchState.NextActiveColour));
+            args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
 
             return CommandState.Completed;
         }

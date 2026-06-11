@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcbf23ee56ed4cbdb5dc9cc4f4a35053, type: 3}
   m_Name: Match.MatchState
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.MatchState
+  luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
+  matchScenarioCatalogue: {fileID: 0}
   activeColourChangedEvent: {fileID: 11400000, guid: 9d1275558d43e5a4283f0f707c672233, type: 2}
   onChanged: {fileID: 11400000, guid: a012f45e458c7994a9fc972b20e22521, type: 2}

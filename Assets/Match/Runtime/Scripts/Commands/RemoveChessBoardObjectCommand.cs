@@ -13,9 +13,7 @@ namespace QC.Match.Commands
 
         public CommandState Execute(ChessBoardCommandArgs args)
         {
-            return args.ChessBoard.RemoveChessBoardObject(InstanceToRemove)
-                ? CommandState.Completed
-                : CommandState.Abandoned;
+            return RemoveCommandUtilities.RemoveChessBoardObject(args, InstanceToRemove);
         }
     }
 }

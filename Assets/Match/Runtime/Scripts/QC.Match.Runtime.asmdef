@@ -13,7 +13,9 @@
         "Celeste.Maths",
         "Celeste.Input",
         "Celeste.FX",
-        "Celeste.Lua"
+        "Celeste.Lua",
+        "Celeste.Assets",
+        "Celeste.Coroutines"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

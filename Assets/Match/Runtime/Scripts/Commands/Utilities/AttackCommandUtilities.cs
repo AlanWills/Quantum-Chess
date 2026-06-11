@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public static class AttackCommandUtils
+    public static class AttackCommandUtilities
     {
         public static CommandState TryAttackWithChessBoardObject(
             ChessBoardCommandArgs args,

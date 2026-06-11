@@ -15,7 +15,7 @@ namespace QC.Match.Commands
         public CommandState Execute(ChessBoardCommandArgs args)
         {
             ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
-            return MoveCommandUtils.TryMoveChessBoardObject(
+            return MoveCommandUtilities.TryMoveChessBoardObject(
                 args, 
                 chessBoardObjectInstance,
                 chessBoardObjectEndingPosition);

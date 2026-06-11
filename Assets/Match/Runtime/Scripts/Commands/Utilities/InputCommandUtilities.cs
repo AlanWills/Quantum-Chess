@@ -2,7 +2,7 @@ using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
-    public static class InputCommandUtils
+    public static class InputCommandUtilities
     {
         public static CommandState SetInteractableForColour(
             ChessBoard chessBoard,

@@ -3,6 +3,7 @@
     "com.celestegames.native-file-picker": "git@github.com:AlanWills/UnityNativeFilePicker.git",
     "com.celestegames.native-share": "git@github.com:AlanWills/UnityNativeShare.git",
     "com.celestegames.unity-runtime-inspector": "git@github.com:AlanWills/UnityRuntimeInspector.git",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap.extras": "6.0.2",
     "com.unity.addressables": "3.0.0",

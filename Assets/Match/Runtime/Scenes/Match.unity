@@ -671,6 +671,11 @@ TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: 7191675665641619489, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
   m_PrefabInstance: {fileID: 7586440324023284591}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &746428885 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9045666192234093136, guid: 63214e18bc183496e94b73fa41e3ada0, type: 3}
+  m_PrefabInstance: {fileID: 2704217917382501527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &847570058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -956,6 +961,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: AssetLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+      propertyPath: assetsToLoad.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+      propertyPath: 'assetsToLoad.Array.data[0]'
+      value: 
+      objectReference: {fileID: 746428885}
+    - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+      propertyPath: 'assetsToLoad.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1538463192}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

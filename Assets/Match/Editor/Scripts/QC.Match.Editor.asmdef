@@ -2,14 +2,16 @@
     "name": "QC.Match.Editor",
     "rootNamespace": "QCEditor.Match",
     "references": [
-        "UnityEditor.UI",
         "QC.Match.Runtime",
+        "Celeste.Objects",
         "Celeste.Persistence",
         "Celeste.Components",
+        "Celeste.DataStructures",
         "Celeste.Persistence.Editor",
         "Celeste.DataStructures.Editor",
         "Celeste.Components.Editor",
-        "Celeste.Tools.Editor"
+        "Celeste.Tools.Editor",
+        "Celeste.Objects.Editor"
     ],
     "includePlatforms": [
         "Editor"

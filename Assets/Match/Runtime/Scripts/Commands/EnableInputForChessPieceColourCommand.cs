@@ -11,7 +11,7 @@ namespace QC.Match.Commands
         
         public CommandState Execute(ChessBoardCommandArgs args)
         {
-            var commandState = InputCommandUtils.SetInteractableForColour(args.ChessBoard, colour, true);
+            var commandState = InputCommandUtilities.SetInteractableForColour(args.ChessBoard, colour, true);
             if (commandState == CommandState.Completed)
             {
                 // Clear the selection when changing what pieces are interactable

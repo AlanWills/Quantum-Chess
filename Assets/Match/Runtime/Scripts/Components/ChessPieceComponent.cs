@@ -184,8 +184,9 @@ namespace QC.Match.Components
                     return;
                
                 case ChessPieceType.Pawn:
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    int verticalDirection = (int)saveData.verticalDirection;
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1 * verticalDirection), saveData.currentPieceColour, chessBoardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1 * verticalDirection), saveData.currentPieceColour, chessBoardLookup, validAttacks);
                     
                     return;
                

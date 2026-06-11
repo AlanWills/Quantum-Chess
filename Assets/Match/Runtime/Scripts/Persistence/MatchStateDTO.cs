@@ -8,10 +8,12 @@ namespace QC.Match.Persistence
     public class MatchStateDTO : VersionedDTO
     {
         public ChessPieceColour activeColour;
+        public string activeScenarioGuid;
         
         public MatchStateDTO(MatchState matchState)
         {
             activeColour = matchState.ActiveColour;
+            activeScenarioGuid = matchState.ActiveScenarioGuid;
         }
     }
 }

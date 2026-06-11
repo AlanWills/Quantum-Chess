@@ -21,9 +21,7 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            return args.ChessBoard.RemoveChessBoardObject(instance)
-                ? CommandState.Completed
-                : CommandState.Abandoned;
+            return RemoveCommandUtilities.RemoveChessBoardObject(args, instance);
         }
     }
 }

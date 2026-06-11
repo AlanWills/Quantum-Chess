@@ -214,6 +214,12 @@ namespace QC.Match.Objects
         {
             AddChessBoardTile(boardPosition.v);
         }
+
+        [LuaMember("isChessPieceAt")]
+        private bool IsChessPieceAt(LuaVector2Int boardPosition)
+        {
+            return GetChessBoardObjectAt(boardPosition.v) != null;
+        }
         
         #endregion
     }

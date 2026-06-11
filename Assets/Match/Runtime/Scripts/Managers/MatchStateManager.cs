@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using Celeste.Assets;
+using Celeste.Coroutines;
 using Celeste.Persistence;
 using QC.Match.Commands;
 using QC.Match.Events;
@@ -8,7 +12,7 @@ using UnityEngine.Events;
 
 namespace QC.Match.Managers
 {
-    public class MatchStateManager : PersistentSceneManager<MatchStateManager, MatchStateDTO>
+    public class MatchStateManager : PersistentSceneManager<MatchStateManager, MatchStateDTO>, IHasAssets
     {
         #region Properties and Fields
 
@@ -22,11 +26,13 @@ namespace QC.Match.Managers
         [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
+
+        [NonSerialized] private string lastActiveScenarioGuid;
         
         #endregion
         
         #region Unity Methods
-        
+
         private void OnEnable()
         {
             onMatchSetup.Invoke();
@@ -54,6 +60,8 @@ namespace QC.Match.Managers
 
         protected override void Deserialize(MatchStateDTO dto)
         {
+            lastActiveScenarioGuid = dto.activeScenarioGuid;
+            
             matchState.Initialize(dto);
         }
 
@@ -63,6 +71,19 @@ namespace QC.Match.Managers
         }
         
         #endregion
+
+        public bool ShouldLoadAssets()
+        {
+            return !string.IsNullOrEmpty(lastActiveScenarioGuid);
+        }
+
+        public IEnumerator LoadAssets()
+        {
+            yield return matchState.LoadScenario(lastActiveScenarioGuid).ExecuteAsCoroutine();
+            
+            ChessBoardCommandArgs args = CreateCommandArgs();
+            yield return chessBoardCommandExecutor.CompleteCommands(args);
+        }
 
         private ChessBoardCommandArgs CreateCommandArgs()
         {
