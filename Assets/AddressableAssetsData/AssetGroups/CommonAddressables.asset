@@ -67,6 +67,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 223600cb820c4e02b369d64de21f2e25
+    m_Address: Commands/SetActivePlayerCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e86d9e384dbd4ff6a65627b02e0b894
     m_Address: Assets/Match/Runtime/Scenes/MatchSceneSet.asset
     m_ReadOnly: 0

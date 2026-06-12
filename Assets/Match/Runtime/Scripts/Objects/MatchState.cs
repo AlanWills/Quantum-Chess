@@ -21,6 +21,9 @@ namespace QC.Match.Objects
 
         public const string kLuaName = nameof(MatchState);
 
+        [LuaMember("hasActiveScenario")] private bool HasActiveScenario => !string.IsNullOrEmpty(activeScenarioGuid);
+        [LuaMember("numPlayers")] private int NumPlayers => players.Count;
+
         [LuaMember("activeScenarioGuid")]
         public string ActiveScenarioGuid
         {
@@ -36,7 +39,8 @@ namespace QC.Match.Objects
         }
 
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
-        public ChessPieceColour ActiveColour => ActivePlayer.Colour;
+        [LuaMember("nextPlayerIndex")] public int NextPlayerIndex => (activePlayerIndex + 1) % players.Count;
+        public ChessPieceColour ActiveColour => ActivePlayer?.Colour ?? ChessPieceColour.Unknown;
         [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
         private Player ActivePlayer => players.Get(activePlayerIndex);
 
@@ -47,7 +51,7 @@ namespace QC.Match.Objects
         [SerializeField] private Celeste.Events.Event onChanged;
 
         [NonSerialized] private readonly List<Player> players = new();
-        [NonSerialized] private int activePlayerIndex;
+        [NonSerialized] private int activePlayerIndex = -1;
         [NonSerialized] private string activeScenarioGuid;
         [NonSerialized] private LuaTable activeScenarioTable;
 
@@ -55,9 +59,10 @@ namespace QC.Match.Objects
 
         public void Initialize()
         {
-            activePlayerIndex = 0;
+            activePlayerIndex = -1;
             activeScenarioGuid = string.Empty;
             activeScenarioTable = null;
+            players.Clear();
         }
 
         public void Initialize(MatchStateDTO dto)
@@ -65,14 +70,18 @@ namespace QC.Match.Objects
             activePlayerIndex = dto.activePlayerIndex;
             activeScenarioGuid = string.Empty;
             activeScenarioTable = null;
+            players.Clear();
         }
 
-        public async UniTask<bool> LoadScenario(string scenarioGuid)
+        public async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
         {
             if (string.IsNullOrEmpty(scenarioGuid))
             {
                 return false;
             }
+
+            activePlayerIndex = -1;
+            players.Clear();
             
             MatchScenario matchScenario = matchScenarioCatalogue.MustFindByGuid(scenarioGuid);
             activeScenarioGuid = scenarioGuid;
@@ -88,21 +97,33 @@ namespace QC.Match.Objects
             UnityEngine.Debug.Assert(loadedSuccessfully, $"Failed to load {nameof(MatchScenario)} '{matchScenario.name}'.");
             return loadedSuccessfully;
         }
-
-        public void MakeNextPlayerActive()
+        
+        public async UniTask StartScenarioAsync(string scenarioGuid)
         {
-            activePlayerIndex = (activePlayerIndex + 1) % players.Count;
-            onChanged.Invoke();
+            if (!await LoadScenarioAsync(scenarioGuid))
+            {
+                return;
+            }
+
+            var setUpScenarioFunction = activeScenarioTable.GetFunction(MatchScenario.kScenarioSetUpFunctionName);
+            if (setUpScenarioFunction == null)
+            {
+                return;
+            }
+
+            await luaRuntime.ExecuteFunctionAsync(setUpScenarioFunction);
         }
 
-        public void UpdateBasedOnActivePlayer(ChessBoardObjectInstance chessBoardObjectInstance)
+        public void MakePlayerActive(int playerIndex)
         {
-            if (chessBoardObjectInstance.TryFindComponent<IInteractable>(out var interactable) &&
-                chessBoardObjectInstance.TryFindComponent<IChessPiece>(out var chessPiece))
+            if (playerIndex < 0 || players.Count <= playerIndex)
             {
-                bool isActiveColour = chessPiece.iFace.GetPieceColour(chessPiece.instance) == ActiveColour;
-                interactable.iFace.SetInteractable(interactable.instance, isActiveColour);
+                UnityEngine.Debug.LogAssertion($"Attempting to make player active ({playerIndex}), but it is not a valid player index.");
+                return;
             }
+            
+            activePlayerIndex = playerIndex;
+            onChanged.Invoke();
         }
 
         public UniTask CalculateTurnStrategyForPlayer(int playerIndex, ITurnStrategy.Args args)
@@ -125,20 +146,9 @@ namespace QC.Match.Objects
         #region Lua
 
         [LuaMember("startScenario")]
-        private async ValueTask StartScenario(string scenarioGuid)
+        private void StartScenario(string scenarioGuid)
         {
-            if (!await LoadScenario(scenarioGuid))
-            {
-                return;
-            }
-
-            var setUpScenarioFunction = activeScenarioTable.GetFunction(MatchScenario.kScenarioSetUpFunctionName);
-            if (setUpScenarioFunction == LuaValue.Nil)
-            {
-                return;
-            }
-
-            await luaRuntime.ExecuteFunctionAsync(setUpScenarioFunction);
+            StartScenarioAsync(scenarioGuid).Forget();
         }
 
         [LuaMember("addPlayer")]

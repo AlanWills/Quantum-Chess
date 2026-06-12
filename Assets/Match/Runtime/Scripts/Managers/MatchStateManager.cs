@@ -76,7 +76,7 @@ namespace QC.Match.Managers
 
         public IEnumerator LoadAssets()
         {
-            yield return matchState.LoadScenario(lastActiveScenarioGuid);
+            yield return matchState.LoadScenarioAsync(lastActiveScenarioGuid);
 
             ChessBoardCommandArgs args = CreateCommandArgs();
             chessBoardCommandExecutor.BeginProcessing(args);
@@ -91,14 +91,5 @@ namespace QC.Match.Managers
                 chessBoardObjectSelection,
                 luaRuntime);
         }
-        
-        #region Callbacks
-
-        public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
-        {
-            matchState.UpdateBasedOnActivePlayer(args.AddedObject);
-        }
-        
-        #endregion
     }
 }

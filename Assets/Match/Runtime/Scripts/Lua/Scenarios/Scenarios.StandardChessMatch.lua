@@ -1,6 +1,6 @@
-local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
+local SetActivePlayerCommand = require("Commands/SetActivePlayerCommand.lua")
 local EndTurnCommand = require("Commands/EndTurnCommand.lua")
 
 local Scenario = { }
@@ -23,6 +23,8 @@ function Scenario:load()
         turnStrategyFunc = function()
             -- TODO: Add actual logic here
             
+            -- TODO: Delete when we do proper logic
+            print("Got here!")
             EndTurnCommand.new()
         end
     })
@@ -44,7 +46,7 @@ function Scenario:setUp()
         {
             position = Vector2Int.new(xPos, 2),
             colour = "White",
-            type = { "Pawn", "Queen" },
+            type = "Pawn",
             verticalDirection = "Up"
         })
     end
@@ -182,7 +184,7 @@ function Scenario:setUp()
         type = "King"
     })
     
-    SetActiveColourCommand.toWhite()
+    SetActivePlayerCommand.to(0)
 end
 
 return Scenario

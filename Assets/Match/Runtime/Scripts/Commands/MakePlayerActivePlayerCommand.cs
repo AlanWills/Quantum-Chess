@@ -2,15 +2,19 @@
 
 namespace QC.Match.Commands
 {
-    public readonly struct MakeNextPlayerActivePlayerCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct MakePlayerActivePlayerCommand : ICommand<ChessBoardCommandArgs>
     {
+        private readonly int PlayerIndex;
+
+        public MakePlayerActivePlayerCommand(int playerIndex)
+        {
+            PlayerIndex = playerIndex;
+        }
+        
         public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
-            args.MatchState.MakeNextPlayerActive();
+            args.MatchState.MakePlayerActive(PlayerIndex);
             
-            args.CommandExecutor.QueueCommand(new EnableInputForChessPieceColourCommand(args.MatchState.ActiveColour));
-            args.CommandExecutor.QueueCommand(new DisableInputIfNotChessPieceColourCommand(args.MatchState.ActiveColour));
-
             ITurnStrategy.Args turnStrategyArgs = new ITurnStrategy.Args(
                 args.MatchState,
                 args.ChessBoard,

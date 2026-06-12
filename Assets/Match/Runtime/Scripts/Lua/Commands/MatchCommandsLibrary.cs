@@ -37,6 +37,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
             functions.Add(new LibraryFunction(kName, "attackFromTo", AttackFromTo));
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
+            functions.Add(new LibraryFunction(kName, "setActivePlayer", SetActivePlayer));
             functions.Add(new LibraryFunction(kName, "endTurn", EndTurn));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
@@ -139,6 +140,18 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
+        private ValueTask<int> SetActivePlayer(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int playerIndex = context.GetArgument<int>(1);
+            MakePlayerActivePlayerCommand makePlayerActivePlayerCommand = new MakePlayerActivePlayerCommand(playerIndex);
+            chessBoardCommandExecutor.QueueCommand(makePlayerActivePlayerCommand);
+
+            return new ValueTask<int>(context.Return());
+        }
+        
         private ValueTask<int> EndTurn(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
@@ -211,10 +224,8 @@ namespace QC.Match.Lua
 
             // Vertical Direction
             {
-                if (!config.TryGetEnum("verticalDirection", out verticalDirection))
-                {
-                    UnityEngine.Debug.LogAssertion("Issue attempting to parse the 'verticalDirection' field when adding a chess piece.");
-                }
+                // This is technically OK to be missing, so we don't log assertions if there's a failure here
+                config.TryGetEnum("verticalDirection", out verticalDirection);
             }
             
             // Position

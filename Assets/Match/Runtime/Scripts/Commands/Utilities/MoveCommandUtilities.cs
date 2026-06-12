@@ -39,6 +39,9 @@ namespace QC.Match.Commands
             }
             
             args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
+            
+            // This could be a problem in the future if we allow multiple moves
+            args.CommandExecutor.QueueCommand(new EndTurnCommand());
 
             return UniTask.FromResult(CommandState.Completed);
         }
