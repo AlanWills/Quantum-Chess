@@ -37,8 +37,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
             functions.Add(new LibraryFunction(kName, "attackFromTo", AttackFromTo));
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
-            functions.Add(new LibraryFunction(kName, "setActiveColour", SetActiveColour));
-            functions.Add(new LibraryFunction(kName, "switchActiveColour", SwitchActiveColour));
+            functions.Add(new LibraryFunction(kName, "endTurn", EndTurn));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
@@ -140,37 +139,14 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> SetActiveColour(
+        private ValueTask<int> EndTurn(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
-            string colourString = context.GetArgument<string>(1);
+            EndTurnCommand endTurnCommand = new EndTurnCommand();
+            chessBoardCommandExecutor.QueueCommand(endTurnCommand);
 
-            if (Enum.TryParse(colourString, out ChessPieceColour chessPieceColour))
-            {
-                SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(chessPieceColour);
-                chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
-            }
-            else
-            {
-                UnityEngine.Debug.LogAssertion($"Could not parse colour string '{colourString}' to a vaild chess piece colour enum value.");
-            }
-
-            return new ValueTask<int>(context.Return());
-        }
-        
-        private ValueTask<int> SwitchActiveColour(
-            LuaFunctionExecutionContext context,
-            CancellationToken cancellationToken)
-        {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
-            MatchState matchState = context.GetArgument<MatchState>(1);
-            ChessPieceColour newColour = matchState.NextActiveColour;
-            
-            SetActiveChessPieceColourCommand setActiveColourCommand = new SetActiveChessPieceColourCommand(newColour);
-            chessBoardCommandExecutor.QueueCommand(setActiveColourCommand);
-            
             return new ValueTask<int>(context.Return());
         }
         
@@ -187,21 +163,16 @@ namespace QC.Match.Lua
                 return new ValueTask<int>(context.Return());
             }
 
-            ChessPieceColour colour = ChessPieceColour.Unknown;
+            ChessPieceColour colour;
             ChessPieceType type = ChessPieceType.None;
-            ChessPieceVerticalDirection verticalDirection = ChessPieceVerticalDirection.Up;
-            Vector2Int position = new();
+            ChessPieceVerticalDirection verticalDirection;
+            Vector2Int position;
             
             // Colour
             {
-                string colourString = config.GetString("colour");
-                if (string.IsNullOrEmpty(colourString))
+                if (!config.TryGetEnum("colour", out colour))
                 {
-                    UnityEngine.Debug.LogAssertion("No colour string provided when attempting to add chess piece.");
-                }
-                else if (!Enum.TryParse(colourString, out colour))
-                {
-                    UnityEngine.Debug.LogAssertion($"Issue attempting to parse the string '{colourString}' as a valid colour.");
+                    UnityEngine.Debug.LogAssertion("Issue attempting to parse the 'colour' field as a valid colour when adding chess piece.");
                 }
             }
 
@@ -240,25 +211,15 @@ namespace QC.Match.Lua
 
             // Vertical Direction
             {
-                if (config.TryGetValue("verticalDirection", out LuaValue verticalDirectionValue) &&
-                    verticalDirectionValue.IsString())
+                if (!config.TryGetEnum("verticalDirection", out verticalDirection))
                 {
-                    string verticalDirectionString = verticalDirectionValue.As<string>();
-                    if (!Enum.TryParse(verticalDirectionString, out verticalDirection))
-                    {
-                        UnityEngine.Debug.LogAssertion($"Issue attempting to parse the string '{verticalDirectionString}' as a valid vertical direction.");
-                    }
+                    UnityEngine.Debug.LogAssertion("Issue attempting to parse the 'verticalDirection' field when adding a chess piece.");
                 }
             }
             
             // Position
             {
-                if (config.TryGetValue("position", out LuaValue luaValue))
-                {
-                    LuaVector2Int luaVector2Int = luaValue.As<LuaVector2Int>();
-                    position = luaVector2Int.v;
-                }
-                else
+                if (!config.TryGetVector2Int("position", out position))
                 {
                     position.x = config.GetInt("x");
                     position.y = config.GetInt("y");

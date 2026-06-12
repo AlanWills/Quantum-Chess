@@ -5,8 +5,8 @@ MatchStateDebugMenu.scenarioEntriesPerPage = 20
 
 function MatchStateDebugMenu:onDrawMenu()
     GUILayout.label("Active Scenario: " .. MatchState.activeScenarioGuid)
+    GUILayout.label("Active Player Index: " .. tostring(MatchState.activePlayerIndex))
     GUILayout.label("Active Colour: " .. tostring(MatchState.activeColour))
-    GUILayout.label("Next Active Colour: " .. tostring(MatchState.nextActiveColour))
     
     GUILayout.beginSection("Scenarios")
         self.currentScenarioPage = GUILayout.readOnlyPaginatedListField(

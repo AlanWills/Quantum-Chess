@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Celeste.DataStructures;
 using Celeste.Lua;
-using Celeste.Tools;
 using Cysharp.Threading.Tasks;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
-using QC.Match.Events;
 using QC.Match.Persistence;
+using QC.Match.Players;
 using UnityEngine;
 
 namespace QC.Match.Objects
@@ -34,54 +35,19 @@ namespace QC.Match.Objects
             }
         }
 
-        public ChessPieceColour ActiveColour
-        {
-            get => activeColour;
-            set
-            {
-                if (activeColour != value)
-                {
-                    ChessPieceColour oldColour = activeColour;
-                    activeColour = value;
-                    activeColourChangedEvent.Invoke(new ActiveColourChangedArgs(oldColour, activeColour));
-                    onChanged.Invoke();
-                }
-            }
-        }
-
-        [LuaMember("activeColour")] 
-        private string ActiveColourString => ActiveColour.ToString();
-
-        public ChessPieceColour NextActiveColour
-        {
-            get
-            {
-                switch (activeColour)
-                {
-                    case ChessPieceColour.White:
-                        return ChessPieceColour.Black;
-                    
-                    case ChessPieceColour.Black:
-                        return ChessPieceColour.White;
-                    
-                    case ChessPieceColour.Unknown:
-                    default:
-                        return ChessPieceColour.White;
-                }
-            }
-        }
-        
-        [LuaMember("nextActiveColour")] 
-        private string NextActiveColourString => NextActiveColour.ToString();
+        [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
+        public ChessPieceColour ActiveColour => ActivePlayer.Colour;
+        [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
+        private Player ActivePlayer => players.Get(activePlayerIndex);
 
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
         
         [Header("Events")] 
-        [SerializeField] private ActiveColourChangedEvent activeColourChangedEvent;
         [SerializeField] private Celeste.Events.Event onChanged;
 
-        [NonSerialized] private ChessPieceColour activeColour;
+        [NonSerialized] private readonly List<Player> players = new();
+        [NonSerialized] private int activePlayerIndex;
         [NonSerialized] private string activeScenarioGuid;
         [NonSerialized] private LuaTable activeScenarioTable;
 
@@ -89,14 +55,14 @@ namespace QC.Match.Objects
 
         public void Initialize()
         {
-            activeColour = ChessPieceColour.Unknown;
+            activePlayerIndex = 0;
             activeScenarioGuid = string.Empty;
             activeScenarioTable = null;
         }
 
         public void Initialize(MatchStateDTO dto)
         {
-            activeColour = dto.activeColour;
+            activePlayerIndex = dto.activePlayerIndex;
             activeScenarioGuid = string.Empty;
             activeScenarioTable = null;
         }
@@ -111,37 +77,25 @@ namespace QC.Match.Objects
             MatchScenario matchScenario = matchScenarioCatalogue.MustFindByGuid(scenarioGuid);
             activeScenarioGuid = scenarioGuid;
             activeScenarioTable = await matchScenario.Load(luaRuntime);
+            
+            var loadScenarioFunction = activeScenarioTable.GetFunction(MatchScenario.kScenarioLoadFunctionName);
+            if (loadScenarioFunction != LuaValue.Nil)
+            {
+                await luaRuntime.ExecuteFunctionAsync(loadScenarioFunction);
+            }
 
             bool loadedSuccessfully = activeScenarioTable != null;
             UnityEngine.Debug.Assert(loadedSuccessfully, $"Failed to load {nameof(MatchScenario)} '{matchScenario.name}'.");
             return loadedSuccessfully;
         }
 
-        public async UniTask<bool> IsScenarioWon()
+        public void MakeNextPlayerActive()
         {
-            var checkScenarioWonFunction = activeScenarioTable.GetFunction(MatchScenario.kCheckScenarioWonFunctionName);
-            if (checkScenarioWonFunction == LuaValue.Nil)
-            {
-                return false;
-            }
-
-            var returnValues = await luaRuntime.ExecuteFunctionAsync(checkScenarioWonFunction);
-            return returnValues?.Length == 1 && returnValues[0].ToBoolean();
+            activePlayerIndex = (activePlayerIndex + 1) % players.Count;
+            onChanged.Invoke();
         }
 
-        public async UniTask<bool> IsScenarioLost()
-        {
-            var checkScenarioLostFunction = activeScenarioTable.GetFunction(MatchScenario.kCheckScenarioLostFunctionName);
-            if (checkScenarioLostFunction == LuaValue.Nil)
-            {
-                return false;
-            }
-            
-            var returnValues = await luaRuntime.ExecuteFunctionAsync(checkScenarioLostFunction);
-            return returnValues?.Length == 1 && returnValues[0].ToBoolean();
-        }
-
-        public void UpdateBasedOnActiveColour(ChessBoardObjectInstance chessBoardObjectInstance)
+        public void UpdateBasedOnActivePlayer(ChessBoardObjectInstance chessBoardObjectInstance)
         {
             if (chessBoardObjectInstance.TryFindComponent<IInteractable>(out var interactable) &&
                 chessBoardObjectInstance.TryFindComponent<IChessPiece>(out var chessPiece))
@@ -149,6 +103,18 @@ namespace QC.Match.Objects
                 bool isActiveColour = chessPiece.iFace.GetPieceColour(chessPiece.instance) == ActiveColour;
                 interactable.iFace.SetInteractable(interactable.instance, isActiveColour);
             }
+        }
+
+        public UniTask CalculateTurnStrategyForPlayer(int playerIndex, ITurnStrategy.Args args)
+        {
+            Player player = players.Get(playerIndex);
+            return player != null ? player.TurnStrategy.CalculateTurnStrategy(args) : UniTask.CompletedTask;
+        }
+
+        public UniTask<bool> CalculateIfPlayerHasWon(int playerIndex, IWinCondition.Args args)
+        {
+            Player player = players.Get(playerIndex);
+            return player != null ? player.WinCondition.CalculateIfWinConditionIsMet(args) : UniTask.FromResult(false);
         }
 
         public MatchStateDTO Serialize()
@@ -173,6 +139,33 @@ namespace QC.Match.Objects
             }
 
             await luaRuntime.ExecuteFunctionAsync(setUpScenarioFunction);
+        }
+
+        [LuaMember("addPlayer")]
+        private void AddPlayer(LuaTable playerConfig)
+        {
+            if (!playerConfig.TryGetEnum("colour", out ChessPieceColour playerColour))
+            {
+                UnityEngine.Debug.LogAssertion($"Failed to successfully parse player colour value as a valid {nameof(ChessPieceColour)}.");
+                return;
+            }
+
+            if (!playerConfig.TryGetEnum("turnStrategy", out TurnStrategyFactory.Type turnStrategyType))
+            {
+                UnityEngine.Debug.LogAssertion("Failed to successfully parse turn strategy value.");
+                return;
+            }
+
+            if (!playerConfig.TryGetEnum("winCondition", out WinConditionFactory.Type winConditionType))
+            {
+                UnityEngine.Debug.LogAssertion("Failed to successfully parse player win condition value.");
+                return;
+            }
+
+            ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, playerConfig);
+            IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
+            Player player = new Player(playerColour, turnStrategy, winCondition);
+            players.Add(player);
         }
         
         #endregion

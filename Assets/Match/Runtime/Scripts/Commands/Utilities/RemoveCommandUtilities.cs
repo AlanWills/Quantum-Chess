@@ -12,9 +12,6 @@ namespace QC.Match.Commands
             CommandState commandState = args.ChessBoard.RemoveChessBoardObject(objectToRemove)
                 ? CommandState.Completed
                 : CommandState.Abandoned;
-            
-            args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
-            args.CommandExecutor.QueueCommand(new CheckScenarioLostCommand());
 
             return UniTask.FromResult(commandState);
         }

@@ -2,7 +2,7 @@ local MoveCommand = require("Commands/MoveCommand.lua")
 local AttackCommand = require("Commands/AttackCommand.lua")
 local SelectCommand = require("Commands/SelectCommand.lua")
 local EnableInputCommand = require("Commands/EnableInputCommand.lua") 
-local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
+local EndTurnCommand = require("Commands/EndTurnCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local RemoveChessPieceCommand = require("Commands/RemoveChessPieceCommand.lua")
 local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
@@ -62,20 +62,10 @@ function MatchCommandsDebugMenu:onDrawMenu()
         GUILayout.endHorizontal()
     GUILayout.endSection()
 
-    GUILayout.beginSection("Set Active Colour")
-        GUILayout.beginHorizontal()
-            if GUILayout.button("White") then
-                SetActiveColourCommand.toWhite()
-            end
-        
-            if GUILayout.button("Black") then
-                EnableInputCommand.toBlack()
-            end
-        
-            if GUILayout.button("Switch") then
-                EnableInputCommand.switch()
-            end
-        GUILayout.endHorizontal()
+    GUILayout.beginSection("End Turn")
+        if GUILayout.button("End Turn") then
+            EndTurnCommand.new()
+        end
     GUILayout.endSection()
     
     GUILayout.beginSection("Add Pieces")

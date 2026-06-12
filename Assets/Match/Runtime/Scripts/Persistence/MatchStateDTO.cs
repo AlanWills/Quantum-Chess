@@ -7,12 +7,12 @@ namespace QC.Match.Persistence
     [Serializable]
     public class MatchStateDTO : VersionedDTO
     {
-        public ChessPieceColour activeColour;
+        public int activePlayerIndex;
         public string activeScenarioGuid;
         
         public MatchStateDTO(MatchState matchState)
         {
-            activeColour = matchState.ActiveColour;
+            activePlayerIndex = matchState.ActivePlayerIndex;
             activeScenarioGuid = matchState.ActiveScenarioGuid;
         }
     }

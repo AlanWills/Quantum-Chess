@@ -49,19 +49,9 @@ namespace QC.Match.Commands
                 UnityEngine.Debug.LogAssertion($"Attempting to attack with chess board object at {endingPosition}, but there is a chess board object there with the same colour ({chessPieceColour}).");
                 return UniTask.FromResult(CommandState.Abandoned);
             }
-
-            grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
             
-            if (instance.TryFindComponent<IObjectStatus>(out var status))
-            {
-                status.iFace.SetHasMoved(status.instance, true);
-            }
-            
-            args.ChessBoard.RemoveChessBoardObject(endingPositionInstance);
-            args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
-            args.CommandExecutor.QueueCommand(new CheckScenarioWonCommand());
-            args.CommandExecutor.QueueCommand(new CheckScenarioLostCommand());
-            args.CommandExecutor.QueueCommand(new SetActiveChessPieceColourCommand(args.MatchState.NextActiveColour));
+            args.CommandExecutor.QueueCommand(new RemoveChessBoardObjectCommand(endingPositionInstance));
+            args.CommandExecutor.QueueCommand(new MoveChessBoardObjectToCommand(instance, endingPosition));
 
             return UniTask.FromResult(CommandState.Completed);
         }

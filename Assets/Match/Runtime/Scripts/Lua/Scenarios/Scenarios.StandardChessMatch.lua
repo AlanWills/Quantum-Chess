@@ -1,8 +1,32 @@
 local SetActiveColourCommand = require("Commands/SetActiveColourCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
+local EndTurnCommand = require("Commands/EndTurnCommand.lua")
 
 local Scenario = { }
+
+function Scenario:load()
+    MatchState:addPlayer(
+    {
+        colour = "White",
+        winCondition = "Checkmate",
+        winConditionData = "Black",
+        turnStrategy = "Manual"
+    })
+    
+    MatchState:addPlayer(
+    {
+        colour = "Black",
+        winCondition = "Checkmate",
+        winConditionData = "White",
+        turnStrategy = "Custom",
+        turnStrategyFunc = function()
+            -- TODO: Add actual logic here
+            
+            EndTurnCommand.new()
+        end
+    })
+end
 
 function Scenario:setUp()
     ClearChessBoardCommand.new()
@@ -159,14 +183,6 @@ function Scenario:setUp()
     })
     
     SetActiveColourCommand.toWhite()
-end
-
-function Scenario:checkScenarioWon()
-    return not ChessBoard:chessPieceExists({ colour = "Black", type = "King" })
-end
-
-function Scenario:checkScenarioLost()
-    return not ChessBoard:chessPieceExists({ colour = "White", type = "King" })
 end
 
 return Scenario

@@ -208,7 +208,7 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a4e1f42dc5ee466b84101c6570231b34
-    m_Address: Commands/SetActiveColourCommand.lua
+    m_Address: Commands/EndTurnCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

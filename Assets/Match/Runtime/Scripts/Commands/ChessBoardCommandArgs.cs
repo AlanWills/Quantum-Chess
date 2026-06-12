@@ -1,3 +1,4 @@
+using Celeste.Lua;
 using QC.Match.Objects;
 
 namespace QC.Match.Commands
@@ -8,17 +9,20 @@ namespace QC.Match.Commands
         public readonly ChessBoardCommandExecutor CommandExecutor; 
         public readonly ChessBoard ChessBoard;
         public readonly ChessBoardObjectSelection Selection;
+        public readonly ILuaRuntime LuaRuntime;
 
         public ChessBoardCommandArgs(
             MatchState matchState,
             ChessBoardCommandExecutor commandExecutor,
             ChessBoard chessBoard,
-            ChessBoardObjectSelection selection)
+            ChessBoardObjectSelection selection,
+            ILuaRuntime luaRuntime)
         {
             MatchState = matchState;
             CommandExecutor = commandExecutor;
             ChessBoard = chessBoard;
             Selection = selection;
+            LuaRuntime = luaRuntime;
         }
     }
 }

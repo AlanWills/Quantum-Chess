@@ -34,9 +34,8 @@ namespace QC.Match.Objects
         [SerializeField, StringAsSystemGuid] private string guid;
         [SerializeField] private LuaScript scenarioScript;
 
+        public const string kScenarioLoadFunctionName = "load";
         public const string kScenarioSetUpFunctionName = "setUp";
-        public const string kCheckScenarioWonFunctionName = "checkScenarioWon";
-        public const string kCheckScenarioLostFunctionName = "checkScenarioLost";
 
         #endregion
 

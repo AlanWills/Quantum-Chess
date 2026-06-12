@@ -168,6 +168,14 @@ namespace QC.Match.Objects
             return GetChessBoardObjectAt(new Vector2Int(x, y));
         }
 
+        public bool DoesChessPieceExist(ChessPieceColour colour, ChessPieceType type)
+        {
+            return objects.Exists(x => 
+                x.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                colour == chessPiece.iFace.GetPieceColour(chessPiece.instance) &&
+                chessPiece.iFace.GetPieceType(chessPiece.instance).HasFlag(type));
+        }
+
         public bool RemoveChessBoardObject(ChessBoardObjectInstance instance)
         {
             bool result = objects.Remove(instance);

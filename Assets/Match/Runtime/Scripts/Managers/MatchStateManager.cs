@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Celeste.Assets;
 using Celeste.Coroutines;
+using Celeste.Lua;
 using Celeste.Persistence;
 using Cysharp.Threading.Tasks;
 using QC.Match.Commands;
@@ -25,6 +26,7 @@ namespace QC.Match.Managers
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         [SerializeField] private ChessBoard chessBoard;
         [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
+        [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
 
@@ -86,14 +88,15 @@ namespace QC.Match.Managers
                 matchState,
                 chessBoardCommandExecutor,
                 chessBoard,
-                chessBoardObjectSelection);
+                chessBoardObjectSelection,
+                luaRuntime);
         }
         
         #region Callbacks
 
         public void OnChessBoardObjectAdded(ChessBoardObjectAddedArgs args)
         {
-            matchState.UpdateBasedOnActiveColour(args.AddedObject);
+            matchState.UpdateBasedOnActivePlayer(args.AddedObject);
         }
         
         #endregion
