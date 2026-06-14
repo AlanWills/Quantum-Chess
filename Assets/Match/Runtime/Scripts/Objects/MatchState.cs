@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
+using QC.Match.Commands;
 using QC.Match.Persistence;
 using QC.Match.Players;
 using UnityEngine;
@@ -68,27 +69,42 @@ namespace QC.Match.Objects
         public void Initialize(MatchStateDTO dto)
         {
             activePlayerIndex = dto.activePlayerIndex;
-            activeScenarioGuid = string.Empty;
+            activeScenarioGuid = dto.activeScenarioGuid;
             activeScenarioTable = null;
             players.Clear();
         }
 
-        public async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
+        public async UniTask TryLoadLastActiveScenario(ICommandExecutor<ChessBoardCommandArgs> commandExecutor)
+        {
+            if (!HasActiveScenario)
+            {
+                return;
+            }
+
+            if (!await LoadScenarioAsync(activeScenarioGuid))
+            {
+                return;
+            }
+            
+            commandExecutor.QueueCommand(new CalculatePlayerTurnStrategyCommand(ActivePlayerIndex));
+        }
+
+        private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
         {
             if (string.IsNullOrEmpty(scenarioGuid))
             {
+                UnityEngine.Debug.LogAssertion("Attempting to load a scenario with an empty guid.  Ignoring...");
                 return false;
             }
-
-            activePlayerIndex = -1;
-            players.Clear();
             
+            players.Clear();
+
             MatchScenario matchScenario = matchScenarioCatalogue.MustFindByGuid(scenarioGuid);
             activeScenarioGuid = scenarioGuid;
             activeScenarioTable = await matchScenario.Load(luaRuntime);
             
             var loadScenarioFunction = activeScenarioTable.GetFunction(MatchScenario.kScenarioLoadFunctionName);
-            if (loadScenarioFunction != LuaValue.Nil)
+            if (loadScenarioFunction != null)
             {
                 await luaRuntime.ExecuteFunctionAsync(loadScenarioFunction);
             }
@@ -98,7 +114,7 @@ namespace QC.Match.Objects
             return loadedSuccessfully;
         }
         
-        public async UniTask StartScenarioAsync(string scenarioGuid)
+        private async UniTask StartScenarioAsync(string scenarioGuid)
         {
             if (!await LoadScenarioAsync(scenarioGuid))
             {

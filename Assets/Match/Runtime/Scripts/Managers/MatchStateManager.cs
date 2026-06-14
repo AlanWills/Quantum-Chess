@@ -30,8 +30,6 @@ namespace QC.Match.Managers
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
 
-        [NonSerialized] private string lastActiveScenarioGuid;
-        
         #endregion
         
         #region Unity Methods
@@ -57,8 +55,6 @@ namespace QC.Match.Managers
 
         protected override void Deserialize(MatchStateDTO dto)
         {
-            lastActiveScenarioGuid = dto.activeScenarioGuid;
-            
             matchState.Initialize(dto);
         }
 
@@ -71,12 +67,12 @@ namespace QC.Match.Managers
 
         public bool ShouldLoadAssets()
         {
-            return !string.IsNullOrEmpty(lastActiveScenarioGuid);
+            return true;
         }
 
         public IEnumerator LoadAssets()
         {
-            yield return matchState.LoadScenarioAsync(lastActiveScenarioGuid);
+            yield return matchState.TryLoadLastActiveScenario(chessBoardCommandExecutor);
 
             ChessBoardCommandArgs args = CreateCommandArgs();
             chessBoardCommandExecutor.BeginProcessing(args);

@@ -8,6 +8,7 @@ namespace QC.Match.Commands
         {
             args.CommandExecutor.QueueCommand(new CheckPlayerWonScenarioCommand(args.MatchState.ActivePlayerIndex));
             args.CommandExecutor.QueueCommand(new MakePlayerActivePlayerCommand(args.MatchState.NextPlayerIndex));
+            args.CommandExecutor.QueueCommand(new CalculatePlayerTurnStrategyCommand(args.MatchState.NextPlayerIndex));
             
             return UniTask.FromResult(CommandState.Completed);
         }

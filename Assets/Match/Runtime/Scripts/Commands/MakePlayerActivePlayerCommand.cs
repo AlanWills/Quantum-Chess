@@ -11,18 +11,11 @@ namespace QC.Match.Commands
             PlayerIndex = playerIndex;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
             args.MatchState.MakePlayerActive(PlayerIndex);
             
-            ITurnStrategy.Args turnStrategyArgs = new ITurnStrategy.Args(
-                args.MatchState,
-                args.ChessBoard,
-                args.CommandExecutor,
-                args.LuaRuntime);
-            await args.MatchState.CalculateTurnStrategyForPlayer(args.MatchState.ActivePlayerIndex, turnStrategyArgs);
-            
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }
