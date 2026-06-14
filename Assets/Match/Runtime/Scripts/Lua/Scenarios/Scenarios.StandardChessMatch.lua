@@ -20,12 +20,15 @@ function Scenario:load()
         winCondition = "Checkmate",
         winConditionData = "White",
         turnStrategy = "Custom",
-        turnStrategyFunc = function()
+        onTurnBegin = function()
             -- TODO: Add actual logic here
             
             -- TODO: Delete when we do proper logic
             print("Got here!")
             EndTurnCommand.new()
+        end,
+        onTurnEnd = function()
+            print("Black Turn End!")
         end
     })
 end
@@ -47,7 +50,8 @@ function Scenario:setUp()
             position = Vector2Int.new(xPos, 2),
             colour = "White",
             type = "Pawn",
-            verticalDirection = "Up"
+            verticalDirection = "Up",
+            interactable = true
         })
     end
     
@@ -57,13 +61,15 @@ function Scenario:setUp()
         position = Vector2Int.new(1, 1),
         colour = "White",
         type = "Rook",
+        interactable = true
     })
     
     AddChessPieceCommand.new(1, 
     {
         position = Vector2Int.new(8, 1),
         colour = "White",
-        type = "Rook"
+        type = "Rook",
+        interactable = true
     })
     
     -- Set Up White Knights
@@ -71,14 +77,16 @@ function Scenario:setUp()
     {
         position = Vector2Int.new(2, 1),
         colour = "White",
-        type = "Knight"
+        type = "Knight",
+        interactable = true
     })
     
     AddChessPieceCommand.new(1, 
     {
         position = Vector2Int.new(7, 1),
         colour = "White",
-        type = "Knight"
+        type = "Knight",
+        interactable = true
     })
     
     -- Set Up White Bishops
@@ -86,14 +94,16 @@ function Scenario:setUp()
     {
         position = Vector2Int.new(3, 1),
         colour = "White",
-        type = "Bishop"
+        type = "Bishop",
+        interactable = true
     })
     
     AddChessPieceCommand.new(1, 
     {
         position = Vector2Int.new(6, 1),
         colour = "White",
-        type = "Bishop"
+        type = "Bishop",
+        interactable = true
     })
     
     -- Set Up White Queen
@@ -101,7 +111,8 @@ function Scenario:setUp()
     {
         position = Vector2Int.new(4, 1),
         colour = "White",
-        type = "Queen"
+        type = "Queen",
+        interactable = true
     })
     
     -- Set Up White King
@@ -109,12 +120,13 @@ function Scenario:setUp()
     {
         position = Vector2Int.new(5, 1),
         colour = "White",
-        type = "King"
+        type = "King",
+        interactable = true
     })
     
     -- Set up Black Pawns
     for xPos = 1, 8 do
-        AddChessPieceCommand.new(1, 
+        AddChessPieceCommand.new(2, 
         {
             position = Vector2Int.new(xPos, 7),
             colour = "Black",
@@ -124,14 +136,14 @@ function Scenario:setUp()
     end
     
     -- Set up Black Rooks
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(1, 8),
         colour = "Black",
         type = "Rook"
     })
     
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(8, 8),
         colour = "Black",
@@ -139,14 +151,14 @@ function Scenario:setUp()
     })
     
     -- Set Up Black Knights
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(2, 8),
         colour = "Black",
         type = "Knight"
     })
     
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(7, 8),
         colour = "Black",
@@ -154,14 +166,14 @@ function Scenario:setUp()
     })
     
     -- Set Up Black Bishops
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(3, 8),
         colour = "Black",
         type = "Bishop"
     })
     
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(6, 8),
         colour = "Black",
@@ -169,7 +181,7 @@ function Scenario:setUp()
     })
     
     -- Set Up Black Queen
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(4, 8),
         colour = "Black",
@@ -177,14 +189,14 @@ function Scenario:setUp()
     })
     
     -- Set Up Black King
-    AddChessPieceCommand.new(1, 
+    AddChessPieceCommand.new(2, 
     {
         position = Vector2Int.new(5, 8),
         colour = "Black",
         type = "King"
     })
     
-    SetActivePlayerCommand.to(0)
+    SetActivePlayerCommand.toColour("White")
 end
 
 return Scenario

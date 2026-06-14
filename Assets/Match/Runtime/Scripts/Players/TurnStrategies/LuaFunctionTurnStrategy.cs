@@ -6,17 +6,29 @@ namespace QC.Match.Players
 {
     public class LuaFunctionTurnStrategy : ITurnStrategy
     {
-        private readonly LuaFunction TurnStrategyFunction;
+        private readonly LuaFunction TurnBeginFunction;
+        private readonly LuaFunction TurnEndFunction;
         
-        public LuaFunctionTurnStrategy(LuaFunction turnStrategyFunction)
+        public LuaFunctionTurnStrategy(
+            LuaFunction turnBeginFunction,
+            LuaFunction turnEndFunction)
         {
-            UnityEngine.Debug.Assert(turnStrategyFunction != null, $"Null {nameof(turnStrategyFunction)} passed into {nameof(LuaFunctionWinCondition)}.");
-            TurnStrategyFunction = turnStrategyFunction;
+            UnityEngine.Debug.Assert(turnBeginFunction != null, $"Null {nameof(turnBeginFunction)} passed into {nameof(LuaFunctionWinCondition)}.");
+            TurnBeginFunction = turnBeginFunction;
+            TurnEndFunction = turnEndFunction;
         }
         
-        public async UniTask CalculateTurnStrategy(ITurnStrategy.Args args)
+        public async UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            await args.LuaRuntime.ExecuteFunctionAsync(TurnStrategyFunction);
+            await args.LuaRuntime.ExecuteFunctionAsync(TurnBeginFunction);
+        }
+
+        public async UniTask OnTurnEnd(ITurnStrategy.Args args)
+        {
+            if (TurnEndFunction != null)
+            {
+                await args.LuaRuntime.ExecuteFunctionAsync(TurnEndFunction);
+            }
         }
     }
 }

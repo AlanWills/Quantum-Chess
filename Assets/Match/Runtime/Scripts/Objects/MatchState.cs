@@ -39,11 +39,14 @@ namespace QC.Match.Objects
             }
         }
 
+        private bool HasActivePlayer => 0 <= activePlayerIndex && activePlayerIndex < NumPlayers;
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
-        [LuaMember("nextPlayerIndex")] public int NextPlayerIndex => (activePlayerIndex + 1) % players.Count;
+        [LuaMember("nextPlayerIndex")] public int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
         public ChessPieceColour ActiveColour => ActivePlayer?.Colour ?? ChessPieceColour.Unknown;
+        public ChessPieceColour NextColour => NextPlayer?.Colour ?? ChessPieceColour.Unknown;
         [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
         private Player ActivePlayer => players.Get(activePlayerIndex);
+        private Player NextPlayer => players.Get(NextPlayerIndex);
 
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
@@ -74,7 +77,7 @@ namespace QC.Match.Objects
             players.Clear();
         }
 
-        public async UniTask TryLoadLastActiveScenario(ICommandExecutor<ChessBoardCommandArgs> commandExecutor)
+        public async UniTask TryLoadLastActiveScenario(ITurnStrategy.Args turnStrategyArgs)
         {
             if (!HasActiveScenario)
             {
@@ -85,8 +88,13 @@ namespace QC.Match.Objects
             {
                 return;
             }
-            
-            commandExecutor.QueueCommand(new CalculatePlayerTurnStrategyCommand(ActivePlayerIndex));
+
+            if (!HasActivePlayer)
+            {
+                return;
+            }
+
+            await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -130,28 +138,26 @@ namespace QC.Match.Objects
             await luaRuntime.ExecuteFunctionAsync(setUpScenarioFunction);
         }
 
-        public void MakePlayerActive(int playerIndex)
+        public async UniTask SetActivePlayerIndex(
+            int playerIndex, 
+            ITurnStrategy.Args turnStrategyArgs, 
+            IWinCondition.Args winConditionArgs)
         {
-            if (playerIndex < 0 || players.Count <= playerIndex)
+            if (HasActivePlayer)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to make player active ({playerIndex}), but it is not a valid player index.");
-                return;
+                await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
+                
+                bool isScenarioWon = await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs);
+                UnityEngine.Debug.Assert(!isScenarioWon, $"Active Player {ActiveColour} has Won!");
             }
             
             activePlayerIndex = playerIndex;
             onChanged.Invoke();
-        }
 
-        public UniTask CalculateTurnStrategyForPlayer(int playerIndex, ITurnStrategy.Args args)
-        {
-            Player player = players.Get(playerIndex);
-            return player != null ? player.TurnStrategy.CalculateTurnStrategy(args) : UniTask.CompletedTask;
-        }
-
-        public UniTask<bool> CalculateIfPlayerHasWon(int playerIndex, IWinCondition.Args args)
-        {
-            Player player = players.Get(playerIndex);
-            return player != null ? player.WinCondition.CalculateIfWinConditionIsMet(args) : UniTask.FromResult(false);
+            if (HasActivePlayer)
+            {
+                await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
+            }
         }
 
         public MatchStateDTO Serialize()
@@ -192,6 +198,17 @@ namespace QC.Match.Objects
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
             Player player = new Player(playerColour, turnStrategy, winCondition);
             players.Add(player);
+        }
+
+        [LuaMember("findPlayerIndexOfColour")]
+        private int FindPlayerIndexOfColour(string colourString)
+        {
+            if (Enum.TryParse(colourString, out ChessPieceColour colour))
+            {
+                return players.FindIndex(x => x.Colour == colour);
+            }
+
+            return -1;
         }
         
         #endregion

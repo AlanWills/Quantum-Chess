@@ -162,11 +162,6 @@ namespace QC.Match.Objects
                 obj.TryFindComponent(out InterfaceHandle<IGrid2DTransform> grid2DTransform) && 
                 grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == boardPosition);
         }
-        
-        public ChessBoardObjectInstance GetChessBoardObjectAt(int x, int y)
-        {
-            return GetChessBoardObjectAt(new Vector2Int(x, y));
-        }
 
         public bool DoesChessPieceExist(ChessPieceColour colour, ChessPieceType type)
         {

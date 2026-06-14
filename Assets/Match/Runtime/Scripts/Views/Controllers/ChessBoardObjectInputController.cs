@@ -1,3 +1,4 @@
+using System;
 using Celeste.Components;
 using Celeste.Input;
 using QC.Match.Commands;
@@ -17,7 +18,7 @@ namespace QC.Match.Input
         [SerializeField] private Collider2D hitBoxCollider;
         
         #endregion
-        
+
         protected override void DoHookup(IRuntimeAddedContext context)
         {
             UpdateHitBoxCollider();
@@ -25,6 +26,7 @@ namespace QC.Match.Input
 
         protected override void DoShutdown()
         {
+            hitBoxCollider.enabled = false;
         }
 
         protected override void OnInterfaceDataChanged()

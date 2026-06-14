@@ -5,11 +5,18 @@ namespace QC.Match.Players
 {
     public readonly struct ManualTurnStrategy : ITurnStrategy
     {
-        public UniTask CalculateTurnStrategy(ITurnStrategy.Args args)
+        public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            args.CommandExecutor.QueueCommand(new EnableInputForChessPieceColourCommand(args.MatchState.ActiveColour));
-            args.CommandExecutor.QueueCommand(new DisableInputIfNotChessPieceColourCommand(args.MatchState.ActiveColour));
+            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, true));
+            args.CommandExecutor.QueueCommand(new ToggleInputIfNotChessPieceColourCommand(args.MatchState.ActiveColour, false));
             
+            return UniTask.CompletedTask;
+        }
+
+        public UniTask OnTurnEnd(ITurnStrategy.Args args)
+        {
+            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, false));
+
             return UniTask.CompletedTask;
         }
     }

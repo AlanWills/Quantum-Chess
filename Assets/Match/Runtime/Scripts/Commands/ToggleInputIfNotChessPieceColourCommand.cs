@@ -2,18 +2,20 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct DisableInputIfNotChessPieceColourCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct ToggleInputIfNotChessPieceColourCommand : ICommand<ChessBoardCommandArgs>
     {
         private readonly ChessPieceColour colour;
+        private readonly bool inputEnabled;
 
-        public DisableInputIfNotChessPieceColourCommand(ChessPieceColour colour)
+        public ToggleInputIfNotChessPieceColourCommand(ChessPieceColour colour, bool inputEnabled)
         {
             this.colour = colour;
+            this.inputEnabled = inputEnabled;
         }
         
         public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
         {
-            var commandState = await InputCommandUtilities.SetInteractableForNotColour(args.ChessBoard, colour, false);
+            var commandState = await InputCommandUtilities.SetInteractableForNotColour(args.ChessBoard, colour, inputEnabled);
             
             if (commandState == CommandState.Completed)
             {

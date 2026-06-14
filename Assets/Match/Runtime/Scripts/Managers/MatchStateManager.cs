@@ -72,7 +72,12 @@ namespace QC.Match.Managers
 
         public IEnumerator LoadAssets()
         {
-            yield return matchState.TryLoadLastActiveScenario(chessBoardCommandExecutor);
+            ITurnStrategy.Args turnStrategyArgs = new ITurnStrategy.Args(
+                matchState,
+                chessBoard,
+                chessBoardCommandExecutor,
+                luaRuntime);
+            yield return matchState.TryLoadLastActiveScenario(turnStrategyArgs);
 
             ChessBoardCommandArgs args = CreateCommandArgs();
             chessBoardCommandExecutor.BeginProcessing(args);

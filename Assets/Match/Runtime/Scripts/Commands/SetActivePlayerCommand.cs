@@ -2,11 +2,11 @@
 
 namespace QC.Match.Commands
 {
-    public readonly struct CalculatePlayerTurnStrategyCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct SetActivePlayerCommand : ICommand<ChessBoardCommandArgs>
     {
         private readonly int PlayerIndex;
 
-        public CalculatePlayerTurnStrategyCommand(int playerIndex)
+        public SetActivePlayerCommand(int playerIndex)
         {
             PlayerIndex = playerIndex;
         }
@@ -18,8 +18,12 @@ namespace QC.Match.Commands
                 args.ChessBoard,
                 args.CommandExecutor,
                 args.LuaRuntime);
-            await args.MatchState.CalculateTurnStrategyForPlayer(PlayerIndex, turnStrategyArgs);
-            
+            IWinCondition.Args winConditionArgs = new IWinCondition.Args(
+                args.MatchState,
+                args.ChessBoard,
+                args.LuaRuntime);
+            await args.MatchState.SetActivePlayerIndex(PlayerIndex, turnStrategyArgs, winConditionArgs);
+
             return CommandState.Completed;
         }
     }

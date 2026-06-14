@@ -37,8 +37,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "enableInputForColour", EnableInputForColour));
             functions.Add(new LibraryFunction(kName, "attackFromTo", AttackFromTo));
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
-            functions.Add(new LibraryFunction(kName, "setActivePlayer", SetActivePlayer));
-            functions.Add(new LibraryFunction(kName, "endTurn", EndTurn));
+            functions.Add(new LibraryFunction(kName, "setActivePlayerIndex", SetActivePlayerIndex));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
@@ -109,8 +108,8 @@ namespace QC.Match.Lua
                 return new ValueTask<int>(context.Return()); 
             }
             
-            EnableInputForChessPieceColourCommand enableInputCommand = new EnableInputForChessPieceColourCommand(chessPieceColour);
-            chessBoardCommandExecutor.QueueCommand(enableInputCommand);
+            ToggleInputForChessPieceColourCommand toggleInputCommand = new ToggleInputForChessPieceColourCommand(chessPieceColour, true);
+            chessBoardCommandExecutor.QueueCommand(toggleInputCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -140,25 +139,14 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> SetActivePlayer(
+        private ValueTask<int> SetActivePlayerIndex(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             int playerIndex = context.GetArgument<int>(1);
-            MakePlayerActivePlayerCommand makePlayerActivePlayerCommand = new MakePlayerActivePlayerCommand(playerIndex);
-            chessBoardCommandExecutor.QueueCommand(makePlayerActivePlayerCommand);
-
-            return new ValueTask<int>(context.Return());
-        }
-        
-        private ValueTask<int> EndTurn(
-            LuaFunctionExecutionContext context,
-            CancellationToken cancellationToken)
-        {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
-            EndTurnCommand endTurnCommand = new EndTurnCommand();
-            chessBoardCommandExecutor.QueueCommand(endTurnCommand);
+            SetActivePlayerCommand setActivePlayerCommand = new SetActivePlayerCommand(playerIndex);
+            chessBoardCommandExecutor.QueueCommand(setActivePlayerCommand);
 
             return new ValueTask<int>(context.Return());
         }
@@ -180,6 +168,7 @@ namespace QC.Match.Lua
             ChessPieceType type = ChessPieceType.None;
             ChessPieceVerticalDirection verticalDirection;
             Vector2Int position;
+            bool interactable;
             
             // Colour
             {
@@ -237,12 +226,18 @@ namespace QC.Match.Lua
                 }
             }
 
+            // Interactable
+            {
+                interactable = config.GetBool("interactable");
+            }
+            
             AddChessPieceCommand addChessPieceCommand = new AddChessPieceCommand(
                 guid,
                 colour,
                 type,
                 verticalDirection,
-                position);
+                position,
+                interactable);
             chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
             
             return new ValueTask<int>(context.Return());

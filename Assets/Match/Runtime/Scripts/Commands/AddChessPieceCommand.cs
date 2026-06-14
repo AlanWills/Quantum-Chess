@@ -12,19 +12,22 @@ namespace QC.Match.Commands
         private readonly ChessPieceType Type;
         private readonly ChessPieceVerticalDirection VerticalDirection;
         private readonly Vector2Int Position;
+        private readonly bool Interactable;
 
         public AddChessPieceCommand(
             int guid,
             ChessPieceColour colour,
             ChessPieceType type,
             ChessPieceVerticalDirection verticalDirection,
-            Vector2Int position)
+            Vector2Int position,
+            bool interactable)
         {
             Guid = guid;
             Colour = colour;
             Type = type;
             VerticalDirection = verticalDirection;
             Position = position;
+            Interactable = interactable;
         }
         
         public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
@@ -52,6 +55,12 @@ namespace QC.Match.Commands
             chessPiece.iFace.SetType(chessPiece.instance, Type);
             chessPiece.iFace.SetVerticalDirection(chessPiece.instance, VerticalDirection);
             gridTransform.iFace.SetPosition(gridTransform.instance, Position);
+
+            if (instance.TryFindComponent<IInteractable>(out var interactable))
+            {
+                interactable.iFace.SetInteractable(interactable.instance, Interactable);
+            }
+            
             args.ChessBoard.AddChessBoardObjectInstance(instance);
 
             return UniTask.FromResult(CommandState.Completed);

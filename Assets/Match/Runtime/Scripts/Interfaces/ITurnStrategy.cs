@@ -27,6 +27,7 @@ namespace QC.Match
             }
         }
 
-        UniTask CalculateTurnStrategy(Args args);
+        UniTask OnTurnBegin(Args args);
+        UniTask OnTurnEnd(Args args);
     }
 }
