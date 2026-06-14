@@ -34,11 +34,6 @@ namespace QC.Match.Managers
         
         #region Unity Methods
 
-        private void OnEnable()
-        {
-            onMatchSetup.Invoke();
-        }
-
         private void OnDisable()
         {
             onMatchShutdown.Invoke();
@@ -77,10 +72,13 @@ namespace QC.Match.Managers
                 chessBoard,
                 chessBoardCommandExecutor,
                 luaRuntime);
-            yield return matchState.TryLoadLastActiveScenario(turnStrategyArgs);
 
             ChessBoardCommandArgs args = CreateCommandArgs();
             chessBoardCommandExecutor.BeginProcessing(args);
+            
+            yield return matchState.TryLoadLastActiveScenario(turnStrategyArgs);
+            
+            onMatchSetup.Invoke();
         }
 
         private ChessBoardCommandArgs CreateCommandArgs()

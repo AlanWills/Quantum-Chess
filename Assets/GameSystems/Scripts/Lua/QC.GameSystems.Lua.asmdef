@@ -1,0 +1,14 @@
+{
+    "name": "QC.GameSystems.Lua",
+    "rootNamespace": "QC.GameSystems.Lua",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

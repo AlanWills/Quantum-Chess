@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747342e29f034d1494282240bf414902, type: 3}
   m_Name: GameSystems.RunOnInitializeScripts
   m_EditorClassIdentifier: Celeste.Lua::Celeste.Lua.Catalogues.LuaScriptCatalogue
-  items: []
+  items:
+  - {fileID: -6979533126094156877, guid: 08d2eb9e272bbe6479fdd61a1c36fd05, type: 3}
   importBehaviour: 0

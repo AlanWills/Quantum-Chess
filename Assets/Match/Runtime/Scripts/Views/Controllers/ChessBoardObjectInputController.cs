@@ -26,7 +26,10 @@ namespace QC.Match.Input
 
         protected override void DoShutdown()
         {
-            hitBoxCollider.enabled = false;
+            if (hitBoxCollider != null)
+            {
+                hitBoxCollider.enabled = false;
+            }
         }
 
         protected override void OnInterfaceDataChanged()

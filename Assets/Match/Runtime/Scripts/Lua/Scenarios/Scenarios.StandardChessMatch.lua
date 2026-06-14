@@ -2,6 +2,7 @@ local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
 local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
 local SetActivePlayerCommand = require("Commands/SetActivePlayerCommand.lua")
 local EndTurnCommand = require("Commands/EndTurnCommand.lua")
+local MoveCommand = require("Commands/MoveCommand.lua")
 
 local Scenario = { }
 
@@ -24,8 +25,7 @@ function Scenario:load()
             -- TODO: Add actual logic here
             
             -- TODO: Delete when we do proper logic
-            print("Got here!")
-            EndTurnCommand.new()
+            MoveCommand.fromTo(Vector2Int.new(4, 7), Vector2Int.new(4, 5))
         end,
         onTurnEnd = function()
             print("Black Turn End!")

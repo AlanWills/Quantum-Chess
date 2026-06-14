@@ -1,3 +1,4 @@
+using Celeste;
 using Celeste.Lua;
 using QC.Match.Catalogue;
 using QC.Match.Lua;
@@ -26,6 +27,8 @@ namespace QC.Match
             luaRuntime.SetEnvironmentVariable(ChessBoardObjectSelection.kLuaName, chessBoardObjectSelection);
             luaRuntime.SetEnvironmentVariable(ChessBoardCommandExecutor.kLuaName, chessBoardCommandExecutor);
             luaRuntime.OpenLibrary(MatchCommandsLibrary.Instance);
+            
+            UnityEngine.Debug.Log("Match Lua Bindings set up successfully!", CelesteLog.Lua);
         }
 
         public void Unbind(LuaRuntime luaRuntime)

@@ -253,6 +253,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be39b6918ae84918b58d75b040681258
+    m_Address: Commands/AllCommands.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd9c49480df7f400d84095c23adf239e
     m_Address: MatchDebug.unity
     m_ReadOnly: 0

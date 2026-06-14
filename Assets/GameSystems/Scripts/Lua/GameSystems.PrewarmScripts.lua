@@ -1,0 +1,1 @@
+require("Commands/AllCommands.lua")
