@@ -1,3 +1,4 @@
+require("Commands/AddChessBoardTileCommand.lua")
 require("Commands/AddChessPieceCommand.lua")
 require("Commands/AttackCommand.lua")
 require("Commands/ClearChessBoardCommand.lua")

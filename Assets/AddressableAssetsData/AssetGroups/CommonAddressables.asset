@@ -263,6 +263,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8439101cc4a4d74ae53741749fb3756
+    m_Address: Commands/AddChessBoardTileCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e061463112bba478ea83968bed31bd7c
     m_Address: Assets/EngineSystems/Data/MusicSettings.asset
     m_ReadOnly: 0

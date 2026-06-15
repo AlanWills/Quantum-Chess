@@ -1,7 +1,6 @@
+local AddChessBoardTileCommand = require("Commands/AddChessBoardTileCommand.lua")
 local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
-local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
 local SetActivePlayerCommand = require("Commands/SetActivePlayerCommand.lua")
-local EndTurnCommand = require("Commands/EndTurnCommand.lua")
 local MoveCommand = require("Commands/MoveCommand.lua")
 
 local Scenario = { }
@@ -34,12 +33,14 @@ function Scenario:load()
 end
 
 function Scenario:setUp()
-    ClearChessBoardCommand.new()
-    
     -- Set up board
     for y = 1, 8 do
         for x = 1, 8 do
-            ChessBoard:addChessBoardTile(Vector2Int.new(x, y))
+            local tileGuid = ((x + y + 1) % 2) + 1
+            AddChessBoardTileCommand.new(tileGuid,
+            {
+                position = Vector2Int.new(x, y)
+            })
         end
     end
     

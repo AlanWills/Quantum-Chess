@@ -40,6 +40,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "setActivePlayerIndex", SetActivePlayerIndex));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
+            functions.Add(new LibraryFunction(kName, "addChessBoardTile", AddChessBoardTile));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
         }
         
@@ -252,6 +253,31 @@ namespace QC.Match.Lua
             
             RemoveChessBoardObjectAtCommand removeChessBoardObjectCommand = new RemoveChessBoardObjectAtCommand(position.v);
             chessBoardCommandExecutor.QueueCommand(removeChessBoardObjectCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+
+        private ValueTask<int> AddChessBoardTile(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int tileGuid = context.GetArgument<int>(1);
+            LuaTable config = context.GetArgument<LuaTable>(2);
+
+            Vector2Int position;
+
+            // Position
+            {
+                if (!config.TryGetVector2Int("position", out position))
+                {
+                    position.x = config.GetInt("x");
+                    position.y = config.GetInt("y");
+                }
+            }
+
+            AddChessBoardTileCommand addChessBoardTileCommand = new AddChessBoardTileCommand(tileGuid, position);
+            chessBoardCommandExecutor.QueueCommand(addChessBoardTileCommand);
             
             return new ValueTask<int>(context.Return());
         }

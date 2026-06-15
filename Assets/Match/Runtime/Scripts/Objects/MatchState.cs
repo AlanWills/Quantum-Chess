@@ -51,7 +51,8 @@ namespace QC.Match.Objects
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
         
-        [Header("Events")] 
+        [Header("Events")]
+        [SerializeField] private Celeste.Events.Event onBeforeScenarioSetUp;
         [SerializeField] private Celeste.Events.Event onChanged;
 
         [NonSerialized] private readonly List<Player> players = new();
@@ -63,17 +64,20 @@ namespace QC.Match.Objects
 
         public void Initialize()
         {
-            activePlayerIndex = -1;
-            activeScenarioGuid = string.Empty;
-            activeScenarioTable = null;
-            players.Clear();
+            Initialize(-1, string.Empty);
         }
 
         public void Initialize(MatchStateDTO dto)
         {
-            activePlayerIndex = dto.activePlayerIndex;
-            activeScenarioGuid = dto.activeScenarioGuid;
-            activeScenarioTable = null;
+            Initialize(dto.activePlayerIndex, dto.activeScenarioGuid);
+        }
+
+        private void Initialize(
+            int activePlayerIndex,
+            string activeScenarioGuid)
+        {
+            this.activePlayerIndex = activePlayerIndex;
+            this.activeScenarioGuid = activeScenarioGuid;
             players.Clear();
         }
 
@@ -128,6 +132,8 @@ namespace QC.Match.Objects
             {
                 return;
             }
+            
+            onBeforeScenarioSetUp.Invoke();
 
             var setUpScenarioFunction = activeScenarioTable.GetFunction(MatchScenario.kScenarioSetUpFunctionName);
             if (setUpScenarioFunction == null)

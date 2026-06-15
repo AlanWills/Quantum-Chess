@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace QC.Match.Objects
 {
@@ -8,6 +9,7 @@ namespace QC.Match.Objects
 
         public int Guid => tile.Guid;
         public Vector2Int Position { get; }
+        public TileBase Tile => tile.TileBase;
 
         private readonly ChessBoardTile tile;
         

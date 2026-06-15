@@ -47,5 +47,14 @@ namespace QC.Match.Managers
         }
 		
 		#endregion
+		
+		#region Callbacks
+
+		public void OnBeforeScenarioSetUp()
+		{
+			chessBoard.Clear();
+		}
+		
+		#endregion
     }
 }

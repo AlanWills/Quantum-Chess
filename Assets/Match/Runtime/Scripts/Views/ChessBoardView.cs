@@ -69,7 +69,7 @@ namespace QC.Match.Views
 
         public void OnChessBoardTileAdded(ChessBoardTileAddedArgs args)
         {
-            AddChessBoardTile(args.BoardPosition, args.Tile);
+            AddChessBoardTile(args.Instance.Position, args.Instance.Tile);
         }
 
         public void OnChessBoardTileRemoved(ChessBoardTileRemovedArgs args)

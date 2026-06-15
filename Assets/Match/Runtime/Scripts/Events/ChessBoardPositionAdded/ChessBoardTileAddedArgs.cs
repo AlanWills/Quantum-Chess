@@ -4,11 +4,11 @@ namespace QC.Match.Events
 {
     public readonly struct ChessBoardTileAddedArgs
     {
-        public readonly ChessBoardTileInstance Tile;
+        public readonly ChessBoardTileInstance Instance;
 
-        public ChessBoardTileAddedArgs(ChessBoardTileInstance tile)
+        public ChessBoardTileAddedArgs(ChessBoardTileInstance instance)
         {
-            Tile = tile;
+            Instance = instance;
         }
     }
 }

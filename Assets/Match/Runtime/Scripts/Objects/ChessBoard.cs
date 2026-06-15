@@ -54,12 +54,12 @@ namespace QC.Match.Objects
 
             foreach (ChessBoardTileDTO tile in chessBoardDTO.tiles)
             {
-                CreateChessBoardTile(tile);
+                CreateAndAddChessBoardTile(tile);
             }
             
             foreach (var chessBoardObjectInstanceDTO in chessBoardDTO.objects)
             {
-                CreateChessBoardObject(chessBoardObjectInstanceDTO);
+                CreateAndAddChessBoardObject(chessBoardObjectInstanceDTO);
             }
         }
 
@@ -72,7 +72,7 @@ namespace QC.Match.Objects
             }
         }
 
-        private ChessBoardTileInstance CreateChessBoardTile(int guid, Vector2Int position)
+        public ChessBoardTileInstance CreateChessBoardTile(int guid, Vector2Int position)
         {
             ChessBoardTile chessBoardTile = chessBoardTileCatalogue.MustFindItemByGuid(guid);
             if (chessBoardTile == null)
@@ -81,17 +81,26 @@ namespace QC.Match.Objects
             }
             
             UnityEngine.Debug.Assert(!DoesChessBoardTileExist(position), $"Tile Instance at position {position} already exists!");
-            ChessBoardTileInstance tileInstance = new ChessBoardTileInstance(chessBoardTile, position);
+            return new ChessBoardTileInstance(chessBoardTile, position);
+        }
+
+        private void CreateAndAddChessBoardTile(ChessBoardTileDTO tileDTO)
+        {
+            ChessBoardTileInstance instance = CreateChessBoardTile(tileDTO.guid, tileDTO.position.v);
+            if (instance == null)
+            {
+                UnityEngine.Debug.LogAssertion($"Failed to create and add chess board tile from dto with guid: {tileDTO.guid}.");
+                return;
+            }
+            
+            AddChessBoardTileInstance(instance);
+        }
+
+        public void AddChessBoardTileInstance(ChessBoardTileInstance tileInstance)
+        {
             tiles.Add(tileInstance);
             onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(tileInstance));
             onChanged?.Invoke();
-
-            return tileInstance;
-        }
-
-        private ChessBoardTileInstance CreateChessBoardTile(ChessBoardTileDTO tileDTO)
-        {
-            return CreateChessBoardTile(tileDTO.guid, tileDTO.position.v);
         }
         
         private void RemoveChessBoardTileAt(int indexOfTile)
@@ -126,22 +135,22 @@ namespace QC.Match.Objects
             return instance;
         }
         
-        private ChessBoardObjectInstance CreateChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
+        private void CreateAndAddChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
         {
             ChessBoardObject chessBoardObject = chessBoardObjectCatalogue.MustFindItemByGuid(chessBoardObjectDto.guid);
             if (chessBoardObject == null)
             {
-                return null;
+                return;
             }
 
             ChessBoardObjectInstance instance = new ChessBoardObjectInstance(chessBoardObject);
             EnsureInstanceComponentsExist(instance);
             instance.LoadComponents(chessBoardObjectDto.components.ToLookup());
             
-            return AddChessBoardObjectInstance(instance);
+            AddChessBoardObjectInstance(instance);
         }
 
-        public ChessBoardObjectInstance AddChessBoardObjectInstance(ChessBoardObjectInstance instance)
+        public void AddChessBoardObjectInstance(ChessBoardObjectInstance instance)
         {
             EnsureInstanceComponentsExist(instance);
             
@@ -150,8 +159,6 @@ namespace QC.Match.Objects
             
             onChessBoardObjectAdded?.Invoke(new ChessBoardObjectAddedArgs(instance));
             onChanged?.Invoke();
-            
-            return instance;
         }
         
         private void EnsureInstanceComponentsExist(ChessBoardObjectInstance instance)
@@ -189,7 +196,7 @@ namespace QC.Match.Objects
 
             return result;
         }
-
+        
         public void Clear()
         {
             for (int i = objects.Count - 1; i >= 0; --i)
@@ -219,12 +226,6 @@ namespace QC.Match.Objects
         
         #region Lua
         
-        [LuaMember("addChessBoardTile")]
-        private void AddChessBoardTile(int guid, LuaVector2Int boardPosition)
-        {
-            CreateChessBoardTile(guid, boardPosition.v);
-        }
-
         [LuaMember("isChessPieceAt")]
         private bool IsChessPieceAt(LuaVector2Int boardPosition)
         {

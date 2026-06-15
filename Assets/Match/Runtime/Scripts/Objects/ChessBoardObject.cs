@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QC.Match.Objects
 {
-    [CreateAssetMenu(fileName = nameof(ChessBoardObject), menuName = "QC/Match/Chess Board Object")]
+    [CreateAssetMenu(fileName = nameof(ChessBoardObject), menuName = "QC/Match/Objects/Chess Board Object")]
     public class ChessBoardObject : ComponentContainerUsingSubAssets<ChessBoardObjectComponent>, IIntGuid
     {
         #region Properties and Fields
