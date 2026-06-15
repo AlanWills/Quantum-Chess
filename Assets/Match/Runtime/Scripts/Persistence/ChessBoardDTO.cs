@@ -9,19 +9,19 @@ namespace QC.Match.Persistence
     [Serializable]
     public class ChessBoardDTO : Celeste.Persistence.VersionedDTO
     {
+        public List<ChessBoardTileDTO> tiles = new();
         public List<ChessBoardObjectDTO> objects = new();
-        public List<SerializableVector2Int> boardPositions = new();
 
         public ChessBoardDTO(ChessBoard chessBoard)
         {
+            foreach (ChessBoardTileInstance tile in chessBoard.Tiles)
+            {
+                tiles.Add(new ChessBoardTileDTO(tile));
+            }
+            
             foreach (ChessBoardObjectInstance chessBoardObjectInstance in chessBoard.Objects)
             {
                 objects.Add(new ChessBoardObjectDTO(chessBoardObjectInstance));
-            }
-
-            foreach (Vector2Int boardPosition in chessBoard.BoardPositions)
-            {
-                boardPositions.Add(boardPosition.ToSerializable());
             }
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Celeste.Components;
+using Celeste.DataStructures;
 using Celeste.Lua.Maths;
 using Celeste.Persistence.Wrappers;
 using Lua;
@@ -23,15 +24,12 @@ namespace QC.Match.Objects
 
         public const string kLuaName = nameof(ChessBoard);
 
+        public IReadOnlyList<ChessBoardTileInstance> Tiles => tiles;
         public IReadOnlyList<ChessBoardObjectInstance> Objects => objects;
-        public IReadOnlyCollection<Vector2Int> BoardPositions => boardPositions;
 
+        [SerializeField] private ChessBoardTileCatalogue chessBoardTileCatalogue;
         [SerializeField] private ChessBoardObjectCatalogue chessBoardObjectCatalogue;
         
-        // Can change these to actual objects in a catalogue
-        [SerializeField] private TileBase blackTile;
-        [SerializeField] private TileBase whiteTile;
-
         [Header("Events")] 
         [SerializeField] private ChessBoardTileAddedEvent onChessBoardTileAdded;
         [SerializeField] private ChessBoardTileRemovedEvent onChessBoardTileRemoved;
@@ -39,33 +37,29 @@ namespace QC.Match.Objects
         [SerializeField] private ChessBoardObjectRemovedEvent onChessBoardObjectRemoved;
         [SerializeField] private Celeste.Events.Event onChanged;
         
+        [NonSerialized] private readonly List<ChessBoardTileInstance> tiles = new();
         [NonSerialized] private readonly List<ChessBoardObjectInstance> objects = new();
-        [NonSerialized] private readonly HashSet<Vector2Int> boardPositions = new();
         
         #endregion
 
-        public void Initialize(IReadOnlyList<Vector2Int> positions)
+        public void Initialize()
         {
-            boardPositions.Clear();
-
-            foreach (Vector2Int position in positions)
-            {
-                AddChessBoardTile(position);
-            }
+            tiles.Clear();
+            objects.Clear();
         }
 
         public void Initialize(ChessBoardDTO chessBoardDTO)
         {
+            Initialize();
+
+            foreach (ChessBoardTileDTO tile in chessBoardDTO.tiles)
+            {
+                CreateChessBoardTile(tile);
+            }
+            
             foreach (var chessBoardObjectInstanceDTO in chessBoardDTO.objects)
             {
-                AddChessBoardObject(chessBoardObjectInstanceDTO);
-            }
-
-            boardPositions.Clear();
-
-            foreach (SerializableVector2Int position in chessBoardDTO.boardPositions)
-            {
-                AddChessBoardTile(position.v);
+                CreateChessBoardObject(chessBoardObjectInstanceDTO);
             }
         }
 
@@ -77,54 +71,45 @@ namespace QC.Match.Objects
                 chessBoardObjectInstance.ShutdownComponents();
             }
         }
-        
-        private void AddChessBoardTile(Vector2Int boardPosition)
+
+        private ChessBoardTileInstance CreateChessBoardTile(int guid, Vector2Int position)
         {
-            // Possibly need to expand this to take sprite etc. have some more data
-            bool isEvenYPosition = boardPosition.y % 2 == 0;
-            TileBase tile = boardPosition.x % 2 == (isEvenYPosition ? 1 : 0) ? whiteTile : blackTile;
+            ChessBoardTile chessBoardTile = chessBoardTileCatalogue.MustFindItemByGuid(guid);
+            if (chessBoardTile == null)
+            {
+                return null;
+            }
             
-            boardPositions.Add(boardPosition);
-            onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(boardPosition, tile));
+            UnityEngine.Debug.Assert(!DoesChessBoardTileExist(position), $"Tile Instance at position {position} already exists!");
+            ChessBoardTileInstance tileInstance = new ChessBoardTileInstance(chessBoardTile, position);
+            tiles.Add(tileInstance);
+            onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(tileInstance));
             onChanged?.Invoke();
+
+            return tileInstance;
+        }
+
+        private ChessBoardTileInstance CreateChessBoardTile(ChessBoardTileDTO tileDTO)
+        {
+            return CreateChessBoardTile(tileDTO.guid, tileDTO.position.v);
         }
         
-        private void RemoveChessBoardTile(Vector2Int boardPosition)
+        private void RemoveChessBoardTileAt(int indexOfTile)
         {
-            if (boardPositions.Remove(boardPosition))
+            if (0 > indexOfTile || indexOfTile >= tiles.Count)
             {
-                boardPositions.Add(boardPosition);
-                onChessBoardTileRemoved?.Invoke(new ChessBoardTileRemovedArgs(boardPosition));
-                onChanged?.Invoke();
+                return;
             }
+            
+            ChessBoardTileInstance tileInstance = tiles[indexOfTile];
+            tiles.RemoveAt(indexOfTile);
+            onChessBoardTileRemoved?.Invoke(new ChessBoardTileRemovedArgs(tileInstance.Position));
+            onChanged?.Invoke();
         }
 
         public bool DoesChessBoardTileExist(Vector2Int boardPosition)
         {
-            return boardPositions.Contains(boardPosition);
-        }
-        
-        private void EnsureInstanceComponentsExist(ChessBoardObjectInstance instance)
-        {
-            if (!instance.HasComponent<IGrid2DTransform>())
-            {
-                // If we don't have a transform component assigned we inject one here, as all chess board objects must have one
-                Grid2DTransformComponent grid2DTransform = CreateInstance<Grid2DTransformComponent>();
-                instance.AddComponent(grid2DTransform);
-            }
-        }
-
-        public ChessBoardObjectInstance AddChessBoardObjectInstance(ChessBoardObjectInstance instance)
-        {
-            EnsureInstanceComponentsExist(instance);
-            
-            instance.ComponentDataChanged.AddListener(OnChessBoardObjectComponentDataChanged);
-            objects.Add(instance);
-            
-            onChessBoardObjectAdded?.Invoke(new ChessBoardObjectAddedArgs(instance));
-            onChanged?.Invoke();
-            
-            return instance;
+            return tiles.Exists(x => x.Position == boardPosition);
         }
 
         public ChessBoardObjectInstance CreateChessBoardObject(int guid)
@@ -141,7 +126,7 @@ namespace QC.Match.Objects
             return instance;
         }
         
-        private ChessBoardObjectInstance AddChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
+        private ChessBoardObjectInstance CreateChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
         {
             ChessBoardObject chessBoardObject = chessBoardObjectCatalogue.MustFindItemByGuid(chessBoardObjectDto.guid);
             if (chessBoardObject == null)
@@ -154,6 +139,29 @@ namespace QC.Match.Objects
             instance.LoadComponents(chessBoardObjectDto.components.ToLookup());
             
             return AddChessBoardObjectInstance(instance);
+        }
+
+        public ChessBoardObjectInstance AddChessBoardObjectInstance(ChessBoardObjectInstance instance)
+        {
+            EnsureInstanceComponentsExist(instance);
+            
+            instance.ComponentDataChanged.AddListener(OnChessBoardObjectComponentDataChanged);
+            objects.Add(instance);
+            
+            onChessBoardObjectAdded?.Invoke(new ChessBoardObjectAddedArgs(instance));
+            onChanged?.Invoke();
+            
+            return instance;
+        }
+        
+        private void EnsureInstanceComponentsExist(ChessBoardObjectInstance instance)
+        {
+            if (!instance.HasComponent<IGrid2DTransform>())
+            {
+                // If we don't have a transform component assigned we inject one here, as all chess board objects must have one
+                Grid2DTransformComponent grid2DTransform = CreateInstance<Grid2DTransformComponent>();
+                instance.AddComponent(grid2DTransform);
+            }
         }
         
         public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
@@ -189,10 +197,9 @@ namespace QC.Match.Objects
                 RemoveChessBoardObject(objects[i]);
             }
 
-            List<Vector2Int> boardPositionsClone = boardPositions.ToList();
-            foreach (Vector2Int boardPosition in boardPositionsClone)
+            for (int i = tiles.Count - 1; i >= 0; --i)
             {
-                RemoveChessBoardTile(boardPosition);
+                RemoveChessBoardTileAt(i);
             }
         }
 
@@ -213,9 +220,9 @@ namespace QC.Match.Objects
         #region Lua
         
         [LuaMember("addChessBoardTile")]
-        private void AddChessBoardTile(LuaVector2Int boardPosition)
+        private void AddChessBoardTile(int guid, LuaVector2Int boardPosition)
         {
-            AddChessBoardTile(boardPosition.v);
+            CreateChessBoardTile(guid, boardPosition.v);
         }
 
         [LuaMember("isChessPieceAt")]

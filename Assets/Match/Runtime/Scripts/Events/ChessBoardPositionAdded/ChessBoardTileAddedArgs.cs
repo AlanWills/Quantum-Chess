@@ -1,16 +1,13 @@
-using UnityEngine;
-using UnityEngine.Tilemaps;
+using QC.Match.Objects;
 
 namespace QC.Match.Events
 {
     public readonly struct ChessBoardTileAddedArgs
     {
-        public readonly Vector2Int BoardPosition;
-        public readonly TileBase Tile;
+        public readonly ChessBoardTileInstance Tile;
 
-        public ChessBoardTileAddedArgs(Vector2Int boardPosition, TileBase tile)
+        public ChessBoardTileAddedArgs(ChessBoardTileInstance tile)
         {
-            BoardPosition = boardPosition;
             Tile = tile;
         }
     }
