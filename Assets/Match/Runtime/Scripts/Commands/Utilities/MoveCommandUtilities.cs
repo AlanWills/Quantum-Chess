@@ -6,7 +6,7 @@ namespace QC.Match.Commands
 {
     public static class MoveCommandUtilities
     {
-        public static UniTask<CommandState> TryMoveChessBoardObject(
+        public static async UniTask<CommandState> TryMoveChessBoardObject(
             ChessBoardCommandArgs args,
             ChessBoardObjectInstance instance,
             Vector2Int endingPosition)
@@ -14,13 +14,13 @@ namespace QC.Match.Commands
             if (instance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing move command.");
-                return UniTask.FromResult(CommandState.Abandoned);
+                return CommandState.Abandoned;
             }
             
             if (!instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
             {
                 UnityEngine.Debug.LogAssertion("Could not find transform component for chess board object when executing move object command.");
-                return UniTask.FromResult(CommandState.Abandoned);
+                return CommandState.Abandoned;
             }
             
             ChessBoardObjectInstance endingPositionInstance = args.ChessBoard.GetChessBoardObjectAt(endingPosition);
@@ -28,7 +28,7 @@ namespace QC.Match.Commands
             if (endingPositionInstance != null)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to move chess board object to {endingPosition} which already has a piece there.");
-                return UniTask.FromResult(CommandState.Abandoned);
+                return CommandState.Abandoned;
             }
             
             grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
@@ -37,13 +37,15 @@ namespace QC.Match.Commands
             {
                 status.iFace.SetHasMoved(status.instance, true);
             }
-            
-            args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
+
+            CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
+            UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected chess board object after trying to move it.");
             
             // This could be a problem in the future if we allow multiple moves
+            // Queue this up, as there may be other things that need resolving before we switch players
             args.CommandExecutor.QueueCommand(new SetActivePlayerCommand(args.MatchState.NextPlayerIndex));
 
-            return UniTask.FromResult(CommandState.Completed);
+            return CommandState.Completed;
         }
     }
 }

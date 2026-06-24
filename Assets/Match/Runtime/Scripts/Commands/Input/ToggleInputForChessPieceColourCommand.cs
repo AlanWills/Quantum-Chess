@@ -20,7 +20,8 @@ namespace QC.Match.Commands
             if (commandState == CommandState.Completed)
             {
                 // Clear the selection when changing what pieces are interactable
-                args.CommandExecutor.QueueCommand(new ClearSelectedChessBoardObjectCommand());
+                CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
+                UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult != CommandState.Abandoned, $"There was an issue clearing the selected chess board object after toggling input for {colour}.");
             }
             
             return commandState;

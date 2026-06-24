@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Celeste.Components;
 using Celeste.Input;
 using Celeste.Maths;
+using Celeste.Memory;
 using QC.Match.Commands;
 using QC.Match.Events;
 using QC.Match.Objects;
@@ -14,8 +15,8 @@ namespace QC.Match.Views
     public class ChessBoardView : MonoBehaviour
     {
         #region Properties and Fields
-        
-        [SerializeField] private ChessBoardObjectView chessBoardObjectView;
+
+        [SerializeField] private GameObjectAllocator chessBoardObjectViewAllocator;
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         [SerializeField] private Transform piecesViewRoot;
         [SerializeField] private Tilemap chessBoardTilemap;
@@ -45,8 +46,10 @@ namespace QC.Match.Views
 
         private void CreateChessBoardObjectView(ChessBoardObjectInstance chessBoardObjectInstance)
         {
-            // TODO: Change this to use Object Pooling 
-            ChessBoardObjectView viewInstance = Instantiate(chessBoardObjectView, piecesViewRoot, false);
+            GameObject chessBoardObjectGameObject = chessBoardObjectViewAllocator.AllocateWithResizeIfNecessary();
+            chessBoardObjectGameObject.transform.SetParent(piecesViewRoot);
+            ChessBoardObjectView viewInstance = chessBoardObjectGameObject.GetComponent<ChessBoardObjectView>();
+            UnityEngine.Debug.Assert(viewInstance != null, $"Failed to find instance of script {nameof(ChessBoardObjectView)} on chess board object from allocator {chessBoardObjectViewAllocator.name}.");
             viewInstance.Hookup(chessBoardObjectInstance, IRuntimeAddedContext.Empty);
             chessBoardObjectViews.Add(viewInstance);
         }
@@ -92,10 +95,9 @@ namespace QC.Match.Views
             int viewIndex = chessBoardObjectViews.FindIndex(x => x.Instance == args.RemovedInstance);
             if (viewIndex >= 0)
             {
-                // TODO: Change this to use Object Pooling
                 ChessBoardObjectView viewInstance = chessBoardObjectViews[viewIndex];
                 chessBoardObjectViews.RemoveAt(viewIndex);
-                Destroy(viewInstance.gameObject);
+                chessBoardObjectViewAllocator.Deallocate(viewInstance.gameObject);
             }
         }
 

@@ -6,9 +6,12 @@ namespace QC.Match
     {
         ChessPieceColour GetPieceColour(Instance instance);
         ChessPieceType GetPieceType(Instance instance);
-        
+        void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection);
+    }
+    
+    public interface IModifiableChessPiece : IChessPiece
+    {
         void SetColour(Instance instance, ChessPieceColour colour);
         void SetType(Instance instance, ChessPieceType type);
-        void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection);
     }
 }

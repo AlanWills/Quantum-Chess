@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8602028031392236940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093c12f8ae4c43388ab2ec852d66ae48, type: 3}
+  m_Name: InteractableComponent
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.InteractableComponent
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 825236a3f17c34e1d880dc394772d7a7, type: 3}
+  m_Name: Match.BlackQueen
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.ChessBoardObject
+  components:
+  - {fileID: 1143354274208350664}
+  - {fileID: -8602028031392236940}
+  - {fileID: 5705104614142811384}
+  guid: 12
+--- !u!114 &1143354274208350664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8f95fc3b5344f2ae248453f8785d10, type: 3}
+  m_Name: ModifiableChessPieceComponent
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.ModifiableChessPieceComponent
+  startingColour: 1
+  startingPieceType: 16
+--- !u!114 &5705104614142811384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98f7a25cf0ea4ffbb6f92ce436b0258f, type: 3}
+  m_Name: Grid2DTransformComponent
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.Grid2DTransformComponent

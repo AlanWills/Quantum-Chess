@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2422305684936891609
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a8f95fc3b5344f2ae248453f8785d10, type: 3}
-  m_Name: MultiplePieceTypeComponent
-  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.MultiplePieceTypeComponent
-  startingColour: 0
-  startingPieceType: 0
---- !u!114 &-2150919337401303868
+  m_Script: {fileID: 11500000, guid: 825236a3f17c34e1d880dc394772d7a7, type: 3}
+  m_Name: Match.WhiteKnight
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.ChessBoardObject
+  components:
+  - {fileID: 2856420031127585609}
+  - {fileID: 5357720523765489679}
+  - {fileID: 1672349685981474808}
+  guid: 3
+--- !u!114 &1672349685981474808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26,7 +29,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f7a25cf0ea4ffbb6f92ce436b0258f, type: 3}
   m_Name: Grid2DTransformComponent
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.Grid2DTransformComponent
---- !u!114 &11400000
+--- !u!114 &2856420031127585609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35,15 +38,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 825236a3f17c34e1d880dc394772d7a7, type: 3}
-  m_Name: Match.InteractableQuantumPiece
-  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.ChessBoardObject
-  components:
-  - {fileID: -2422305684936891609}
-  - {fileID: 7040464526764120522}
-  - {fileID: -2150919337401303868}
-  guid: 1
---- !u!114 &7040464526764120522
+  m_Script: {fileID: 11500000, guid: 5a8f95fc3b5344f2ae248453f8785d10, type: 3}
+  m_Name: ModifiableChessPieceComponent
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.ModifiableChessPieceComponent
+  startingColour: 2
+  startingPieceType: 2
+--- !u!114 &5357720523765489679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

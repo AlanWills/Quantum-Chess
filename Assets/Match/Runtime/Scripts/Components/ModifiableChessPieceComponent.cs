@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace QC.Match.Components
 {
-    [DisplayName("Chess Piece Type")]
-    public class ChessPieceComponent : ChessBoardObjectComponent, 
-        IChessPiece, 
+    [DisplayName("Modifiable Chess Piece")]
+    public class ModifiableChessPieceComponent : ChessBoardObjectComponent, 
+        IModifiableChessPiece, 
         IObjectActionProvider, 
         IObjectStatus
     {
@@ -335,7 +335,7 @@ namespace QC.Match.Components
         {
             ChessBoardObjectInstance objectInstance = chessBoardLookup.GetChessBoardObjectAt(position);
 
-            if (objectInstance == null || !objectInstance.TryFindComponent<IChessPiece>(out var chessPiece))
+            if (objectInstance == null || !objectInstance.TryFindComponent<IModifiableChessPiece>(out var chessPiece))
             {
                 return false;
             }

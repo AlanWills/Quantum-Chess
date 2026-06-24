@@ -39,6 +39,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "attackWithSelectedTo", AttackWithSelectedTo));
             functions.Add(new LibraryFunction(kName, "setActivePlayerIndex", SetActivePlayerIndex));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
+            functions.Add(new LibraryFunction(kName, "addCustomisedChessPiece", AddCustomisedChessPiece));
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
             functions.Add(new LibraryFunction(kName, "addChessBoardTile", AddChessBoardTile));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
@@ -165,6 +166,53 @@ namespace QC.Match.Lua
                 return new ValueTask<int>(context.Return());
             }
 
+            ChessPieceVerticalDirection verticalDirection;
+            Vector2Int position;
+            bool interactable;
+            
+            // Vertical Direction
+            {
+                // This is technically OK to be missing, so we don't log assertions if there's a failure here
+                config.TryGetEnum("verticalDirection", out verticalDirection);
+            }
+            
+            // Position
+            {
+                if (!config.TryGetVector2Int("position", out position))
+                {
+                    position.x = config.GetInt("x");
+                    position.y = config.GetInt("y");
+                }
+            }
+
+            // Interactable
+            {
+                interactable = config.GetBool("interactable");
+            }
+            
+            AddChessPieceCommand addChessPieceCommand = new AddChessPieceCommand(
+                guid,
+                verticalDirection,
+                position,
+                interactable);
+            chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> AddCustomisedChessPiece(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int guid = context.GetArgument<int>(1);
+            LuaTable config = context.GetArgument<LuaTable>(2);
+
+            if (config == null)
+            {
+                return new ValueTask<int>(context.Return());
+            }
+
             ChessPieceColour colour;
             ChessPieceType type = ChessPieceType.None;
             ChessPieceVerticalDirection verticalDirection;
@@ -234,11 +282,11 @@ namespace QC.Match.Lua
             
             AddChessPieceCommand addChessPieceCommand = new AddChessPieceCommand(
                 guid,
-                colour,
-                type,
                 verticalDirection,
                 position,
-                interactable);
+                interactable,
+                colour,
+                type);
             chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
             
             return new ValueTask<int>(context.Return());

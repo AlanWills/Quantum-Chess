@@ -24,6 +24,11 @@ namespace QC.Match.Objects
             ProcessCommandsAsync(args).Forget();
         }
 
+        public UniTask<CommandState> ExecuteCommandImmediately(ICommand<ChessBoardCommandArgs> command, ChessBoardCommandArgs args)
+        {
+            return command.Execute(args);
+        }
+
         private async UniTask ProcessCommandsAsync(ChessBoardCommandArgs args)
         {
             while (await commands.Reader.WaitToReadAsync())

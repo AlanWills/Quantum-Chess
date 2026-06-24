@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23abf69a14db4ab29b01d9f86c800f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
-  chessBoardObjectView: {fileID: 3060440209623685418, guid: 591a202a8876743f891312cdb90e1ee3, type: 3}
+  chessBoardObjectViewAllocator: {fileID: 932586496}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   piecesViewRoot: {fileID: 1255884393}
   chessBoardTilemap: {fileID: 690885639}
@@ -171,7 +171,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 932586495}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &277367576
@@ -868,6 +869,53 @@ MonoBehaviour:
   minZoom: {fileID: 1787099566}
   maxZoom: {fileID: 1325310371}
   zoomSpeed: {fileID: 1875570990}
+--- !u!1 &932586494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 932586495}
+  - component: {fileID: 932586496}
+  m_Layer: 0
+  m_Name: ChessBoardObjectViewAllocator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &932586495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932586494}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 277367575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &932586496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932586494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed62cd2cf1b1004da5f1b728be3631a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Memory::Celeste.Memory.GameObjectAllocator
+  prefab: {fileID: 6674288208208511763, guid: 591a202a8876743f891312cdb90e1ee3, type: 3}
+  defaultChunkSize: 5
+  allocateOnStart: 32
 --- !u!1839735485 &1019234146 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 2619428639064228203, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
