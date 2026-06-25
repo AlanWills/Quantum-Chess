@@ -162,7 +162,8 @@ namespace QC.Match.Components
                     AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection),
                         chessBoardLookup, validMoves);
 
-                    if (!hasMoved)
+                    // The space in front must be free for the pawn to move two
+                    if (!hasMoved && IsBoardPositionVacant(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection), chessBoardLookup))
                     {
                         AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2 * verticalDirection),
                             chessBoardLookup, validMoves);
@@ -312,13 +313,17 @@ namespace QC.Match.Components
             }
         }
 
+        private static bool IsBoardPositionVacant(Vector2Int position, IChessBoardLookup chessBoardLookup)
+        {
+            return chessBoardLookup.DoesChessBoardTileExist(position) && chessBoardLookup.GetChessBoardObjectAt(position) == null;
+        }
+
         private static bool AddIfVacantBoardPosition(
             Vector2Int position,
             IChessBoardLookup chessBoardLookup,
             IList<Vector2Int> list)
         {
-            if (!chessBoardLookup.DoesChessBoardTileExist(position) ||
-                chessBoardLookup.GetChessBoardObjectAt(position) != null)
+            if (!IsBoardPositionVacant(position, chessBoardLookup))
             {
                 return false;
             }

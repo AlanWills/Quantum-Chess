@@ -19,16 +19,7 @@ function Scenario:load()
         colour = "Black",
         winCondition = "Checkmate",
         winConditionData = "White",
-        turnStrategy = "Custom",
-        onTurnBegin = function()
-            -- TODO: Add actual logic here
-            
-            -- TODO: Delete when we do proper logic
-            MoveCommand.fromTo(Vector2Int.new(4, 7), Vector2Int.new(4, 5))
-        end,
-        onTurnEnd = function()
-            print("Black Turn End!")
-        end
+        turnStrategy = "AI"
     })
 end
 

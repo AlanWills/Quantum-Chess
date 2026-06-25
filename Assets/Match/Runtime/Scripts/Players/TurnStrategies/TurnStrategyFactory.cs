@@ -8,6 +8,7 @@ namespace QC.Match.Players
         public enum Type
         {
             Manual,
+            AI,
             Custom
         }
 
@@ -17,6 +18,14 @@ namespace QC.Match.Players
             {
                 case Type.Manual:
                     return new ManualTurnStrategy();
+                
+                case Type.AI:
+                    if (luaTable.TryGetTable("turnStrategyData", out LuaTable strategyDataTable))
+                    {
+                        AITurnStrategyData data = AITurnStrategyData.FromTable(strategyDataTable);
+                        return new AITurnStrategy(data);
+                    }
+                    return new AITurnStrategy(AITurnStrategyData.Default);
 
                 case Type.Custom:
                 {
