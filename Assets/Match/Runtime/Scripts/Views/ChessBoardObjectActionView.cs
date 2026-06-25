@@ -33,7 +33,7 @@ namespace QC.Match.Views
             
             if (instance == null ||
                 !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) ||
-                !instance.TryFindComponent<IObjectActionProvider>(out var actionProvider))
+                !instance.TryFindComponent<IActionProvider>(out var actionProvider))
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace QC.Match.Views
             CalculateValidAttacks(boardPosition, actionProvider);
         }
 
-        private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
+        private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
             actionProvider.iFace.CalculateValidMoves(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);
@@ -63,7 +63,7 @@ namespace QC.Match.Views
             boardPositionCache.Clear();
         }
 
-        private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IObjectActionProvider> actionProvider)
+        private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
             actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QC.Match
 {
-    public interface IObjectActionProvider
+    public interface IActionProvider
     {
         void CalculateValidMoves(
             Instance instance, 

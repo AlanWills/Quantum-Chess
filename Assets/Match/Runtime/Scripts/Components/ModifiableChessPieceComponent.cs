@@ -11,7 +11,7 @@ namespace QC.Match.Components
     [DisplayName("Modifiable Chess Piece")]
     public class ModifiableChessPieceComponent : ChessBoardObjectComponent, 
         IModifiableChessPiece, 
-        IObjectActionProvider, 
+        IActionProvider, 
         IObjectStatus
     {
         #region Save Data
