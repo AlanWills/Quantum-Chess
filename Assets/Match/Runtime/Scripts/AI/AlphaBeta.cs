@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Celeste.Components;
 using QC.Match.Commands;
@@ -8,15 +9,70 @@ namespace QC.Match.AI
 {
     public static class AlphaBeta
     {
-        private class Board
+        private class Board : IChessBoardLookup
         {
+           public ChessBoard chessBoard;
            public Dictionary<Vector2Int, Piece> pieces = new();
+
+           public Board(ChessBoard chessBoard)
+           {
+              this.chessBoard = chessBoard;
+
+              foreach (var chessBoardObject in chessBoard.Objects)
+              {
+                 if (chessBoardObject.TryFindComponent<IGrid2DTransform>(out var transform) &&
+                     chessBoardObject.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                     chessBoardObject.TryFindComponent<IActionProvider>(out var actionProvider))
+                 {
+                    pieces[transform.iFace.GetPosition(transform.instance)] = new Piece
+                    {
+                       instance = chessBoardObject,
+                       actionProvider = actionProvider,
+                       chessPiece = chessPiece,
+                    };
+                 }
+              }
+           }
+
+           private Board(Board board)
+           {
+              chessBoard = board.chessBoard;
+
+              foreach (var piece in board.pieces)
+              {
+                 pieces[piece.Key] = piece.Value;
+              }
+           }
+           
+           public bool DoesChessBoardTileExist(Vector2Int boardPosition)
+           {
+              return chessBoard.DoesChessBoardTileExist(boardPosition);
+           }
+
+           public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
+           {
+              return pieces.TryGetValue(boardPosition, out var piece) ? piece.instance : null;
+           }
+
+           public void RemovePieceAt(Vector2Int position)
+           {
+              pieces.Remove(position);
+           }
+
+           public void ReplacePieceAt(Vector2Int position, Piece piece)
+           {
+              pieces[position] = piece;
+           }
+
+           public Board Clone()
+           {
+              return new Board(this);
+           }
         }
 
         private struct Piece
         {
            public ChessBoardObjectInstance instance;
-           public InterfaceHandle<IGrid2DTransform> gridTransform;
            public InterfaceHandle<IChessPiece> chessPiece;
            public InterfaceHandle<IActionProvider> actionProvider;
         }
@@ -29,10 +85,57 @@ namespace QC.Match.AI
             
         }
 
-        private static int AlphaBetaMax(/*int alpha, int beta, int depthleft*/)
+        private static int AlphaBetaMax(
+           Board board, 
+           ChessPieceColour activeColour, 
+           int alpha, 
+           int beta, 
+           int remainingDepth)
         {
+           if (remainingDepth == 0)
+           {
+              return EvaluateBoard(board, activeColour);
+           }
+           
+           int bestValue = int.MinValue;
+           List<Vector2Int> validActions = new List<Vector2Int>();
+
+           foreach (var piece in board.pieces)
+           {
+              validActions.Clear();
+              
+              var actionProvider = piece.Value.actionProvider;
+              actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, piece.Key, board, validActions);
+              actionProvider.iFace.CalculateValidMoves(actionProvider.instance, piece.Key, board, validActions);
+
+              foreach (var action in validActions)
+              {
+                 // Need to make a new representation of the board here taking into account the action (same for move or attack)
+                 Board nextBoard = board.Clone();
+                 nextBoard.RemovePieceAt(piece.Key);
+                 nextBoard.ReplacePieceAt(action, piece.Value);
+                 
+                 int score = AlphaBetaMin(nextBoard, activeColour, alpha, beta, remainingDepth - 1);
+                 if (score > bestValue)
+                 {
+                    bestValue = score;
+
+                    if (score > alpha)
+                    {
+                       alpha = score;
+                    }
+                 }
+
+                 if (score >= beta)
+                 {
+                    return score;
+                 }
+              }
+           }
+           
+           return bestValue;
+           
            /*
-            * if ( depthleft == 0 ) return evaluate();
               bestValue = -infinity;
               for ( all moves) {
                  score = alphaBetaMin( alpha, beta, depthleft - 1 );
@@ -49,7 +152,12 @@ namespace QC.Match.AI
             */
         }
 
-        private static int AlphaBetaMin(/*int alpha, int beta, int depthleft*/)
+        private static int AlphaBetaMin(
+           Board board, 
+           ChessPieceColour activeColour, 
+           int alpha, 
+           int beta, 
+           int remainingDepth)
         {
            /*
             * if ( depthleft == 0 ) return -evaluate();
