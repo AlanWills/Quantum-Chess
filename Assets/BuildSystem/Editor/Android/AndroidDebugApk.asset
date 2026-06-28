@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AndroidDebugApk
   m_EditorClassIdentifier: Celeste.BuildSystem.Editor::CelesteEditor.BuildSystem.AndroidSettings
   version: {fileID: 11400000, guid: 406aa0b70472e4fd9afc98c186caedb2, type: 2}
-  companyName: 
-  productName: 
-  applicationIdentifier: 
+  companyName: Celeste Games
+  productName: Quantum Chess
+  applicationIdentifier: com.celestegames.quantumchess
   buildDirectory: Builds/{build_target}/{environment}Apk
   outputName: Build-{version}-{environment}
   buildUploadUrl: celeste-games/
@@ -45,9 +45,9 @@ MonoBehaviour:
   updateAssetsPostProcessSteps: {fileID: 11400000, guid: 2e90f93cb95b54d848863d7f35878124, type: 2}
   buildAppBundle: 0
   minifyRelease: 0
-  keystorePassword: 
-  keyAliasName: 
-  keyAliasPassword: 
+  keystorePassword: ebong382684
+  keyAliasName: quantum_chess_signing_key
+  keyAliasPassword: ebong382684
   requiresWritePermission: 1
   minSdkVersion: 28
   targetSdkVersion: 0

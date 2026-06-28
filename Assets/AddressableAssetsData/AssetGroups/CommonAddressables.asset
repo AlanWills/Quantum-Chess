@@ -18,7 +18,8 @@ MonoBehaviour:
   - m_GUID: 0c863bf2d789418298fae48eaadad5b3
     m_Address: Commands/EnableInputCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10ba0f09655a5f243b414d2b64c32ed8
     m_Address: Assets/Celeste/Input/Data/Events/TripleTouch.asset
@@ -47,7 +48,8 @@ MonoBehaviour:
   - m_GUID: 17fc41ad08e746228578cf1814fb8304
     m_Address: Commands/SelectCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 19f3c0a08f26f3d458a39303193882d8
     m_Address: Assets/Celeste/Sound/Data/Events/PlayMusicOneShotWithRawClip.asset
@@ -70,12 +72,14 @@ MonoBehaviour:
   - m_GUID: 223600cb820c4e02b369d64de21f2e25
     m_Address: Commands/SetActivePlayerCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e86d9e384dbd4ff6a65627b02e0b894
     m_Address: Assets/Match/Runtime/Scenes/MatchSceneSet.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e8a2ec916cac49c3bfcbe58461a724f
     m_Address: GameSystems
@@ -152,7 +156,8 @@ MonoBehaviour:
   - m_GUID: 7b8de2765a954d018560404f158fb06a
     m_Address: Commands/ClearChessBoardCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7df7e4fa055fc4cef89009f744644154
     m_Address: MainMenuDebug
@@ -187,7 +192,8 @@ MonoBehaviour:
   - m_GUID: 8e04954f1e234d3eb3ec2392ad5e2adc
     m_Address: Commands/MoveCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fcb2e881d8bae8478459cdea4c03987
     m_Address: Assets/Celeste/Sound/Data/Events/PlayMusicWithSettings.asset
@@ -196,15 +202,16 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 97040b346af1f4055913a64a600911ac
-    m_Address: Match.unity
+    m_Address: Match
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9ef3e9c318cfa452f8dc7acdb1db91a6
     m_Address: Bootstrap
     m_ReadOnly: 0
     m_SerializedLabels:
-    - BootstrapAddressables
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3aa7b1cee5289041a03094b573b5bf5
     m_Address: Assets/Celeste/Input/Data/Events/MiddleMouseButtonFirstUp.asset
@@ -215,7 +222,8 @@ MonoBehaviour:
   - m_GUID: a4e1f42dc5ee466b84101c6570231b34
     m_Address: Commands/EndTurnCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a69af8b76035b40e0b04a7aaa13e6969
     m_Address: Assets/EngineSystems/Data/SFXSettings.asset
@@ -256,17 +264,20 @@ MonoBehaviour:
   - m_GUID: be39b6918ae84918b58d75b040681258
     m_Address: Commands/AllCommands.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd9c49480df7f400d84095c23adf239e
-    m_Address: MatchDebug.unity
+    m_Address: MatchDebug
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8439101cc4a4d74ae53741749fb3756
     m_Address: Commands/AddChessBoardTileCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e061463112bba478ea83968bed31bd7c
     m_Address: Assets/EngineSystems/Data/MusicSettings.asset
@@ -295,7 +306,8 @@ MonoBehaviour:
   - m_GUID: fffb94954dd64ed097824506b9fc9f60
     m_Address: Commands/AttackCommand.lua
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 40d2b6e7860a34337b8ed435bd5adaa3, type: 2}

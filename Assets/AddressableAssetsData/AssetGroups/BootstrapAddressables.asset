@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50039586d3d71834c8dbb6af9cae319c
+    m_Address: Assets/Celeste/Debug/Data/Parameters/IsDebugBuild.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BootstrapAddressables
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 52d8de620249d487fbab74466282f975
     m_Address: Assets/Bootstrap/Jobs/DownloadCommonAddressables.asset
     m_ReadOnly: 0
@@ -45,8 +51,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83ba7f9a61ae76242a3ce60c24f5a870
+    m_Address: Assets/GameSystems/Debug/GameSystems.SceneSetDebugMenu.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c353037263420f41a43b2a04a8dc1e1
     m_Address: Assets/Celeste/Loading/Data/LoadJob/DisableFallbackLoadAssets.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BootstrapAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e94da5cef2b0304e9fd5e17d31aa918
+    m_Address: Assets/Celeste/Loading/Parameters/ShouldFallbackLoadAssets.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - BootstrapAddressables
@@ -71,6 +88,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7258f84fd3d94272912366f05c97883
     m_Address: Assets/GameSystems/Data/SceneSetCatalogue.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BootstrapAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f371fd85b22484899998ea83331c2eb5
+    m_Address: Assets/Startup/Scenes/StartupSceneSet.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - BootstrapAddressables
