@@ -29,19 +29,17 @@ namespace QC.Match.Players
             this.data = data;
         }
 
-        public async UniTask OnTurnBegin(ITurnStrategy.Args args)
-        {
-            await UniTask.Delay(3000);
-            
-            List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
-            ChessPieceColour activeColour = args.MatchState.ActiveColour;
-
+        public UniTask OnTurnBegin(ITurnStrategy.Args args)
+        {   
             // Get all active player pieces
+            /*
+		    List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
+            ChessPieceColour activeColour = args.MatchState.ActiveColour;
             activePlayerPieces.AddRange(args.ChessBoard.Objects.Where(x =>
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));
+                chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));*/
 
-            if (RandomAction.TryCalculate(activePlayerPieces, args, out var command))
+            if (AlphaBeta.TryCalculate(args, out var command))
             {
                 args.CommandExecutor.QueueCommand(command);
             }
@@ -50,6 +48,8 @@ namespace QC.Match.Players
                 UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.MatchState.ActiveColour}.  Queueing up a change of colour...");
                 args.CommandExecutor.QueueCommand(new SetActivePlayerCommand(args.MatchState.NextPlayerIndex));
             }
+
+            return UniTask.CompletedTask;
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)
