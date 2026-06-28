@@ -111,10 +111,11 @@ namespace QC.Match.AI
         
         public static bool TryCalculate(
             ITurnStrategy.Args args,
+            int depth,
             out ICommand<ChessBoardCommandArgs> command)
         {
            Board board = new Board(args.ChessBoard);
-           var bestMove = AlphaBetaMax(board, args.MatchState.ActiveColour, int.MinValue, int.MaxValue, 1);
+           var bestMove = AlphaBetaMax(board, args.MatchState.ActiveColour, int.MinValue, int.MaxValue, depth);
 
            if (!bestMove.Item2.IsValid)
            {

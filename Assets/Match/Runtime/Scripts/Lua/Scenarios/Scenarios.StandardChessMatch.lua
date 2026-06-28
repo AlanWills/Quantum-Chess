@@ -19,7 +19,11 @@ function Scenario:load()
         colour = "Black",
         winCondition = "Checkmate",
         winConditionData = "White",
-        turnStrategy = "AI"
+        turnStrategy = "AI",
+        turnStrategyData = 
+        {
+            depth = 2
+        }
     })
 end
 
