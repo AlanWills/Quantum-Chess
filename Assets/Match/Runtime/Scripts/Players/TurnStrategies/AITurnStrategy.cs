@@ -41,15 +41,15 @@ namespace QC.Match.Players
 
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            /*List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
+            List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
             ChessPieceColour activeColour = args.MatchState.ActiveColour;
             activePlayerPieces.AddRange(args.ChessBoard.Objects.Where(x =>
                 x.HasComponent<IActionProvider>() &&
                 x.HasComponent<IGrid2DTransform>() &&
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));*/
+                chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));
             
-            if (AlphaBeta.TryCalculate(args, data.Depth, out var command))
+            if (AlphaBeta.TryCalculate(args, activePlayerPieces, data.Depth, out var command))
             {
                 args.CommandExecutor.QueueCommand(command);
             }
