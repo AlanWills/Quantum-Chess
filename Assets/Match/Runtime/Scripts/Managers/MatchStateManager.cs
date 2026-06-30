@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Celeste.Assets;
+using Celeste.Core;
 using Celeste.Coroutines;
 using Celeste.Lua;
 using Celeste.Persistence;
@@ -88,7 +89,8 @@ namespace QC.Match.Managers
                 chessBoardCommandExecutor,
                 chessBoard,
                 chessBoardObjectSelection,
-                luaRuntime);
+                luaRuntime,
+                new UnityTimeProvider());
         }
     }
 }
