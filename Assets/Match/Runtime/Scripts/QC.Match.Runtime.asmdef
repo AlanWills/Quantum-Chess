@@ -18,7 +18,9 @@
         "Celeste.Coroutines",
         "UniTask",
         "Celeste.Memory",
-        "Celeste.Core"
+        "Celeste.Core",
+        "Celeste.RemoteConfig",
+        "Celeste.Debug"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

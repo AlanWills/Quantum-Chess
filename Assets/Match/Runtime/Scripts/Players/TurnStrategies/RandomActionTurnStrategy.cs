@@ -1,44 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using Celeste.DataStructures;
-using Celeste.Lua;
 using Cysharp.Threading.Tasks;
-using Lua;
 using QC.Match.AI;
 using QC.Match.Commands;
 using QC.Match.Objects;
-using UnityEngine;
 
 namespace QC.Match.Players
 {
-    public class AITurnStrategyData
+    public class RandomActionTurnStrategy : ITurnStrategy
     {
-        public static readonly AITurnStrategyData Default = new();
-
-        public int Depth { get; private set; } = 1;
-
-        public static AITurnStrategyData FromTable(LuaTable table)
-        {
-            AITurnStrategyData data = new();
-
-            if (table.TryGet("depth", out int depth))
-            {
-                data.Depth = depth;
-            }
-
-            return data;
-        }
-    }
-    
-    public class AITurnStrategy : ITurnStrategy
-    {
-        private readonly AITurnStrategyData data;
-        
-        public AITurnStrategy(AITurnStrategyData data)
-        {
-            this.data = data;
-        }
-
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
             List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
@@ -49,7 +19,7 @@ namespace QC.Match.Players
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
                 chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));
             
-            if (AlphaBeta.TryCalculate(args, activePlayerPieces, data.Depth, out var command))
+            if (RandomAction.TryCalculate(args, activePlayerPieces, out var command))
             {
                 args.CommandExecutor.QueueCommand(command);
             }

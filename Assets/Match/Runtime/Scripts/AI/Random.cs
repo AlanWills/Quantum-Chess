@@ -9,8 +9,8 @@ namespace QC.Match.AI
     public static class RandomAction
     {
         public static bool TryCalculate(
-            List<ChessBoardObjectInstance> piecesToConsider,
             ITurnStrategy.Args args,
+            List<ChessBoardObjectInstance> piecesToConsider,
             out ICommand<ChessBoardCommandArgs> command)
         {
             List<Vector2Int> validAttacks = new();
@@ -44,7 +44,7 @@ namespace QC.Match.AI
                     int totalActions = validAttacks.Count + validMoves.Count;
                     if (totalActions > 0)
                     {
-                        int randomActionIndex = Random.Range(0, validAttacks.Count + validMoves.Count);
+                        int randomActionIndex = UnityEngine.Random.Range(0, validAttacks.Count + validMoves.Count);
 
                         if (randomActionIndex < validAttacks.Count)
                         {

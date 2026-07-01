@@ -1,5 +1,6 @@
 ﻿using Celeste.Lua;
 using Lua;
+using QC.Match.AI;
 
 namespace QC.Match.Players
 {
@@ -8,24 +9,28 @@ namespace QC.Match.Players
         public enum Type
         {
             Manual,
-            AI,
+            AlphaBeta,
+            Random,
             Custom
         }
 
-        public static ITurnStrategy Create(Type turnStrategyType, LuaTable luaTable)
+        public static ITurnStrategy Create(Type turnStrategyType, AIStrategyDefaultParameters defaultParameters, LuaTable luaTable)
         {
             switch (turnStrategyType)
             {
                 case Type.Manual:
                     return new ManualTurnStrategy();
                 
-                case Type.AI:
+                case Type.AlphaBeta:
                     if (luaTable.TryGetTable("turnStrategyData", out LuaTable strategyDataTable))
                     {
-                        AITurnStrategyData data = AITurnStrategyData.FromTable(strategyDataTable);
-                        return new AITurnStrategy(data);
+                        AlphaBetaParameters parameters = AlphaBetaParameters.FromTableOverride(defaultParameters.AlphaBeta, strategyDataTable);
+                        return new AlphaBetaTurnStrategy(parameters);
                     }
-                    return new AITurnStrategy(AITurnStrategyData.Default);
+                    return new AlphaBetaTurnStrategy(defaultParameters.AlphaBeta);
+
+                case Type.Random:
+                    return new RandomActionTurnStrategy();
 
                 case Type.Custom:
                 {

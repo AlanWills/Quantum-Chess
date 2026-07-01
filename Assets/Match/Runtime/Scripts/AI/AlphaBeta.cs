@@ -102,10 +102,10 @@ namespace QC.Match.AI
         public static bool TryCalculate(
             ITurnStrategy.Args args,
             IReadOnlyList<ChessBoardObjectInstance> piecesToConsider,
-            int depth,
+            AlphaBetaParameters alphaBetaParameters,
             out ICommand<ChessBoardCommandArgs> command)
         {
-           if (depth < 1)
+           if (alphaBetaParameters.Depth < 1)
            {
               UnityEngine.Debug.LogAssertion($"Failed to calculate best move as calculate depth was insufficient - please provide a value of at least 1.");
               command = null;
@@ -142,7 +142,7 @@ namespace QC.Match.AI
                  Move move = new Move(piece, position, action);
                  Board nextBoard = new Board(args.ChessBoard).MakeMove(move);
          
-                 int score = AlphaBetaMin(nextBoard, activeColour, alpha, beta, depth - 1);
+                 int score = AlphaBetaMin(nextBoard, activeColour, alpha, beta, alphaBetaParameters.Depth - 1);
                  if (score > bestScore)
                  {
                     bestScore = score;

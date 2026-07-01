@@ -6,6 +6,7 @@ using Celeste.Lua;
 using Cysharp.Threading.Tasks;
 using Lua;
 using Lua.Unity;
+using QC.Match.AI;
 using QC.Match.Catalogue;
 using QC.Match.Commands;
 using QC.Match.Persistence;
@@ -50,6 +51,7 @@ namespace QC.Match.Objects
 
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
+        [SerializeField] private AIStrategyDefaultParameters aiStrategyDefaultParameters;
         
         [Header("Events")]
         [SerializeField] private Celeste.Events.Event onBeforeScenarioSetUp;
@@ -200,7 +202,7 @@ namespace QC.Match.Objects
                 return;
             }
 
-            ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, playerConfig);
+            ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, aiStrategyDefaultParameters, playerConfig);
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
             Player player = new Player(playerColour, turnStrategy, winCondition);
             players.Add(player);

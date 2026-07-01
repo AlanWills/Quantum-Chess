@@ -619,6 +619,84 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &484144550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 484144551}
+  - component: {fileID: 484144552}
+  - component: {fileID: 484144553}
+  m_Layer: 0
+  m_Name: AIStrategyDefaultParametersManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &484144551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484144550}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &484144552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484144550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e87e14f57e41a0a1b3d71a08968d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.AIStrategyDefaultParametersManager
+  remoteConfigRecord: {fileID: 11400000, guid: a14e286dc19b9854aaeaa6e71212c32d, type: 2}
+  remoteConfigKey: AIStrategyDefaults
+  aiStrategyDefaultParameters: {fileID: 11400000, guid: 185bdc715bfbc49f69e367f334e72274, type: 2}
+--- !u!114 &484144553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484144550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c2c167d8138f94b8f96ff1b82578d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events::Celeste.Events.EventListener
+  gameEvent: {fileID: 11400000, guid: d33ac7e7e92326f4486f98e5dbfcc4b3, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 484144552}
+        m_TargetAssemblyTypeName: QC.Match.Managers.AIStrategyDefaultParametersManager,
+          QC.Match.Runtime
+        m_MethodName: OnRemoteConfigFetchedDataChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &537746226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5744840686107370326, guid: 63214e18bc183496e94b73fa41e3ada0, type: 3}
@@ -1933,6 +2011,7 @@ SceneRoots:
   - {fileID: 1497964437}
   - {fileID: 2704217917382501527}
   - {fileID: 1538463193}
+  - {fileID: 484144551}
   - {fileID: 50550789}
   - {fileID: 1580313333}
   - {fileID: 277367575}

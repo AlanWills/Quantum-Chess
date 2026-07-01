@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.MatchState
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   matchScenarioCatalogue: {fileID: 11400000, guid: f269b040058463540a3ce3eb0d737fec, type: 2}
+  aiStrategyDefaultParameters: {fileID: 11400000, guid: 185bdc715bfbc49f69e367f334e72274, type: 2}
   onBeforeScenarioSetUp: {fileID: 11400000, guid: 8d6494fa8802343b08483c91776ca6da, type: 2}
   onChanged: {fileID: 11400000, guid: a012f45e458c7994a9fc972b20e22521, type: 2}

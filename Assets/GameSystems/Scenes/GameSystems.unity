@@ -291,6 +291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameSystems
       objectReference: {fileID: 0}
+    - target: {fileID: 3242698408698065159, guid: 73678cf8ed3eb6447b50c9614a6a2fc4, type: 3}
+      propertyPath: environmentIds
+      value: 
+      objectReference: {fileID: 11400000, guid: e1b4563d700b34d83a30efa72244f1cf, type: 2}
     - target: {fileID: 5579732983644875166, guid: 73678cf8ed3eb6447b50c9614a6a2fc4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

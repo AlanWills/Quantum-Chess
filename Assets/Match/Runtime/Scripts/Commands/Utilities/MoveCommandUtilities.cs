@@ -16,12 +16,6 @@ namespace QC.Match.Commands
                 UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing move command.");
                 return CommandState.Abandoned;
             }
-            
-            if (args.ChessBoard.GetChessBoardObjectAt(endingPosition) != null)
-            {
-                UnityEngine.Debug.LogAssertion($"Attempting to move chess board object to {endingPosition} which already has a piece there.");
-                return CommandState.Abandoned;
-            }
 
             if (!instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
             {
