@@ -1,4 +1,3 @@
-using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using QC.Match.Objects;
 
@@ -11,7 +10,7 @@ namespace QC.Match.Commands
         public readonly ChessBoard ChessBoard;
         public readonly ChessBoardObjectSelection Selection;
         public readonly ILuaRuntime LuaRuntime;
-        public readonly ITimeProvider TimeProvider;
+        public readonly IVisualAnimationSystem VisualAnimationSystem;
 
         public ChessBoardCommandArgs(
             MatchState matchState,
@@ -19,14 +18,14 @@ namespace QC.Match.Commands
             ChessBoard chessBoard,
             ChessBoardObjectSelection selection,
             ILuaRuntime luaRuntime,
-            ITimeProvider timeProvider)
+            IVisualAnimationSystem visualAnimationSystem)
         {
             MatchState = matchState;
             CommandExecutor = commandExecutor;
             ChessBoard = chessBoard;
             Selection = selection;
             LuaRuntime = luaRuntime;
-            TimeProvider = timeProvider;
+            VisualAnimationSystem = visualAnimationSystem;
         }
     }
 }

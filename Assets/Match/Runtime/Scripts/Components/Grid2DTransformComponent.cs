@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using Celeste.Components;
+using Celeste.Events;
 using UnityEngine;
 
 namespace QC.Match.Components
@@ -17,7 +18,7 @@ namespace QC.Match.Components
         }
         
         #endregion
-
+        
         public override ComponentData CreateData()
         {
             return new SaveData();

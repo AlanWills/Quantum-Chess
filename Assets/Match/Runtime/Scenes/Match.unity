@@ -119,6 +119,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &50550788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 50550789}
+  - component: {fileID: 50550790}
+  m_Layer: 0
+  m_Name: VisualAnimationSystemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &50550789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50550788}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &50550790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50550788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d5fb72c8e14ef390654c7e26b1b26e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Managers.VisualAnimationSystemManager
+  visualAnimationSystem: {fileID: 11400000, guid: f900482a81aeb4f65866fd62326b7d6e, type: 2}
 --- !u!1 &277367573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1125,7 @@ MonoBehaviour:
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
+  visualAnimationSystem: {fileID: 11400000, guid: f900482a81aeb4f65866fd62326b7d6e, type: 2}
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   onMatchSetup:
     m_PersistentCalls:
@@ -1887,6 +1933,7 @@ SceneRoots:
   - {fileID: 1497964437}
   - {fileID: 2704217917382501527}
   - {fileID: 1538463193}
+  - {fileID: 50550789}
   - {fileID: 1580313333}
   - {fileID: 277367575}
   - {fileID: 538604455}

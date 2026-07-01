@@ -27,6 +27,7 @@ namespace QC.Match.Managers
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
         [SerializeField] private ChessBoard chessBoard;
         [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
+        [SerializeField] private VisualAnimationSystemUsingHandlers visualAnimationSystem;
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
@@ -90,7 +91,7 @@ namespace QC.Match.Managers
                 chessBoard,
                 chessBoardObjectSelection,
                 luaRuntime,
-                new UnityTimeProvider());
+                visualAnimationSystem);
         }
     }
 }

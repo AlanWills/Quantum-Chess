@@ -388,4 +388,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a25409cc7874e03b3466c874c8b7d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.Grid2DTransformController
+  visualAnimationSystem: {fileID: 11400000, guid: f900482a81aeb4f65866fd62326b7d6e, type: 2}
   gridTransform: {fileID: 7459234346702303689}
