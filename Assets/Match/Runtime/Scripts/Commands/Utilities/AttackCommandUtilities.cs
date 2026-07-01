@@ -13,13 +13,13 @@ namespace QC.Match.Commands
         {
             if (instance == null)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing move command.");
+                UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing attack command.");
                 return CommandState.Abandoned;
             }
             
             if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
             {
-                UnityEngine.Debug.LogAssertion($"Could not find {nameof(IChessPiece)} component for chess board object when executing move object command.");
+                UnityEngine.Debug.LogAssertion($"Could not find {nameof(IChessPiece)} component for chess board object when executing attack command.");
                 return CommandState.Abandoned;
             }
             
@@ -44,15 +44,15 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            if (await args.CommandExecutor.ExecuteCommandImmediately(new RemoveChessBoardObjectCommand(endingPositionInstance), args) == CommandState.Abandoned)
-            {
-                UnityEngine.Debug.LogAssertion($"Attempting to remove chess board object at {endingPosition} as the result of an attack, but there was an issue trying to remove it from the board.");
-                return CommandState.Abandoned;
-            }
-
             if (await args.CommandExecutor.ExecuteCommandImmediately(new MoveChessBoardObjectToCommand(instance, endingPosition), args) == CommandState.Abandoned)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to move chess board object to {endingPosition} as the result of an attack, but there was an issue trying to move it on the board.");
+                return CommandState.Abandoned;
+            }
+
+            if (await args.CommandExecutor.ExecuteCommandImmediately(new RemoveChessBoardObjectCommand(endingPositionInstance), args) == CommandState.Abandoned)
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to remove chess board object at {endingPosition} as the result of an attack, but there was an issue trying to remove it from the board.");
                 return CommandState.Abandoned;
             }
 

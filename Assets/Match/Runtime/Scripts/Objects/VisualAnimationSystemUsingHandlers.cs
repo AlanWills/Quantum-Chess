@@ -42,7 +42,7 @@ namespace QC.Match.Objects
             transformHandlers.Remove(objectInstance.InstanceId);
         }
         
-        public async UniTask AnimateTo(ChessBoardObjectInstance objectInstance, Vector2Int position)
+        public async UniTask AnimateTo(ChessBoardObjectInstance objectInstance, Vector2 position)
         {
             if (!transformHandlers.TryGetValue(objectInstance.InstanceId, out IVisualAnimationHandler handler))
             {
