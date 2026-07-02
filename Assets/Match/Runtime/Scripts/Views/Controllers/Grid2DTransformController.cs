@@ -37,12 +37,12 @@ namespace QC.Match.Views
 
         private void SyncPosition()
         {
-            gridTransform.localPosition = Interface.iFace.GetPosition(Interface.instance).ToVector3();
+            gridTransform.localPosition = Interface.GetPosition().ToVector3();
         }
 
         public async UniTask AnimateTo(Vector2 position, ITimeProvider timeProvider, float speed)
         {
-            Vector2 startingPosition = Interface.iFace.GetPosition(Interface.instance);
+            Vector2 startingPosition = Interface.GetPosition();
             Vector2 delta = position - startingPosition;
             float magnitude = delta.magnitude;
             float animationTime = magnitude / speed;

@@ -28,11 +28,11 @@ namespace QC.Match.Commands
 
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
             
-            grid2DTransform.iFace.SetPosition(grid2DTransform.instance, endingPosition);
+            grid2DTransform.SetPosition(endingPosition);
 
             if (instance.TryFindComponent<IObjectStatus>(out var status))
             {
-                status.iFace.SetHasMoved(status.instance, true);
+                status.SetHasMoved(true);
             }
 
             // This could be a problem in the future if we allow multiple moves

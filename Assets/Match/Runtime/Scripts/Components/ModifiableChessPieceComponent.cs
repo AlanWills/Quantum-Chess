@@ -345,7 +345,7 @@ namespace QC.Match.Components
                 return false;
             }
 
-            if (chessPiece.iFace.GetPieceColour(chessPiece.instance) != currentColour)
+            if (chessPiece.GetPieceColour() != currentColour)
             {
                 // Attacks are only valid on non-matching colours, but all pieces block attacks
                 list.Add(position);

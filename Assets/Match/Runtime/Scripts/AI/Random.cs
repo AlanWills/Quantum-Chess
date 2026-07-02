@@ -29,15 +29,13 @@ namespace QC.Match.AI
                     validAttacks.Clear();
                     validMoves.Clear();
                     
-                    actionProvider.iFace.CalculateValidAttacks(
-                        actionProvider.instance,
-                        transform.iFace.GetPosition(transform.instance), 
+                    actionProvider.CalculateValidAttacks(
+                        transform.GetPosition(), 
                         args.ChessBoard, 
                         validAttacks);
                     
-                    actionProvider.iFace.CalculateValidMoves(
-                        actionProvider.instance,
-                        transform.iFace.GetPosition(transform.instance), 
+                    actionProvider.CalculateValidMoves(
+                        transform.GetPosition(), 
                         args.ChessBoard, 
                         validMoves);
                     
@@ -49,7 +47,7 @@ namespace QC.Match.AI
                         if (randomActionIndex < validAttacks.Count)
                         {
                             command = new AttackWithChessBoardObjectFromToCommand(
-                                transform.iFace.GetPosition(transform.instance),
+                                transform.GetPosition(),
                                 validAttacks[randomActionIndex]);
                             return true;
                         }

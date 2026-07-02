@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Celeste.Components;
 using QC.Match.Objects;
 using UnityEngine;
@@ -17,5 +18,28 @@ namespace QC.Match
             Vector2Int currentBoardPosition,
             IChessBoardLookup chessBoardLookup, 
             IList<Vector2Int> validAttacks);
+    }
+    
+    public static class ActionProviderExtensions
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void CalculateValidMoves(
+            this InterfaceHandle<IActionProvider> provider, 
+            Vector2Int currentBoardPosition,
+            IChessBoardLookup chessBoardLookup, 
+            IList<Vector2Int> validMoves)
+        {
+            provider.iFace.CalculateValidMoves(provider.instance, currentBoardPosition, chessBoardLookup, validMoves);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void CalculateValidAttacks(
+            this InterfaceHandle<IActionProvider> provider, 
+            Vector2Int currentBoardPosition,
+            IChessBoardLookup chessBoardLookup, 
+            IList<Vector2Int> validAttacks)
+        {
+            provider.iFace.CalculateValidAttacks(provider.instance, currentBoardPosition, chessBoardLookup, validAttacks);
+        }
     }
 }

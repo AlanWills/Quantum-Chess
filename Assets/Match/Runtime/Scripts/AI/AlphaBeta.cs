@@ -27,7 +27,7 @@ namespace QC.Match.AI
                      chessBoardObject.TryFindComponent<IChessPiece>(out var chessPiece) &&
                      chessBoardObject.TryFindComponent<IActionProvider>(out var actionProvider))
                  {
-                    Vector2Int piecePosition = transform.iFace.GetPosition(transform.instance);
+                    Vector2Int piecePosition = transform.GetPosition();
                     Pieces[piecePosition] = new Piece(chessBoardObject, chessPiece, actionProvider);
                  }
               }
@@ -123,7 +123,7 @@ namespace QC.Match.AI
            foreach (var pieceInstance in piecesToConsider)
            {
               var chessPiece = pieceInstance.FindInterface<IChessPiece>();
-              if (chessPiece.iFace.GetPieceColour(chessPiece.instance) != activeColour)
+              if (chessPiece.GetPieceColour() != activeColour)
               {
                  continue;
               }
@@ -132,9 +132,9 @@ namespace QC.Match.AI
               
               var actionProvider = pieceInstance.FindInterface<IActionProvider>();
               var transform = pieceInstance.FindInterface<IGrid2DTransform>();
-              Vector2Int position = transform.iFace.GetPosition(transform.instance);
-              actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, position, args.ChessBoard, validActions);
-              actionProvider.iFace.CalculateValidMoves(actionProvider.instance, position, args.ChessBoard, validActions);
+              Vector2Int position = transform.GetPosition();
+              actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
+              actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 
               foreach (var action in validActions)
               {
@@ -174,7 +174,7 @@ namespace QC.Match.AI
            }
 
            var bestMoveChessPiece = bestMove.Piece.ChessPiece;
-           UnityEngine.Debug.Assert(bestMoveChessPiece.iFace.GetPieceColour(bestMoveChessPiece.instance) == activeColour, 
+           UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour, 
               $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
            
            var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
@@ -186,7 +186,7 @@ namespace QC.Match.AI
                  $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
               UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake), 
                  $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
-              UnityEngine.Debug.Assert(pieceToTake.iFace.GetPieceColour(pieceToTake.instance) != args.MatchState.ActiveColour, 
+              UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.MatchState.ActiveColour, 
                  $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
               command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
            }
@@ -221,7 +221,7 @@ namespace QC.Match.AI
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.iFace.GetPieceColour(chessPiece.instance) != activeColour)
+              if (chessPiece.GetPieceColour() != activeColour)
               {
                  continue;
               }
@@ -229,8 +229,8 @@ namespace QC.Match.AI
               validActions.Clear();
               
               var actionProvider = piece.Value.ActionProvider;
-              actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, piece.Key, board, validActions);
-              actionProvider.iFace.CalculateValidMoves(actionProvider.instance, piece.Key, board, validActions);
+              actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
+              actionProvider.CalculateValidMoves(piece.Key, board, validActions);
 
               foreach (var action in validActions)
               {
@@ -271,7 +271,7 @@ namespace QC.Match.AI
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour)
+              if (chessPiece.GetPieceColour() == activeColour)
               {
                  continue;
               }
@@ -279,8 +279,8 @@ namespace QC.Match.AI
               validActions.Clear();
               
               var actionProvider = piece.Value.ActionProvider;
-              actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, piece.Key, board, validActions);
-              actionProvider.iFace.CalculateValidMoves(actionProvider.instance, piece.Key, board, validActions);
+              actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
+              actionProvider.CalculateValidMoves(piece.Key, board, validActions);
 
               foreach (var action in validActions)
               {
@@ -311,8 +311,8 @@ namespace QC.Match.AI
            foreach (var piece in board.Pieces)
            {
               var chessPieceComponent = piece.Value.ChessPiece;
-              int materialWorth = CalculateMaterialWorth(chessPieceComponent.iFace.GetPieceType(chessPieceComponent.instance));
-              int colourModifier = chessPieceComponent.iFace.GetPieceColour(chessPieceComponent.instance) == activeColour ? 1 : -1;
+              int materialWorth = CalculateMaterialWorth(chessPieceComponent.GetPieceType());
+              int colourModifier = chessPieceComponent.GetPieceColour() == activeColour ? 1 : -1;
               
               total += materialWorth * colourModifier;
            }

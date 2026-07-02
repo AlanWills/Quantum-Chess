@@ -69,16 +69,16 @@ namespace QC.Match.Commands
                     return UniTask.FromResult(CommandState.Abandoned);
                 }
                 
-                modifiableChessPiece.iFace.SetColour(chessPiece.instance, Colour);
-                modifiableChessPiece.iFace.SetType(chessPiece.instance, Type);
+                modifiableChessPiece.SetColour(Colour);
+                modifiableChessPiece.SetType(Type);
             }
 
-            chessPiece.iFace.SetVerticalDirection(chessPiece.instance, VerticalDirection);
-            gridTransform.iFace.SetPosition(gridTransform.instance, Position);
+            chessPiece.SetVerticalDirection(VerticalDirection);
+            gridTransform.SetPosition(Position);
              
             if (instance.TryFindComponent<IInteractable>(out var interactable))
             {
-                interactable.iFace.SetInteractable(interactable.instance, Interactable);
+                interactable.SetInteractable(Interactable);
             }
             
             args.ChessBoard.AddChessBoardObjectInstance(instance);

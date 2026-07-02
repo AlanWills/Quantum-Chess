@@ -38,7 +38,7 @@ namespace QC.Match.Views
                 return;
             }
 
-            Vector2Int boardPosition = grid2DTransform.iFace.GetPosition(grid2DTransform.instance);
+            Vector2Int boardPosition = grid2DTransform.GetPosition();
             CalculateValidMoves(boardPosition, actionProvider);
             CalculateValidAttacks(boardPosition, actionProvider);
         }
@@ -46,7 +46,7 @@ namespace QC.Match.Views
         private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.iFace.CalculateValidMoves(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);
+            actionProvider.CalculateValidMoves(boardPosition, chessBoard, boardPositionCache);
 
             foreach (Vector2Int validMove in boardPositionCache)
             {
@@ -66,7 +66,7 @@ namespace QC.Match.Views
         private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, boardPosition, chessBoard, boardPositionCache);
+            actionProvider.CalculateValidAttacks(boardPosition, chessBoard, boardPositionCache);
 
             foreach (Vector2Int validAttack in boardPositionCache)
             {

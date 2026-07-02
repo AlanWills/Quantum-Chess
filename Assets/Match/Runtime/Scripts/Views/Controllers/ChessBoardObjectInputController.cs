@@ -12,7 +12,7 @@ namespace QC.Match.Input
     {
         #region Properties and Fields
 
-        private bool IsInteractable => Interface.IsValid && Interface.iFace.IsInteractable(Interface.instance);
+        private bool IsInteractable => Interface.IsValid && Interface.IsInteractable();
         
         [SerializeField] private ChessBoardCommandExecutor commandExecutor;
         [SerializeField] private Collider2D hitBoxCollider;

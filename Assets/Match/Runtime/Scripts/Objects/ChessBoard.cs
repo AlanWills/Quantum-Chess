@@ -175,15 +175,15 @@ namespace QC.Match.Objects
         {
             return objects.Find(obj => 
                 obj.TryFindComponent(out InterfaceHandle<IGrid2DTransform> grid2DTransform) && 
-                grid2DTransform.iFace.GetPosition(grid2DTransform.instance) == boardPosition);
+                grid2DTransform.GetPosition() == boardPosition);
         }
 
         public bool DoesChessPieceExist(ChessPieceColour colour, ChessPieceType type)
         {
             return objects.Exists(x => 
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                colour == chessPiece.iFace.GetPieceColour(chessPiece.instance) &&
-                chessPiece.iFace.GetPieceType(chessPiece.instance).HasFlag(type));
+                colour == chessPiece.GetPieceColour() &&
+                chessPiece.GetPieceType().HasFlag(type));
         }
 
         public bool RemoveChessBoardObject(ChessBoardObjectInstance instance)
@@ -252,8 +252,8 @@ namespace QC.Match.Objects
 
             return objects.Exists(x => 
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                (!colour.HasValue || colour.Value == chessPiece.iFace.GetPieceColour(chessPiece.instance)) &&
-                (!type.HasValue || type.Value == chessPiece.iFace.GetPieceType(chessPiece.instance)));
+                (!colour.HasValue || colour.Value == chessPiece.GetPieceColour()) &&
+                (!type.HasValue || type.Value == chessPiece.GetPieceType()));
         }
         
         #endregion

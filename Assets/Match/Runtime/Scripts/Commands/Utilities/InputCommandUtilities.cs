@@ -14,12 +14,12 @@ namespace QC.Match.Commands
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||
-                    piece.iFace.GetPieceColour(piece.instance) != colour)
+                    piece.GetPieceColour() != colour)
                 {
                     continue;
                 }
                 
-                interactable.iFace.SetInteractable(interactable.instance, isInteractable);
+                interactable.SetInteractable(isInteractable);
             }
 
             return UniTask.FromResult(CommandState.Completed);
@@ -34,12 +34,12 @@ namespace QC.Match.Commands
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||
-                    piece.iFace.GetPieceColour(piece.instance) == colour)
+                    piece.GetPieceColour() == colour)
                 {
                     continue;
                 }
                 
-                interactable.iFace.SetInteractable(interactable.instance, isInteractable);
+                interactable.SetInteractable(isInteractable);
             }
 
             return UniTask.FromResult(CommandState.Completed);

@@ -28,7 +28,7 @@ namespace QC.Match.Players
                 x.HasComponent<IActionProvider>() &&
                 x.HasComponent<IGrid2DTransform>() &&
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                chessPiece.iFace.GetPieceColour(chessPiece.instance) == activeColour));
+                chessPiece.GetPieceColour() == activeColour));
             
             if (AlphaBeta.TryCalculate(args, activePlayerPieces, parameters, out var command))
             {
