@@ -16,14 +16,22 @@ namespace QC.Match.AI
             set => depth = value;
         }
 
+        public int MinThinkingTime
+        {
+            get => minThinkingTimeMilliseconds;
+            set => minThinkingTimeMilliseconds = value;
+        }
+
         [SerializeField] private int depth;
+        [SerializeField] private int minThinkingTimeMilliseconds;
         
         #endregion
 
         public static AlphaBetaParameters FromTableOverride(AlphaBetaParameters parameters, LuaTable overrideTable)
         {
             AlphaBetaParameters data = parameters;
-            overrideTable.TryGet("depth", out data.depth);
+            data.depth = overrideTable.TryGet("depth", data.depth);
+            data.minThinkingTimeMilliseconds = overrideTable.TryGet("minThinkingTime", data.minThinkingTimeMilliseconds);
 
             return data;
         }

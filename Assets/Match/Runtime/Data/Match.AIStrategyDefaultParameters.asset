@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.AI.AIStrategyDefaultParameters
   defaultAlphaBeta:
     depth: 2
+    minThinkingTimeMilliseconds: 3000

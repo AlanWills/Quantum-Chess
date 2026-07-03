@@ -23,6 +23,7 @@ namespace QC.Match.Debug
                 using (var changeScope = new GUIChangedScope())
                 {
                     alphaBeta.Depth = GUIExtensions.IntField("Depth", alphaBeta.Depth);
+                    alphaBeta.MinThinkingTime = GUIExtensions.IntField("Min Thinking Time", alphaBeta.MinThinkingTime);
 
                     if (changeScope.Changed)
                     {

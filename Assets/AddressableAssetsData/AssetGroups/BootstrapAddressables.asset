@@ -92,6 +92,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dccdd538fe384677bac9628505fc473e
+    m_Address: Factories/StandardChessMatchFactory.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f371fd85b22484899998ea83331c2eb5
     m_Address: Assets/Startup/Scenes/StartupSceneSet.asset
     m_ReadOnly: 0
