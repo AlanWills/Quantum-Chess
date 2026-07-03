@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.ModifiableChessPieceComponent
   startingColour: 1
   startingPieceType: 8
+  startingValue: 50
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

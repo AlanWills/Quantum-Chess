@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.MultiplePieceTypeComponent
   startingColour: 0
   startingPieceType: 0
+  startingValue: 1
 --- !u!114 &-2150919337401303868
 MonoBehaviour:
   m_ObjectHideFlags: 0

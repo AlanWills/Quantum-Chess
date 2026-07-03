@@ -5,9 +5,12 @@ namespace QC.Match
 {
     public interface IChessPiece
     {
-        ChessPieceColour GetPieceColour(Instance instance);
-        ChessPieceType GetPieceType(Instance instance);
+        ChessPieceColour GetColour(Instance instance);
+        ChessPieceType GetType(Instance instance);
+        int GetValue(Instance instance);
+        
         void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection);
+        void SetValue(Instance instance, int value);
     }
     
     public interface IModifiableChessPiece : IChessPiece
@@ -19,15 +22,27 @@ namespace QC.Match
     public static class ChessPieceExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChessPieceColour GetPieceColour<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
+        public static ChessPieceColour GetColour<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
         {
-            return chessPiece.iFace.GetPieceColour(chessPiece.instance);
+            return chessPiece.iFace.GetColour(chessPiece.instance);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChessPieceType GetPieceType<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
+        public static ChessPieceType GetType<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
         {
-            return chessPiece.iFace.GetPieceType(chessPiece.instance);
+            return chessPiece.iFace.GetType(chessPiece.instance);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetValue<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
+        {
+            return chessPiece.iFace.GetValue(chessPiece.instance);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetValue<T>(this InterfaceHandle<T> chessPiece, int value) where T : class, IChessPiece
+        {
+            chessPiece.iFace.SetValue(chessPiece.instance, value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

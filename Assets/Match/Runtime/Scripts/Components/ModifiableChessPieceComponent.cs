@@ -21,8 +21,9 @@ namespace QC.Match.Components
         {
             public ChessPieceColour currentPieceColour;
             public ChessPieceType currentPieceType;
-            public bool hasMoved;
+            public int currentValue;
             public ChessPieceVerticalDirection verticalDirection;
+            public bool hasMoved;
         }
         
         #endregion
@@ -31,6 +32,7 @@ namespace QC.Match.Components
         
         [SerializeField] private ChessPieceColour startingColour = ChessPieceColour.Unknown;
         [SerializeField] private ChessPieceType startingPieceType = ChessPieceTypeExtensions.Everything;
+        [SerializeField] private int startingValue = 1;
         
         #endregion
 
@@ -40,12 +42,13 @@ namespace QC.Match.Components
             {
                 currentPieceColour = startingColour,
                 currentPieceType = startingPieceType,
+                currentValue = startingValue,
+                verticalDirection = ChessPieceVerticalDirection.Up,
                 hasMoved = false,
-                verticalDirection = ChessPieceVerticalDirection.Up
             };
         }
 
-        public ChessPieceColour GetPieceColour(Instance instance)
+        public ChessPieceColour GetColour(Instance instance)
         {
             return (instance.data as SaveData).currentPieceColour;
         }
@@ -60,7 +63,7 @@ namespace QC.Match.Components
             }
         }
 
-        public ChessPieceType GetPieceType(Instance instance)
+        public ChessPieceType GetType(Instance instance)
         {
             return (instance.data as SaveData).currentPieceType;
         }
@@ -71,6 +74,21 @@ namespace QC.Match.Components
             if (saveData.currentPieceType != type)
             {
                 saveData.currentPieceType = type;
+                instance.events.ComponentDataChanged.Invoke();
+            }
+        }
+
+        public int GetValue(Instance instance)
+        {
+            return (instance.data as SaveData).currentValue;
+        }
+
+        public void SetValue(Instance instance, int value)
+        {
+            SaveData saveData = instance.data as SaveData;
+            if (saveData.currentValue != value)
+            {
+                saveData.currentValue = value;
                 instance.events.ComponentDataChanged.Invoke();
             }
         }
@@ -345,7 +363,7 @@ namespace QC.Match.Components
                 return false;
             }
 
-            if (chessPiece.GetPieceColour() != currentColour)
+            if (chessPiece.GetColour() != currentColour)
             {
                 // Attacks are only valid on non-matching colours, but all pieces block attacks
                 list.Add(position);

@@ -26,6 +26,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Components.ModifiableChessPieceComponent
   startingColour: 1
   startingPieceType: 32
+  startingValue: 9000
 --- !u!114 &-1037797547609353635
 MonoBehaviour:
   m_ObjectHideFlags: 0

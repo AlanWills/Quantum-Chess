@@ -13,13 +13,14 @@ namespace QC.Match.Commands
         private readonly bool Interactable;
         private readonly ChessPieceColour Colour;
         private readonly ChessPieceType Type;
+        private readonly int? Value;
 
         public AddChessPieceCommand(
             int guid,
             ChessPieceVerticalDirection verticalDirection,
             Vector2Int position,
             bool interactable)
-        : this(guid, verticalDirection, position, interactable, ChessPieceColour.Unknown, ChessPieceType.None)
+        : this(guid, verticalDirection, position, interactable, ChessPieceColour.Unknown, ChessPieceType.None, null)
         {
         }
 
@@ -29,7 +30,8 @@ namespace QC.Match.Commands
             Vector2Int position,
             bool interactable,
             ChessPieceColour colour,
-            ChessPieceType type)
+            ChessPieceType type,
+            int? value)
         {
             Guid = guid;
             VerticalDirection = verticalDirection;
@@ -37,6 +39,7 @@ namespace QC.Match.Commands
             Interactable = interactable;
             Colour = colour;
             Type = type;
+            Value = value;
         }
         
         public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
@@ -71,6 +74,11 @@ namespace QC.Match.Commands
                 
                 modifiableChessPiece.SetColour(Colour);
                 modifiableChessPiece.SetType(Type);
+            }
+
+            if (Value.HasValue)
+            {
+                chessPiece.SetValue(Value.Value);
             }
 
             chessPiece.SetVerticalDirection(VerticalDirection);

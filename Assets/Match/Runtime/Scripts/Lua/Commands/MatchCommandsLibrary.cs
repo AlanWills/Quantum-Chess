@@ -215,6 +215,7 @@ namespace QC.Match.Lua
 
             ChessPieceColour colour;
             ChessPieceType type = ChessPieceType.None;
+            int value = 0;
             ChessPieceVerticalDirection verticalDirection;
             Vector2Int position;
             bool interactable;
@@ -260,6 +261,11 @@ namespace QC.Match.Lua
                 }
             }
 
+            // Value
+            {
+                config.TryGet("value", out value);
+            }
+
             // Vertical Direction
             {
                 // This is technically OK to be missing, so we don't log assertions if there's a failure here
@@ -286,7 +292,8 @@ namespace QC.Match.Lua
                 position,
                 interactable,
                 colour,
-                type);
+                type,
+                value);
             chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
             
             return new ValueTask<int>(context.Return());

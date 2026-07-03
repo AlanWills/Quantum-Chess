@@ -17,7 +17,7 @@ namespace QC.Match.Players
                 x.HasComponent<IActionProvider>() &&
                 x.HasComponent<IGrid2DTransform>() &&
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                chessPiece.GetPieceColour() == activeColour));
+                chessPiece.GetColour() == activeColour));
             
             if (RandomAction.TryCalculate(args, activePlayerPieces, out var command))
             {
