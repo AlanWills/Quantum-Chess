@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using Lua;
 using Lua.Unity;
@@ -28,6 +29,7 @@ namespace QC.Match.AI
         {
             public ChessPieceType pieceType;
             public int value;
+            public Vector2Int variance;
         }
         
         #endregion
@@ -59,9 +61,16 @@ namespace QC.Match.AI
             return indexOfPosition >= 0 ? coordinateImportanceOverrides[indexOfPosition].importance : 0;
         }
 
-        public int GetValueOverrideForPiece(ChessPieceType chessPieceType)
+        public int GetValueOverrideForPiece(ChessPieceType chessPieceType, IRNG rng)
         {
             int indexOfType = pieceValueOverrides.FindIndex(x => x.pieceType == chessPieceType);
+            if (indexOfType < 0)
+            {
+                return 0;
+            }
+            
+            // Handle variance here
+            
             return indexOfType >= 0 ? pieceValueOverrides[indexOfType].value : 0;
         }
 
