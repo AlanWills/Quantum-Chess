@@ -321,6 +321,7 @@ namespace QC.Match.Lua
             LuaTable config = context.GetArgument<LuaTable>(2);
 
             Vector2Int position;
+            int importance;
 
             // Position
             {
@@ -330,8 +331,13 @@ namespace QC.Match.Lua
                     position.y = config.GetInt("y");
                 }
             }
+            
+            // Importance
+            {
+                config.TryGet("importance", out importance);
+            }
 
-            AddChessBoardTileCommand addChessBoardTileCommand = new AddChessBoardTileCommand(tileGuid, position);
+            AddChessBoardTileCommand addChessBoardTileCommand = new AddChessBoardTileCommand(tileGuid, position, importance);
             chessBoardCommandExecutor.QueueCommand(addChessBoardTileCommand);
             
             return new ValueTask<int>(context.Return());

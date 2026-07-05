@@ -42,9 +42,19 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
     for y = 1, boardHeight do
         for x = 1, boardWidth do
             local tileGuid = ((x + y + 1) % 2) + 1
+            local position = Vector2Int.new(x, y)
+            local importance = 0
+
+            if (x == 4 or x == 5) and (y == 4 or y == 5) then
+                importance = 2
+            elseif (x == 3 or x == 6) and (x == 3 or x == 6) then
+                importance = 1
+            end
+            
             AddChessBoardTileCommand.new(tileGuid,
             {
-                position = Vector2Int.new(x, y)
+                position = position,
+                importance = importance
             })
         end
     end

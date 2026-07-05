@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using Celeste.Components;
+using QC.Match.Components;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace QC.Match.Objects
 {
-    public class ChessBoardTileInstance
+    public class ChessBoardTileInstance : ComponentContainerInstance<ChessBoardTileComponent>
     {
         #region Properties and Fields
 
@@ -11,14 +14,17 @@ namespace QC.Match.Objects
         public Vector2Int Position { get; }
         public TileBase Tile => tile.TileBase;
 
-        private readonly ChessBoardTile tile;
+        [NonSerialized] private readonly ChessBoardTile tile;
         
         #endregion
         
         public ChessBoardTileInstance(ChessBoardTile tile, Vector2Int position)
         {
             this.tile = tile;
+            
             Position = position;
+            
+            InitializeComponents(tile);
         }
     }
 }

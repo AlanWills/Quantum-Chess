@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Celeste.Components.Persistence;
 using Celeste.Persistence.Wrappers;
 using QC.Match.Objects;
-using UnityEngine;
 
 namespace QC.Match.Persistence
 {
@@ -10,11 +11,17 @@ namespace QC.Match.Persistence
     {
         public int guid;
         public SerializableVector2Int position;
+        public List<ComponentDTO> components = new();
 
         public ChessBoardTileDTO(ChessBoardTileInstance instance)
         {
             guid = instance.Guid;
             position = new SerializableVector2Int(instance.Position);
+            
+            foreach (var component in instance.Components)
+            {
+                components.Add(ComponentDTO.From(component));
+            }
         }
     }
 }

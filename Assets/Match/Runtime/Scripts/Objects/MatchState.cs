@@ -155,8 +155,12 @@ namespace QC.Match.Objects
             {
                 await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
                 
-                bool isScenarioWon = await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs);
-                UnityEngine.Debug.Assert(!isScenarioWon, $"Active Player {ActiveColour} has Won!");
+                if (await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
+                {
+                    // Probably need to trigger an event or something here when a player has won
+                    UnityEngine.Debug.LogAssertion($"Active Player {ActiveColour} has won!");
+                    return;
+                }
             }
             
             activePlayerIndex = playerIndex;

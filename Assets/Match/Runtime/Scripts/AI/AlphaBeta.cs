@@ -57,6 +57,11 @@ namespace QC.Match.AI
               return Pieces.TryGetValue(boardPosition, out var piece) ? piece.Instance : null;
            }
 
+           public int GetTileImportance(Vector2Int boardPosition)
+           {
+              return chessBoard.GetTileImportance(boardPosition);
+           }
+
            public Board MakeMove(Move moveToMake)
            {
               Board boardWithMove = new Board(this, moveToMake);
@@ -310,8 +315,7 @@ namespace QC.Match.AI
 
            foreach (var piece in board.Pieces)
            {
-              var chessPieceComponent = piece.Value.ChessPiece;
-              int materialWorth = CalculateValue(chessPieceComponent, activeColour);
+              int materialWorth = CalculateValue(piece.Key, piece.Value, activeColour, board);
               
               total += materialWorth;
            }
@@ -320,14 +324,18 @@ namespace QC.Match.AI
         }
 
         private static int CalculateValue(
-           InterfaceHandle<IChessPiece> chessPiece,
-           ChessPieceColour activeColour)
+           Vector2Int position,
+           Piece piece,
+           ChessPieceColour activeColour,
+           IChessBoardLookup boardLookup)
         {
-           int colourModifier = chessPiece.GetColour() == activeColour ? 1 : -1;
-           int chessPieceValue = chessPiece.GetValue();
+           int colourModifier = piece.ChessPiece.GetColour() == activeColour ? 1 : -1;
+           int chessPieceValue = piece.ChessPiece.GetValue();
+           int positionImportance = boardLookup.GetTileImportance(position);
            
            // Can adjust this with extra bits and bobs, e.g. a board heatmap, promotion zones (a specific instance of a board heatmap I suppose) and other things
-           return chessPieceValue * colourModifier;
+           int value = chessPieceValue + positionImportance;
+           return value * colourModifier;
         }
     }
 }

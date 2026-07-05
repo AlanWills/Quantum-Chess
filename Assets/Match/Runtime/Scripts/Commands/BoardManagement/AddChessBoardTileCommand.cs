@@ -9,13 +9,16 @@ namespace QC.Match.Commands
     {
         private readonly int Guid;
         private readonly Vector2Int Position;
+        private readonly int Importance;
 
         public AddChessBoardTileCommand(
             int guid,
-            Vector2Int position)
+            Vector2Int position,
+            int importance)
         {
             Guid = guid;
             Position = position;
+            Importance = importance;
         }
         
         public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
@@ -25,6 +28,11 @@ namespace QC.Match.Commands
             {
                 UnityEngine.Debug.LogError($"Failed to create chess board tile with guid {Guid} at position {Position}.");
                 return UniTask.FromResult(CommandState.Abandoned);
+            }
+
+            if (instance.TryFindComponent<ITileAIInfo>(out var tileAIInfo))
+            {
+                tileAIInfo.SetImportance(Importance);
             }
 
             args.ChessBoard.AddChessBoardTileInstance(instance);

@@ -99,6 +99,7 @@ namespace QC.Match.Objects
         public void AddChessBoardTileInstance(ChessBoardTileInstance tileInstance)
         {
             tiles.Add(tileInstance);
+            tileInstance.ComponentDataChanged.AddListener(OnChessBoardTileComponentDataChanged);
             onChessBoardTileAdded?.Invoke(new ChessBoardTileAddedArgs(tileInstance));
             onChanged?.Invoke();
         }
@@ -112,6 +113,7 @@ namespace QC.Match.Objects
             
             ChessBoardTileInstance tileInstance = tiles[indexOfTile];
             tiles.RemoveAt(indexOfTile);
+            tileInstance.ComponentDataChanged.RemoveListener(OnChessBoardTileComponentDataChanged);
             onChessBoardTileRemoved?.Invoke(new ChessBoardTileRemovedArgs(tileInstance.Position));
             onChanged?.Invoke();
         }
@@ -119,6 +121,22 @@ namespace QC.Match.Objects
         public bool DoesChessBoardTileExist(Vector2Int boardPosition)
         {
             return tiles.Exists(x => x.Position == boardPosition);
+        }
+
+        public int GetTileImportance(Vector2Int boardPosition)
+        {
+            ChessBoardTileInstance tileInstance = tiles.Find(x => x.Position == boardPosition);
+            if (tileInstance == null)
+            {
+                return 0;
+            }
+
+            if (!tileInstance.TryFindComponent<ITileAIInfo>(out var tileAiInfo))
+            {
+                return 0;
+            }
+            
+            return tileAiInfo.GetImportance();
         }
 
         public ChessBoardObjectInstance CreateChessBoardObject(int guid)
@@ -222,6 +240,11 @@ namespace QC.Match.Objects
             onChanged?.Invoke();
         }
         
+        private void OnChessBoardTileComponentDataChanged()
+        {
+            onChanged?.Invoke();
+        }
+
         #endregion
         
         #region Lua

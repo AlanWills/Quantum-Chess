@@ -8,5 +8,6 @@ namespace QC.Match
     {
         bool DoesChessBoardTileExist(Vector2Int boardPosition);
         ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition);
+        int GetTileImportance(Vector2Int boardPosition);
     }
 }
