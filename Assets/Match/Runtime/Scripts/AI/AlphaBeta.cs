@@ -147,7 +147,7 @@ namespace QC.Match.AI
                  Move move = new Move(piece, position, action);
                  Board nextBoard = new Board(args.ChessBoard).MakeMove(move);
          
-                 int score = AlphaBetaMin(nextBoard, activeColour, alpha, beta, alphaBetaParameters.Depth - 1);
+                 int score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, alpha, beta, alphaBetaParameters.Depth - 1);
                  if (score > bestScore)
                  {
                     bestScore = score;
@@ -208,6 +208,7 @@ namespace QC.Match.AI
         }
 
         private static int AlphaBetaMax(
+           AlphaBetaParameters parameters,
            Board board, 
            ChessPieceColour activeColour, 
            int alpha, 
@@ -216,7 +217,7 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour);
+              int currentBoardScore = EvaluateBoard(board, activeColour, parameters);
               return currentBoardScore;
            }
 
@@ -242,7 +243,7 @@ namespace QC.Match.AI
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
                  Board nextBoard = board.MakeMove(move);
-                 var score = AlphaBetaMin(nextBoard, activeColour, alpha, beta, remainingDepth - 1);
+                 var score = AlphaBetaMin(parameters, nextBoard, activeColour, alpha, beta, remainingDepth - 1);
                  
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
@@ -258,6 +259,7 @@ namespace QC.Match.AI
         }
 
         private static int AlphaBetaMin(
+           AlphaBetaParameters parameters,
            Board board, 
            ChessPieceColour activeColour, 
            int alpha, 
@@ -266,7 +268,7 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour);
+              int currentBoardScore = EvaluateBoard(board, activeColour, parameters);
               return currentBoardScore;
            }
            
@@ -292,7 +294,7 @@ namespace QC.Match.AI
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
                  Board nextBoard = board.MakeMove(move);
-                 int score = AlphaBetaMax(nextBoard, activeColour, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMax(parameters, nextBoard, activeColour, alpha, beta, remainingDepth - 1);
                  
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
@@ -309,13 +311,19 @@ namespace QC.Match.AI
 
         private static int EvaluateBoard(
            Board board,
-           ChessPieceColour activeColour)
+           ChessPieceColour activeColour,
+           AlphaBetaParameters parameters)
         {
            int total = 0;
 
            foreach (var piece in board.Pieces)
            {
-              int materialWorth = CalculateValue(piece.Key, piece.Value, activeColour, board);
+              int materialWorth = CalculateValue(
+                 piece.Key, 
+                 piece.Value, 
+                 activeColour, 
+                 board,
+                 parameters);
               
               total += materialWorth;
            }
@@ -327,14 +335,16 @@ namespace QC.Match.AI
            Vector2Int position,
            Piece piece,
            ChessPieceColour activeColour,
-           IChessBoardLookup boardLookup)
+           IChessBoardLookup boardLookup,
+           AlphaBetaParameters parameters)
         {
            int colourModifier = piece.ChessPiece.GetColour() == activeColour ? 1 : -1;
            int chessPieceValue = piece.ChessPiece.GetValue();
            int positionImportance = boardLookup.GetTileImportance(position);
+           int positionImportanceOverride = parameters.GetImportanceOverrideForPosition(position);
            
            // Can adjust this with extra bits and bobs, e.g. a board heatmap, promotion zones (a specific instance of a board heatmap I suppose) and other things
-           int value = chessPieceValue + positionImportance;
+           int value = chessPieceValue + positionImportance + positionImportanceOverride;
            return value * colourModifier;
         }
     }

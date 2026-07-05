@@ -45,12 +45,6 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
             local position = Vector2Int.new(x, y)
             local importance = 0
 
-            if (x == 4 or x == 5) and (y == 4 or y == 5) then
-                importance = 2
-            elseif (x == 3 or x == 6) and (x == 3 or x == 6) then
-                importance = 1
-            end
-            
             AddChessBoardTileCommand.new(tileGuid,
             {
                 position = position,

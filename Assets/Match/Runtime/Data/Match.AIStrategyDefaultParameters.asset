@@ -15,3 +15,36 @@ MonoBehaviour:
   defaultAlphaBeta:
     depth: 2
     minThinkingTimeMilliseconds: 3000
+    coordinateImportanceOverrides:
+    - position: {x: 3, y: 3}
+      importance: 1
+    - position: {x: 4, y: 3}
+      importance: 1
+    - position: {x: 5, y: 3}
+      importance: 1
+    - position: {x: 6, y: 3}
+      importance: 1
+    - position: {x: 3, y: 4}
+      importance: 1
+    - position: {x: 4, y: 4}
+      importance: 2
+    - position: {x: 5, y: 4}
+      importance: 2
+    - position: {x: 6, y: 4}
+      importance: 1
+    - position: {x: 3, y: 5}
+      importance: 1
+    - position: {x: 4, y: 5}
+      importance: 2
+    - position: {x: 5, y: 5}
+      importance: 2
+    - position: {x: 6, y: 5}
+      importance: 1
+    - position: {x: 3, y: 6}
+      importance: 1
+    - position: {x: 4, y: 6}
+      importance: 1
+    - position: {x: 5, y: 6}
+      importance: 1
+    - position: {x: 6, y: 6}
+      importance: 1
