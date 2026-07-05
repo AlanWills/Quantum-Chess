@@ -5,8 +5,8 @@ namespace QC.Match
 {
     public interface IChessPiece
     {
-        ChessPieceColour GetColour(Instance instance);
-        ChessPieceType GetType(Instance instance);
+        ChessPieceColour GetPieceColour(Instance instance);
+        ChessPieceType GetPieceType(Instance instance);
         int GetValue(Instance instance);
         
         void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection);
@@ -22,15 +22,15 @@ namespace QC.Match
     public static class ChessPieceExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChessPieceColour GetColour<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
+        public static ChessPieceColour GetPieceColour<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
         {
-            return chessPiece.iFace.GetColour(chessPiece.instance);
+            return chessPiece.iFace.GetPieceColour(chessPiece.instance);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChessPieceType GetType<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
+        public static ChessPieceType GetPieceType<T>(this InterfaceHandle<T> chessPiece) where T : class, IChessPiece
         {
-            return chessPiece.iFace.GetType(chessPiece.instance);
+            return chessPiece.iFace.GetPieceType(chessPiece.instance);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

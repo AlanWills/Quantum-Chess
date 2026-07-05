@@ -28,8 +28,8 @@ namespace QC.Match.Views
 
         private void SetSpriteFromType()
         {
-            ChessPieceColour currentColour = Interface.GetColour();
-            ChessPieceType currentPieceType = ChessPieceExtensions.GetType(Interface);
+            ChessPieceColour currentColour = Interface.GetPieceColour();
+            ChessPieceType currentPieceType = ChessPieceExtensions.GetPieceType(Interface);
             spriteRenderer.sprite = visualLookup.GetSprite(currentColour, currentPieceType);
         }
     }

@@ -37,8 +37,8 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            ChessPieceColour chessPieceColour = chessPiece.GetColour();
-            if (chessPieceColour == otherChessPiece.GetColour())
+            ChessPieceColour chessPieceColour = chessPiece.GetPieceColour();
+            if (chessPieceColour == otherChessPiece.GetPieceColour())
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to attack with chess board object at {endingPosition}, but there is a chess board object there with the same colour ({chessPieceColour}).");
                 return CommandState.Abandoned;

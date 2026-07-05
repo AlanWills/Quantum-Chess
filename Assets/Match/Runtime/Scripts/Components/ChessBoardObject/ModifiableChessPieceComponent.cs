@@ -48,7 +48,7 @@ namespace QC.Match.Components
             };
         }
 
-        public ChessPieceColour GetColour(Instance instance)
+        public ChessPieceColour GetPieceColour(Instance instance)
         {
             return (instance.data as SaveData).currentPieceColour;
         }
@@ -63,7 +63,7 @@ namespace QC.Match.Components
             }
         }
 
-        public ChessPieceType GetType(Instance instance)
+        public ChessPieceType GetPieceType(Instance instance)
         {
             return (instance.data as SaveData).currentPieceType;
         }
@@ -363,7 +363,7 @@ namespace QC.Match.Components
                 return false;
             }
 
-            if (chessPiece.GetColour() != currentColour)
+            if (chessPiece.GetPieceColour() != currentColour)
             {
                 // Attacks are only valid on non-matching colours, but all pieces block attacks
                 list.Add(position);

@@ -128,7 +128,7 @@ namespace QC.Match.AI
            foreach (var pieceInstance in piecesToConsider)
            {
               var chessPiece = pieceInstance.FindInterface<IChessPiece>();
-              if (chessPiece.GetColour() != activeColour)
+              if (chessPiece.GetPieceColour() != activeColour)
               {
                  continue;
               }
@@ -179,7 +179,7 @@ namespace QC.Match.AI
            }
 
            var bestMoveChessPiece = bestMove.Piece.ChessPiece;
-           UnityEngine.Debug.Assert(bestMoveChessPiece.GetColour() == activeColour, 
+           UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour, 
               $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
            
            var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
@@ -191,7 +191,7 @@ namespace QC.Match.AI
                  $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
               UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake), 
                  $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
-              UnityEngine.Debug.Assert(pieceToTake.GetColour() != args.MatchState.ActiveColour, 
+              UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.MatchState.ActiveColour, 
                  $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
               command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
            }
@@ -227,7 +227,7 @@ namespace QC.Match.AI
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.GetColour() != activeColour)
+              if (chessPiece.GetPieceColour() != activeColour)
               {
                  continue;
               }
@@ -278,7 +278,7 @@ namespace QC.Match.AI
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.GetColour() == activeColour)
+              if (chessPiece.GetPieceColour() == activeColour)
               {
                  continue;
               }
@@ -338,13 +338,13 @@ namespace QC.Match.AI
            IChessBoardLookup boardLookup,
            AlphaBetaParameters parameters)
         {
-           int colourModifier = piece.ChessPiece.GetColour() == activeColour ? 1 : -1;
+           int colourModifier = piece.ChessPiece.GetPieceColour() == activeColour ? 1 : -1;
            int chessPieceValue = piece.ChessPiece.GetValue();
+           int chessPieceValueOverride = parameters.GetValueOverrideForPiece(piece.ChessPiece.GetPieceType());
            int positionImportance = boardLookup.GetTileImportance(position);
            int positionImportanceOverride = parameters.GetImportanceOverrideForPosition(position);
            
-           // Can adjust this with extra bits and bobs, e.g. a board heatmap, promotion zones (a specific instance of a board heatmap I suppose) and other things
-           int value = chessPieceValue + positionImportance + positionImportanceOverride;
+           int value = chessPieceValue + chessPieceValueOverride + positionImportance + positionImportanceOverride;
            return value * colourModifier;
         }
     }

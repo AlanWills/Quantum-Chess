@@ -21,6 +21,17 @@ namespace QC.Match.AI
         
         #endregion
         
+        #region Piece Value
+
+        [Serializable]
+        private struct PieceValue
+        {
+            public ChessPieceType pieceType;
+            public int value;
+        }
+        
+        #endregion
+
         #region Properties and Fields
 
         public int Depth
@@ -38,6 +49,7 @@ namespace QC.Match.AI
         [SerializeField] private int depth;
         [SerializeField] private int minThinkingTimeMilliseconds;
         [SerializeField] private List<CoordinateImportance> coordinateImportanceOverrides;
+        [SerializeField] private List<PieceValue> pieceValueOverrides;
         
         #endregion
 
@@ -47,48 +59,100 @@ namespace QC.Match.AI
             return indexOfPosition >= 0 ? coordinateImportanceOverrides[indexOfPosition].importance : 0;
         }
 
+        public int GetValueOverrideForPiece(ChessPieceType chessPieceType)
+        {
+            int indexOfType = pieceValueOverrides.FindIndex(x => x.pieceType == chessPieceType);
+            return indexOfType >= 0 ? pieceValueOverrides[indexOfType].value : 0;
+        }
+
         public static AlphaBetaParameters FromTableOverride(AlphaBetaParameters parameters, LuaTable overrideTable)
         {
             AlphaBetaParameters data = parameters;
             data.depth = overrideTable.TryGet("depth", data.depth);
             data.minThinkingTimeMilliseconds = overrideTable.TryGet("minThinkingTime", data.minThinkingTimeMilliseconds);
 
-            if (overrideTable.TryGetTable("coordinateImportanceOverrides", out LuaTable importanceOverridesTable) &&
-                importanceOverridesTable.ArrayLength > 0)
+            // Coordinate Importance Overrides
             {
-                foreach (var v in importanceOverridesTable)
+                if (overrideTable.TryGetTable("coordinateImportanceOverrides", out LuaTable importanceOverridesTable) &&
+                    importanceOverridesTable.ArrayLength > 0)
                 {
-                    // Need to override value if it already exists in the array, otherwise add it
-                    if (!v.Value.IsTable())
+                    foreach (var v in importanceOverridesTable)
                     {
-                        UnityEngine.Debug.LogAssertion($"Failed to parse coordinate importance override ({v.Key}) as the value is not a table.");
-                        continue;
-                    }
+                        if (!v.Value.IsTable())
+                        {
+                            UnityEngine.Debug.LogAssertion(
+                                $"Failed to parse coordinate importance override ({v.Key}) as the value is not a table.");
+                            continue;
+                        }
 
-                    LuaTable table = v.Value.ReadTable();
-                    CoordinateImportance coordinateImportance = new();
+                        LuaTable table = v.Value.ReadTable();
+                        CoordinateImportance coordinateImportance = new();
 
-                    if (!table.TryGetVector2Int("pos", out coordinateImportance.position))
-                    {
-                        UnityEngine.Debug.LogAssertion($"Failed to parse 'pos' as a {nameof(Vector2Int)}.");
-                        continue;
-                    }
+                        if (!table.TryGetVector2Int("pos", out coordinateImportance.position))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'pos' as a {nameof(Vector2Int)}.");
+                            continue;
+                        }
 
-                    if (!table.TryGet("importance", out coordinateImportance.importance))
-                    {
-                        UnityEngine.Debug.LogAssertion($"Failed to parse 'importance' as a {nameof(Vector2Int)}.");
-                        continue;
-                    }
+                        if (!table.TryGet("importance", out coordinateImportance.importance))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'importance' as a {nameof(Vector2Int)}.");
+                            continue;
+                        }
 
-                    int indexOfExistingPosition =
-                        data.coordinateImportanceOverrides.FindIndex(x => x.position == coordinateImportance.position); 
-                    if (indexOfExistingPosition >= 0)
-                    {
-                        data.coordinateImportanceOverrides[indexOfExistingPosition] = coordinateImportance;
+                        int indexOfExistingPosition =
+                            data.coordinateImportanceOverrides.FindIndex(x =>
+                                x.position == coordinateImportance.position);
+                        if (indexOfExistingPosition >= 0)
+                        {
+                            data.coordinateImportanceOverrides[indexOfExistingPosition] = coordinateImportance;
+                        }
+                        else
+                        {
+                            data.coordinateImportanceOverrides.Add(coordinateImportance);
+                        }
                     }
-                    else
+                }
+            }
+
+            // Piece Value Overrides
+            {
+                if (overrideTable.TryGetTable("pieceValueOverrides", out LuaTable pieceValueOverrides) &&
+                    pieceValueOverrides.ArrayLength > 0)
+                {
+                    foreach (var v in pieceValueOverrides)
                     {
-                        data.coordinateImportanceOverrides.Add(coordinateImportance);
+                        if (!v.Value.IsTable())
+                        {
+                            UnityEngine.Debug.LogAssertion(
+                                $"Failed to parse piece value override ({v.Key}) as the value is not a table.");
+                            continue;
+                        }
+
+                        LuaTable table = v.Value.ReadTable();
+                        PieceValue pieceValue = new();
+
+                        if (!table.TryGetEnum("pieceType", out pieceValue.pieceType))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'pieceType' as a {nameof(ChessPieceType)}.");
+                            continue;
+                        }
+
+                        if (!table.TryGet("value", out pieceValue.value))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'value' as an int.");
+                            continue;
+                        }
+
+                        int indexOfExistingPosition = data.pieceValueOverrides.FindIndex(x => x.pieceType == pieceValue.pieceType);
+                        if (indexOfExistingPosition >= 0)
+                        {
+                            data.pieceValueOverrides[indexOfExistingPosition] = pieceValue;
+                        }
+                        else
+                        {
+                            data.pieceValueOverrides.Add(pieceValue);
+                        }
                     }
                 }
             }

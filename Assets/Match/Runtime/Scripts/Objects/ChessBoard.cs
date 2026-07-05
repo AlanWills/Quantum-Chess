@@ -200,8 +200,8 @@ namespace QC.Match.Objects
         {
             return objects.Exists(x => 
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                colour == chessPiece.GetColour() &&
-                ChessPieceExtensions.GetType(chessPiece).HasFlag(type));
+                colour == chessPiece.GetPieceColour() &&
+                ChessPieceExtensions.GetPieceType(chessPiece).HasFlag(type));
         }
 
         public bool RemoveChessBoardObject(ChessBoardObjectInstance instance)
@@ -275,8 +275,8 @@ namespace QC.Match.Objects
 
             return objects.Exists(x => 
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                (!colour.HasValue || colour.Value == chessPiece.GetColour()) &&
-                (!type.HasValue || type.Value == ChessPieceExtensions.GetType(chessPiece)));
+                (!colour.HasValue || colour.Value == chessPiece.GetPieceColour()) &&
+                (!type.HasValue || type.Value == ChessPieceExtensions.GetPieceType(chessPiece)));
         }
         
         #endregion

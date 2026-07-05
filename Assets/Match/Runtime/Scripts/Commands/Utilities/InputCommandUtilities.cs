@@ -14,7 +14,7 @@ namespace QC.Match.Commands
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||
-                    piece.GetColour() != colour)
+                    piece.GetPieceColour() != colour)
                 {
                     continue;
                 }
@@ -34,7 +34,7 @@ namespace QC.Match.Commands
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||
-                    piece.GetColour() == colour)
+                    piece.GetPieceColour() == colour)
                 {
                     continue;
                 }
