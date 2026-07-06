@@ -4,7 +4,9 @@ local Scenario = { }
 
 function Scenario:load()
     StandardChessMatchFactory.createHumanWhitePlayer()
-    StandardChessMatchFactory.createAIBlackPlayer()
+    StandardChessMatchFactory.createAIBlackPlayer({
+        difficulty = "Medium"
+    })
 end
 
 function Scenario:setUp()

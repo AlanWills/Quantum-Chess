@@ -12,39 +12,167 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a07f80327084dbfb3ea7f4b78720cb1, type: 3}
   m_Name: Match.AIStrategyDefaultParameters
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.AI.AIStrategyDefaultParameters
-  defaultAlphaBeta:
+  defaultAlphaBetaEasy:
     depth: 2
     minThinkingTimeMilliseconds: 3000
+    coordinateImportanceOverrides: []
+    pieceValueOverrides:
+    - pieceType: 1
+      value: 10
+      variance: {x: -10, y: 10}
+    - pieceType: 2
+      value: 30
+      variance: {x: -20, y: 20}
+    - pieceType: 4
+      value: 30
+      variance: {x: -20, y: 20}
+    - pieceType: 8
+      value: 50
+      variance: {x: -30, y: 30}
+    - pieceType: 16
+      value: 90
+      variance: {x: -40, y: 40}
+    - pieceType: 32
+      value: 9000
+      variance: {x: 0, y: 0}
+  defaultAlphaBetaMedium:
+    depth: 4
+    minThinkingTimeMilliseconds: 2500
     coordinateImportanceOverrides:
-    - position: {x: 3, y: 3}
-      importance: 1
-    - position: {x: 4, y: 3}
-      importance: 1
-    - position: {x: 5, y: 3}
-      importance: 1
-    - position: {x: 6, y: 3}
-      importance: 1
-    - position: {x: 3, y: 4}
-      importance: 1
     - position: {x: 4, y: 4}
+      importance: 2
+    - position: {x: 4, y: 5}
       importance: 2
     - position: {x: 5, y: 4}
       importance: 2
-    - position: {x: 6, y: 4}
+    - position: {x: 5, y: 5}
+      importance: 2
+    pieceValueOverrides:
+    - pieceType: 1
+      value: 10
+      variance: {x: -3, y: 3}
+    - pieceType: 2
+      value: 30
+      variance: {x: -7, y: 7}
+    - pieceType: 4
+      value: 30
+      variance: {x: -7, y: 7}
+    - pieceType: 8
+      value: 50
+      variance: {x: -10, y: 10}
+    - pieceType: 16
+      value: 90
+      variance: {x: -20, y: 20}
+    - pieceType: 32
+      value: 9000
+      variance: {x: 0, y: 0}
+  defaultAlphaBetaHard:
+    depth: 6
+    minThinkingTimeMilliseconds: 2000
+    coordinateImportanceOverrides:
+    - position: {x: 3, y: 3}
+      importance: 1
+    - position: {x: 3, y: 4}
       importance: 1
     - position: {x: 3, y: 5}
       importance: 1
+    - position: {x: 3, y: 6}
+      importance: 1
+    - position: {x: 4, y: 3}
+      importance: 1
+    - position: {x: 4, y: 4}
+      importance: 2
     - position: {x: 4, y: 5}
+      importance: 2
+    - position: {x: 4, y: 6}
+      importance: 1
+    - position: {x: 5, y: 3}
+      importance: 1
+    - position: {x: 5, y: 4}
       importance: 2
     - position: {x: 5, y: 5}
       importance: 2
-    - position: {x: 6, y: 5}
-      importance: 1
-    - position: {x: 3, y: 6}
-      importance: 1
-    - position: {x: 4, y: 6}
-      importance: 1
     - position: {x: 5, y: 6}
+      importance: 2
+    - position: {x: 6, y: 3}
+      importance: 1
+    - position: {x: 6, y: 4}
+      importance: 1
+    - position: {x: 6, y: 5}
       importance: 1
     - position: {x: 6, y: 6}
       importance: 1
+    pieceValueOverrides:
+    - pieceType: 1
+      value: 10
+      variance: {x: -1, y: 1}
+    - pieceType: 2
+      value: 30
+      variance: {x: -2, y: 2}
+    - pieceType: 4
+      value: 30
+      variance: {x: -2, y: 2}
+    - pieceType: 8
+      value: 50
+      variance: {x: -3, y: -3}
+    - pieceType: 16
+      value: 90
+      variance: {x: -4, y: 4}
+    - pieceType: 32
+      value: 9000
+      variance: {x: 0, y: 0}
+  defaultAlphaBetaExpert:
+    depth: 7
+    minThinkingTimeMilliseconds: 2000
+    coordinateImportanceOverrides:
+    - position: {x: 3, y: 3}
+      importance: 1
+    - position: {x: 3, y: 4}
+      importance: 1
+    - position: {x: 3, y: 5}
+      importance: 1
+    - position: {x: 3, y: 6}
+      importance: 1
+    - position: {x: 4, y: 3}
+      importance: 1
+    - position: {x: 4, y: 4}
+      importance: 2
+    - position: {x: 4, y: 5}
+      importance: 2
+    - position: {x: 4, y: 6}
+      importance: 1
+    - position: {x: 5, y: 3}
+      importance: 1
+    - position: {x: 5, y: 4}
+      importance: 2
+    - position: {x: 5, y: 5}
+      importance: 2
+    - position: {x: 5, y: 6}
+      importance: 2
+    - position: {x: 6, y: 3}
+      importance: 1
+    - position: {x: 6, y: 4}
+      importance: 1
+    - position: {x: 6, y: 5}
+      importance: 1
+    - position: {x: 6, y: 6}
+      importance: 1
+    pieceValueOverrides:
+    - pieceType: 1
+      value: 10
+      variance: {x: 0, y: 0}
+    - pieceType: 2
+      value: 30
+      variance: {x: 0, y: 0}
+    - pieceType: 4
+      value: 30
+      variance: {x: 0, y: 0}
+    - pieceType: 8
+      value: 50
+      variance: {x: 0, y: 0}
+    - pieceType: 16
+      value: 90
+      variance: {x: 0, y: 0}
+    - pieceType: 32
+      value: 9000
+      variance: {x: 0, y: 0}

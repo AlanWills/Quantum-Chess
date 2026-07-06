@@ -17,7 +17,8 @@ namespace QC.Match.Commands
                 args.MatchState,
                 args.ChessBoard,
                 args.CommandExecutor,
-                args.LuaRuntime);
+                args.LuaRuntime,
+                args.RNG);
             IWinCondition.Args winConditionArgs = new IWinCondition.Args(
                 args.MatchState,
                 args.ChessBoard,

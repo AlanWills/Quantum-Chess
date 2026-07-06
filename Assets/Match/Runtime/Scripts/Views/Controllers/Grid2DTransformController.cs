@@ -49,10 +49,10 @@ namespace QC.Match.Views
             float currentTime = 0;
             float currentZ = gridTransform.localPosition.z;
             
-            AnimationCurve xAnimCurve = AnimationCurve.EaseInOut(
+            AnimationCurve xAnimCurve = AnimationCurve.Linear(
                 0, startingPosition.x,
                 animationTime, position.x);
-            AnimationCurve yAnimCurve = AnimationCurve.EaseInOut(
+            AnimationCurve yAnimCurve = AnimationCurve.Linear(
                 0, startingPosition.y,
                 animationTime, position.y);
 

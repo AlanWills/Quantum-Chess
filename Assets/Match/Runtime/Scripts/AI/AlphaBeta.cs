@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Celeste.Components;
+using Celeste.Core.Interfaces;
 using QC.Match.Commands;
 using QC.Match.Objects;
 using UnityEngine;
@@ -147,7 +148,7 @@ namespace QC.Match.AI
                  Move move = new Move(piece, position, action);
                  Board nextBoard = new Board(args.ChessBoard).MakeMove(move);
          
-                 int score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, alpha, beta, alphaBetaParameters.Depth - 1);
+                 int score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, args.RNG, alpha, beta, alphaBetaParameters.Depth - 1);
                  if (score > bestScore)
                  {
                     bestScore = score;
@@ -210,14 +211,15 @@ namespace QC.Match.AI
         private static int AlphaBetaMax(
            AlphaBetaParameters parameters,
            Board board, 
-           ChessPieceColour activeColour, 
+           ChessPieceColour activeColour,
+           IRNG rng,
            int alpha, 
            int beta,
            int remainingDepth)
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour, parameters);
+              int currentBoardScore = EvaluateBoard(parameters, board, activeColour, rng);
               return currentBoardScore;
            }
 
@@ -243,7 +245,7 @@ namespace QC.Match.AI
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
                  Board nextBoard = board.MakeMove(move);
-                 var score = AlphaBetaMin(parameters, nextBoard, activeColour, alpha, beta, remainingDepth - 1);
+                 var score = AlphaBetaMin(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
                  
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
@@ -260,15 +262,16 @@ namespace QC.Match.AI
 
         private static int AlphaBetaMin(
            AlphaBetaParameters parameters,
-           Board board, 
-           ChessPieceColour activeColour, 
+           Board board,
+           ChessPieceColour activeColour,
+           IRNG rng,
            int alpha, 
            int beta, 
            int remainingDepth)
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour, parameters);
+              int currentBoardScore = EvaluateBoard(parameters, board, activeColour, rng);
               return currentBoardScore;
            }
            
@@ -294,7 +297,7 @@ namespace QC.Match.AI
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
                  Board nextBoard = board.MakeMove(move);
-                 int score = AlphaBetaMax(parameters, nextBoard, activeColour, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMax(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
                  
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
@@ -310,20 +313,22 @@ namespace QC.Match.AI
         }
 
         private static int EvaluateBoard(
+           AlphaBetaParameters parameters,
            Board board,
            ChessPieceColour activeColour,
-           AlphaBetaParameters parameters)
+           IRNG rng)
         {
            int total = 0;
 
            foreach (var piece in board.Pieces)
            {
               int materialWorth = CalculateValue(
+                 parameters,
                  piece.Key, 
                  piece.Value, 
                  activeColour, 
                  board,
-                 parameters);
+                 rng);
               
               total += materialWorth;
            }
@@ -332,15 +337,17 @@ namespace QC.Match.AI
         }
 
         private static int CalculateValue(
+           AlphaBetaParameters parameters,
            Vector2Int position,
            Piece piece,
            ChessPieceColour activeColour,
            IChessBoardLookup boardLookup,
-           AlphaBetaParameters parameters)
+           IRNG rng)
         {
            int colourModifier = piece.ChessPiece.GetPieceColour() == activeColour ? 1 : -1;
            int chessPieceValue = piece.ChessPiece.GetValue();
-           int chessPieceValueOverride = parameters.GetValueOverrideForPiece(piece.ChessPiece.GetPieceType());
+           ChessPieceType chessPieceType = piece.ChessPiece.GetPieceType();
+           int chessPieceValueOverride = parameters.GetValueOverrideForPiece(chessPieceType, rng);
            int positionImportance = boardLookup.GetTileImportance(position);
            int positionImportanceOverride = parameters.GetImportanceOverrideForPosition(position);
            

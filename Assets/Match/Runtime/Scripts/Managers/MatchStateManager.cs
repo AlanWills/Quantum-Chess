@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Celeste.Assets;
 using Celeste.Core;
+using Celeste.Core.Interfaces;
 using Celeste.Coroutines;
 using Celeste.Lua;
 using Celeste.Persistence;
@@ -31,6 +32,8 @@ namespace QC.Match.Managers
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
+
+        [NonSerialized] private IRNG rng = new UnityRNG();
 
         #endregion
         
@@ -73,7 +76,8 @@ namespace QC.Match.Managers
                 matchState,
                 chessBoard,
                 chessBoardCommandExecutor,
-                luaRuntime);
+                luaRuntime,
+                rng);
 
             ChessBoardCommandArgs args = CreateCommandArgs();
             chessBoardCommandExecutor.BeginProcessing(args);
@@ -91,7 +95,8 @@ namespace QC.Match.Managers
                 chessBoard,
                 chessBoardObjectSelection,
                 luaRuntime,
-                visualAnimationSystem);
+                visualAnimationSystem,
+                rng);
         }
     }
 }

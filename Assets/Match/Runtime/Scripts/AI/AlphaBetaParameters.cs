@@ -68,10 +68,11 @@ namespace QC.Match.AI
             {
                 return 0;
             }
+
+            Vector2Int variance = pieceValueOverrides[indexOfType].variance;
+            int randomVariance = rng.FromRangeInclusive(variance.x, variance.y);
             
-            // Handle variance here
-            
-            return indexOfType >= 0 ? pieceValueOverrides[indexOfType].value : 0;
+            return pieceValueOverrides[indexOfType].value + randomVariance;
         }
 
         public static AlphaBetaParameters FromTableOverride(AlphaBetaParameters parameters, LuaTable overrideTable)
@@ -151,6 +152,22 @@ namespace QC.Match.AI
                         {
                             UnityEngine.Debug.LogAssertion($"Failed to parse 'value' as an int.");
                             continue;
+                        }
+
+                        if (!table.TryGetTable("variance", out LuaTable varianceTable))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'variance' as a table.");
+                            continue;
+                        }
+                        else if (!table.TryGet("min", out int minValue) ||
+                                 !table.TryGet("max", out int maxValue))
+                        {
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'min' or 'max' values from variance table.");
+                            continue;
+                        }
+                        else
+                        {
+                            pieceValue.variance = new Vector2Int(minValue, maxValue);
                         }
 
                         int indexOfExistingPosition = data.pieceValueOverrides.FindIndex(x => x.pieceType == pieceValue.pieceType);

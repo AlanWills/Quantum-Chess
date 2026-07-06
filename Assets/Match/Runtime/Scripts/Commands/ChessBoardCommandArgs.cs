@@ -1,3 +1,4 @@
+using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using QC.Match.Objects;
 
@@ -11,6 +12,7 @@ namespace QC.Match.Commands
         public readonly ChessBoardObjectSelection Selection;
         public readonly ILuaRuntime LuaRuntime;
         public readonly IVisualAnimationSystem VisualAnimationSystem;
+        public readonly IRNG RNG;
 
         public ChessBoardCommandArgs(
             MatchState matchState,
@@ -18,7 +20,8 @@ namespace QC.Match.Commands
             ChessBoard chessBoard,
             ChessBoardObjectSelection selection,
             ILuaRuntime luaRuntime,
-            IVisualAnimationSystem visualAnimationSystem)
+            IVisualAnimationSystem visualAnimationSystem,
+            IRNG rng)
         {
             MatchState = matchState;
             CommandExecutor = commandExecutor;
@@ -26,6 +29,7 @@ namespace QC.Match.Commands
             Selection = selection;
             LuaRuntime = luaRuntime;
             VisualAnimationSystem = visualAnimationSystem;
+            RNG = rng;
         }
     }
 }

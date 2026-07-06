@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e78a2f56f67503442af9f56e3b47d7e1, type: 3}
-  m_Name: Match.StandardChessMatchScenario
+  m_Name: Match.StandardChessMatch_VsMedium
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.MatchScenario
-  guid: 3bef3040-6e8e-4fab-9cbc-1ae6692f2045
-  scenarioScript: {fileID: -6979533126094156877, guid: 83a997ce2d62dae4eb1520daef8ca4cc, type: 3}
+  guid: 90b395c4-79a0-416c-9b73-6ee71eddf1d0
+  scenarioScript: {fileID: -6979533126094156877, guid: 2a75352b0b56447ffaab1d534df5e4ed, type: 3}

@@ -1,5 +1,6 @@
 using System;
 using Celeste.Tools.Attributes.GUI;
+using QC.Match.Players;
 using UnityEngine;
 
 namespace QC.Match.AI
@@ -9,21 +10,70 @@ namespace QC.Match.AI
     {
         #region Properties and Fields
 
-        public AlphaBetaParameters AlphaBeta
+        public AlphaBetaParameters AlphaBeta_Easy
         {
-            get => runtimeAlphaBeta;
-            set => runtimeAlphaBeta = value;
+            get => runtimeAlphaBetaEasy;
+            set => runtimeAlphaBetaEasy = value;
         }
         
-        [SerializeField, InlineDataInInspector] private AlphaBetaParameters defaultAlphaBeta;
+        public AlphaBetaParameters AlphaBeta_Medium
+        {
+            get => runtimeAlphaBetaMedium;
+            set => runtimeAlphaBetaMedium = value;
+        }
+        
+        public AlphaBetaParameters AlphaBeta_Hard
+        {
+            get => runtimeAlphaBetaHard;
+            set => runtimeAlphaBetaHard = value;
+        }
+        
+        public AlphaBetaParameters AlphaBeta_Expert
+        {
+            get => runtimeAlphaBetaExpert;
+            set => runtimeAlphaBetaExpert = value;
+        }
 
-        [NonSerialized] private AlphaBetaParameters runtimeAlphaBeta;
+        [SerializeField, InlineDataInInspector] private AlphaBetaParameters defaultAlphaBetaEasy;
+        [SerializeField, InlineDataInInspector] private AlphaBetaParameters defaultAlphaBetaMedium;
+        [SerializeField, InlineDataInInspector] private AlphaBetaParameters defaultAlphaBetaHard;
+        [SerializeField, InlineDataInInspector] private AlphaBetaParameters defaultAlphaBetaExpert;
+
+        [NonSerialized] private AlphaBetaParameters runtimeAlphaBetaEasy;
+        [NonSerialized] private AlphaBetaParameters runtimeAlphaBetaMedium;
+        [NonSerialized] private AlphaBetaParameters runtimeAlphaBetaHard;
+        [NonSerialized] private AlphaBetaParameters runtimeAlphaBetaExpert;
         
         #endregion
 
         public void Initialize()
         {
-            runtimeAlphaBeta = defaultAlphaBeta;
+            runtimeAlphaBetaEasy = defaultAlphaBetaEasy;
+            runtimeAlphaBetaMedium = defaultAlphaBetaMedium;
+            runtimeAlphaBetaHard = defaultAlphaBetaHard;
+            runtimeAlphaBetaExpert = defaultAlphaBetaExpert;
+        }
+
+        public AlphaBetaParameters AlphaBetaParametersFromAIDifficulty(TurnStrategyFactory.AIDifficulty difficulty)
+        {
+            switch (difficulty)
+            {
+                case TurnStrategyFactory.AIDifficulty.Easy:
+                    return AlphaBeta_Easy;
+                
+                case TurnStrategyFactory.AIDifficulty.Medium:
+                    return AlphaBeta_Medium;
+                
+                case TurnStrategyFactory.AIDifficulty.Hard:
+                    return AlphaBeta_Hard;
+                
+                case TurnStrategyFactory.AIDifficulty.Expert:
+                    return AlphaBeta_Expert;
+
+                default:
+                    UnityEngine.Debug.LogAssertion($"Unhandled difficulty type '{difficulty}' when attempting to fetch Alpha Beta Parameters.");
+                    return AlphaBeta_Medium;
+            }
         }
     }
 }

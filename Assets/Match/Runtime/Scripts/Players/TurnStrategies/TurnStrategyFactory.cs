@@ -14,6 +14,14 @@ namespace QC.Match.Players
             Custom
         }
 
+        public enum AIDifficulty
+        {
+            Easy,
+            Medium,
+            Hard,
+            Expert
+        }
+
         public static ITurnStrategy Create(Type turnStrategyType, AIStrategyDefaultParameters defaultParameters, LuaTable luaTable)
         {
             switch (turnStrategyType)
@@ -22,12 +30,14 @@ namespace QC.Match.Players
                     return new ManualTurnStrategy();
                 
                 case Type.AlphaBeta:
-                    if (luaTable.TryGetTable("turnStrategyData", out LuaTable strategyDataTable))
+                    if (luaTable.TryGetTable("turnStrategyData", out LuaTable strategyDataTable) &&
+                        strategyDataTable.TryGetEnum("difficulty", out AIDifficulty difficulty))
                     {
-                        AlphaBetaParameters parameters = AlphaBetaParameters.FromTableOverride(defaultParameters.AlphaBeta, strategyDataTable);
+                        AlphaBetaParameters parameters = defaultParameters.AlphaBetaParametersFromAIDifficulty(difficulty);
+                        parameters = AlphaBetaParameters.FromTableOverride(parameters, strategyDataTable);
                         return new AlphaBetaTurnStrategy(parameters);
                     }
-                    return new AlphaBetaTurnStrategy(defaultParameters.AlphaBeta);
+                    return new AlphaBetaTurnStrategy(defaultParameters.AlphaBeta_Medium);
 
                 case Type.Random:
                     return new RandomActionTurnStrategy();

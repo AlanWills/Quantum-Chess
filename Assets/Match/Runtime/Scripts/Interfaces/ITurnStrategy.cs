@@ -1,7 +1,7 @@
-﻿using Celeste.Lua;
+﻿using Celeste.Core.Interfaces;
+using Celeste.Lua;
 using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
-using QC.Match.Players;
 
 namespace QC.Match
 {
@@ -13,17 +13,20 @@ namespace QC.Match
             public readonly ChessBoard ChessBoard;
             public readonly ChessBoardCommandExecutor CommandExecutor;
             public readonly ILuaRuntime LuaRuntime;
+            public readonly IRNG RNG;
 
             public Args(
                 MatchState matchState,
                 ChessBoard chessBoard,
                 ChessBoardCommandExecutor commandExecutor,
-                ILuaRuntime luaRuntime)
+                ILuaRuntime luaRuntime,
+                IRNG rng)
             {
                 MatchState = matchState;
                 ChessBoard = chessBoard;
                 CommandExecutor = commandExecutor;
                 LuaRuntime = luaRuntime;
+                RNG = rng;
             }
         }
 

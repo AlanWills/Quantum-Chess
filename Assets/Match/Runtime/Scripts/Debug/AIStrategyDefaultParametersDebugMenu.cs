@@ -1,3 +1,4 @@
+using System;
 using Celeste.Debug.Menus;
 using Celeste.Tools;
 using QC.Match.AI;
@@ -16,18 +17,44 @@ namespace QC.Match.Debug
 
         protected override void OnDrawMenu()
         {
-            using (Section("Alpha Beta"))
-            {
-                var alphaBeta = aiStrategyDefaultParameters.AlphaBeta;
+            DrawAlphaBetaParameters(
+                "Alpha Beta - Easy", 
+                aiStrategyDefaultParameters.AlphaBeta_Easy,
+                parameters => aiStrategyDefaultParameters.AlphaBeta_Easy = parameters);
+            
+            DrawAlphaBetaParameters(
+                "Alpha Beta - Medium", 
+                aiStrategyDefaultParameters.AlphaBeta_Medium,
+                parameters => aiStrategyDefaultParameters.AlphaBeta_Medium = parameters);
+            
+            DrawAlphaBetaParameters(
+                "Alpha Beta - Hard", 
+                aiStrategyDefaultParameters.AlphaBeta_Hard,
+                parameters => aiStrategyDefaultParameters.AlphaBeta_Hard = parameters);
+            
+            DrawAlphaBetaParameters(
+                "Alpha Beta - Expert", 
+                aiStrategyDefaultParameters.AlphaBeta_Expert,
+                parameters => aiStrategyDefaultParameters.AlphaBeta_Expert = parameters);
+        }
 
+        private void DrawAlphaBetaParameters(
+            string sectionName,
+            AlphaBetaParameters parameters,
+            Action<AlphaBetaParameters> onChange)
+        {
+            using (Section(sectionName))
+            {
                 using (var changeScope = new GUIChangedScope())
                 {
-                    alphaBeta.Depth = GUIExtensions.IntField("Depth", alphaBeta.Depth);
-                    alphaBeta.MinThinkingTime = GUIExtensions.IntField("Min Thinking Time", alphaBeta.MinThinkingTime);
+                    parameters.Depth = GUIExtensions.IntField("Depth", parameters.Depth);
+                    parameters.MinThinkingTime = GUIExtensions.IntField("Min Thinking Time", parameters.MinThinkingTime);
+                    
+                    // Should probably add read only paginated information on overrides here
 
                     if (changeScope.Changed)
                     {
-                        aiStrategyDefaultParameters.AlphaBeta = alphaBeta;
+                        onChange(parameters);
                     }
                 }
             }
