@@ -6,6 +6,7 @@ using QC.Match.Commands;
 using QC.Match.Objects;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.Windows;
 
 namespace QC.Match.AI
 {
@@ -13,70 +14,113 @@ namespace QC.Match.AI
     {
         private class Board : IChessBoardLookup
         {
-           public Dictionary<Vector2Int, Piece> Pieces => pieces;
-           
-           private readonly ChessBoard chessBoard;
-           private readonly Dictionary<Vector2Int, Piece> pieces = new(32);
+           // TODO: Oooffff, why public?
+           public readonly Tile[] board = new Tile[width * height];
+           private const int width = 8; // TODO: Make this variable based on bounding box
+           private const int height = 8; // TODO: Make this variable based on bounding box
 
            public Board(ChessBoard chessBoard)
            {
-              this.chessBoard = chessBoard;
-              pieces.EnsureCapacity(chessBoard.Objects.Count);
-
-              foreach (var chessBoardObject in chessBoard.Objects)
+              foreach (var tile in chessBoard.Tiles)
               {
-                 if (chessBoardObject.TryFindComponent<IGrid2DTransform>(out var transform) &&
-                     chessBoardObject.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                     chessBoardObject.TryFindComponent<IActionProvider>(out var actionProvider))
-                 {
-                    Vector2Int piecePosition = transform.GetPosition();
-                    pieces[piecePosition] = new Piece(chessBoardObject, chessPiece, actionProvider);
-                 }
+                 Vector2Int tilePosition = tile.Position;
+                 int index = ToIndex(tilePosition);
+                 ChessBoardObjectInstance chessBoardObjectInstance = chessBoard.GetChessBoardObjectAt(tilePosition);
+                 Piece piece = chessBoardObjectInstance != null ? new Piece(chessBoardObjectInstance) : default;
+                 UnityEngine.Debug.Assert(index < board.Length, $"Incorrectly calculated index ({index}) for position ({tilePosition}).");
+                 board[index] = new Tile(true, chessBoard.GetTileImportance(tilePosition), piece);
               }
            }
 
-           public bool DoesChessBoardTileExist(Vector2Int boardPosition)
+           public int ToIndex(Vector2Int position)
            {
-              return chessBoard.DoesChessBoardTileExist(boardPosition);
+              int index = (position.x - 1) + (position.y - 1) * width;
+              return index;
            }
 
-           public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
+           public Vector2Int ToVector2Int(int boardIndex)
            {
-              return Pieces.TryGetValue(boardPosition, out var piece) ? piece.Instance : null;
+              return new Vector2Int((boardIndex % width) + 1, (boardIndex / width) + 1);
            }
 
-           public int GetTileImportance(Vector2Int boardPosition)
+           public Piece GetPieceAt(Vector2Int boardPosition)
            {
-              return chessBoard.GetTileImportance(boardPosition);
+              int index = ToIndex(boardPosition);
+              return board[index].Piece;
            }
 
            public void MakeMove(Move moveToMake)
            {
-              pieces.Remove(moveToMake.Position);
-              pieces[moveToMake.Destination] = moveToMake.PieceToMove;
+              int indexOfPosition = ToIndex(moveToMake.Position);
+              int indexOfDestination = ToIndex(moveToMake.Destination);
+              board[indexOfPosition] = board[indexOfPosition].WithoutPiece();
+              board[indexOfDestination] = board[indexOfDestination].WithPiece(moveToMake.PieceToMove);
            }
 
            public void UndoMove(Move moveToUndo)
            {
-              if (moveToUndo.PieceToCapture.IsValid)
-              {
-                 pieces[moveToUndo.Destination] = moveToUndo.PieceToCapture;
-              }
-              else
-              {
-                 pieces.Remove(moveToUndo.Destination);
-              }
-              
-              pieces[moveToUndo.Position] = moveToUndo.PieceToMove;
+              int indexOfPosition = ToIndex(moveToUndo.Position);
+              int indexOfDestination = ToIndex(moveToUndo.Destination);
+              board[indexOfPosition] = board[indexOfPosition].WithPiece(moveToUndo.PieceToMove);
+              board[indexOfDestination] = board[indexOfPosition].WithPiece(moveToUndo.PieceToCapture);
+           }
+
+           public bool DoesChessBoardTileExist(Vector2Int boardPosition)
+           {
+              int index = ToIndex(boardPosition);
+              return 0 <= index && index < board.Length && board[index].IsValid;
+           }
+
+           public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
+           {
+              int index = ToIndex(boardPosition);
+              return 0 <= index && index < board.Length ? board[index].Piece.Instance : null;
+           }
+
+           public int GetTileImportance(Vector2Int boardPosition)
+           {
+              int index = ToIndex(boardPosition);
+              return board[index].Importance;
+           }
+        }
+
+        private readonly struct Tile
+        {
+           public readonly bool IsValid;
+           public readonly int Importance;
+           public readonly Piece Piece;
+
+           public Tile(bool isValid, int importance) :
+              this(isValid, importance, default)
+           {
+           }
+           
+           public Tile(bool isValid, int importance, Piece piece)
+           {
+              IsValid = isValid;
+              Importance = importance;
+              Piece = piece;
+           }
+
+           public Tile WithoutPiece()
+           {
+              return new Tile(IsValid, Importance);
+           }
+           
+           public Tile WithPiece(Piece piece)
+           {
+              return new Tile(IsValid, Importance, piece);
            }
         }
 
         private readonly struct Piece
         {
-           public bool IsValid => Instance != null && ChessPiece.IsValid && ActionProvider.IsValid;
+           public bool IsValid => Instance != null && PieceType != ChessPieceType.None && PieceColour != ChessPieceColour.Unknown && ActionProvider.IsValid;
            
            public readonly ChessBoardObjectInstance Instance;
-           public readonly InterfaceHandle<IChessPiece> ChessPiece;
+           public readonly ChessPieceType PieceType;
+           public readonly ChessPieceColour PieceColour;
+           public readonly int Value;
            public readonly InterfaceHandle<IActionProvider> ActionProvider;
 
            public Piece(
@@ -85,7 +129,9 @@ namespace QC.Match.AI
               InterfaceHandle<IActionProvider> actionProvider)
            {
               Instance = instance;
-              ChessPiece = chessPiece;
+              PieceType = chessPiece.GetPieceType();
+              PieceColour = chessPiece.GetPieceColour();
+              Value = chessPiece.GetValue();
               ActionProvider = actionProvider;
            }
 
@@ -158,30 +204,17 @@ namespace QC.Match.AI
                  Vector2Int position = transform.GetPosition();
 
                  actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
-                 int numAttacks = validActions.Count;
                  actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 
                  for (int i = 0, n = validActions.Count; i < n; ++i)
                  {
                     Vector2Int action = validActions[i];
                     Piece piece = new Piece(pieceInstance, chessPiece, actionProvider);
-                    Move move;
-
-                    if (i < numAttacks)
-                    {
-                       ChessBoardObjectInstance pieceToCaptureInstance = args.ChessBoard.GetChessBoardObjectAt(action);
-                       Piece pieceToCapture = new Piece(pieceToCaptureInstance);
-                       move = new Move(piece, pieceToCapture, position, action);
-                    }
-                    else
-                    {
-                       move = new Move(piece, default, position, action);
-                    }
-                    
-                    int score = 0;
+                    Piece pieceToCapture = board.GetPieceAt(action);
+                    Move move = new Move(piece, pieceToCapture, position, action);
 
                     board.MakeMove(move);
-                    score = AlphaBetaMin(alphaBetaParameters, board, activeColour, args.RNG, alpha, beta,
+                    int score = AlphaBetaMin(alphaBetaParameters, board, activeColour, args.RNG, alpha, beta,
                        alphaBetaParameters.Depth - 1);
                     board.UndoMove(move);
 
@@ -217,9 +250,8 @@ namespace QC.Match.AI
                  command = null;
                  return false;
               }
-
-              var bestMoveChessPiece = bestMove.PieceToMove.ChessPiece;
-              UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour,
+              
+              UnityEngine.Debug.Assert(bestMove.PieceToMove.PieceColour == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
 
               var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
@@ -265,42 +297,42 @@ namespace QC.Match.AI
 
            int maxValue = int.MinValue;
            
-           foreach (var piece in board.Pieces)
+           for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
-              var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.GetPieceColour() != activeColour)
+              Tile tile = board.board[boardIndex];
+              
+              if (!tile.IsValid)
               {
                  continue;
               }
               
+              if (!tile.Piece.IsValid)
+              {
+                 continue;
+              }
+              
+              if (tile.Piece.PieceColour != activeColour)
+              {
+                 continue;
+              }
+
+              Vector2Int boardPosition = board.ToVector2Int(boardIndex);
               List<Vector2Int> validActions = s_validMovesPool.Get();
               
-              var actionProvider = piece.Value.ActionProvider;
+              var actionProvider = tile.Piece.ActionProvider;
               
-              actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
-              int numAttacks = validActions.Count;
-              actionProvider.CalculateValidMoves(piece.Key, board, validActions);
+              // TODO: May have to change these to support the faster AlphaBeta version
+              actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
+              actionProvider.CalculateValidMoves(boardPosition, board, validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
                  Vector2Int action = validActions[i];
-                 Move move;
-
-                 if (i < numAttacks)
-                 {
-                    ChessBoardObjectInstance pieceToCaptureInstance = board.GetChessBoardObjectAt(action);
-                    Piece pieceToCapture = new Piece(pieceToCaptureInstance);
-                    move = new Move(piece.Value, pieceToCapture, piece.Key, action);
-                 }
-                 else
-                 {
-                    move = new Move(piece.Value, default, piece.Key, action);
-                 }
+                 Piece pieceToCapture = board.GetPieceAt(action);
+                 Move move = new Move(tile.Piece, pieceToCapture, boardPosition, action);
                  
-                 int score = 0;
-
                  board.MakeMove(move);
-                 score = AlphaBetaMin(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMin(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
                  board.UndoMove(move);
 
                  maxValue = Math.Max(maxValue, score);
@@ -336,42 +368,41 @@ namespace QC.Match.AI
            
            int minValue = int.MaxValue;
            
-           foreach (var piece in board.Pieces)
+           for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
-              var chessPiece = piece.Value.ChessPiece;
-              if (chessPiece.GetPieceColour() == activeColour)
+              Tile tile = board.board[boardIndex];
+              
+              if (!tile.IsValid)
               {
                  continue;
               }
               
+              if (!tile.Piece.IsValid)
+              {
+                 continue;
+              }
+              
+              if (tile.Piece.PieceColour != activeColour)
+              {
+                 continue;
+              }
+
+              Vector2Int boardPosition = board.ToVector2Int(boardIndex);
               List<Vector2Int> validActions = s_validMovesPool.Get();
 
-              var actionProvider = piece.Value.ActionProvider;
+              var actionProvider = tile.Piece.ActionProvider;
               
-              actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
-              int numAttacks = validActions.Count;
-              actionProvider.CalculateValidMoves(piece.Key, board, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
+              actionProvider.CalculateValidMoves(boardPosition, board, validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
                  Vector2Int action = validActions[i];
-                 Move move;
-
-                 if (i < numAttacks)
-                 {
-                    ChessBoardObjectInstance pieceToCaptureInstance = board.GetChessBoardObjectAt(action);
-                    Piece pieceToCapture = new Piece(pieceToCaptureInstance);
-                    move = new Move(piece.Value, pieceToCapture, piece.Key, action);
-                 }
-                 else
-                 {
-                    move = new Move(piece.Value, default, piece.Key, action);
-                 }
+                 Piece pieceToCapture = board.GetPieceAt(action);
+                 Move move = new Move(tile.Piece, pieceToCapture, boardPosition, action);
                  
-                 int score = 0;
-
                  board.MakeMove(move);
-                 score = AlphaBetaMax(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMax(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
                  board.UndoMove(move);
 
                  minValue = Math.Min(minValue, score);
@@ -398,12 +429,19 @@ namespace QC.Match.AI
         {
            int total = 0;
 
-           foreach (var piece in board.Pieces)
+           for (int tileIndex = 0, n = board.board.Length; tileIndex < n; ++tileIndex)
            {
+              Tile tile = board.board[tileIndex];
+              if (!tile.IsValid || !tile.Piece.IsValid)
+              {
+                 continue;
+              }
+
+              Vector2Int position = board.ToVector2Int(tileIndex);
               int materialWorth = CalculateValue(
                  parameters,
-                 piece.Key, 
-                 piece.Value, 
+                 position, 
+                 tile.Piece, 
                  activeColour, 
                  board,
                  rng);
@@ -422,9 +460,9 @@ namespace QC.Match.AI
            IChessBoardLookup boardLookup,
            IRNG rng)
         {
-           int colourModifier = piece.ChessPiece.GetPieceColour() == activeColour ? 1 : -1;
-           int chessPieceValue = piece.ChessPiece.GetValue();
-           ChessPieceType chessPieceType = piece.ChessPiece.GetPieceType();
+           int colourModifier = piece.PieceColour == activeColour ? 1 : -1;
+           int chessPieceValue = piece.Value;
+           ChessPieceType chessPieceType = piece.PieceType;
            int chessPieceValueOverride = parameters.GetValueOverrideForPiece(chessPieceType, rng);
            int positionImportance = boardLookup.GetTileImportance(position);
            int positionImportanceOverride = parameters.GetImportanceOverrideForPosition(position);

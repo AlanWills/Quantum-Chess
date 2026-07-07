@@ -48,10 +48,7 @@ namespace QC.Match.Objects
             {
                 return;
             }
-
-            // Animations will be changing Unity Objects, so it's best to by default switch to the main thread
-            // This will avoid any issues changing transforms on other threads
-            await UniTask.SwitchToMainThread();
+            
             await handler.AnimateTo(position, timeProvider, defaultAnimationSpeed);
         }
     }

@@ -26,7 +26,11 @@ namespace QC.Match.Commands
             CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
             UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected chess board object after trying to move it.");
 
+            // Animations will be changing Unity Objects, so it's best to by default switch to the main thread
+            // This will avoid any issues changing transforms on other threads
+            await UniTask.SwitchToMainThread();
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
+            await UniTask.SwitchToThreadPool();
             
             grid2DTransform.SetPosition(endingPosition);
 
