@@ -30,9 +30,10 @@ namespace QC.Match.Commands
             // This will avoid any issues changing transforms on other threads
             await UniTask.SwitchToMainThread();
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
-            await UniTask.SwitchToThreadPool();
             
             grid2DTransform.SetPosition(endingPosition);
+            
+            await UniTask.SwitchToThreadPool();
 
             if (instance.TryFindComponent<IObjectStatus>(out var status))
             {

@@ -273,7 +273,7 @@ namespace QC.Match.Objects
 
         private void OnChessBoardObjectComponentDataChanged()
         {
-            onChanged?.Invoke();
+            onChanged?.InvokeSilently();
         }
         
         private void OnChessBoardTileComponentDataChanged()
