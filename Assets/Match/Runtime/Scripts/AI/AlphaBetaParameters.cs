@@ -57,22 +57,42 @@ namespace QC.Match.AI
 
         public int GetImportanceOverrideForPosition(Vector2Int position)
         {
-            int indexOfPosition = coordinateImportanceOverrides.FindIndex(x => x.position == position);
-            return indexOfPosition >= 0 ? coordinateImportanceOverrides[indexOfPosition].importance : 0;
+            int indexOfMatchingCoordinate = -1;
+
+            for (int i = 0, n = coordinateImportanceOverrides.Count; i < n; ++i)
+            {
+                if (coordinateImportanceOverrides[i].position == position)
+                {
+                    indexOfMatchingCoordinate = i;
+                    break;
+                }
+            }
+            
+            return indexOfMatchingCoordinate >= 0 ? coordinateImportanceOverrides[indexOfMatchingCoordinate].importance : 0;
         }
 
         public int GetValueOverrideForPiece(ChessPieceType chessPieceType, IRNG rng)
         {
-            int indexOfType = pieceValueOverrides.FindIndex(x => x.pieceType == chessPieceType);
-            if (indexOfType < 0)
+            int indexOfMatchingPiece = -1;
+
+            for (int i = 0, n = pieceValueOverrides.Count; i < n; ++i)
+            {
+                if (pieceValueOverrides[i].pieceType == chessPieceType)
+                {
+                    indexOfMatchingPiece = i;
+                    break;
+                }
+            }
+            
+            if (indexOfMatchingPiece < 0)
             {
                 return 0;
             }
 
-            Vector2Int variance = pieceValueOverrides[indexOfType].variance;
+            Vector2Int variance = pieceValueOverrides[indexOfMatchingPiece].variance;
             int randomVariance = rng.FromRangeInclusive(variance.x, variance.y);
             
-            return pieceValueOverrides[indexOfType].value + randomVariance;
+            return pieceValueOverrides[indexOfMatchingPiece].value + randomVariance;
         }
 
         public static AlphaBetaParameters FromTableOverride(AlphaBetaParameters parameters, LuaTable overrideTable)

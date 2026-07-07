@@ -46,23 +46,29 @@ namespace QC.Match.Views
             Vector2 delta = position - startingPosition;
             float magnitude = delta.magnitude;
             float animationTime = magnitude / speed;
-            float currentTime = 0;
             float currentZ = gridTransform.localPosition.z;
+            float startingTime = timeProvider.Time;
             
             AnimationCurve xAnimCurve = AnimationCurve.Linear(
                 0, startingPosition.x,
-                animationTime, position.x);
+                1, position.x);
             AnimationCurve yAnimCurve = AnimationCurve.Linear(
                 0, startingPosition.y,
-                animationTime, position.y);
+                1, position.y);
 
-            while (currentTime < animationTime)
+            while (true)
             {
-                currentTime += timeProvider.DeltaTime;
-                Vector3 newPosition = new Vector3(xAnimCurve.Evaluate(currentTime), yAnimCurve.Evaluate(currentTime), currentZ);
-                gridTransform.localPosition = newPosition;
+                await UniTask.Yield(PlayerLoopTiming.Update);
+
+                float deltaT = timeProvider.Time - startingTime;
+                if (deltaT > animationTime)
+                {
+                    break;
+                }
                 
-                await UniTask.Yield();
+                float t = Mathf.Clamp01(deltaT / animationTime);
+                Vector3 newPosition = new Vector3(xAnimCurve.Evaluate(t), yAnimCurve.Evaluate(t), currentZ);
+                gridTransform.localPosition = newPosition;
             }
         }
     }

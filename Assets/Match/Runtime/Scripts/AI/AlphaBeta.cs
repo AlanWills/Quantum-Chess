@@ -6,21 +6,30 @@ using Celeste.Core.Interfaces;
 using QC.Match.Commands;
 using QC.Match.Objects;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace QC.Match.AI
 {
     public static class AlphaBeta
     {
-        private class Board : IChessBoardLookup
+        private class Board : IChessBoardLookup, IDisposable
         {
-           public readonly Dictionary<Vector2Int, Piece> Pieces = new();
+           private static ObjectPool<Dictionary<Vector2Int, Piece>> s_piecesPool = new(
+                 () => new Dictionary<Vector2Int, Piece>(32),
+                 actionOnRelease: d => d.Clear(),
+                 defaultCapacity: 100);
+
+           public IReadOnlyDictionary<Vector2Int, Piece> Pieces => pieces;
            
            private readonly Move move;
            private readonly ChessBoard chessBoard;
+           private readonly Dictionary<Vector2Int, Piece> pieces;
 
            public Board(ChessBoard chessBoard)
            {
               this.chessBoard = chessBoard;
+              pieces = s_piecesPool.Get() ?? new Dictionary<Vector2Int, Piece>(chessBoard.Objects.Count);
+              pieces.EnsureCapacity(chessBoard.Objects.Count);
 
               foreach (var chessBoardObject in chessBoard.Objects)
               {
@@ -29,7 +38,7 @@ namespace QC.Match.AI
                      chessBoardObject.TryFindComponent<IActionProvider>(out var actionProvider))
                  {
                     Vector2Int piecePosition = transform.GetPosition();
-                    Pieces[piecePosition] = new Piece(chessBoardObject, chessPiece, actionProvider);
+                    pieces[piecePosition] = new Piece(chessBoardObject, chessPiece, actionProvider);
                  }
               }
            }
@@ -38,14 +47,21 @@ namespace QC.Match.AI
            {
               this.move = move;
               chessBoard = board.chessBoard;
+              pieces = s_piecesPool.Get() ?? new Dictionary<Vector2Int, Piece>(board.Pieces.Count);
+              pieces.EnsureCapacity(chessBoard.Objects.Count);
 
               foreach (var piece in board.Pieces)
               {
-                 Pieces[piece.Key] = piece.Value;
+                 pieces[piece.Key] = piece.Value;
               }
               
-              Pieces.Remove(move.Position);
-              Pieces[move.Destination] = move.Piece;
+              pieces.Remove(move.Position);
+              pieces[move.Destination] = move.Piece;
+           }
+
+           public void Dispose()
+           {
+              s_piecesPool.Release(pieces);
            }
            
            public bool DoesChessBoardTileExist(Vector2Int boardPosition)
@@ -117,92 +133,104 @@ namespace QC.Match.AI
               command = null;
               return false;
            }
-           
-           ChessPieceColour activeColour = args.MatchState.ActiveColour;
-           Move bestMove = default;
-           int bestScore = int.MinValue;
-           int alpha = int.MinValue;
-           int beta = int.MaxValue;
 
-           List<Vector2Int> validActions = new List<Vector2Int>();
-           
-           foreach (var pieceInstance in piecesToConsider)
+           using (AlphaBetaProfileMarkers.MainLoop.Auto())
            {
-              var chessPiece = pieceInstance.FindInterface<IChessPiece>();
-              if (chessPiece.GetPieceColour() != activeColour)
-              {
-                 continue;
-              }
+              ChessPieceColour activeColour = args.MatchState.ActiveColour;
+              Move bestMove = default;
+              int bestScore = int.MinValue;
+              int alpha = int.MinValue;
+              int beta = int.MaxValue;
 
-              validActions.Clear();
-              
-              var actionProvider = pieceInstance.FindInterface<IActionProvider>();
-              var transform = pieceInstance.FindInterface<IGrid2DTransform>();
-              Vector2Int position = transform.GetPosition();
-              actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
-              actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
+              List<Vector2Int> validActions = new List<Vector2Int>(32);
 
-              foreach (var action in validActions)
+              foreach (var pieceInstance in piecesToConsider)
               {
-                 Piece piece = new Piece(pieceInstance, chessPiece, actionProvider);
-                 Move move = new Move(piece, position, action);
-                 Board nextBoard = new Board(args.ChessBoard).MakeMove(move);
-         
-                 int score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, args.RNG, alpha, beta, alphaBetaParameters.Depth - 1);
-                 if (score > bestScore)
+                 var chessPiece = pieceInstance.FindInterface<IChessPiece>();
+                 if (chessPiece.GetPieceColour() != activeColour)
                  {
-                    bestScore = score;
-                    bestMove = move;
+                    continue;
+                 }
 
-                    if (score > alpha)
+                 validActions.Clear();
+
+                 var actionProvider = pieceInstance.FindInterface<IActionProvider>();
+                 var transform = pieceInstance.FindInterface<IGrid2DTransform>();
+                 Vector2Int position = transform.GetPosition();
+                 actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
+                 actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
+
+                 foreach (var action in validActions)
+                 {
+                    Piece piece = new Piece(pieceInstance, chessPiece, actionProvider);
+                    Move move = new Move(piece, position, action);
+                    int score = 0;
+
+                    using (Board board = new Board(args.ChessBoard))
                     {
-                       alpha = score;
+                       using (Board nextBoard = board.MakeMove(move))
+                       {
+                          score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, args.RNG, alpha, beta,
+                             alphaBetaParameters.Depth - 1);
+                       }
+                    }
+
+                    if (score > bestScore)
+                    {
+                       bestScore = score;
+                       bestMove = move;
+
+                       if (score > alpha)
+                       {
+                          alpha = score;
+                       }
+                    }
+
+                    if (beta <= alpha)
+                    {
+                       break;
                     }
                  }
-                 
+
                  if (beta <= alpha)
                  {
                     break;
                  }
               }
-              
-              if (beta <= alpha)
-              {
-                 break; 
-              }
-           }
-           
-           if (!bestMove.IsValid)
-           {
-              UnityEngine.Debug.LogAssertion($"{nameof(AlphaBeta)} failed to find any valid moves (possibly Checkmate or Stalemate).");
-              command = null;
-              return false;
-           }
 
-           var bestMoveChessPiece = bestMove.Piece.ChessPiece;
-           UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour, 
-              $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
-           
-           var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
-           if (objectAtBestMove != null)
-           {
-              // Our best move involves an attack
-              // We run a few basic checks first to ensure the algorithm hasn't done something weird
-              UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null, 
-                 $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
-              UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake), 
-                 $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
-              UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.MatchState.ActiveColour, 
-                 $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
-              command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
-           }
-           else
-           {
-              // Our best move involves a move
-              // We run a few basic checks first to ensure the algorithm hasn't done something weird
-              UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null, 
-                 $"Attempting to move a piece at {bestMove.Position}, but there is no object there!");
-              command = new MoveChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+              if (!bestMove.IsValid)
+              {
+                 UnityEngine.Debug.LogAssertion(
+                    $"{nameof(AlphaBeta)} failed to find any valid moves (possibly Checkmate or Stalemate).");
+                 command = null;
+                 return false;
+              }
+
+              var bestMoveChessPiece = bestMove.Piece.ChessPiece;
+              UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour,
+                 $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
+
+              var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
+              if (objectAtBestMove != null)
+              {
+                 // Our best move involves an attack
+                 // We run a few basic checks first to ensure the algorithm hasn't done something weird
+                 UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null,
+                    $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
+                 UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake),
+                    $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
+                 UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.MatchState.ActiveColour,
+                    $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
+                 command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+              }
+              else
+              {
+                 // Our best move involves a move
+                 // We run a few basic checks first to ensure the algorithm hasn't done something weird
+                 UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null,
+                    $"Attempting to move a piece at {bestMove.Position}, but there is no object there!");
+                 command = new MoveChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+              }
            }
 
            return true;
@@ -224,7 +252,7 @@ namespace QC.Match.AI
            }
 
            int maxValue = int.MinValue;
-           List<Vector2Int> validActions = new List<Vector2Int>();
+           List<Vector2Int> validActions = new List<Vector2Int>(32);
 
            foreach (var piece in board.Pieces)
            {
@@ -244,9 +272,13 @@ namespace QC.Match.AI
               {
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
-                 Board nextBoard = board.MakeMove(move);
-                 var score = AlphaBetaMin(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = 0;
                  
+                 using (Board nextBoard = board.MakeMove(move))
+                 {
+                    score = AlphaBetaMin(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 }
+
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
 
@@ -296,9 +328,13 @@ namespace QC.Match.AI
               {
                  // Need to make a new representation of the board here taking into account the action
                  Move move = new Move(piece.Value, piece.Key, action);
-                 Board nextBoard = board.MakeMove(move);
-                 int score = AlphaBetaMax(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = 0;
                  
+                 using (Board nextBoard = board.MakeMove(move))
+                 {
+                    score = AlphaBetaMax(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 }
+
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
 
