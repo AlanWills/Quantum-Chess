@@ -21,7 +21,6 @@ namespace QC.Match.AI
 
            public IReadOnlyDictionary<Vector2Int, Piece> Pieces => pieces;
            
-           private readonly Move move;
            private readonly ChessBoard chessBoard;
            private readonly Dictionary<Vector2Int, Piece> pieces;
 
@@ -45,7 +44,6 @@ namespace QC.Match.AI
 
            private Board(Board board, Move move)
            {
-              this.move = move;
               chessBoard = board.chessBoard;
               pieces = s_piecesPool.Get() ?? new Dictionary<Vector2Int, Piece>(board.Pieces.Count);
               pieces.EnsureCapacity(chessBoard.Objects.Count);
@@ -142,7 +140,7 @@ namespace QC.Match.AI
               int alpha = int.MinValue;
               int beta = int.MaxValue;
 
-              List<Vector2Int> validActions = new List<Vector2Int>(32);
+              List<Vector2Int> validActions = new List<Vector2Int>(20);
 
               foreach (var pieceInstance in piecesToConsider)
               {
@@ -252,7 +250,7 @@ namespace QC.Match.AI
            }
 
            int maxValue = int.MinValue;
-           List<Vector2Int> validActions = new List<Vector2Int>(32);
+           List<Vector2Int> validActions = new List<Vector2Int>(20);
 
            foreach (var piece in board.Pieces)
            {
@@ -308,7 +306,7 @@ namespace QC.Match.AI
            }
            
            int minValue = int.MaxValue;
-           List<Vector2Int> validActions = new List<Vector2Int>();
+           List<Vector2Int> validActions = new List<Vector2Int>(20);
 
            foreach (var piece in board.Pieces)
            {
