@@ -29,9 +29,11 @@ namespace QC.Match.Players
                 chessPiece.GetPieceColour() == activeColour));
 
             turnCalculationTimer.Restart();
-            
+
+            await UniTask.SwitchToThreadPool();
             bool calculatedMoveSuccessfully =
                 AlphaBeta.TryCalculate(args, activePlayerPieces, parameters, out var command);
+            await UniTask.SwitchToMainThread();
             
             turnCalculationTimer.Stop();
 

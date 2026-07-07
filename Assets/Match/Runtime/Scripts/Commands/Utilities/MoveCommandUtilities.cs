@@ -33,7 +33,7 @@ namespace QC.Match.Commands
             
             grid2DTransform.SetPosition(endingPosition);
             
-            await UniTask.SwitchToThreadPool();
+            //await UniTask.SwitchToThreadPool();
 
             if (instance.TryFindComponent<IObjectStatus>(out var status))
             {
