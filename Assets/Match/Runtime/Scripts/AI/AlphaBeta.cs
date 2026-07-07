@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Celeste.Components;
 using Celeste.Core.Interfaces;
 using QC.Match.Commands;
@@ -12,22 +11,16 @@ namespace QC.Match.AI
 {
     public static class AlphaBeta
     {
-        private class Board : IChessBoardLookup, IDisposable
+        private class Board : IChessBoardLookup
         {
-           private static ObjectPool<Dictionary<Vector2Int, Piece>> s_piecesPool = new(
-                 () => new Dictionary<Vector2Int, Piece>(32),
-                 actionOnRelease: d => d.Clear(),
-                 defaultCapacity: 100);
-
-           public IReadOnlyDictionary<Vector2Int, Piece> Pieces => pieces;
+           public Dictionary<Vector2Int, Piece> Pieces => pieces;
            
            private readonly ChessBoard chessBoard;
-           private readonly Dictionary<Vector2Int, Piece> pieces;
+           private readonly Dictionary<Vector2Int, Piece> pieces = new(32);
 
            public Board(ChessBoard chessBoard)
            {
               this.chessBoard = chessBoard;
-              pieces = s_piecesPool.Get() ?? new Dictionary<Vector2Int, Piece>(chessBoard.Objects.Count);
               pieces.EnsureCapacity(chessBoard.Objects.Count);
 
               foreach (var chessBoardObject in chessBoard.Objects)
@@ -42,26 +35,6 @@ namespace QC.Match.AI
               }
            }
 
-           private Board(Board board, Move move)
-           {
-              chessBoard = board.chessBoard;
-              pieces = s_piecesPool.Get() ?? new Dictionary<Vector2Int, Piece>(board.Pieces.Count);
-              pieces.EnsureCapacity(chessBoard.Objects.Count);
-
-              foreach (var piece in board.Pieces)
-              {
-                 pieces[piece.Key] = piece.Value;
-              }
-              
-              pieces.Remove(move.Position);
-              pieces[move.Destination] = move.Piece;
-           }
-
-           public void Dispose()
-           {
-              s_piecesPool.Release(pieces);
-           }
-           
            public bool DoesChessBoardTileExist(Vector2Int boardPosition)
            {
               return chessBoard.DoesChessBoardTileExist(boardPosition);
@@ -77,10 +50,24 @@ namespace QC.Match.AI
               return chessBoard.GetTileImportance(boardPosition);
            }
 
-           public Board MakeMove(Move moveToMake)
+           public void MakeMove(Move moveToMake)
            {
-              Board boardWithMove = new Board(this, moveToMake);
-              return boardWithMove;
+              pieces.Remove(moveToMake.Position);
+              pieces[moveToMake.Destination] = moveToMake.PieceToMove;
+           }
+
+           public void UndoMove(Move moveToUndo)
+           {
+              if (moveToUndo.PieceToCapture.IsValid)
+              {
+                 pieces[moveToUndo.Destination] = moveToUndo.PieceToCapture;
+              }
+              else
+              {
+                 pieces.Remove(moveToUndo.Destination);
+              }
+              
+              pieces[moveToUndo.Position] = moveToUndo.PieceToMove;
            }
         }
 
@@ -101,23 +88,38 @@ namespace QC.Match.AI
               ChessPiece = chessPiece;
               ActionProvider = actionProvider;
            }
+
+           public Piece(ChessBoardObjectInstance instance) : 
+              this(instance, instance.FindInterface<IChessPiece>(), instance.FindInterface<IActionProvider>())
+           {
+           }
         }
 
         private readonly struct Move
         {
-           public bool IsValid => Position != Destination && Piece.IsValid;
+           public bool IsValid => Position != Destination && PieceToMove.IsValid;
            
-           public readonly Piece Piece;
+           public readonly Piece PieceToMove;
+           public readonly Piece PieceToCapture;
            public readonly Vector2Int Position;
            public readonly Vector2Int Destination;
 
-           public Move(Piece piece, Vector2Int position, Vector2Int destination)
+           public Move(Piece pieceToMove, Piece pieceToCapture, Vector2Int position, Vector2Int destination)
            {
-              Piece = piece;
+              PieceToMove = pieceToMove;
+              PieceToCapture = pieceToCapture;
               Position = position;
               Destination = destination;
            }
         }
+
+        private const int k_defaultValidMovesAllocation = 20;
+        private const int k_defaultValidMovesPoolCapacity = 1000;
+        
+        private static ObjectPool<List<Vector2Int>> s_validMovesPool = new(
+           () => new List<Vector2Int>(k_defaultValidMovesAllocation),
+           actionOnRelease: l => l.Clear(),
+           defaultCapacity: k_defaultValidMovesPoolCapacity);
         
         public static bool TryCalculate(
             ITurnStrategy.Args args,
@@ -131,7 +133,7 @@ namespace QC.Match.AI
               command = null;
               return false;
            }
-
+           
            using (AlphaBetaProfileMarkers.MainLoop.Auto())
            {
               ChessPieceColour activeColour = args.MatchState.ActiveColour;
@@ -139,9 +141,8 @@ namespace QC.Match.AI
               int bestScore = int.MinValue;
               int alpha = int.MinValue;
               int beta = int.MaxValue;
-
-              List<Vector2Int> validActions = new List<Vector2Int>(20);
-
+              Board board = new Board(args.ChessBoard);
+              
               foreach (var pieceInstance in piecesToConsider)
               {
                  var chessPiece = pieceInstance.FindInterface<IChessPiece>();
@@ -150,28 +151,39 @@ namespace QC.Match.AI
                     continue;
                  }
 
-                 validActions.Clear();
+                 List<Vector2Int> validActions = s_validMovesPool.Get();
 
                  var actionProvider = pieceInstance.FindInterface<IActionProvider>();
                  var transform = pieceInstance.FindInterface<IGrid2DTransform>();
                  Vector2Int position = transform.GetPosition();
+
                  actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
+                 int numAttacks = validActions.Count;
                  actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 
-                 foreach (var action in validActions)
+                 for (int i = 0, n = validActions.Count; i < n; ++i)
                  {
+                    Vector2Int action = validActions[i];
                     Piece piece = new Piece(pieceInstance, chessPiece, actionProvider);
-                    Move move = new Move(piece, position, action);
+                    Move move;
+
+                    if (i < numAttacks)
+                    {
+                       ChessBoardObjectInstance pieceToCaptureInstance = args.ChessBoard.GetChessBoardObjectAt(action);
+                       Piece pieceToCapture = new Piece(pieceToCaptureInstance);
+                       move = new Move(piece, pieceToCapture, position, action);
+                    }
+                    else
+                    {
+                       move = new Move(piece, default, position, action);
+                    }
+                    
                     int score = 0;
 
-                    using (Board board = new Board(args.ChessBoard))
-                    {
-                       using (Board nextBoard = board.MakeMove(move))
-                       {
-                          score = AlphaBetaMin(alphaBetaParameters, nextBoard, activeColour, args.RNG, alpha, beta,
-                             alphaBetaParameters.Depth - 1);
-                       }
-                    }
+                    board.MakeMove(move);
+                    score = AlphaBetaMin(alphaBetaParameters, board, activeColour, args.RNG, alpha, beta,
+                       alphaBetaParameters.Depth - 1);
+                    board.UndoMove(move);
 
                     if (score > bestScore)
                     {
@@ -189,13 +201,15 @@ namespace QC.Match.AI
                        break;
                     }
                  }
+                 
+                 s_validMovesPool.Release(validActions);
 
                  if (beta <= alpha)
                  {
                     break;
                  }
               }
-
+              
               if (!bestMove.IsValid)
               {
                  UnityEngine.Debug.LogAssertion(
@@ -204,7 +218,7 @@ namespace QC.Match.AI
                  return false;
               }
 
-              var bestMoveChessPiece = bestMove.Piece.ChessPiece;
+              var bestMoveChessPiece = bestMove.PieceToMove.ChessPiece;
               UnityEngine.Debug.Assert(bestMoveChessPiece.GetPieceColour() == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
 
@@ -250,8 +264,7 @@ namespace QC.Match.AI
            }
 
            int maxValue = int.MinValue;
-           List<Vector2Int> validActions = new List<Vector2Int>(20);
-
+           
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
@@ -260,31 +273,47 @@ namespace QC.Match.AI
                  continue;
               }
               
-              validActions.Clear();
+              List<Vector2Int> validActions = s_validMovesPool.Get();
               
               var actionProvider = piece.Value.ActionProvider;
+              
               actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
+              int numAttacks = validActions.Count;
               actionProvider.CalculateValidMoves(piece.Key, board, validActions);
 
-              foreach (var action in validActions)
+              for (int i = 0, n = validActions.Count; i < n; ++i)
               {
-                 // Need to make a new representation of the board here taking into account the action
-                 Move move = new Move(piece.Value, piece.Key, action);
-                 int score = 0;
-                 
-                 using (Board nextBoard = board.MakeMove(move))
+                 Vector2Int action = validActions[i];
+                 Move move;
+
+                 if (i < numAttacks)
                  {
-                    score = AlphaBetaMin(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                    ChessBoardObjectInstance pieceToCaptureInstance = board.GetChessBoardObjectAt(action);
+                    Piece pieceToCapture = new Piece(pieceToCaptureInstance);
+                    move = new Move(piece.Value, pieceToCapture, piece.Key, action);
                  }
+                 else
+                 {
+                    move = new Move(piece.Value, default, piece.Key, action);
+                 }
+                 
+                 int score = 0;
+
+                 board.MakeMove(move);
+                 score = AlphaBetaMin(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 board.UndoMove(move);
 
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
 
                  if (beta <= alpha)
                  {
+                    s_validMovesPool.Release(validActions);
                     return maxValue;
                  }
               }
+              
+              s_validMovesPool.Release(validActions);
            }
            
            return maxValue;
@@ -306,8 +335,7 @@ namespace QC.Match.AI
            }
            
            int minValue = int.MaxValue;
-           List<Vector2Int> validActions = new List<Vector2Int>(20);
-
+           
            foreach (var piece in board.Pieces)
            {
               var chessPiece = piece.Value.ChessPiece;
@@ -316,31 +344,47 @@ namespace QC.Match.AI
                  continue;
               }
               
-              validActions.Clear();
-              
+              List<Vector2Int> validActions = s_validMovesPool.Get();
+
               var actionProvider = piece.Value.ActionProvider;
+              
               actionProvider.CalculateValidAttacks(piece.Key, board, validActions);
+              int numAttacks = validActions.Count;
               actionProvider.CalculateValidMoves(piece.Key, board, validActions);
 
-              foreach (var action in validActions)
+              for (int i = 0, n = validActions.Count; i < n; ++i)
               {
-                 // Need to make a new representation of the board here taking into account the action
-                 Move move = new Move(piece.Value, piece.Key, action);
-                 int score = 0;
-                 
-                 using (Board nextBoard = board.MakeMove(move))
+                 Vector2Int action = validActions[i];
+                 Move move;
+
+                 if (i < numAttacks)
                  {
-                    score = AlphaBetaMax(parameters, nextBoard, activeColour, rng, alpha, beta, remainingDepth - 1);
+                    ChessBoardObjectInstance pieceToCaptureInstance = board.GetChessBoardObjectAt(action);
+                    Piece pieceToCapture = new Piece(pieceToCaptureInstance);
+                    move = new Move(piece.Value, pieceToCapture, piece.Key, action);
                  }
+                 else
+                 {
+                    move = new Move(piece.Value, default, piece.Key, action);
+                 }
+                 
+                 int score = 0;
+
+                 board.MakeMove(move);
+                 score = AlphaBetaMax(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 board.UndoMove(move);
 
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
 
                  if (beta <= alpha)
                  {
+                    s_validMovesPool.Release(validActions);
                     return minValue;
                  }
               }
+              
+              s_validMovesPool.Release(validActions);
            }
            
            return minValue;
