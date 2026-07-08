@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
@@ -11,7 +12,7 @@ namespace QC.Match.Commands
             PlayerIndex = playerIndex;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             ITurnStrategy.Args turnStrategyArgs = new ITurnStrategy.Args(
                 args.MatchState,

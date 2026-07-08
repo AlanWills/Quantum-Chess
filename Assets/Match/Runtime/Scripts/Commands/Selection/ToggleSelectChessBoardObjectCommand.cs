@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 
@@ -12,7 +13,7 @@ namespace QC.Match.Commands
             chessBoardObjectInstance = instance;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             if (chessBoardObjectInstance == null)
             {

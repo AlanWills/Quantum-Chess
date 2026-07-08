@@ -33,7 +33,7 @@ namespace QC.Match.Managers
         [SerializeField] private UnityEvent onMatchSetup = new();
         [SerializeField] private UnityEvent onMatchShutdown = new();
 
-        [NonSerialized] private IRNG rng = new UnityRNG();
+        [NonSerialized] private readonly IRNG rng = new XorRNG();
 
         #endregion
         
@@ -42,6 +42,7 @@ namespace QC.Match.Managers
         private void OnDisable()
         {
             onMatchShutdown.Invoke();
+            chessBoardCommandExecutor.StopProcessing();
         }
         
         #endregion

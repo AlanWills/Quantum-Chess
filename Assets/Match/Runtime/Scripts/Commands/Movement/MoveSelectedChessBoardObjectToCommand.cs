@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace QC.Match.Commands
             chessBoardObjectEndingPosition = end;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             ChessBoardObjectInstance chessBoardObjectInstance = args.Selection.CurrentSelectedObject;
             return MoveCommandUtilities.TryMoveChessBoardObject(

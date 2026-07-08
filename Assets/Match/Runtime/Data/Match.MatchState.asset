@@ -16,4 +16,6 @@ MonoBehaviour:
   matchScenarioCatalogue: {fileID: 11400000, guid: f269b040058463540a3ce3eb0d737fec, type: 2}
   aiStrategyDefaultParameters: {fileID: 11400000, guid: 185bdc715bfbc49f69e367f334e72274, type: 2}
   onBeforeScenarioSetUp: {fileID: 11400000, guid: 8d6494fa8802343b08483c91776ca6da, type: 2}
+  onPlayerStartedThinking: {fileID: 11400000, guid: 9496fd5d1e6184db2a7cf60051ec9bb2, type: 2}
+  onPlayerFinishedThinking: {fileID: 11400000, guid: 33a17e9aafd1e433d9966271dfbf04d1, type: 2}
   onChanged: {fileID: 11400000, guid: a012f45e458c7994a9fc972b20e22521, type: 2}

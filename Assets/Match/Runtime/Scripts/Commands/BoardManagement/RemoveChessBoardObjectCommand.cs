@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using QC.Match.Objects;
 
 namespace QC.Match.Commands
@@ -12,7 +13,7 @@ namespace QC.Match.Commands
             InstanceToRemove = instanceToRemove;
         }
 
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             return RemoveCommandUtilities.RemoveChessBoardObject(args, InstanceToRemove);
         }

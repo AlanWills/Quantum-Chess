@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace QC.Match
@@ -10,6 +11,6 @@ namespace QC.Match
     
     public interface ICommand<in TArgs>
     {
-        UniTask<CommandState> Execute(TArgs args);
+        UniTask<CommandState> Execute(TArgs args, CancellationToken cancellationToken);
     }
 }

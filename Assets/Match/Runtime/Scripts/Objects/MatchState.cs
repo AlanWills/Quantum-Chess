@@ -55,6 +55,8 @@ namespace QC.Match.Objects
         
         [Header("Events")]
         [SerializeField] private Celeste.Events.Event onBeforeScenarioSetUp;
+        [SerializeField] private Celeste.Events.Event onPlayerStartedThinking;
+        [SerializeField] private Celeste.Events.Event onPlayerFinishedThinking;
         [SerializeField] private Celeste.Events.Event onChanged;
 
         [NonSerialized] private readonly List<Player> players = new();
@@ -100,7 +102,9 @@ namespace QC.Match.Objects
                 return;
             }
 
+            onPlayerStartedThinking.Invoke();
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
+            onPlayerFinishedThinking.Invoke();
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -168,7 +172,9 @@ namespace QC.Match.Objects
 
             if (HasActivePlayer)
             {
+                onPlayerStartedThinking.Invoke();
                 await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
+                onPlayerFinishedThinking.Invoke();
             }
         }
 

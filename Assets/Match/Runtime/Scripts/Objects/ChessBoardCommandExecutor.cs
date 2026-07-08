@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Lua;
 using QC.Match.Commands;
@@ -15,28 +16,43 @@ namespace QC.Match.Objects
         public const string kLuaName = nameof(ChessBoardCommandExecutor);
         
         [NonSerialized] private Channel<ICommand<ChessBoardCommandArgs>> commands = Channel.CreateSingleConsumerUnbounded<ICommand<ChessBoardCommandArgs>>();
+        [NonSerialized] private CancellationTokenSource commandCancellationToken;
         
         #endregion
 
         public void BeginProcessing(ChessBoardCommandArgs args)
         {
             commands = Channel.CreateSingleConsumerUnbounded<ICommand<ChessBoardCommandArgs>>();
+            commandCancellationToken = new CancellationTokenSource();
+            
             ProcessCommandsAsync(args).Forget();
+        }
+
+        public void StopProcessing()
+        {
+            commands?.Writer.TryComplete();
+
+            if (commandCancellationToken != null)
+            {
+                commandCancellationToken.Cancel();
+                commandCancellationToken.Dispose();
+                commandCancellationToken = null;
+            }
         }
 
         public UniTask<CommandState> ExecuteCommandImmediately(ICommand<ChessBoardCommandArgs> command, ChessBoardCommandArgs args)
         {
-            return command.Execute(args);
+            return command.Execute(args, commandCancellationToken.Token);
         }
 
         private async UniTask ProcessCommandsAsync(ChessBoardCommandArgs args)
         {
-            while (await commands.Reader.WaitToReadAsync())
+            await UniTask.SwitchToMainThread();
+            
+            await foreach (var nextCommand in commands.Reader.ReadAllAsync(commandCancellationToken.Token))
             {
-                while (commands.Reader.TryRead(out var nextCommand))
-                {
-                    await nextCommand.Execute(args);
-                }
+                await nextCommand.Execute(args, commandCancellationToken.Token);
+                await UniTask.SwitchToMainThread();
             }
         }
         

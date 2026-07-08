@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using Lua;
 using QC.Match.Objects;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace QC.Match.Commands
             Importance = importance;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             ChessBoardTileInstance instance = args.ChessBoard.CreateChessBoardTile(Guid, Position);
             if (instance == null)

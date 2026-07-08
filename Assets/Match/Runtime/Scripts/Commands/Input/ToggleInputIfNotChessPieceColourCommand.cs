@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
@@ -13,7 +14,7 @@ namespace QC.Match.Commands
             this.inputEnabled = inputEnabled;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             var commandState = await InputCommandUtilities.SetInteractableForNotColour(args.ChessBoard, colour, inputEnabled);
             

@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using Lua;
 using QC.Match.Objects;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace QC.Match.Commands
             Value = value;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             ChessBoardObjectInstance instance = args.ChessBoard.CreateChessBoardObject(Guid);
             if (instance == null)
