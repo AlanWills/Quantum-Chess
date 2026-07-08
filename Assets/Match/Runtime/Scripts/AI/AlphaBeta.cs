@@ -15,12 +15,21 @@ namespace QC.Match.AI
         private class Board : IChessBoardLookup
         {
            // TODO: Oooffff, why public?
-           public readonly Tile[] board = new Tile[width * height];
-           private const int width = 8; // TODO: Make this variable based on bounding box
-           private const int height = 8; // TODO: Make this variable based on bounding box
+           // TODO: Can pool/cache this Tile[] for re-use between 
+           public readonly Tile[] board;
+           private readonly int width;
+           private readonly int height;
+           private readonly int xMin;
+           private readonly int yMin;
 
-           public Board(ChessBoard chessBoard)
+           public Board(ChessBoard chessBoard, RectInt boardDimensions, Tile[] tileArray)
            {
+              width = boardDimensions.size.x;
+              height = boardDimensions.size.y;
+              xMin = boardDimensions.xMin;
+              yMin = boardDimensions.yMin;
+              board = tileArray;
+              
               foreach (var tile in chessBoard.Tiles)
               {
                  Vector2Int tilePosition = tile.Position;
@@ -34,13 +43,13 @@ namespace QC.Match.AI
 
            public int ToIndex(Vector2Int position)
            {
-              int index = (position.x - 1) + (position.y - 1) * width;
+              int index = (position.x - xMin) + (position.y - yMin) * width;
               return index;
            }
 
            public Vector2Int ToVector2Int(int boardIndex)
            {
-              return new Vector2Int((boardIndex % width) + 1, (boardIndex / width) + 1);
+              return new Vector2Int((boardIndex % width) + xMin, (boardIndex / width) + yMin);
            }
 
            public Piece GetPieceAt(Vector2Int boardPosition)
@@ -166,6 +175,7 @@ namespace QC.Match.AI
            () => new List<Vector2Int>(k_defaultValidMovesAllocation),
            actionOnRelease: l => l.Clear(),
            defaultCapacity: k_defaultValidMovesPoolCapacity);
+        private static Tile[] s_tiles;
         
         public static bool TryCalculate(
             ITurnStrategy.Args args,
@@ -187,7 +197,14 @@ namespace QC.Match.AI
               int bestScore = int.MinValue;
               int alpha = int.MinValue;
               int beta = int.MaxValue;
-              Board board = new Board(args.ChessBoard);
+              
+              RectInt boundingBox = args.ChessBoard.CalculateBoundingBox();
+              if ( s_tiles == null || s_tiles.Length != boundingBox.size.x * boundingBox.size.y)
+              {
+                 s_tiles = new Tile[boundingBox.size.x * boundingBox.size.y];
+              }
+              
+              Board board = new Board(args.ChessBoard, boundingBox, s_tiles);
               
               foreach (var pieceInstance in piecesToConsider)
               {

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Catalogue.MatchScenarioCatalogue
   items:
   - {fileID: 11400000, guid: f1a35a14970d62e49aa57ee20c211058, type: 2}
-  - {fileID: 11400000, guid: a4dd031eeb80b44f2a0b607d468d68b5, type: 2}
-  - {fileID: 11400000, guid: 3ea3e78411eed46afb559f95af9c154d, type: 2}
-  - {fileID: 11400000, guid: 5b85528f3c3c64c198fb82e0610303b1, type: 2}
   - {fileID: 11400000, guid: 835fc2745f6df49c890841036b3abaa3, type: 2}
   - {fileID: 11400000, guid: 175cf9107540c400283462ddefac4485, type: 2}
   - {fileID: 11400000, guid: 5ede8f31fba014ef99a64597d45b1ebb, type: 2}
+  - {fileID: 11400000, guid: a4dd031eeb80b44f2a0b607d468d68b5, type: 2}
+  - {fileID: 11400000, guid: 3ea3e78411eed46afb559f95af9c154d, type: 2}
+  - {fileID: 11400000, guid: 5b85528f3c3c64c198fb82e0610303b1, type: 2}
   importBehaviour: 0

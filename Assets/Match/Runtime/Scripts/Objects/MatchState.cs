@@ -102,9 +102,7 @@ namespace QC.Match.Objects
                 return;
             }
 
-            onPlayerStartedThinking.Invoke();
-            await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
-            onPlayerFinishedThinking.Invoke();
+            await BeginTurnForActivePlayer(turnStrategyArgs);
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -172,10 +170,19 @@ namespace QC.Match.Objects
 
             if (HasActivePlayer)
             {
-                onPlayerStartedThinking.Invoke();
-                await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
-                onPlayerFinishedThinking.Invoke();
+                await BeginTurnForActivePlayer(turnStrategyArgs);
             }
+        }
+
+        private async UniTask BeginTurnForActivePlayer(ITurnStrategy.Args turnStrategyArgs)
+        {
+            onPlayerStartedThinking.Invoke();
+            
+            // Ideally we'd want to pump the CommandDispatcher and make sure all commands are completed
+            // However, it's possible this is being called from a command, in which case it will wait forever
+            await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
+            
+            onPlayerFinishedThinking.Invoke();
         }
 
         public MatchStateDTO Serialize()

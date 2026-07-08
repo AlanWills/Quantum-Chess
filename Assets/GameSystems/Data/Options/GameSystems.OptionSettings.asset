@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7168d82500dce8341b810a270549496d, type: 3}
+  m_Name: GameSystems.OptionSettings
+  m_EditorClassIdentifier: Celeste.Options::Celeste.Options.Settings.OptionsSettingsUsingAssets
+  boolOptions: {fileID: 11400000, guid: 5b1b06acb1f5f49d782b54661cc8e762, type: 2}
+  floatOptions: {fileID: 11400000, guid: 2748b489a08874f54a28c039d51d1bd0, type: 2}
+  intOptions: {fileID: 11400000, guid: 26f8c1b61aab44ed2a66dcabd0fbbcda, type: 2}
+  stringOptions: {fileID: 11400000, guid: 578e2bf3205d04e08b9d8e918e897276, type: 2}

@@ -40,13 +40,13 @@ MonoBehaviour:
     minThinkingTimeMilliseconds: 2500
     coordinateImportanceOverrides:
     - position: {x: 4, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 4, y: 5}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 5}
-      importance: 2
+      importance: 10
     pieceValueOverrides:
     - pieceType: 1
       value: 10
@@ -71,37 +71,37 @@ MonoBehaviour:
     minThinkingTimeMilliseconds: 2000
     coordinateImportanceOverrides:
     - position: {x: 3, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 4}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 5}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 6}
-      importance: 1
+      importance: 5
     - position: {x: 4, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 4, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 4, y: 5}
-      importance: 2
+      importance: 10
     - position: {x: 4, y: 6}
-      importance: 1
+      importance: 5
     - position: {x: 5, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 5, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 5}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 6}
-      importance: 2
+      importance: 10
     - position: {x: 6, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 4}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 5}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 6}
-      importance: 1
+      importance: 5
     pieceValueOverrides:
     - pieceType: 1
       value: 10
@@ -126,37 +126,37 @@ MonoBehaviour:
     minThinkingTimeMilliseconds: 2000
     coordinateImportanceOverrides:
     - position: {x: 3, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 4}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 5}
-      importance: 1
+      importance: 5
     - position: {x: 3, y: 6}
-      importance: 1
+      importance: 5
     - position: {x: 4, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 4, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 4, y: 5}
-      importance: 2
+      importance: 10
     - position: {x: 4, y: 6}
-      importance: 1
+      importance: 5
     - position: {x: 5, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 5, y: 4}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 5}
-      importance: 2
+      importance: 10
     - position: {x: 5, y: 6}
-      importance: 2
+      importance: 10
     - position: {x: 6, y: 3}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 4}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 5}
-      importance: 1
+      importance: 5
     - position: {x: 6, y: 6}
-      importance: 1
+      importance: 5
     pieceValueOverrides:
     - pieceType: 1
       value: 10

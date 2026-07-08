@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0887efccaad4445b1f3560303bf9a9, type: 3}
+  m_Name: GameSystems.OptionsDebugMenu
+  m_EditorClassIdentifier: Celeste.Options::Celeste.Options.Debug.OptionsDebugMenu
+  displayName: Options
+  menuPriority: 0
+  options: {fileID: 11400000, guid: 494337358b5524d17aed97ecbb1ba936, type: 2}

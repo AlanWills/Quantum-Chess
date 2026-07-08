@@ -231,6 +231,10 @@ PrefabInstance:
       propertyPath: debugAreaCanvas
       value: 
       objectReference: {fileID: 2068980282}
+    - target: {fileID: 7864250194288970077, guid: d2d5f2d844aadad4e999243e63dd4a3b, type: 3}
+      propertyPath: debugMenu
+      value: 
+      objectReference: {fileID: 11400000, guid: a0faee3ac87936f46b793f7d00a38f9a, type: 2}
     - target: {fileID: 8343430697975250819, guid: d2d5f2d844aadad4e999243e63dd4a3b, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542

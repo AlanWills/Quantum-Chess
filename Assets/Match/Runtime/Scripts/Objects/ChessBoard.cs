@@ -264,6 +264,23 @@ namespace QC.Match.Objects
             }
         }
 
+        public RectInt CalculateBoundingBox()
+        {
+            Vector2Int minCoords = new Vector2Int(int.MaxValue, int.MaxValue);
+            Vector2Int maxCoords = new Vector2Int(int.MinValue, int.MinValue);
+
+            for (int i = 0, n = tiles.Count; i < n; ++i)
+            {
+                Vector2Int tilePosition = tiles[i].Position;
+                minCoords.x = Mathf.Min(tilePosition.x, minCoords.x);
+                maxCoords.x = Mathf.Max(tilePosition.x, maxCoords.x);
+                minCoords.y = Mathf.Min(tilePosition.y, minCoords.y);
+                maxCoords.y = Mathf.Max(tilePosition.y, maxCoords.y);
+            }
+
+            return new RectInt(minCoords.x, minCoords.y, maxCoords.x + 1 - minCoords.x, maxCoords.y + 1 - minCoords.y);
+        }
+
         public ChessBoardDTO Serialize()
         {
             return new ChessBoardDTO(this);
