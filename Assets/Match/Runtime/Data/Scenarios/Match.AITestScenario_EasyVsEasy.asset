@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e78a2f56f67503442af9f56e3b47d7e1, type: 3}
   m_Name: Match.AITestScenario_EasyVsEasy
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Objects.MatchScenario
-  guid: c5d05bc9-a496-48af-b0ac-85f62b60c8dc
-  scenarioScript: {fileID: -6979533126094156877, guid: 171e1c8641f9247aa9b1ea2488c722c6, type: 3}
+  guid: 8ced5bdf-91df-4318-a839-44bb969cc660
+  scenarioScript: {fileID: -6979533126094156877, guid: 4fc787fdc334347ce99a622d748cbac3, type: 3}

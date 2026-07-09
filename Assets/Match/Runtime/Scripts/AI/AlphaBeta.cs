@@ -18,6 +18,7 @@ namespace QC.Match.AI
         private const int k_defaultValidMovesAllocation = 20;
         private const int k_defaultValidMovesPoolCapacity = 1000;
         
+        // Does this leak memory between domain reloads?
         private static ObjectPool<List<Vector2Int>> s_validMovesPool = new(
            () => new List<Vector2Int>(k_defaultValidMovesAllocation),
            actionOnRelease: l => l.Clear(),
@@ -80,6 +81,8 @@ namespace QC.Match.AI
                  Vector2Int position = board.ToVector2Int(boardIndex);
 
                  List<Vector2Int> validActions = s_validMovesPool.Get();
+                 validActions.Clear();
+                 
                  tile.Piece.ActionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
                  tile.Piece.ActionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 

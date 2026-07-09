@@ -15,7 +15,15 @@ MonoBehaviour:
   defaultAlphaBetaEasy:
     depth: 2
     minThinkingTimeMilliseconds: 3000
-    coordinateImportanceOverrides: []
+    coordinateImportanceOverrides:
+    - position: {x: 4, y: 4}
+      importance: 5
+    - position: {x: 4, y: 5}
+      importance: 5
+    - position: {x: 5, y: 4}
+      importance: 5
+    - position: {x: 5, y: 5}
+      importance: 5
     pieceValueOverrides:
     - pieceType: 1
       value: 10

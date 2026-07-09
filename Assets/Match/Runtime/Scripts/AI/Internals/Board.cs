@@ -82,8 +82,18 @@ namespace QC.Match.AI.Internals
            {
               int indexOfPosition = ToIndex(moveToMake.Position);
               int indexOfDestination = ToIndex(moveToMake.Destination);
-              board[indexOfPosition] = board[indexOfPosition].WithoutPiece();
-              board[indexOfDestination] = board[indexOfDestination].WithPiece(moveToMake.PieceToMove);
+              
+              Tile tile = board[indexOfPosition];
+              Tile tileWithoutPiece = tile.WithoutPiece();
+              board[indexOfPosition] = tileWithoutPiece;
+              UnityEngine.Debug.Assert(tile.Importance == tileWithoutPiece.Importance);
+              UnityEngine.Debug.Assert(tile.Importance == board[indexOfPosition].Importance);
+              
+              Tile destinationTile = board[indexOfDestination];
+              Tile destinationTileWithPiece = destinationTile.WithPiece(moveToMake.PieceToMove);
+              board[indexOfDestination] = destinationTileWithPiece;
+              UnityEngine.Debug.Assert(destinationTile.Importance == destinationTileWithPiece.Importance);
+              UnityEngine.Debug.Assert(destinationTile.Importance == board[indexOfDestination].Importance);
            }
 
            public void UndoMove(Move moveToUndo)
