@@ -55,7 +55,7 @@ namespace QC.Match.AI
         
         #endregion
 
-        public int GetImportanceOverrideForPosition(Vector2Int position)
+        public int GetImportanceOverrideForPosition(Vector2Int position, int defaultImportance)
         {
             int indexOfMatchingCoordinate = -1;
 
@@ -68,10 +68,10 @@ namespace QC.Match.AI
                 }
             }
             
-            return indexOfMatchingCoordinate >= 0 ? coordinateImportanceOverrides[indexOfMatchingCoordinate].importance : 0;
+            return indexOfMatchingCoordinate >= 0 ? coordinateImportanceOverrides[indexOfMatchingCoordinate].importance : defaultImportance;
         }
 
-        public int GetValueOverrideForPiece(ChessPieceType chessPieceType, IRNG rng)
+        public int GetValueOverrideForPiece(ChessPieceType chessPieceType, IRNG rng, int defaultValue)
         {
             int indexOfMatchingPiece = -1;
 
@@ -86,7 +86,7 @@ namespace QC.Match.AI
             
             if (indexOfMatchingPiece < 0)
             {
-                return 0;
+                return defaultValue;
             }
 
             Vector2Int variance = pieceValueOverrides[indexOfMatchingPiece].variance;

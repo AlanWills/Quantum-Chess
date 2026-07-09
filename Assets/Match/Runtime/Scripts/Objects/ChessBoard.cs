@@ -131,32 +131,6 @@ namespace QC.Match.Objects
             return false;
         }
 
-        public int GetTileImportance(Vector2Int boardPosition)
-        {
-            ChessBoardTileInstance tileInstance = null;
-
-            foreach (var tile in tiles)
-            {
-                if (tile.Position == boardPosition)
-                {
-                    tileInstance = tile;
-                    break;
-                }
-            }
-            
-            if (tileInstance == null)
-            {
-                return 0;
-            }
-
-            if (!tileInstance.TryFindComponent<ITileAIInfo>(out var tileAiInfo))
-            {
-                return 0;
-            }
-            
-            return tileAiInfo.GetImportance();
-        }
-
         public ChessBoardObjectInstance CreateChessBoardObject(int guid)
         {
             ChessBoardObject chessBoardObject = chessBoardObjectCatalogue.MustFindItemByGuid(guid);

@@ -19,19 +19,19 @@ MonoBehaviour:
     pieceValueOverrides:
     - pieceType: 1
       value: 10
-      variance: {x: -10, y: 10}
+      variance: {x: -2, y: 2}
     - pieceType: 2
       value: 30
-      variance: {x: -20, y: 20}
+      variance: {x: -4, y: 4}
     - pieceType: 4
       value: 30
-      variance: {x: -20, y: 20}
+      variance: {x: -4, y: 4}
     - pieceType: 8
       value: 50
-      variance: {x: -30, y: 30}
+      variance: {x: -4, y: 4}
     - pieceType: 16
       value: 90
-      variance: {x: -40, y: 40}
+      variance: {x: -4, y: 4}
     - pieceType: 32
       value: 9000
       variance: {x: 0, y: 0}
@@ -40,67 +40,12 @@ MonoBehaviour:
     minThinkingTimeMilliseconds: 2500
     coordinateImportanceOverrides:
     - position: {x: 4, y: 4}
-      importance: 10
+      importance: 5
     - position: {x: 4, y: 5}
-      importance: 10
-    - position: {x: 5, y: 4}
-      importance: 10
-    - position: {x: 5, y: 5}
-      importance: 10
-    pieceValueOverrides:
-    - pieceType: 1
-      value: 10
-      variance: {x: -3, y: 3}
-    - pieceType: 2
-      value: 30
-      variance: {x: -7, y: 7}
-    - pieceType: 4
-      value: 30
-      variance: {x: -7, y: 7}
-    - pieceType: 8
-      value: 50
-      variance: {x: -10, y: 10}
-    - pieceType: 16
-      value: 90
-      variance: {x: -20, y: 20}
-    - pieceType: 32
-      value: 9000
-      variance: {x: 0, y: 0}
-  defaultAlphaBetaHard:
-    depth: 6
-    minThinkingTimeMilliseconds: 2000
-    coordinateImportanceOverrides:
-    - position: {x: 3, y: 3}
-      importance: 5
-    - position: {x: 3, y: 4}
-      importance: 5
-    - position: {x: 3, y: 5}
-      importance: 5
-    - position: {x: 3, y: 6}
-      importance: 5
-    - position: {x: 4, y: 3}
-      importance: 5
-    - position: {x: 4, y: 4}
-      importance: 10
-    - position: {x: 4, y: 5}
-      importance: 10
-    - position: {x: 4, y: 6}
-      importance: 5
-    - position: {x: 5, y: 3}
       importance: 5
     - position: {x: 5, y: 4}
-      importance: 10
+      importance: 5
     - position: {x: 5, y: 5}
-      importance: 10
-    - position: {x: 5, y: 6}
-      importance: 10
-    - position: {x: 6, y: 3}
-      importance: 5
-    - position: {x: 6, y: 4}
-      importance: 5
-    - position: {x: 6, y: 5}
-      importance: 5
-    - position: {x: 6, y: 6}
       importance: 5
     pieceValueOverrides:
     - pieceType: 1
@@ -114,10 +59,65 @@ MonoBehaviour:
       variance: {x: -2, y: 2}
     - pieceType: 8
       value: 50
-      variance: {x: -3, y: -3}
+      variance: {x: -3, y: 3}
     - pieceType: 16
       value: 90
-      variance: {x: -4, y: 4}
+      variance: {x: -3, y: 3}
+    - pieceType: 32
+      value: 9000
+      variance: {x: 0, y: 0}
+  defaultAlphaBetaHard:
+    depth: 6
+    minThinkingTimeMilliseconds: 2000
+    coordinateImportanceOverrides:
+    - position: {x: 3, y: 3}
+      importance: 3
+    - position: {x: 3, y: 4}
+      importance: 3
+    - position: {x: 3, y: 5}
+      importance: 3
+    - position: {x: 3, y: 6}
+      importance: 3
+    - position: {x: 4, y: 3}
+      importance: 3
+    - position: {x: 4, y: 4}
+      importance: 5
+    - position: {x: 4, y: 5}
+      importance: 5
+    - position: {x: 4, y: 6}
+      importance: 3
+    - position: {x: 5, y: 3}
+      importance: 3
+    - position: {x: 5, y: 4}
+      importance: 5
+    - position: {x: 5, y: 5}
+      importance: 5
+    - position: {x: 5, y: 6}
+      importance: 5
+    - position: {x: 6, y: 3}
+      importance: 3
+    - position: {x: 6, y: 4}
+      importance: 3
+    - position: {x: 6, y: 5}
+      importance: 3
+    - position: {x: 6, y: 6}
+      importance: 3
+    pieceValueOverrides:
+    - pieceType: 1
+      value: 10
+      variance: {x: -1, y: 1}
+    - pieceType: 2
+      value: 30
+      variance: {x: -1, y: 1}
+    - pieceType: 4
+      value: 30
+      variance: {x: -1, y: 1}
+    - pieceType: 8
+      value: 50
+      variance: {x: 0, y: 0}
+    - pieceType: 16
+      value: 90
+      variance: {x: 0, y: 0}
     - pieceType: 32
       value: 9000
       variance: {x: 0, y: 0}
@@ -126,37 +126,37 @@ MonoBehaviour:
     minThinkingTimeMilliseconds: 2000
     coordinateImportanceOverrides:
     - position: {x: 3, y: 3}
-      importance: 5
+      importance: 3
     - position: {x: 3, y: 4}
-      importance: 5
+      importance: 3
     - position: {x: 3, y: 5}
-      importance: 5
+      importance: 3
     - position: {x: 3, y: 6}
-      importance: 5
+      importance: 3
     - position: {x: 4, y: 3}
-      importance: 5
+      importance: 3
     - position: {x: 4, y: 4}
-      importance: 10
+      importance: 5
     - position: {x: 4, y: 5}
-      importance: 10
+      importance: 5
     - position: {x: 4, y: 6}
-      importance: 5
+      importance: 3
     - position: {x: 5, y: 3}
-      importance: 5
+      importance: 3
     - position: {x: 5, y: 4}
-      importance: 10
+      importance: 5
     - position: {x: 5, y: 5}
-      importance: 10
+      importance: 5
     - position: {x: 5, y: 6}
-      importance: 10
+      importance: 5
     - position: {x: 6, y: 3}
-      importance: 5
+      importance: 3
     - position: {x: 6, y: 4}
-      importance: 5
+      importance: 3
     - position: {x: 6, y: 5}
-      importance: 5
+      importance: 3
     - position: {x: 6, y: 6}
-      importance: 5
+      importance: 3
     pieceValueOverrides:
     - pieceType: 1
       value: 10

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Celeste.Components;
 using Celeste.Core.Interfaces;
+using QC.Match.AI.Internals;
 using QC.Match.Commands;
 using QC.Match.Objects;
 using UnityEngine;
@@ -12,162 +13,8 @@ namespace QC.Match.AI
 {
     public static class AlphaBeta
     {
-        private class Board : IChessBoardLookup
-        {
-           // TODO: Oooffff, why public?
-           // TODO: Can pool/cache this Tile[] for re-use between 
-           public readonly Tile[] board;
-           private readonly int width;
-           private readonly int height;
-           private readonly int xMin;
-           private readonly int yMin;
-
-           public Board(ChessBoard chessBoard, RectInt boardDimensions, Tile[] tileArray)
-           {
-              width = boardDimensions.size.x;
-              height = boardDimensions.size.y;
-              xMin = boardDimensions.xMin;
-              yMin = boardDimensions.yMin;
-              board = tileArray;
-              
-              foreach (var tile in chessBoard.Tiles)
-              {
-                 Vector2Int tilePosition = tile.Position;
-                 int index = ToIndex(tilePosition);
-                 ChessBoardObjectInstance chessBoardObjectInstance = chessBoard.GetChessBoardObjectAt(tilePosition);
-                 Piece piece = chessBoardObjectInstance != null ? new Piece(chessBoardObjectInstance) : default;
-                 UnityEngine.Debug.Assert(index < board.Length, $"Incorrectly calculated index ({index}) for position ({tilePosition}).");
-                 board[index] = new Tile(true, chessBoard.GetTileImportance(tilePosition), piece);
-              }
-           }
-
-           public int ToIndex(Vector2Int position)
-           {
-              int index = (position.x - xMin) + (position.y - yMin) * width;
-              return index;
-           }
-
-           public Vector2Int ToVector2Int(int boardIndex)
-           {
-              return new Vector2Int((boardIndex % width) + xMin, (boardIndex / width) + yMin);
-           }
-
-           public Piece GetPieceAt(Vector2Int boardPosition)
-           {
-              int index = ToIndex(boardPosition);
-              return board[index].Piece;
-           }
-
-           public void MakeMove(Move moveToMake)
-           {
-              int indexOfPosition = ToIndex(moveToMake.Position);
-              int indexOfDestination = ToIndex(moveToMake.Destination);
-              board[indexOfPosition] = board[indexOfPosition].WithoutPiece();
-              board[indexOfDestination] = board[indexOfDestination].WithPiece(moveToMake.PieceToMove);
-           }
-
-           public void UndoMove(Move moveToUndo)
-           {
-              int indexOfPosition = ToIndex(moveToUndo.Position);
-              int indexOfDestination = ToIndex(moveToUndo.Destination);
-              board[indexOfPosition] = board[indexOfPosition].WithPiece(moveToUndo.PieceToMove);
-              board[indexOfDestination] = board[indexOfPosition].WithPiece(moveToUndo.PieceToCapture);
-           }
-
-           public bool DoesChessBoardTileExist(Vector2Int boardPosition)
-           {
-              int index = ToIndex(boardPosition);
-              return 0 <= index && index < board.Length && board[index].IsValid;
-           }
-
-           public ChessBoardObjectInstance GetChessBoardObjectAt(Vector2Int boardPosition)
-           {
-              int index = ToIndex(boardPosition);
-              return 0 <= index && index < board.Length ? board[index].Piece.Instance : null;
-           }
-
-           public int GetTileImportance(Vector2Int boardPosition)
-           {
-              int index = ToIndex(boardPosition);
-              return board[index].Importance;
-           }
-        }
-
-        private readonly struct Tile
-        {
-           public readonly bool IsValid;
-           public readonly int Importance;
-           public readonly Piece Piece;
-
-           public Tile(bool isValid, int importance) :
-              this(isValid, importance, default)
-           {
-           }
-           
-           public Tile(bool isValid, int importance, Piece piece)
-           {
-              IsValid = isValid;
-              Importance = importance;
-              Piece = piece;
-           }
-
-           public Tile WithoutPiece()
-           {
-              return new Tile(IsValid, Importance);
-           }
-           
-           public Tile WithPiece(Piece piece)
-           {
-              return new Tile(IsValid, Importance, piece);
-           }
-        }
-
-        private readonly struct Piece
-        {
-           public bool IsValid => Instance != null && PieceType != ChessPieceType.None && PieceColour != ChessPieceColour.Unknown && ActionProvider.IsValid;
-           
-           public readonly ChessBoardObjectInstance Instance;
-           public readonly ChessPieceType PieceType;
-           public readonly ChessPieceColour PieceColour;
-           public readonly int Value;
-           public readonly InterfaceHandle<IActionProvider> ActionProvider;
-
-           public Piece(
-              ChessBoardObjectInstance instance, 
-              InterfaceHandle<IChessPiece> chessPiece,
-              InterfaceHandle<IActionProvider> actionProvider)
-           {
-              Instance = instance;
-              PieceType = chessPiece.GetPieceType();
-              PieceColour = chessPiece.GetPieceColour();
-              Value = chessPiece.GetValue();
-              ActionProvider = actionProvider;
-           }
-
-           public Piece(ChessBoardObjectInstance instance) : 
-              this(instance, instance.FindInterface<IChessPiece>(), instance.FindInterface<IActionProvider>())
-           {
-           }
-        }
-
-        private readonly struct Move
-        {
-           public bool IsValid => Position != Destination && PieceToMove.IsValid;
-           
-           public readonly Piece PieceToMove;
-           public readonly Piece PieceToCapture;
-           public readonly Vector2Int Position;
-           public readonly Vector2Int Destination;
-
-           public Move(Piece pieceToMove, Piece pieceToCapture, Vector2Int position, Vector2Int destination)
-           {
-              PieceToMove = pieceToMove;
-              PieceToCapture = pieceToCapture;
-              Position = position;
-              Destination = destination;
-           }
-        }
-
+       #region Properties and Fields
+       
         private const int k_defaultValidMovesAllocation = 20;
         private const int k_defaultValidMovesPoolCapacity = 1000;
         
@@ -177,9 +24,10 @@ namespace QC.Match.AI
            defaultCapacity: k_defaultValidMovesPoolCapacity);
         private static Tile[] s_tiles;
         
+        #endregion
+        
         public static bool TryCalculate(
             ITurnStrategy.Args args,
-            IReadOnlyList<ChessBoardObjectInstance> piecesToConsider,
             AlphaBetaParameters alphaBetaParameters,
             out ICommand<ChessBoardCommandArgs> command)
         {
@@ -204,29 +52,40 @@ namespace QC.Match.AI
                  s_tiles = new Tile[boundingBox.size.x * boundingBox.size.y];
               }
               
-              Board board = new Board(args.ChessBoard, boundingBox, s_tiles);
+              Board board = new Board(boundingBox, s_tiles);
+              board.SetTiles(args.ChessBoard.Tiles, alphaBetaParameters);
+              board.SetObjects(args.ChessBoard.Objects, alphaBetaParameters, args.RNG);
               
-              foreach (var pieceInstance in piecesToConsider)
+              for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
               {
-                 var chessPiece = pieceInstance.FindInterface<IChessPiece>();
-                 if (chessPiece.GetPieceColour() != activeColour)
+                 Tile tile = board.board[boardIndex];
+              
+                 if (!tile.IsValid)
+                 {
+                    continue;
+                 }
+              
+                 if (!tile.Piece.IsValid)
+                 {
+                    continue;
+                 }
+              
+                 if (tile.Piece.PieceColour != activeColour)
                  {
                     continue;
                  }
 
+                 
+                 Piece piece = tile.Piece;
+                 Vector2Int position = board.ToVector2Int(boardIndex);
+
                  List<Vector2Int> validActions = s_validMovesPool.Get();
-
-                 var actionProvider = pieceInstance.FindInterface<IActionProvider>();
-                 var transform = pieceInstance.FindInterface<IGrid2DTransform>();
-                 Vector2Int position = transform.GetPosition();
-
-                 actionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
-                 actionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
+                 tile.Piece.ActionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
+                 tile.Piece.ActionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 
                  for (int i = 0, n = validActions.Count; i < n; ++i)
                  {
                     Vector2Int action = validActions[i];
-                    Piece piece = new Piece(pieceInstance, chessPiece, actionProvider);
                     Piece pieceToCapture = board.GetPieceAt(action);
                     Move move = new Move(piece, pieceToCapture, position, action);
 
@@ -308,7 +167,7 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(parameters, board, activeColour, rng);
+              int currentBoardScore = EvaluateBoard(board, activeColour);
               return currentBoardScore;
            }
 
@@ -338,7 +197,7 @@ namespace QC.Match.AI
               
               var actionProvider = tile.Piece.ActionProvider;
               
-              // TODO: May have to change these to support the faster AlphaBeta version
+              // TODO: May have to change these to support the faster AlphaBeta structs
               actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
               actionProvider.CalculateValidMoves(boardPosition, board, validActions);
 
@@ -379,7 +238,7 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(parameters, board, activeColour, rng);
+              int currentBoardScore = EvaluateBoard(board, activeColour);
               return currentBoardScore;
            }
            
@@ -438,54 +297,29 @@ namespace QC.Match.AI
            return minValue;
         }
 
-        private static int EvaluateBoard(
-           AlphaBetaParameters parameters,
-           Board board,
-           ChessPieceColour activeColour,
-           IRNG rng)
+        private static int EvaluateBoard(Board board, ChessPieceColour activeColour)
         {
            int total = 0;
 
            for (int tileIndex = 0, n = board.board.Length; tileIndex < n; ++tileIndex)
            {
+              // Interestingly, we don't account for the cost of NOT occupying a tile
+              
               Tile tile = board.board[tileIndex];
               if (!tile.IsValid || !tile.Piece.IsValid)
               {
                  continue;
               }
-
-              Vector2Int position = board.ToVector2Int(tileIndex);
-              int materialWorth = CalculateValue(
-                 parameters,
-                 position, 
-                 tile.Piece, 
-                 activeColour, 
-                 board,
-                 rng);
               
-              total += materialWorth;
+              int colourModifier = tile.Piece.PieceColour == activeColour ? 1 : -1;
+              int tileImportance = tile.Importance;
+              int pieceValue = tile.Piece.Value;
+              int totalValue = (tileImportance + pieceValue) * colourModifier;
+              
+              total += totalValue;
            }
            
            return total;
-        }
-
-        private static int CalculateValue(
-           AlphaBetaParameters parameters,
-           Vector2Int position,
-           Piece piece,
-           ChessPieceColour activeColour,
-           IChessBoardLookup boardLookup,
-           IRNG rng)
-        {
-           int colourModifier = piece.PieceColour == activeColour ? 1 : -1;
-           int chessPieceValue = piece.Value;
-           ChessPieceType chessPieceType = piece.PieceType;
-           int chessPieceValueOverride = parameters.GetValueOverrideForPiece(chessPieceType, rng);
-           int positionImportance = boardLookup.GetTileImportance(position);
-           int positionImportanceOverride = parameters.GetImportanceOverrideForPosition(position);
-           
-           int value = chessPieceValue + chessPieceValueOverride + positionImportance + positionImportanceOverride;
-           return value * colourModifier;
         }
     }
 }

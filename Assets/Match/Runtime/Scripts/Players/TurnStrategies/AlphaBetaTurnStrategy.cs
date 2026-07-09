@@ -20,19 +20,11 @@ namespace QC.Match.Players
 
         public async UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
-            ChessPieceColour activeColour = args.MatchState.ActiveColour;
-            activePlayerPieces.AddRange(args.ChessBoard.Objects.Where(x =>
-                x.HasComponent<IActionProvider>() &&
-                x.HasComponent<IGrid2DTransform>() &&
-                x.TryFindComponent<IChessPiece>(out var chessPiece) &&
-                chessPiece.GetPieceColour() == activeColour));
-
             turnCalculationTimer.Restart();
 
             await UniTask.SwitchToThreadPool();
             bool calculatedMoveSuccessfully =
-                AlphaBeta.TryCalculate(args, activePlayerPieces, parameters, out var command);
+                AlphaBeta.TryCalculate(args, parameters, out var command);
             await UniTask.SwitchToMainThread();
             
             turnCalculationTimer.Stop();
