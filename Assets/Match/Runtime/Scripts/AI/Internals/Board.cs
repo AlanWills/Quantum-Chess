@@ -100,8 +100,18 @@ namespace QC.Match.AI.Internals
            {
               int indexOfPosition = ToIndex(moveToUndo.Position);
               int indexOfDestination = ToIndex(moveToUndo.Destination);
-              board[indexOfPosition] = board[indexOfPosition].WithPiece(moveToUndo.PieceToMove);
-              board[indexOfDestination] = board[indexOfPosition].WithPiece(moveToUndo.PieceToCapture);
+              
+              Tile tile = board[indexOfPosition];
+              Tile tilePiece = tile.WithPiece(moveToUndo.PieceToMove);
+              board[indexOfPosition] = tilePiece;
+              UnityEngine.Debug.Assert(tile.Importance == tilePiece.Importance);
+              UnityEngine.Debug.Assert(tile.Importance == board[indexOfPosition].Importance);
+              
+              Tile destinationTile = board[indexOfDestination];
+              Tile destinationTileWithPiece = destinationTile.WithoutPiece();
+              board[indexOfDestination] = destinationTileWithPiece;
+              UnityEngine.Debug.Assert(destinationTile.Importance == destinationTileWithPiece.Importance);
+              UnityEngine.Debug.Assert(destinationTile.Importance == board[indexOfDestination].Importance);
            }
 
            public bool DoesChessBoardTileExist(Vector2Int boardPosition)

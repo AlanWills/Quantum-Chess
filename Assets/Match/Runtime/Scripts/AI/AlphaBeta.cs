@@ -26,7 +26,7 @@ namespace QC.Match.AI
         private static Tile[] s_tiles;
         
         #endregion
-        
+
         public static bool TryCalculate(
             ITurnStrategy.Args args,
             AlphaBetaParameters alphaBetaParameters,
@@ -75,7 +75,6 @@ namespace QC.Match.AI
                  {
                     continue;
                  }
-
                  
                  Piece piece = tile.Piece;
                  Vector2Int position = board.ToVector2Int(boardIndex);
@@ -83,6 +82,7 @@ namespace QC.Match.AI
                  List<Vector2Int> validActions = s_validMovesPool.Get();
                  validActions.Clear();
                  
+                 // TODO: May have to change these to support the faster AlphaBeta structs
                  tile.Piece.ActionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
                  tile.Piece.ActionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
 
@@ -213,7 +213,7 @@ namespace QC.Match.AI
                  board.MakeMove(move);
                  int score = AlphaBetaMin(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
                  board.UndoMove(move);
-
+                 
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
 
@@ -271,6 +271,7 @@ namespace QC.Match.AI
 
               var actionProvider = tile.Piece.ActionProvider;
               
+              // TODO: May have to change these to support the faster AlphaBeta structs
               actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
               actionProvider.CalculateValidMoves(boardPosition, board, validActions);
 
@@ -283,7 +284,7 @@ namespace QC.Match.AI
                  board.MakeMove(move);
                  int score = AlphaBetaMax(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
                  board.UndoMove(move);
-
+                 
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
 
