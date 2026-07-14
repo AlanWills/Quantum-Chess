@@ -18,7 +18,12 @@ namespace QC.Match.Players
             this.parameters = parameters;
         }
 
-        public async UniTask OnTurnBegin(ITurnStrategy.Args args)
+        public UniTask OnTurnBegin(ITurnStrategy.Args args)
+        {
+            return UniTask.CompletedTask;
+        }
+
+        public async UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
         {
             turnCalculationTimer.Restart();
 
@@ -34,16 +39,14 @@ namespace QC.Match.Players
             {
                 await UniTask.Delay(remainingTime);
             }
-            
+
             if (calculatedMoveSuccessfully)
             {
-                args.CommandExecutor.QueueCommand(command);
+                return command;
             }
-            else
-            {
-                UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.MatchState.ActiveColour}.  Queueing up a change of colour...");
-                args.CommandExecutor.QueueCommand(new SetActivePlayerCommand(args.MatchState.NextPlayerIndex));
-            }
+            
+            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.MatchState.ActiveColour}.  This will result in a skipped turn...");
+            return null;
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

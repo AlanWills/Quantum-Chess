@@ -13,6 +13,11 @@ namespace QC.Match.Players
             return UniTask.CompletedTask;
         }
 
+        public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        {
+            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(null);
+        }
+
         public UniTask OnTurnEnd(ITurnStrategy.Args args)
         {
             args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, false));

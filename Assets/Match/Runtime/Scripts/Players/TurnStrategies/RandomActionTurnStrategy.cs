@@ -11,6 +11,11 @@ namespace QC.Match.Players
     {
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
+            return UniTask.CompletedTask;
+        }
+
+        public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        {
             List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
             ChessPieceColour activeColour = args.MatchState.ActiveColour;
             activePlayerPieces.AddRange(args.ChessBoard.Objects.Where(x =>
@@ -21,15 +26,11 @@ namespace QC.Match.Players
             
             if (RandomAction.TryCalculate(args, activePlayerPieces, out var command))
             {
-                args.CommandExecutor.QueueCommand(command);
-            }
-            else
-            {
-                UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.MatchState.ActiveColour}.  Queueing up a change of colour...");
-                args.CommandExecutor.QueueCommand(new SetActivePlayerCommand(args.MatchState.NextPlayerIndex));
+                return UniTask.FromResult(command);
             }
 
-            return UniTask.CompletedTask;
+            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.MatchState.ActiveColour}.  Queueing up a change of colour...");
+            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(null);
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

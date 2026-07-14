@@ -1,6 +1,7 @@
 ﻿using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using Cysharp.Threading.Tasks;
+using QC.Match.Commands;
 using QC.Match.Objects;
 
 namespace QC.Match
@@ -31,6 +32,7 @@ namespace QC.Match
         }
 
         UniTask OnTurnBegin(Args args);
+        UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(Args args);
         UniTask OnTurnEnd(Args args);
     }
 }

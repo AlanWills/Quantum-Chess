@@ -45,9 +45,10 @@ namespace QC.Match.Players
                 case Type.Custom:
                 {
                     if (luaTable.TryGetFunction("onTurnBegin", out var onTurnBeginFunc) &&
+                        luaTable.TryGetFunction("turnAction", out var turnActionFunc) &&
                         luaTable.TryGetFunction("onTurnEnd", out var onTurnEndFunc))
                     {
-                        return new LuaFunctionTurnStrategy(onTurnBeginFunc, onTurnEndFunc);
+                        return new LuaFunctionTurnStrategy(onTurnBeginFunc, turnActionFunc, onTurnEndFunc);
                     }
                     
                     UnityEngine.Debug.LogAssertion($"Failed to create {nameof(Type.Custom)} turn strategy as the factory was unable to detect the 'onTurnBegin' and 'onTurnEnd' functions.");

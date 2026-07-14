@@ -182,6 +182,14 @@ namespace QC.Match.Objects
             // However, it's possible this is being called from a command, in which case it will wait forever
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
             
+            var nextAction = await ActivePlayer.TurnStrategy.CalculateNextAction(turnStrategyArgs);
+            turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+
+            if (ActivePlayer.AutoEndTurn)
+            {
+                turnStrategyArgs.CommandExecutor.QueueCommand(new SetActivePlayerCommand(NextPlayerIndex));
+            }
+            
             onPlayerFinishedThinking.Invoke();
         }
 
@@ -219,9 +227,15 @@ namespace QC.Match.Objects
                 return;
             }
 
+            if (!playerConfig.TryGet("autoEndTurn", out bool autoEndTurn))
+            {
+                UnityEngine.Debug.Log("Failed to find value for 'autoEndTurn' so defaulting to 'true'.");
+                autoEndTurn = true;
+            }
+
             ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, aiStrategyDefaultParameters, playerConfig);
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
-            Player player = new Player(playerColour, turnStrategy, winCondition);
+            Player player = new Player(playerColour, turnStrategy, winCondition, autoEndTurn);
             players.Add(player);
         }
 
