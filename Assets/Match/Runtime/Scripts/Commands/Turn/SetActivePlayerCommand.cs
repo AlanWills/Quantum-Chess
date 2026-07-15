@@ -14,16 +14,8 @@ namespace QC.Match.Commands
         
         public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
-            ITurnStrategy.Args turnStrategyArgs = new ITurnStrategy.Args(
-                args.MatchState,
-                args.ChessBoard,
-                args.CommandExecutor,
-                args.LuaRuntime,
-                args.RNG);
-            IWinCondition.Args winConditionArgs = new IWinCondition.Args(
-                args.MatchState,
-                args.ChessBoard,
-                args.LuaRuntime);
+            ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs();
+            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
             await args.MatchState.SetActivePlayerIndex(PlayerIndex, turnStrategyArgs, winConditionArgs);
 
             return CommandState.Completed;

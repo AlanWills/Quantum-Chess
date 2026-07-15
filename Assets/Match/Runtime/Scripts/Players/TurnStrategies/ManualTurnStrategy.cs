@@ -15,7 +15,7 @@ namespace QC.Match.Players
 
         public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
         {
-            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(null);
+            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(new WaitForActionsTakenByActivePlayerCommand(1));
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

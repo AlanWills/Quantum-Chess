@@ -43,6 +43,8 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
             functions.Add(new LibraryFunction(kName, "addChessBoardTile", AddChessBoardTile));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
+            functions.Add(new LibraryFunction(kName, "checkWinConditionForPlayer", CheckWinConditionForPlayer));
+            functions.Add(new LibraryFunction(kName, "dryRunNextActionForPlayer", DryRunNextActionForPlayer));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -350,6 +352,30 @@ namespace QC.Match.Lua
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             ClearChessBoardCommand clearChessBoardCommand = new ClearChessBoardCommand();
             chessBoardCommandExecutor.QueueCommand(clearChessBoardCommand);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> CheckWinConditionForPlayer(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int playerIndex = context.GetArgument<int>(1);
+            CheckPlayerWinConditionCommand checkPlayerWinCondition = new CheckPlayerWinConditionCommand(playerIndex);
+            chessBoardCommandExecutor.QueueCommand(checkPlayerWinCondition);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> DryRunNextActionForPlayer(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            int playerIndex = context.GetArgument<int>(1);
+            DryRunNextPlayerActionCommand dryRunNextPlayerAction = new DryRunNextPlayerActionCommand(playerIndex);
+            chessBoardCommandExecutor.QueueCommand(dryRunNextPlayerAction);
             
             return new ValueTask<int>(context.Return());
         }

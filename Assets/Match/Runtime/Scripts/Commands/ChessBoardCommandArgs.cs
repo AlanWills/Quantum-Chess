@@ -32,4 +32,25 @@ namespace QC.Match.Commands
             RNG = rng;
         }
     }
+
+    public static class ChessBoardCommandArgsExtensions
+    {
+        public static ITurnStrategy.Args ToTurnStrategyArgs(this ChessBoardCommandArgs args)
+        {
+            return new ITurnStrategy.Args(
+                args.MatchState,
+                args.ChessBoard,
+                args.CommandExecutor,
+                args.LuaRuntime,
+                args.RNG);
+        }
+
+        public static IWinCondition.Args ToWinConditionArgs(this ChessBoardCommandArgs args)
+        {
+            return new IWinCondition.Args(
+                args.MatchState,
+                args.ChessBoard,
+                args.LuaRuntime);
+        }
+    }
 }

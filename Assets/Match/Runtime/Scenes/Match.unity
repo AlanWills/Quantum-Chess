@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
   chessBoardObjectViewAllocator: {fileID: 932586496}
   chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+  matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   piecesViewRoot: {fileID: 1255884393}
   chessBoardTilemap: {fileID: 690885639}
   hitBoxCollider: {fileID: 690885640}

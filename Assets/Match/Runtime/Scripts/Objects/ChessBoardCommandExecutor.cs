@@ -60,6 +60,7 @@ namespace QC.Match.Objects
         public void QueueCommand(ICommand<ChessBoardCommandArgs> command)
         {
             UnityEngine.Debug.Assert(commands != null, $"{nameof(commands)} is still null!  Did you forget to call {nameof(BeginProcessing)}?");
+            UnityEngine.Debug.Assert(command != null, "Attempting to queue a null command!");
             commands.Writer.TryWrite(command);
         }
     }

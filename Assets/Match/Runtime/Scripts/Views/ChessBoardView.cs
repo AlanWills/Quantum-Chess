@@ -18,6 +18,7 @@ namespace QC.Match.Views
 
         [SerializeField] private GameObjectAllocator chessBoardObjectViewAllocator;
         [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
+        [SerializeField] private MatchState matchState;
         [SerializeField] private Transform piecesViewRoot;
         [SerializeField] private Tilemap chessBoardTilemap;
         [SerializeField] private Collider2D hitBoxCollider;
@@ -118,6 +119,7 @@ namespace QC.Match.Views
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
+            matchState.RecordActionForActivePlayer();
         }
 
         public void OnChessBoardAttackActionPressed(InputState inputState)
@@ -125,6 +127,7 @@ namespace QC.Match.Views
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             AttackWithSelectedChessBoardObjectCommand attackWithSelectedChessBoardObjectCommand = new AttackWithSelectedChessBoardObjectCommand(position);
             chessBoardCommandExecutor.QueueCommand(attackWithSelectedChessBoardObjectCommand);
+            matchState.RecordActionForActivePlayer();
         }
         
         #endregion

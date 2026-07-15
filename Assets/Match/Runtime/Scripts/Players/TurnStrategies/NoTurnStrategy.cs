@@ -12,7 +12,7 @@ namespace QC.Match.Players
 
         public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
         {
-            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(null);
+            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(new EmptyCommand());
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

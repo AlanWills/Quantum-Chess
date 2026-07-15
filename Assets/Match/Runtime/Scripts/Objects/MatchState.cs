@@ -148,6 +148,28 @@ namespace QC.Match.Objects
             await luaRuntime.ExecuteFunctionAsync(setUpScenarioFunction);
         }
 
+        public async UniTask<bool> CheckPlayerWinCondition(int playerIndex, IWinCondition.Args winConditionArgs)
+        {
+            if (playerIndex < 0 || playerIndex >= NumPlayers)
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to check player win condition with an out of range index {playerIndex}.");
+                return false;
+            }
+
+            return await players[playerIndex].WinCondition.CalculateIfWinConditionIsMet(winConditionArgs);
+        }
+
+        public async UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextPlayerAction(int playerIndex, ITurnStrategy.Args turnStrategyArgs)
+        {
+            if (playerIndex < 0 || playerIndex >= NumPlayers)
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to calculate next player action with an out of range index {playerIndex}.");
+                return new EmptyCommand();
+            }
+
+            return await players[playerIndex].TurnStrategy.CalculateNextAction(turnStrategyArgs);
+        }
+
         public async UniTask SetActivePlayerIndex(
             int playerIndex, 
             ITurnStrategy.Args turnStrategyArgs, 
@@ -166,6 +188,8 @@ namespace QC.Match.Objects
             }
             
             activePlayerIndex = playerIndex;
+            players[activePlayerIndex].ActionsTakenThisTurn = 0;
+            
             onChanged.Invoke();
 
             if (HasActivePlayer)
@@ -183,7 +207,11 @@ namespace QC.Match.Objects
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
             
             var nextAction = await ActivePlayer.TurnStrategy.CalculateNextAction(turnStrategyArgs);
-            turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+            UnityEngine.Debug.Assert(nextAction != null, $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?");
+            if (nextAction != null)
+            {
+                turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+            }
 
             if (ActivePlayer.AutoEndTurn)
             {
@@ -191,6 +219,22 @@ namespace QC.Match.Objects
             }
             
             onPlayerFinishedThinking.Invoke();
+        }
+
+        public void RecordActionForActivePlayer()
+        {
+            if (!HasActivePlayer)
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to record action for active player, but there is no active player.");
+                return;
+            }
+
+            ++ActivePlayer.ActionsTakenThisTurn;
+        }
+
+        public int GetNumActionsTakenByActivePlayer()
+        {
+            return HasActivePlayer ? ActivePlayer.ActionsTakenThisTurn : 0;
         }
 
         public MatchStateDTO Serialize()
@@ -248,6 +292,27 @@ namespace QC.Match.Objects
             }
 
             return -1;
+        }
+
+        [LuaMember("getPlayerColour")]
+        private string GetPlayerColour(int index)
+        {
+            return index < players.Count ? players[index].Colour.ToString() : string.Empty;
+        }
+
+        [LuaMember("getPlayerAutoEndTurn")]
+        private bool GetPlayerAutoEndTurn(int index)
+        {
+            return index < players.Count && players[index].AutoEndTurn;
+        }
+
+        [LuaMember("setPlayerAutoEndTurn")]
+        private void GetPlayerAutoEndTurn(int index, bool newValue)
+        {
+            if (index < players.Count)
+            {
+                players[index].AutoEndTurn = newValue;
+            }
         }
         
         #endregion

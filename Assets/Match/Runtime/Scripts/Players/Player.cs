@@ -5,7 +5,8 @@
         public ChessPieceColour Colour { get; }
         public ITurnStrategy TurnStrategy { get; }
         public IWinCondition WinCondition { get; }
-        public bool AutoEndTurn { get; }
+        public bool AutoEndTurn { get; set; }
+        public int ActionsTakenThisTurn { get; set; }
 
         public Player(ChessPieceColour colour, ITurnStrategy turnStrategy, IWinCondition winCondition, bool autoEndTurn)
         {
