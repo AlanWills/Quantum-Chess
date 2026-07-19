@@ -74,13 +74,16 @@ namespace QC.Match.Managers
         public IEnumerator LoadAssets()
         {
             ChessBoardCommandArgs args = CreateCommandArgs();
-            ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs();
-            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
-
             chessBoardCommandExecutor.BeginProcessing(args);
-            
-            yield return matchState.TryLoadLastActiveScenario(turnStrategyArgs, winConditionArgs);
-            
+
+            if (matchState.HasActiveScenario)
+            {
+                ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs(args.MatchState.ActivePlayerIndex);
+                IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
+                
+                yield return matchState.LoadLastActiveScenario(turnStrategyArgs, winConditionArgs);
+                }
+
             onMatchSetup.Invoke();
         }
 

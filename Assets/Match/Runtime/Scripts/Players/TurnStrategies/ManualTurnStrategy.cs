@@ -8,14 +8,14 @@ namespace QC.Match.Players
     {
         private class State
         {
-            public MatchState MatchState;
+            public IPlayerInfo PlayerInfo;
             public int TargetActions;
         }
         
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, true));
-            args.CommandExecutor.QueueCommand(new ToggleInputIfNotChessPieceColourCommand(args.MatchState.ActiveColour, false));
+            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.PlayerColour, true));
+            args.CommandExecutor.QueueCommand(new ToggleInputIfNotChessPieceColourCommand(args.PlayerColour, false));
             
             return UniTask.CompletedTask;
         }
@@ -27,10 +27,10 @@ namespace QC.Match.Players
 
         public async UniTask OnTurnEnd(ITurnStrategy.Args args)
         {
-            State state = new State { MatchState = args.MatchState, TargetActions = 1 };
-            await UniTask.WaitUntil(state, s => s.MatchState.GetNumActionsTakenByActivePlayer() >= s.TargetActions);
+            State state = new State { PlayerInfo = args.PlayerInfo, TargetActions = 1 };
+            await UniTask.WaitUntil(state, s => s.PlayerInfo.GetNumActionsTakenByActivePlayer() >= s.TargetActions);
 
-            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, false));
+            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.PlayerColour, false));
         }
     }
 }

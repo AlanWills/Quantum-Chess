@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using QC.Match.AI;
 using QC.Match.Commands;
-using QC.Match.Objects;
 
 namespace QC.Match.Players
 {
@@ -28,8 +25,7 @@ namespace QC.Match.Players
             turnCalculationTimer.Restart();
 
             await UniTask.SwitchToThreadPool();
-            bool calculatedMoveSuccessfully =
-                AlphaBeta.TryCalculate(args, parameters, out var command);
+            bool calculatedMoveSuccessfully = AlphaBeta.TryCalculate(args, parameters, out var command);
             await UniTask.SwitchToMainThread();
             
             turnCalculationTimer.Stop();
@@ -45,7 +41,7 @@ namespace QC.Match.Players
                 return command;
             }
             
-            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.MatchState.ActiveColour}.  This will result in a skipped turn...");
+            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.PlayerColour}.  This will result in a skipped turn...");
             return null;
         }
 

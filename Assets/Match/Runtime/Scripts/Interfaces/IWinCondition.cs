@@ -7,18 +7,15 @@ namespace QC.Match
 {
     public interface IWinCondition
     {
-        public struct Args
+        public readonly struct Args
         {
-            public readonly MatchState MatchState;
             public readonly ChessBoard ChessBoard;
             public readonly ILuaRuntime LuaRuntime;
 
             public Args(
-                MatchState matchState,
                 ChessBoard chessBoard,
                 ILuaRuntime luaRuntime)
             {
-                MatchState = matchState;
                 ChessBoard = chessBoard;
                 LuaRuntime = luaRuntime;
             }

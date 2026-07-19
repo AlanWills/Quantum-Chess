@@ -17,13 +17,13 @@ namespace QC.Match.Objects
 {
     [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(MatchState), menuName = "QC/Match/Match State")]
-    public partial class MatchState : ScriptableObject
+    public partial class MatchState : ScriptableObject, IPlayerInfo
     {
         #region Properties and Fields
 
         public const string kLuaName = nameof(MatchState);
 
-        [LuaMember("hasActiveScenario")] private bool HasActiveScenario => !string.IsNullOrEmpty(activeScenarioGuid);
+        [LuaMember("hasActiveScenario")] public bool HasActiveScenario => !string.IsNullOrEmpty(activeScenarioGuid);
         [LuaMember("numPlayers")] private int NumPlayers => players.Count;
 
         [LuaMember("activeScenarioGuid")]
@@ -40,7 +40,7 @@ namespace QC.Match.Objects
             }
         }
 
-        private bool HasActivePlayer => 0 <= activePlayerIndex && activePlayerIndex < NumPlayers;
+        public bool HasActivePlayer => 0 <= activePlayerIndex && activePlayerIndex < NumPlayers;
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
         [LuaMember("nextPlayerIndex")] public int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
         public ChessPieceColour ActiveColour => ActivePlayer?.Colour ?? ChessPieceColour.Unknown;
@@ -85,26 +85,19 @@ namespace QC.Match.Objects
             players.Clear();
         }
 
-        public async UniTask TryLoadLastActiveScenario(
-            ITurnStrategy.Args turnStrategyArgs, 
+        public async UniTask LoadLastActiveScenario(
+            ITurnStrategy.Args turnStrategyArgs,
             IWinCondition.Args winConditionArgs)
         {
             if (!HasActiveScenario)
             {
+                UnityEngine.Debug.LogAssertion($"Attempting to load a scenario, but we don't actually have one active.  Did you forget to call {nameof(HasActiveScenario)}?");
                 return;
             }
 
-            if (!await LoadScenarioAsync(activeScenarioGuid))
-            {
-                return;
-            }
-
-            if (!HasActivePlayer)
-            {
-                return;
-            }
-
-            PerformTurnForActivePlayer(turnStrategyArgs, winConditionArgs).Forget();
+            await LoadScenarioAsync(activeScenarioGuid);
+            
+            BeginTurnForActivePlayer(turnStrategyArgs, winConditionArgs);
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -181,9 +174,28 @@ namespace QC.Match.Objects
             ITurnStrategy.Args turnStrategyArgs, 
             IWinCondition.Args winConditionArgs)
         {
-            activePlayerIndex = playerIndex;
-            players[activePlayerIndex].ActionsTakenThisTurn = 0;
+            if (activePlayerIndex == playerIndex)
+            {
+                UnityEngine.Debug.LogAssertion($"You're trying to set the active player index to {playerIndex}, but it has already been set to that.  Ignoring...");
+                return;
+            }
             
+            activePlayerIndex = playerIndex;
+            
+            BeginTurnForActivePlayer(turnStrategyArgs, winConditionArgs);
+        }
+
+        private void BeginTurnForActivePlayer(
+            ITurnStrategy.Args turnStrategyArgs,
+            IWinCondition.Args winConditionArgs)
+        {
+            if (!HasActivePlayer)
+            {
+                UnityEngine.Debug.LogAssertion($"Really serious issue here!  You're attempting to load an active player, assuming one has been set up, but it hasn't...");
+                return;
+            }
+            
+            players[activePlayerIndex].ActionsTakenThisTurn = 0;
             onChanged.Invoke();
 
             if (HasActivePlayer)
@@ -233,7 +245,12 @@ namespace QC.Match.Objects
 
             ++ActivePlayer.ActionsTakenThisTurn;
         }
-
+        
+        public ChessPieceColour GetPlayerColour(int index)
+        {
+            return index < players.Count ? players[index].Colour : ChessPieceColour.Unknown;
+        }
+        
         public int GetNumActionsTakenByActivePlayer()
         {
             return HasActivePlayer ? ActivePlayer.ActionsTakenThisTurn : 0;
@@ -303,7 +320,7 @@ namespace QC.Match.Objects
         }
 
         [LuaMember("getPlayerColour")]
-        private string GetPlayerColour(int index)
+        private string Lua_GetPlayerColour(int index)
         {
             return index < players.Count ? players[index].Colour.ToString() : string.Empty;
         }

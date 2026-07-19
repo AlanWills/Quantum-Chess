@@ -2,15 +2,6 @@ local StandardChessMatchFactory = require("Factories/StandardChessMatchFactory.l
 
 local Scenario = { }
 
-function Scenario:load()
-    StandardChessMatchFactory.createAIWhitePlayer({
-        difficulty = "Easy"
-    })
-    StandardChessMatchFactory.createAIBlackPlayer({
-        difficulty = "Easy"
-    })
-end
-
 function Scenario:setUp()
     local boardWidth = 8
     local boardHeight = 8
@@ -18,6 +9,15 @@ function Scenario:setUp()
     
     StandardChessMatchFactory.createBoard(boardWidth, boardHeight, startingXCoordinate)
     StandardChessMatchFactory.setStartingPlayer("White")
+end
+
+function Scenario:load()
+    StandardChessMatchFactory.createAIWhitePlayer({
+        difficulty = "Easy"
+    })
+    StandardChessMatchFactory.createAIBlackPlayer({
+        difficulty = "Easy"
+    })
 end
 
 return Scenario

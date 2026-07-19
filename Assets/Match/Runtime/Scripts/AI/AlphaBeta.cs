@@ -19,7 +19,7 @@ namespace QC.Match.AI
         private const int k_defaultValidMovesPoolCapacity = 1000;
         
         // Does this leak memory between domain reloads?
-        private static ObjectPool<List<Vector2Int>> s_validMovesPool = new(
+        private static readonly ObjectPool<List<Vector2Int>> s_validMovesPool = new(
            () => new List<Vector2Int>(k_defaultValidMovesAllocation),
            actionOnRelease: l => l.Clear(),
            defaultCapacity: k_defaultValidMovesPoolCapacity);
@@ -41,7 +41,7 @@ namespace QC.Match.AI
            
            using (AlphaBetaProfileMarkers.MainLoop.Auto())
            {
-              ChessPieceColour activeColour = args.MatchState.ActiveColour;
+              ChessPieceColour activeColour = args.PlayerColour;
               Move bestMove = default;
               int bestScore = int.MinValue;
               int alpha = int.MinValue;
@@ -142,7 +142,7 @@ namespace QC.Match.AI
                     $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
                  UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake),
                     $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
-                 UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.MatchState.ActiveColour,
+                 UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.PlayerColour,
                     $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
                  command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
               }

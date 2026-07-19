@@ -1,6 +1,7 @@
 using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using QC.Match.Objects;
+using QC.Match.Players;
 
 namespace QC.Match.Commands
 {
@@ -35,9 +36,10 @@ namespace QC.Match.Commands
 
     public static class ChessBoardCommandArgsExtensions
     {
-        public static ITurnStrategy.Args ToTurnStrategyArgs(this ChessBoardCommandArgs args)
+        public static ITurnStrategy.Args ToTurnStrategyArgs(this ChessBoardCommandArgs args, int playerIndex)
         {
             return new ITurnStrategy.Args(
+                playerIndex,
                 args.MatchState,
                 args.ChessBoard,
                 args.CommandExecutor,
@@ -48,7 +50,6 @@ namespace QC.Match.Commands
         public static IWinCondition.Args ToWinConditionArgs(this ChessBoardCommandArgs args)
         {
             return new IWinCondition.Args(
-                args.MatchState,
                 args.ChessBoard,
                 args.LuaRuntime);
         }

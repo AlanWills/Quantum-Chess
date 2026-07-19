@@ -3,27 +3,33 @@ using Celeste.Lua;
 using Cysharp.Threading.Tasks;
 using QC.Match.Commands;
 using QC.Match.Objects;
+using QC.Match.Players;
 
 namespace QC.Match
 {
     public interface ITurnStrategy
     {
-        public struct Args
+        public readonly struct Args
         {
-            public readonly MatchState MatchState;
+            public ChessPieceColour PlayerColour => PlayerInfo.GetPlayerColour(PlayerIndex);
+            
+            public readonly int PlayerIndex;
+            public readonly IPlayerInfo PlayerInfo;
             public readonly ChessBoard ChessBoard;
             public readonly ChessBoardCommandExecutor CommandExecutor;
             public readonly ILuaRuntime LuaRuntime;
             public readonly IRNG RNG;
 
             public Args(
-                MatchState matchState,
+                int playerIndex,
+                IPlayerInfo playerInfo,
                 ChessBoard chessBoard,
                 ChessBoardCommandExecutor commandExecutor,
                 ILuaRuntime luaRuntime,
                 IRNG rng)
             {
-                MatchState = matchState;
+                PlayerIndex = playerIndex;
+                PlayerInfo = playerInfo;
                 ChessBoard = chessBoard;
                 CommandExecutor = commandExecutor;
                 LuaRuntime = luaRuntime;
