@@ -1,10 +1,17 @@
 ﻿using Cysharp.Threading.Tasks;
 using QC.Match.Commands;
+using QC.Match.Objects;
 
 namespace QC.Match.Players
 {
     public readonly struct ManualTurnStrategy : ITurnStrategy
     {
+        private class State
+        {
+            public MatchState MatchState;
+            public int TargetActions;
+        }
+        
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
             args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, true));
@@ -15,14 +22,15 @@ namespace QC.Match.Players
 
         public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
         {
-            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(new WaitForActionsTakenByActivePlayerCommand(1));
+            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(new EmptyCommand());
         }
 
-        public UniTask OnTurnEnd(ITurnStrategy.Args args)
+        public async UniTask OnTurnEnd(ITurnStrategy.Args args)
         {
-            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, false));
+            State state = new State { MatchState = args.MatchState, TargetActions = 1 };
+            await UniTask.WaitUntil(state, s => s.MatchState.GetNumActionsTakenByActivePlayer() >= s.TargetActions);
 
-            return UniTask.CompletedTask;
+            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.MatchState.ActiveColour, false));
         }
     }
 }

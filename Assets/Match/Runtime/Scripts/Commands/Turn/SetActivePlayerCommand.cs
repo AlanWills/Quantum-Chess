@@ -12,13 +12,13 @@ namespace QC.Match.Commands
             PlayerIndex = playerIndex;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
         {
             ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs();
             IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
-            await args.MatchState.SetActivePlayerIndex(PlayerIndex, turnStrategyArgs, winConditionArgs);
+            args.MatchState.SetActivePlayerIndex(PlayerIndex, turnStrategyArgs, winConditionArgs);
 
-            return CommandState.Completed;
+            return UniTask.FromResult(CommandState.Completed);
         }
     }
 }

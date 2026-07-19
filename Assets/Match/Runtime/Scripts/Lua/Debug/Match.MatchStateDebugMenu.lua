@@ -1,5 +1,5 @@
 local CheckWinConditionForPlayer = require("Commands/CheckPlayerWinConditionCommand.lua")
-local DryRunNextActionForPlayer = require("Commands/DryRunNextActionForPlayerCommand.lua")
+local ExecuteNextActionForPlayer = require("Commands/ExecuteNextActionForPlayerCommand.lua")
 
 local MatchStateDebugMenu = { }
 
@@ -21,26 +21,37 @@ function MatchStateDebugMenu:drawPlayers()
     for playerIndex = 0, MatchState.numPlayers - 1, 1 do
         GUILayout.beginSection("Player " .. tostring(playerIndex))
             local playerColour = MatchState:getPlayerColour(playerIndex)
+            local autoQueueAction = MatchState:getPlayerAutoQueueAction(playerIndex);
             local autoEndTurn = MatchState:getPlayerAutoEndTurn(playerIndex)
             
             GUILayout.label("Colour: " .. playerColour)
     
+            local newAutoQueueAction = GUILayout.toggle("Auto Queue Action:", autoQueueAction)
+            if autoQueueAction ~= newAutoQueueAction then
+                MatchState:setPlayerAutoQueueAction(playerIndex, newAutoQueueAction)
+            end
+            
             local newAutoEndTurn = GUILayout.toggle("Auto End Turn:", autoEndTurn)
             if autoEndTurn ~= newAutoEndTurn then
-                MatchState:setPlayerAutoEndTurn(playerIndex, autoEndTurn)
+                MatchState:setPlayerAutoEndTurn(playerIndex, newAutoEndTurn)
             end
             
             GUILayout.beginHorizontal()
     
             if GUILayout.button("Dry Run Next Action") then
-                DryRunNextActionForPlayer.new(playerIndex)
+                ExecuteNextActionForPlayer.dryRun(playerIndex)
             end
+            
+            if GUILayout.button("Execute Next Action") then
+                ExecuteNextActionForPlayer.new(playerIndex)
+            end
+            
+            GUILayout.endHorizontal()
             
             if GUILayout.button("Check Win Condition") then
                 CheckWinConditionForPlayer.new(playerIndex)
             end
             
-            GUILayout.endHorizontal()
         GUILayout.endSection();
     end
 end

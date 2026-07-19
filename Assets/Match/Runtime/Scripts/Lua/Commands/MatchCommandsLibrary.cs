@@ -44,7 +44,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "addChessBoardTile", AddChessBoardTile));
             functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
             functions.Add(new LibraryFunction(kName, "checkWinConditionForPlayer", CheckWinConditionForPlayer));
-            functions.Add(new LibraryFunction(kName, "dryRunNextActionForPlayer", DryRunNextActionForPlayer));
+            functions.Add(new LibraryFunction(kName, "executeNextActionForPlayer", ExecuteNextActionForPlayer));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -368,14 +368,15 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> DryRunNextActionForPlayer(
+        private ValueTask<int> ExecuteNextActionForPlayer(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
             ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
             int playerIndex = context.GetArgument<int>(1);
-            DryRunNextPlayerActionCommand dryRunNextPlayerAction = new DryRunNextPlayerActionCommand(playerIndex);
-            chessBoardCommandExecutor.QueueCommand(dryRunNextPlayerAction);
+            bool dryRun = context.HasArgument(2) && context.GetArgument<bool>(2);
+            ExecuteNextPlayerActionCommand executeNextPlayerAction = new ExecuteNextPlayerActionCommand(playerIndex, dryRun);
+            chessBoardCommandExecutor.QueueCommand(executeNextPlayerAction);
             
             return new ValueTask<int>(context.Return());
         }

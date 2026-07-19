@@ -46,7 +46,7 @@ MonoBehaviour:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 569209f7d0d042e2a431c35ad1728173
-    m_Address: Commands/DryRunNextActionForPlayerCommand.lua
+    m_Address: Commands/ExecuteNextActionForPlayerCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -85,7 +85,9 @@ namespace QC.Match.Objects
             players.Clear();
         }
 
-        public async UniTask TryLoadLastActiveScenario(ITurnStrategy.Args turnStrategyArgs)
+        public async UniTask TryLoadLastActiveScenario(
+            ITurnStrategy.Args turnStrategyArgs, 
+            IWinCondition.Args winConditionArgs)
         {
             if (!HasActiveScenario)
             {
@@ -102,7 +104,7 @@ namespace QC.Match.Objects
                 return;
             }
 
-            await BeginTurnForActivePlayer(turnStrategyArgs);
+            PerformTurnForActivePlayer(turnStrategyArgs, winConditionArgs).Forget();
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -166,27 +168,19 @@ namespace QC.Match.Objects
                 UnityEngine.Debug.LogAssertion($"Attempting to calculate next player action with an out of range index {playerIndex}.");
                 return new EmptyCommand();
             }
+            
+            onPlayerStartedThinking.Invoke();
+            var nextAction = await players[playerIndex].TurnStrategy.CalculateNextAction(turnStrategyArgs);
+            onPlayerFinishedThinking.Invoke();
 
-            return await players[playerIndex].TurnStrategy.CalculateNextAction(turnStrategyArgs);
+            return nextAction;
         }
 
-        public async UniTask SetActivePlayerIndex(
+        public void SetActivePlayerIndex(
             int playerIndex, 
             ITurnStrategy.Args turnStrategyArgs, 
             IWinCondition.Args winConditionArgs)
         {
-            if (HasActivePlayer)
-            {
-                await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
-                
-                if (await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
-                {
-                    // Probably need to trigger an event or something here when a player has won
-                    UnityEngine.Debug.LogAssertion($"Active Player {ActiveColour} has won!");
-                    return;
-                }
-            }
-            
             activePlayerIndex = playerIndex;
             players[activePlayerIndex].ActionsTakenThisTurn = 0;
             
@@ -194,31 +188,39 @@ namespace QC.Match.Objects
 
             if (HasActivePlayer)
             {
-                await BeginTurnForActivePlayer(turnStrategyArgs);
+                PerformTurnForActivePlayer(turnStrategyArgs, winConditionArgs).Forget();
             }
         }
 
-        private async UniTask BeginTurnForActivePlayer(ITurnStrategy.Args turnStrategyArgs)
+        private async UniTask PerformTurnForActivePlayer(
+            ITurnStrategy.Args turnStrategyArgs, 
+            IWinCondition.Args winConditionArgs)
         {
-            onPlayerStartedThinking.Invoke();
-            
             // Ideally we'd want to pump the CommandDispatcher and make sure all commands are completed
             // However, it's possible this is being called from a command, in which case it will wait forever
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
-            
+
             var nextAction = await ActivePlayer.TurnStrategy.CalculateNextAction(turnStrategyArgs);
-            UnityEngine.Debug.Assert(nextAction != null, $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?");
-            if (nextAction != null)
+            UnityEngine.Debug.Assert(nextAction != null, $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?"); 
+            
+            if (nextAction != null && ActivePlayer.AutoQueueAction)
             {
                 turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+            }
+
+            await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
+                
+            if (await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
+            {
+                // Probably need to trigger an event or something here when a player has won
+                UnityEngine.Debug.LogAssertion($"Active Player {ActiveColour} has won!");
+                return;
             }
 
             if (ActivePlayer.AutoEndTurn)
             {
                 turnStrategyArgs.CommandExecutor.QueueCommand(new SetActivePlayerCommand(NextPlayerIndex));
             }
-            
-            onPlayerFinishedThinking.Invoke();
         }
 
         public void RecordActionForActivePlayer()
@@ -271,6 +273,12 @@ namespace QC.Match.Objects
                 return;
             }
 
+            if (!playerConfig.TryGet("autoQueueAction", out bool autoQueueAction))
+            {
+                UnityEngine.Debug.Log("Failed to find value for 'autoQueueAction' so defaulting to 'true'.");
+                autoQueueAction = true;
+            }
+
             if (!playerConfig.TryGet("autoEndTurn", out bool autoEndTurn))
             {
                 UnityEngine.Debug.Log("Failed to find value for 'autoEndTurn' so defaulting to 'true'.");
@@ -279,7 +287,7 @@ namespace QC.Match.Objects
 
             ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, aiStrategyDefaultParameters, playerConfig);
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
-            Player player = new Player(playerColour, turnStrategy, winCondition, autoEndTurn);
+            Player player = new Player(playerColour, turnStrategy, winCondition, autoQueueAction, autoEndTurn);
             players.Add(player);
         }
 
@@ -298,6 +306,21 @@ namespace QC.Match.Objects
         private string GetPlayerColour(int index)
         {
             return index < players.Count ? players[index].Colour.ToString() : string.Empty;
+        }
+
+        [LuaMember("getPlayerAutoQueueAction")]
+        private bool GetPlayerAutoQueueAction(int index)
+        {
+            return index < players.Count && players[index].AutoQueueAction;
+        }
+
+        [LuaMember("setPlayerAutoQueueAction")]
+        private void GetPlayerAutoQueueAction(int index, bool newValue)
+        {
+            if (index < players.Count)
+            {
+                players[index].AutoQueueAction = newValue;
+            }
         }
 
         [LuaMember("getPlayerAutoEndTurn")]
