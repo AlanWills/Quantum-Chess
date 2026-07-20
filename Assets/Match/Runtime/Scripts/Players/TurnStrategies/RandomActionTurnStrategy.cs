@@ -23,8 +23,9 @@ namespace QC.Match.Players
                 x.HasComponent<IGrid2DTransform>() &&
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
                 chessPiece.GetPieceColour() == activeColour));
-            
-            if (RandomAction.TryCalculate(args, activePlayerPieces, out var command))
+
+            bool actionCalculatedSuccessfully = RandomAction.TryCalculate(args, activePlayerPieces, out var command);
+            if (actionCalculatedSuccessfully)
             {
                 return UniTask.FromResult(command);
             }

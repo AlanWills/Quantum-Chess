@@ -36,6 +36,13 @@ namespace QC.Match.Players
             return null;
         }
 
+        public UniTask DoTurn(ITurnStrategy.Args args)
+        {
+            // TODO: This won't work right now - probably need to treat the Lua function as an update loop or something and call
+            // it every frame until it returns a value or something?
+            return UniTask.CompletedTask;
+        }
+
         public async UniTask OnTurnEnd(ITurnStrategy.Args args)
         {
             if (TurnEndFunction != null)

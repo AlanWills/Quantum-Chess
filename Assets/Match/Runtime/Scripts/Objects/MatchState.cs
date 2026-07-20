@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Celeste.DataStructures;
 using Celeste.Lua;
 using Cysharp.Threading.Tasks;
@@ -208,18 +207,17 @@ namespace QC.Match.Objects
             ITurnStrategy.Args turnStrategyArgs, 
             IWinCondition.Args winConditionArgs)
         {
-            // Ideally we'd want to pump the CommandDispatcher and make sure all commands are completed
-            // However, it's possible this is being called from a command, in which case it will wait forever
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
 
-            var nextAction = await ActivePlayer.TurnStrategy.CalculateNextAction(turnStrategyArgs);
+            var nextAction = await CalculateNextPlayerAction(ActivePlayerIndex, turnStrategyArgs);
             UnityEngine.Debug.Assert(nextAction != null, $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?"); 
             
             if (nextAction != null && ActivePlayer.AutoQueueAction)
             {
                 turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
             }
-
+            
+            await UniTask.WaitUntil(this, matchState => matchState.ActivePlayer.HasPerformedAllAllowedActions);
             await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
                 
             if (await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
@@ -235,7 +233,7 @@ namespace QC.Match.Objects
             }
         }
 
-        public void RecordActionForActivePlayer()
+        public void RecordActionTakenByActivePlayer()
         {
             if (!HasActivePlayer)
             {
@@ -251,11 +249,6 @@ namespace QC.Match.Objects
             return index < players.Count ? players[index].Colour : ChessPieceColour.Unknown;
         }
         
-        public int GetNumActionsTakenByActivePlayer()
-        {
-            return HasActivePlayer ? ActivePlayer.ActionsTakenThisTurn : 0;
-        }
-
         public MatchStateDTO Serialize()
         {
             return new MatchStateDTO(this);
@@ -302,9 +295,15 @@ namespace QC.Match.Objects
                 autoEndTurn = true;
             }
 
+            if (!playerConfig.TryGet("actionsPerTurn", out int actionsPerTurn))
+            {
+                UnityEngine.Debug.Log("Failed to find value for 'actionsPerTurn' so defaulting to '1'.");
+                actionsPerTurn = 1;
+            }
+
             ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, aiStrategyDefaultParameters, playerConfig);
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
-            Player player = new Player(playerColour, turnStrategy, winCondition, autoQueueAction, autoEndTurn);
+            Player player = new Player(playerColour, turnStrategy, winCondition, autoQueueAction, autoEndTurn, actionsPerTurn);
             players.Add(player);
         }
 

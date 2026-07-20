@@ -35,7 +35,7 @@ namespace QC.Match.Players
             {
                 await UniTask.Delay(remainingTime);
             }
-
+            
             if (calculatedMoveSuccessfully)
             {
                 return command;
@@ -43,6 +43,11 @@ namespace QC.Match.Players
             
             UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.PlayerColour}.  This will result in a skipped turn...");
             return null;
+        }
+
+        public UniTask DoTurn(ITurnStrategy.Args args)
+        {
+            return UniTask.CompletedTask;
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

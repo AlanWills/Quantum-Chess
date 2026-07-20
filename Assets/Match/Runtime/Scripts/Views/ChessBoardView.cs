@@ -119,7 +119,7 @@ namespace QC.Match.Views
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             chessBoardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
-            matchState.RecordActionForActivePlayer();
+            matchState.RecordActionTakenByActivePlayer();
         }
 
         public void OnChessBoardAttackActionPressed(InputState inputState)
@@ -127,7 +127,7 @@ namespace QC.Match.Views
             Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             AttackWithSelectedChessBoardObjectCommand attackWithSelectedChessBoardObjectCommand = new AttackWithSelectedChessBoardObjectCommand(position);
             chessBoardCommandExecutor.QueueCommand(attackWithSelectedChessBoardObjectCommand);
-            matchState.RecordActionForActivePlayer();
+            matchState.RecordActionTakenByActivePlayer();
         }
         
         #endregion
