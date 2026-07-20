@@ -209,14 +209,19 @@ namespace QC.Match.Objects
         {
             await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
 
-            var nextAction = await CalculateNextPlayerAction(ActivePlayerIndex, turnStrategyArgs);
-            UnityEngine.Debug.Assert(nextAction != null, $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?"); 
-            
-            if (nextAction != null && ActivePlayer.AutoQueueAction)
+            if (ActivePlayer.AutoQueueAction)
             {
-                turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+                // Maybe change this so it's not about calculating the next action, but just about making a decision on the turn again
+                var nextAction = await CalculateNextPlayerAction(ActivePlayerIndex, turnStrategyArgs);
+                UnityEngine.Debug.Assert(nextAction != null,
+                    $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?");
+
+                if (nextAction != null)
+                {
+                    turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
+                }
             }
-            
+
             await UniTask.WaitUntil(this, matchState => matchState.ActivePlayer.HasPerformedAllAllowedActions);
             await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
                 
@@ -233,20 +238,33 @@ namespace QC.Match.Objects
             }
         }
 
-        public void RecordActionTakenByActivePlayer()
+        public void RecordActionTakenByPlayer(int playerIndex)
         {
-            if (!HasActivePlayer)
+            if (playerIndex < 0 || playerIndex >= NumPlayers)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to record action for active player, but there is no active player.");
+                UnityEngine.Debug.LogAssertion($"Attempting to record action for player {playerIndex}, but it is an invalid index.");
                 return;
             }
 
-            ++ActivePlayer.ActionsTakenThisTurn;
+            ++players[playerIndex].ActionsTakenThisTurn;
         }
         
         public ChessPieceColour GetPlayerColour(int index)
         {
             return index < players.Count ? players[index].Colour : ChessPieceColour.Unknown;
+        }
+        
+        public int GetPlayerIndex(ChessPieceColour chessPieceColour)
+        {
+            for (int i = 0, n = NumPlayers; i < n; ++i)
+            {
+                if (players[i].Colour == chessPieceColour)
+                {
+                    return i;
+                }
+            }
+            
+            return -1;
         }
         
         public MatchStateDTO Serialize()

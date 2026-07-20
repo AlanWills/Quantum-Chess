@@ -34,6 +34,13 @@ namespace QC.Match.Commands
             {
                 status.SetHasMoved(true);
             }
+            
+            if (instance.TryFindComponent<IChessPiece>(out var chessPiece))
+            {
+                ChessPieceColour pieceColour = chessPiece.GetPieceColour();
+                int playerIndex = args.MatchState.GetPlayerIndex(pieceColour);
+                args.MatchState.RecordActionTakenByPlayer(playerIndex);
+            }
 
             return CommandState.Completed;
         }
