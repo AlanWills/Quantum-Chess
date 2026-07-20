@@ -17,8 +17,8 @@ function Scenario:load()
         difficulty = "Easy"
     })
     
-    -- Turn off auto queue of actions so we can debug AI calculations if needs be
-    MatchState:setPlayerAutoQueueAction(1, false)
+    -- Turn off auto thinking so we can debug AI calculations if needs be
+    MatchState:setPlayerAutoThink(1, false)
 end
 
 return Scenario

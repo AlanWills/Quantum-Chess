@@ -38,7 +38,7 @@ namespace QC.Match
         }
 
         UniTask OnTurnBegin(Args args);
-        UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(Args args);
+        UniTask OnTurn(Args args, bool dryRun);
         UniTask OnTurnEnd(Args args);
     }
 }

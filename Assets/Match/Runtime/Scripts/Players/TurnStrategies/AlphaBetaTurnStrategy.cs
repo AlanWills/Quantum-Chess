@@ -20,7 +20,7 @@ namespace QC.Match.Players
             return UniTask.CompletedTask;
         }
 
-        public async UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        public async UniTask OnTurn(ITurnStrategy.Args args, bool dryRun)
         {
             turnCalculationTimer.Restart();
 
@@ -29,25 +29,23 @@ namespace QC.Match.Players
             await UniTask.SwitchToMainThread();
             
             turnCalculationTimer.Stop();
-
+            
+            if (!calculatedMoveSuccessfully)
+            {
+                UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.PlayerColour}.  This will result in a skipped turn...");
+                return;
+            }
+            
             int remainingTime = parameters.MinThinkingTime - (int)turnCalculationTimer.ElapsedMilliseconds;
             if (remainingTime > 0)
             {
                 await UniTask.Delay(remainingTime);
             }
-            
-            if (calculatedMoveSuccessfully)
-            {
-                return command;
-            }
-            
-            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.PlayerColour}.  This will result in a skipped turn...");
-            return null;
-        }
 
-        public UniTask DoTurn(ITurnStrategy.Args args)
-        {
-            return UniTask.CompletedTask;
+            if (!dryRun)
+            {
+                args.CommandExecutor.QueueCommand(command);
+            }
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

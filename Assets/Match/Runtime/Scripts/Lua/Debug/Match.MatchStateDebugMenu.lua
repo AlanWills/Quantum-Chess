@@ -1,5 +1,5 @@
 local CheckWinConditionForPlayer = require("Commands/CheckPlayerWinConditionCommand.lua")
-local ExecuteNextActionForPlayer = require("Commands/ExecuteNextActionForPlayerCommand.lua")
+local ThinkForPlayer = require("Commands/ThinkForPlayerCommand.lua")
 
 local MatchStateDebugMenu = { }
 
@@ -21,14 +21,14 @@ function MatchStateDebugMenu:drawPlayers()
     for playerIndex = 0, MatchState.numPlayers - 1, 1 do
         GUILayout.beginSection("Player " .. tostring(playerIndex))
             local playerColour = MatchState:getPlayerColour(playerIndex)
-            local autoQueueAction = MatchState:getPlayerAutoQueueAction(playerIndex);
+            local autoThink = MatchState:getPlayerAutoThink(playerIndex);
             local autoEndTurn = MatchState:getPlayerAutoEndTurn(playerIndex)
             
             GUILayout.label("Colour: " .. playerColour)
     
-            local newAutoQueueAction = GUILayout.toggle("Auto Queue Action:", autoQueueAction)
-            if autoQueueAction ~= newAutoQueueAction then
-                MatchState:setPlayerAutoQueueAction(playerIndex, newAutoQueueAction)
+            local newAutoThink = GUILayout.toggle("Auto Think:", autoThink)
+            if autoThink ~= newAutoThink then
+                MatchState:setPlayerAutoThink(playerIndex, newAutoThink)
             end
             
             local newAutoEndTurn = GUILayout.toggle("Auto End Turn:", autoEndTurn)
@@ -38,12 +38,12 @@ function MatchStateDebugMenu:drawPlayers()
             
             GUILayout.beginHorizontal()
     
-            if GUILayout.button("Dry Run Next Action") then
-                ExecuteNextActionForPlayer.dryRun(playerIndex)
+            if GUILayout.button("Dry Run Think") then
+                ThinkForPlayer.dryRun(playerIndex)
             end
             
-            if GUILayout.button("Execute Next Action") then
-                ExecuteNextActionForPlayer.new(playerIndex)
+            if GUILayout.button("Think") then
+                ThinkForPlayer.new(playerIndex)
             end
             
             GUILayout.endHorizontal()

@@ -5,7 +5,7 @@
         public ChessPieceColour Colour { get; }
         public ITurnStrategy TurnStrategy { get; }
         public IWinCondition WinCondition { get; }
-        public bool AutoQueueAction { get; set; }
+        public bool AutoThink { get; set; }
         public bool AutoEndTurn { get; set; }
         public int AllowedActionsPerTurn { get; }
         public int ActionsTakenThisTurn { get; set; }
@@ -15,14 +15,14 @@
             ChessPieceColour colour, 
             ITurnStrategy turnStrategy, 
             IWinCondition winCondition, 
-            bool autoQueueAction, 
+            bool autoThink, 
             bool autoEndTurn,
             int allowedActionsPerTurn)
         {
             Colour = colour;
             TurnStrategy = turnStrategy;
             WinCondition = winCondition;
-            AutoQueueAction = autoQueueAction;
+            AutoThink = autoThink;
             AutoEndTurn = autoEndTurn;
             AllowedActionsPerTurn = allowedActionsPerTurn;
         }

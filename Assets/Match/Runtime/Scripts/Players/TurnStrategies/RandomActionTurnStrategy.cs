@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using QC.Match.AI;
-using QC.Match.Commands;
 using QC.Match.Objects;
 
 namespace QC.Match.Players
@@ -14,7 +13,7 @@ namespace QC.Match.Players
             return UniTask.CompletedTask;
         }
 
-        public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        public UniTask OnTurn(ITurnStrategy.Args args, bool dryRun)
         {
             List<ChessBoardObjectInstance> activePlayerPieces = new List<ChessBoardObjectInstance>();
             ChessPieceColour activeColour = args.PlayerColour;
@@ -23,15 +22,19 @@ namespace QC.Match.Players
                 x.HasComponent<IGrid2DTransform>() &&
                 x.TryFindComponent<IChessPiece>(out var chessPiece) &&
                 chessPiece.GetPieceColour() == activeColour));
-
-            bool actionCalculatedSuccessfully = RandomAction.TryCalculate(args, activePlayerPieces, out var command);
-            if (actionCalculatedSuccessfully)
+            
+            if (!RandomAction.TryCalculate(args, activePlayerPieces, out var command))
             {
-                return UniTask.FromResult(command);
+                UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.PlayerColour}.  Queueing up a change of colour...");
+                return UniTask.CompletedTask;
             }
 
-            UnityEngine.Debug.LogAssertion($"Failed to calculate any valid move or attack for colour {args.PlayerColour}.  Queueing up a change of colour...");
-            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(null);
+            if (!dryRun)
+            {
+                args.CommandExecutor.QueueCommand(command);
+            }
+
+            return UniTask.CompletedTask;
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

@@ -10,9 +10,9 @@ namespace QC.Match.Players
             return UniTask.CompletedTask;
         }
 
-        public UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        public UniTask OnTurn(ITurnStrategy.Args args, bool dryRun)
         {
-            return UniTask.FromResult<ICommand<ChessBoardCommandArgs>>(new EmptyCommand());
+            return UniTask.CompletedTask;
         }
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)

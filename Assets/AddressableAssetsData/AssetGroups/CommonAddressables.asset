@@ -123,6 +123,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 569209f7d0d042e2a431c35ad1728173
+    m_Address: Commands/ThinkForPlayerCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58738d4d8610416eaad59009cfbda9ed
     m_Address: Commands/AddChessPieceCommand.lua
     m_ReadOnly: 0
@@ -176,6 +181,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8928085585824b21beb07768c47f0086
+    m_Address: Commands/CheckPlayerWinConditionCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8949326f9d7494460a04ef78c6275cde
     m_Address: EngineSystems

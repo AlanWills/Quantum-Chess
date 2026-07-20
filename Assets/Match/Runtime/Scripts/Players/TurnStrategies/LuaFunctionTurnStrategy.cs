@@ -27,20 +27,9 @@ namespace QC.Match.Players
             await args.LuaRuntime.ExecuteFunctionAsync(TurnBeginFunction);
         }
 
-        public async UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextAction(ITurnStrategy.Args args)
+        public async UniTask OnTurn(ITurnStrategy.Args args, bool dryRun)
         {
-            // TODO: This won't work right now - how do we provide people a way of creating actions in Lua without
-            // adding to the CommandExecutor global state.  Can we pass a fake one into this function and then
-            // extract out the command they've supplied it to return?
-            await args.LuaRuntime.ExecuteFunctionAsync(TurnBeginFunction);
-            return null;
-        }
-
-        public UniTask DoTurn(ITurnStrategy.Args args)
-        {
-            // TODO: This won't work right now - probably need to treat the Lua function as an update loop or something and call
-            // it every frame until it returns a value or something?
-            return UniTask.CompletedTask;
+            await args.LuaRuntime.ExecuteFunctionAsync(TurnActionFunction, dryRun);
         }
 
         public async UniTask OnTurnEnd(ITurnStrategy.Args args)

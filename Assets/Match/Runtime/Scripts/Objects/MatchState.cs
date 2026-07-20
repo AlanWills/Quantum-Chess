@@ -38,15 +38,11 @@ namespace QC.Match.Objects
                 }
             }
         }
-
-        public bool HasActivePlayer => 0 <= activePlayerIndex && activePlayerIndex < NumPlayers;
+        
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
-        [LuaMember("nextPlayerIndex")] public int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
-        public ChessPieceColour ActiveColour => ActivePlayer?.Colour ?? ChessPieceColour.Unknown;
-        public ChessPieceColour NextColour => NextPlayer?.Colour ?? ChessPieceColour.Unknown;
+        [LuaMember("nextPlayerIndex")] private int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
+        private ChessPieceColour ActiveColour => players.Get(activePlayerIndex)?.Colour ?? ChessPieceColour.Unknown;
         [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
-        private Player ActivePlayer => players.Get(activePlayerIndex);
-        private Player NextPlayer => players.Get(NextPlayerIndex);
 
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
@@ -96,7 +92,7 @@ namespace QC.Match.Objects
 
             await LoadScenarioAsync(activeScenarioGuid);
             
-            BeginTurnForActivePlayer(turnStrategyArgs, winConditionArgs);
+            BeginTurnForPlayer(ActivePlayerIndex, turnStrategyArgs, winConditionArgs);
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
@@ -144,28 +140,13 @@ namespace QC.Match.Objects
 
         public async UniTask<bool> CheckPlayerWinCondition(int playerIndex, IWinCondition.Args winConditionArgs)
         {
-            if (playerIndex < 0 || playerIndex >= NumPlayers)
+            if (!IsPlayerIndexValid(playerIndex))
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to check player win condition with an out of range index {playerIndex}.");
                 return false;
             }
 
             return await players[playerIndex].WinCondition.CalculateIfWinConditionIsMet(winConditionArgs);
-        }
-
-        public async UniTask<ICommand<ChessBoardCommandArgs>> CalculateNextPlayerAction(int playerIndex, ITurnStrategy.Args turnStrategyArgs)
-        {
-            if (playerIndex < 0 || playerIndex >= NumPlayers)
-            {
-                UnityEngine.Debug.LogAssertion($"Attempting to calculate next player action with an out of range index {playerIndex}.");
-                return new EmptyCommand();
-            }
-            
-            onPlayerStartedThinking.Invoke();
-            var nextAction = await players[playerIndex].TurnStrategy.CalculateNextAction(turnStrategyArgs);
-            onPlayerFinishedThinking.Invoke();
-
-            return nextAction;
         }
 
         public void SetActivePlayerIndex(
@@ -181,61 +162,74 @@ namespace QC.Match.Objects
             
             activePlayerIndex = playerIndex;
             
-            BeginTurnForActivePlayer(turnStrategyArgs, winConditionArgs);
+            BeginTurnForPlayer(playerIndex, turnStrategyArgs, winConditionArgs);
         }
 
-        private void BeginTurnForActivePlayer(
+        private void BeginTurnForPlayer(
+            int playerIndex,
             ITurnStrategy.Args turnStrategyArgs,
             IWinCondition.Args winConditionArgs)
         {
-            if (!HasActivePlayer)
+            if (!IsPlayerIndexValid(playerIndex))
             {
                 UnityEngine.Debug.LogAssertion($"Really serious issue here!  You're attempting to load an active player, assuming one has been set up, but it hasn't...");
                 return;
             }
             
-            players[activePlayerIndex].ActionsTakenThisTurn = 0;
+            players[playerIndex].ActionsTakenThisTurn = 0;
             onChanged.Invoke();
-
-            if (HasActivePlayer)
-            {
-                PerformTurnForActivePlayer(turnStrategyArgs, winConditionArgs).Forget();
-            }
+            
+            PlayerTurn(playerIndex, turnStrategyArgs, winConditionArgs).Forget();
         }
 
-        private async UniTask PerformTurnForActivePlayer(
+        private async UniTask PlayerTurn(
+            int playerIndex,
             ITurnStrategy.Args turnStrategyArgs, 
             IWinCondition.Args winConditionArgs)
         {
-            await ActivePlayer.TurnStrategy.OnTurnBegin(turnStrategyArgs);
-
-            if (ActivePlayer.AutoQueueAction)
+            if (!IsPlayerIndexValid(playerIndex))
             {
-                // Maybe change this so it's not about calculating the next action, but just about making a decision on the turn again
-                var nextAction = await CalculateNextPlayerAction(ActivePlayerIndex, turnStrategyArgs);
-                UnityEngine.Debug.Assert(nextAction != null,
-                    $"Attempting to return a null command from a turn strategy for player {ActivePlayerIndex}.  Did you mean to use {nameof(EmptyCommand)}?");
+                UnityEngine.Debug.LogAssertion($"Failed to execute {nameof(PlayerTurn)} for player index {playerIndex} as it was an invalid index.");
+                return;
+            }
+            
+            Player player = players[playerIndex];
+            
+            await player.TurnStrategy.OnTurnBegin(turnStrategyArgs);
 
-                if (nextAction != null)
-                {
-                    turnStrategyArgs.CommandExecutor.QueueCommand(nextAction);
-                }
+            if (player.AutoThink)
+            {
+                await ThinkForPlayer(playerIndex, turnStrategyArgs, false);
             }
 
-            await UniTask.WaitUntil(this, matchState => matchState.ActivePlayer.HasPerformedAllAllowedActions);
-            await ActivePlayer.TurnStrategy.OnTurnEnd(turnStrategyArgs);
+            await UniTask.WaitUntil(player, p => p.HasPerformedAllAllowedActions);
+            await player.TurnStrategy.OnTurnEnd(turnStrategyArgs);
                 
-            if (await ActivePlayer.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
+            if (await player.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
             {
                 // Probably need to trigger an event or something here when a player has won
-                UnityEngine.Debug.LogAssertion($"Active Player {ActiveColour} has won!");
+                UnityEngine.Debug.LogAssertion($"Player {ActiveColour} has won!");
                 return;
             }
 
-            if (ActivePlayer.AutoEndTurn)
+            if (player.AutoEndTurn)
             {
                 turnStrategyArgs.CommandExecutor.QueueCommand(new SetActivePlayerCommand(NextPlayerIndex));
             }
+        }
+
+        public async UniTask ThinkForPlayer(int playerIndex, ITurnStrategy.Args turnStrategyArgs, bool dryRun)
+        {
+            if (!IsPlayerIndexValid(playerIndex))
+            {
+                UnityEngine.Debug.LogAssertion($"Attempting to calculate next player action with an out of range index {playerIndex}.");
+                return;
+            }
+            
+            onPlayerStartedThinking.Invoke();
+            Player player = players[playerIndex];
+            await player.TurnStrategy.OnTurn(turnStrategyArgs, dryRun);
+            onPlayerFinishedThinking.Invoke();
         }
 
         public void RecordActionTakenByPlayer(int playerIndex)
@@ -301,10 +295,10 @@ namespace QC.Match.Objects
                 return;
             }
 
-            if (!playerConfig.TryGet("autoQueueAction", out bool autoQueueAction))
+            if (!playerConfig.TryGet("autoThink", out bool autoThink))
             {
-                UnityEngine.Debug.Log("Failed to find value for 'autoQueueAction' so defaulting to 'true'.");
-                autoQueueAction = true;
+                UnityEngine.Debug.Log("Failed to find value for 'autoThink' so defaulting to 'true'.");
+                autoThink = true;
             }
 
             if (!playerConfig.TryGet("autoEndTurn", out bool autoEndTurn))
@@ -321,8 +315,14 @@ namespace QC.Match.Objects
 
             ITurnStrategy turnStrategy = TurnStrategyFactory.Create(turnStrategyType, aiStrategyDefaultParameters, playerConfig);
             IWinCondition winCondition = WinConditionFactory.Create(winConditionType, playerConfig);
-            Player player = new Player(playerColour, turnStrategy, winCondition, autoQueueAction, autoEndTurn, actionsPerTurn);
+            Player player = new Player(playerColour, turnStrategy, winCondition, autoThink, autoEndTurn, actionsPerTurn);
             players.Add(player);
+        }
+
+        [LuaMember("isPlayerIndexValid")]
+        private bool IsPlayerIndexValid(int index)
+        {
+            return index >= 0 && index < NumPlayers;
         }
 
         [LuaMember("findPlayerIndexOfColour")]
@@ -342,18 +342,18 @@ namespace QC.Match.Objects
             return index < players.Count ? players[index].Colour.ToString() : string.Empty;
         }
 
-        [LuaMember("getPlayerAutoQueueAction")]
-        private bool GetPlayerAutoQueueAction(int index)
+        [LuaMember("getPlayerAutoThink")]
+        private bool GetPlayerAutoThink(int index)
         {
-            return index < players.Count && players[index].AutoQueueAction;
+            return index < players.Count && players[index].AutoThink;
         }
 
-        [LuaMember("setPlayerAutoQueueAction")]
-        private void GetPlayerAutoQueueAction(int index, bool newValue)
+        [LuaMember("setPlayerAutoThink")]
+        private void GetPlayerAutoThink(int index, bool newValue)
         {
             if (index < players.Count)
             {
-                players[index].AutoQueueAction = newValue;
+                players[index].AutoThink = newValue;
             }
         }
 
