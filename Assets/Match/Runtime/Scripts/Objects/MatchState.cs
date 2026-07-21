@@ -197,6 +197,8 @@ namespace QC.Match.Objects
             
             await player.TurnStrategy.OnTurnBegin(turnStrategyArgs);
 
+            BuildBoardActionMasks();
+
             if (player.AutoThink)
             {
                 await ThinkForPlayer(playerIndex, turnStrategyArgs, false);
@@ -216,6 +218,20 @@ namespace QC.Match.Objects
             {
                 turnStrategyArgs.CommandExecutor.QueueCommand(new SetActivePlayerCommand(NextPlayerIndex));
             }
+        }
+
+        private void BuildBoardActionMasks(ChessBoard chessBoard)
+        {
+            for (int i = 0, n = NumPlayers; i < n; ++i)
+            {
+                BuildBoardActionMaskForPlayer(i, chessBoard); 
+            }
+        }
+
+        private void BuildBoardActionMaskForPlayer(int playerIndex, ChessBoard chessBoard)
+        {
+            ChessPieceColour playerColour = players[playerIndex].Colour;
+            chessBoard.UpdateBoardActionMaskForColour(players[playerIndex].BoardActionMask, playerColour);
         }
 
         public async UniTask ThinkForPlayer(int playerIndex, ITurnStrategy.Args turnStrategyArgs, bool dryRun)

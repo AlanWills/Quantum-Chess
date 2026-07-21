@@ -10,14 +10,12 @@ namespace QC.Match.AI.Internals
            // TODO: Oooffff, why public?
            public readonly Tile[] board;
            private readonly int width;
-           private readonly int height;
            private readonly int xMin;
            private readonly int yMin;
 
            public Board(RectInt boardDimensions, Tile[] tileArray)
            {
               width = boardDimensions.size.x;
-              height = boardDimensions.size.y;
               xMin = boardDimensions.xMin;
               yMin = boardDimensions.yMin;
               board = tileArray;

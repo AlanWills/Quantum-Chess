@@ -11,6 +11,7 @@ using QC.Match.Catalogue;
 using QC.Match.Components;
 using QC.Match.Events;
 using QC.Match.Persistence;
+using QC.Match.Players;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -197,20 +198,20 @@ namespace QC.Match.Objects
             return null;
         }
 
-        public bool DoesChessPieceExist(ChessPieceColour colour, ChessPieceType type)
+        public bool TryFindChessPiece(ChessPieceColour colour, ChessPieceType type, out ChessBoardObjectInstance instance)
         {
-            for (int i = 0; i < objects.Count; ++i)
+            foreach (var objectInstance in objects)
             {
-                var objectInstance = objects[i];
-                
                 if (objectInstance.TryFindComponent<IChessPiece>(out var chessPiece) &&
                     chessPiece.GetPieceColour() == colour &&
                     chessPiece.GetPieceType().HasFlag(type))
                 {
+                    instance = objectInstance;
                     return true;
                 }
             }
 
+            instance = null;
             return false;
         }
 
@@ -253,6 +254,40 @@ namespace QC.Match.Objects
             }
 
             return new RectInt(minCoords.x, minCoords.y, maxCoords.x + 1 - minCoords.x, maxCoords.y + 1 - minCoords.y);
+        }
+
+        public void UpdateBoardActionMaskForColour(BoardActionMask mask, ChessPieceColour colour)
+        {
+            List<Vector2Int> validAttacks = new List<Vector2Int>();
+
+            mask.ResetAllTiles();
+            
+            foreach (ChessBoardObjectInstance instance in objects)
+            {
+                if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+                {
+                    continue;
+                }
+
+                if (chessPiece.GetPieceColour() != colour)
+                {
+                    continue;
+                }
+
+                if (!instance.TryFindComponent<IActionProvider>(out var actionProvider) ||
+                    !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
+                {
+                    continue;
+                }
+
+                validAttacks.Clear();
+                actionProvider.iFace.CalculateValidAttacks(actionProvider.instance, grid2DTransform.GetPosition(), this, validAttacks);
+
+                foreach (Vector2Int validAttack in validAttacks)
+                {
+                    mask.SetTileAttackable(validAttack);
+                }
+            }
         }
 
         public ChessBoardDTO Serialize()

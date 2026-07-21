@@ -10,6 +10,7 @@
         public int AllowedActionsPerTurn { get; }
         public int ActionsTakenThisTurn { get; set; }
         public bool HasPerformedAllAllowedActions => ActionsTakenThisTurn >= AllowedActionsPerTurn;
+        public BoardActionMask BoardActionMask { get; set; }
 
         public Player(
             ChessPieceColour colour, 
@@ -17,7 +18,8 @@
             IWinCondition winCondition, 
             bool autoThink, 
             bool autoEndTurn,
-            int allowedActionsPerTurn)
+            int allowedActionsPerTurn,
+            BoardActionMask boardActionMask)
         {
             Colour = colour;
             TurnStrategy = turnStrategy;
@@ -25,6 +27,7 @@
             AutoThink = autoThink;
             AutoEndTurn = autoEndTurn;
             AllowedActionsPerTurn = allowedActionsPerTurn;
+            BoardActionMask = boardActionMask;
         }
     }
 }

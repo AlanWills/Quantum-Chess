@@ -13,7 +13,16 @@ namespace QC.Match.Players
         
         public UniTask<bool> CalculateIfWinConditionIsMet(IWinCondition.Args args)
         {
-            return UniTask.FromResult(!args.ChessBoard.DoesChessPieceExist(OppositionColour, ChessPieceType.King));
+            if (!args.ChessBoard.TryFindChessPiece(OppositionColour, ChessPieceType.King, out var oppositionKing))
+            {
+                // The King straight up does not exist, game over!
+                return UniTask.FromResult(true);
+            }
+
+            if (!oppositionKing.TryFindComponent<IActionProvider>(out var oppositionKingActionProvider))
+            {
+                
+            }
         }
     }
 }
