@@ -25,7 +25,8 @@ namespace QC.Match.AI.Internals
 
            public void SetTiles(
               IReadOnlyList<ChessBoardTileInstance> tiles,
-              AlphaBetaParameters alphaBetaParameters)
+              AlphaBetaParameters alphaBetaParameters,
+              IRNG rng)
            {
               foreach (var tile in tiles)
               {
@@ -34,7 +35,7 @@ namespace QC.Match.AI.Internals
                  
                  UnityEngine.Debug.Assert(index < board.Length, $"Incorrectly calculated index ({index}) for position ({tilePosition}).");
                  int tileImportance = tile.FindInterface<ITileAIInfo>().GetImportance();
-                 int tileImportanceOverride = alphaBetaParameters.GetImportanceOverrideForPosition(tilePosition, tileImportance);
+                 int tileImportanceOverride = alphaBetaParameters.GetImportanceOverrideForPosition(tilePosition, rng, tileImportance);
                  board[index] = new Tile(true, tileImportanceOverride);
               }
            }

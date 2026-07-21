@@ -54,7 +54,7 @@ namespace QC.Match.AI
               }
               
               Board board = new Board(boundingBox, s_tiles);
-              board.SetTiles(args.ChessBoard.Tiles, alphaBetaParameters);
+              board.SetTiles(args.ChessBoard.Tiles, alphaBetaParameters, args.RNG);
               board.SetObjects(args.ChessBoard.Objects, alphaBetaParameters, args.RNG);
               
               for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
