@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace QC.Match.Views
 {
-    public class Grid2DTransformController : InterfaceController<IGrid2DTransform, ChessBoardObjectComponent, ChessBoardObjectInstance>,
+    public class Grid2DTransformController : InterfaceController<IGrid2DTransform, BoardObjectComponent, BoardObjectInstance>,
          IVisualAnimationHandler
     {
         #region Properties and Fields

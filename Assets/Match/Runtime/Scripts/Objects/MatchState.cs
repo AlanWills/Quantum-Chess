@@ -16,7 +16,7 @@ namespace QC.Match.Objects
 {
     [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(MatchState), menuName = "QC/Match/Match State")]
-    public partial class MatchState : ScriptableObject, IPlayerInfo
+    public partial class MatchState : ScriptableObject, IPlayerInfo, IPlayerActionMaskLookup
     {
         #region Properties and Fields
 
@@ -197,7 +197,7 @@ namespace QC.Match.Objects
             
             await player.TurnStrategy.OnTurnBegin(turnStrategyArgs);
 
-            BuildBoardActionMasks();
+            BuildBoardActionMasks(turnStrategyArgs.Board);
 
             if (player.AutoThink)
             {
@@ -220,18 +220,62 @@ namespace QC.Match.Objects
             }
         }
 
-        private void BuildBoardActionMasks(ChessBoard chessBoard)
+        private void BuildBoardActionMasks(Board board)
         {
             for (int i = 0, n = NumPlayers; i < n; ++i)
             {
-                BuildBoardActionMaskForPlayer(i, chessBoard); 
+                BuildBoardActionMaskForPlayer(i, board); 
             }
         }
 
-        private void BuildBoardActionMaskForPlayer(int playerIndex, ChessBoard chessBoard)
+        private void BuildBoardActionMaskForPlayer(int playerIndex, Board board)
         {
-            ChessPieceColour playerColour = players[playerIndex].Colour;
-            chessBoard.UpdateBoardActionMaskForColour(players[playerIndex].BoardActionMask, playerColour);
+            Player player = players[playerIndex];
+            ChessPieceColour playerColour = player.Colour;
+            RectInt boundingBox = board.CalculateBoundingBox();
+
+            player.EnsureBoardActionMaskMatches(boundingBox);
+            UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board);
+        }
+
+        private void UpdateBoardActionMaskForColour(BoardActionMask mask, ChessPieceColour colour, Board board)
+        {
+            List<Vector2Int> validAttacks = new List<Vector2Int>();
+
+            mask.ResetAllTiles();
+            
+            foreach (BoardObjectInstance instance in board.Objects)
+            {
+                if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+                {
+                    continue;
+                }
+
+                if (chessPiece.GetPieceColour() != colour)
+                {
+                    continue;
+                }
+
+                if (!instance.TryFindComponent<IActionProvider>(out var actionProvider) ||
+                    !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
+                {
+                    continue;
+                }
+
+                validAttacks.Clear();
+                actionProvider.CalculateValidAttacks(grid2DTransform.GetPosition(), board, this, validAttacks);
+
+                foreach (Vector2Int validAttack in validAttacks)
+                {
+                    mask.SetTileAttackable(validAttack);
+                }
+            }
+        }
+
+        public bool DoesPlayerHavePieceAbleToAttack(ChessPieceColour playerColour, Vector2Int boardPosition)
+        {
+            int playerIndex = GetPlayerIndex(playerColour);
+            return IsPlayerIndexValid(playerIndex) && players[playerIndex].BoardActionMask.IsTileAttackable(boardPosition);
         }
 
         public async UniTask ThinkForPlayer(int playerIndex, ITurnStrategy.Args turnStrategyArgs, bool dryRun)

@@ -6,8 +6,8 @@ using UnityEditor;
 
 namespace QCEditor.Match.Objects
 {
-    [CustomEditor(typeof(ChessBoardTile))]
-    public class ChessBoardTileEditor : ComponentContainerUsingSubAssetsEditor<ChessBoardTileComponent>
+    [CustomEditor(typeof(BoardTile))]
+    public class ChessBoardTileEditor : ComponentContainerUsingSubAssetsEditor<BoardTileComponent>
     {
         protected override Type[] AllComponentTypes =>
             ChessBoardTileEditorConstants.AllChessBoardTileComponentTypes;

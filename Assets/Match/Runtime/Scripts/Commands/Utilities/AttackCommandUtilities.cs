@@ -7,8 +7,8 @@ namespace QC.Match.Commands
     public static class AttackCommandUtilities
     {
         public static async UniTask<CommandState> TryAttackWithChessBoardObject(
-            ChessBoardCommandArgs args,
-            ChessBoardObjectInstance instance,
+            BoardCommandArgs args,
+            BoardObjectInstance instance,
             Vector2Int endingPosition)
         {
             if (instance == null)
@@ -23,7 +23,7 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            ChessBoardObjectInstance endingPositionInstance = args.ChessBoard.GetChessBoardObjectAt(endingPosition);
+            BoardObjectInstance endingPositionInstance = args.Board.GetBoardObjectAt(endingPosition);
             
             if (endingPositionInstance == null)
             {

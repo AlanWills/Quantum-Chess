@@ -15,7 +15,7 @@ namespace QCEditor.Match.Objects
 
         static ChessBoardObjectEditorConstants()
         {
-            TypeExtensions.LoadTypes<ChessBoardObjectComponent>(ref AllChessBoardObjectComponentTypes, ref AllChessBoardObjectComponentDisplayNames);
+            TypeExtensions.LoadTypes<BoardObjectComponent>(ref AllChessBoardObjectComponentTypes, ref AllChessBoardObjectComponentDisplayNames);
         }
     }
 }

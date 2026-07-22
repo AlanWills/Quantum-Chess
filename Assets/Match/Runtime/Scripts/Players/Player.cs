@@ -1,4 +1,6 @@
-﻿namespace QC.Match.Players
+﻿using UnityEngine;
+
+namespace QC.Match.Players
 {
     public class Player
     {
@@ -10,7 +12,7 @@
         public int AllowedActionsPerTurn { get; }
         public int ActionsTakenThisTurn { get; set; }
         public bool HasPerformedAllAllowedActions => ActionsTakenThisTurn >= AllowedActionsPerTurn;
-        public BoardActionMask BoardActionMask { get; set; }
+        public BoardActionMask BoardActionMask { get; private set; }
 
         public Player(
             ChessPieceColour colour, 
@@ -18,8 +20,7 @@
             IWinCondition winCondition, 
             bool autoThink, 
             bool autoEndTurn,
-            int allowedActionsPerTurn,
-            BoardActionMask boardActionMask)
+            int allowedActionsPerTurn)
         {
             Colour = colour;
             TurnStrategy = turnStrategy;
@@ -27,7 +28,14 @@
             AutoThink = autoThink;
             AutoEndTurn = autoEndTurn;
             AllowedActionsPerTurn = allowedActionsPerTurn;
-            BoardActionMask = boardActionMask;
+        }
+
+        public void EnsureBoardActionMaskMatches(RectInt boundingBox)
+        {
+            if (BoardActionMask == null || !BoardActionMask.MatchesBoundingBox(boundingBox))
+            {
+                BoardActionMask = new BoardActionMask(boundingBox);
+            }
         }
     }
 }

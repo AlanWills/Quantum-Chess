@@ -7,8 +7,8 @@ namespace QC.Match.Commands
     public static class MoveCommandUtilities
     {
         public static async UniTask<CommandState> TryMoveChessBoardObject(
-            ChessBoardCommandArgs args,
-            ChessBoardObjectInstance instance,
+            BoardCommandArgs args,
+            BoardObjectInstance instance,
             Vector2Int endingPosition)
         {
             if (instance == null)

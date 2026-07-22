@@ -15,7 +15,7 @@ namespace QCEditor.Match.Objects
 
         static ChessBoardTileEditorConstants()
         {
-            TypeExtensions.LoadTypes<ChessBoardTileComponent>(ref AllChessBoardTileComponentTypes, ref AllChessBoardTileComponentDisplayNames);
+            TypeExtensions.LoadTypes<BoardTileComponent>(ref AllChessBoardTileComponentTypes, ref AllChessBoardTileComponentDisplayNames);
         }
     }
 }

@@ -7,14 +7,14 @@ namespace QC.Match.AI.Internals
     {
         public bool IsValid => Instance != null && PieceType != ChessPieceType.None && PieceColour != ChessPieceColour.Unknown && ActionProvider.IsValid;
            
-        public readonly ChessBoardObjectInstance Instance;
+        public readonly BoardObjectInstance Instance;
         public readonly ChessPieceType PieceType;
         public readonly ChessPieceColour PieceColour;
         public readonly int Value;
         public readonly InterfaceHandle<IActionProvider> ActionProvider;
 
         public Piece(
-            ChessBoardObjectInstance instance, 
+            BoardObjectInstance instance, 
             ChessPieceType pieceType,
             ChessPieceColour pieceColour,
             int value,

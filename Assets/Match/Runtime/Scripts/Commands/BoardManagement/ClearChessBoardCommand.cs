@@ -3,11 +3,11 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct ClearChessBoardCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct ClearChessBoardCommand : ICommand<BoardCommandArgs>
     {
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            args.ChessBoard.Clear();
+            args.Board.Clear();
 
             return UniTask.FromResult(CommandState.Completed);
         }

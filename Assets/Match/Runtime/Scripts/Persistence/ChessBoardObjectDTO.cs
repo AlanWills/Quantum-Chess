@@ -11,11 +11,11 @@ namespace QC.Match.Persistence
         public int guid;
         public List<ComponentDTO> components = new();
         
-        public ChessBoardObjectDTO(ChessBoardObjectInstance chessBoardObjectInstance)
+        public ChessBoardObjectDTO(BoardObjectInstance boardObjectInstance)
         {
-            guid = chessBoardObjectInstance.Guid;
+            guid = boardObjectInstance.Guid;
             
-            foreach (var component in chessBoardObjectInstance.Components)
+            foreach (var component in boardObjectInstance.Components)
             {
                 components.Add(ComponentDTO.From(component));
             }

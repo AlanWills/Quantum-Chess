@@ -5,7 +5,7 @@ using QC.Match.Objects;
 namespace QC.Match.Catalogue
 {
     [CreateAssetMenu(fileName = nameof(ChessBoardObjectCatalogue), menuName = "QC/Match/Objects/Chess Board Object Catalogue")]
-    public class ChessBoardObjectCatalogue : ListScriptableObject<ChessBoardObject>, IAutomaticImportSettings
+    public class ChessBoardObjectCatalogue : ListScriptableObject<BoardObject>, IAutomaticImportSettings
     {
         #region Properties and Fields
 
@@ -15,11 +15,11 @@ namespace QC.Match.Catalogue
         
         #endregion
         
-        public ChessBoardObject MustFindItemByGuid(int guid)
+        public BoardObject MustFindItemByGuid(int guid)
         {
-            ChessBoardObject chessBoardObject = FindItem(x => x.Guid == guid);
-            UnityEngine.Debug.Assert(chessBoardObject != null, $"Failed to find {nameof(ChessBoardObject)} wit guid '{guid}' in {name}.");
-            return chessBoardObject;
+            BoardObject boardObject = FindItem(x => x.Guid == guid);
+            UnityEngine.Debug.Assert(boardObject != null, $"Failed to find {nameof(BoardObject)} wit guid '{guid}' in {name}.");
+            return boardObject;
         }
     }
 }

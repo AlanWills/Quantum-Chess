@@ -15,22 +15,25 @@ namespace QC.Match
             
             public readonly int PlayerIndex;
             public readonly IPlayerInfo PlayerInfo;
-            public readonly ChessBoard ChessBoard;
-            public readonly ChessBoardCommandExecutor CommandExecutor;
+            public readonly IPlayerActionMaskLookup PlayerActionMaskLookup;
+            public readonly Board Board;
+            public readonly BoardCommandExecutor CommandExecutor;
             public readonly ILuaRuntime LuaRuntime;
             public readonly IRNG RNG;
 
             public Args(
                 int playerIndex,
                 IPlayerInfo playerInfo,
-                ChessBoard chessBoard,
-                ChessBoardCommandExecutor commandExecutor,
+                IPlayerActionMaskLookup playerActionMaskLookup,
+                Board board,
+                BoardCommandExecutor commandExecutor,
                 ILuaRuntime luaRuntime,
                 IRNG rng)
             {
                 PlayerIndex = playerIndex;
                 PlayerInfo = playerInfo;
-                ChessBoard = chessBoard;
+                PlayerActionMaskLookup = playerActionMaskLookup;
+                Board = board;
                 CommandExecutor = commandExecutor;
                 LuaRuntime = luaRuntime;
                 RNG = rng;

@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct ThinkForPlayerCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct ThinkForPlayerCommand : ICommand<BoardCommandArgs>
     {
         private readonly int playerIndex;
         private readonly bool dryRun;
@@ -14,7 +14,7 @@ namespace QC.Match.Commands
             this.dryRun = dryRun;
         }
 
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken cancellationToken)
+        public async UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken cancellationToken)
         {
             ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs(playerIndex);
             await args.MatchState.ThinkForPlayer(playerIndex, turnStrategyArgs, dryRun);

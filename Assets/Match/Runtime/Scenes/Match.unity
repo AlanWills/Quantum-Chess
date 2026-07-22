@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 277367576}
   - component: {fileID: 277367578}
   m_Layer: 0
-  m_Name: ChessBoardView
+  m_Name: BoardView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,12 +199,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
   chessBoardObjectViewAllocator: {fileID: 932586496}
-  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+  boardCommandExecutor: {fileID: 0}
   matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   piecesViewRoot: {fileID: 1255884393}
   chessBoardTilemap: {fileID: 690885639}
   hitBoxCollider: {fileID: 690885640}
-  chessBoardTilemapChanged: {fileID: 11400000, guid: 1f206a4a1434c4b4185d03e0c81833f1, type: 2}
+  boardTilemapChanged: {fileID: 0}
 --- !u!4 &277367575
 Transform:
   m_ObjectHideFlags: 0
@@ -412,9 +412,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime.Lua::QC.Match.MatchLuaBindings
   matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   matchScenarioCatalogue: {fileID: 11400000, guid: f269b040058463540a3ce3eb0d737fec, type: 2}
-  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
-  chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
-  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+  board: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  boardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
+  boardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
 --- !u!1 &456453836
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,7 +715,7 @@ GameObject:
   - component: {fileID: 538604456}
   - component: {fileID: 538604457}
   m_Layer: 0
-  m_Name: ChessBoardObjectActionView
+  m_Name: BoardObjectActionView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -748,7 +748,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd3580b9786440a99984ef6c2ad0711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Views.ChessBoardObjectActionView
-  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
+  board: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   movementTilemap: {fileID: 1019234146}
   attackTilemap: {fileID: 678907614}
   validMovementTile: {fileID: 11400000, guid: 1458eaeabc25e4af5943804616616fb4, type: 2}
@@ -1178,7 +1179,7 @@ GameObject:
   - component: {fileID: 932586495}
   - component: {fileID: 932586496}
   m_Layer: 0
-  m_Name: ChessBoardObjectViewAllocator
+  m_Name: BoardObjectViewAllocator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1336,7 +1337,6 @@ GameObject:
   - component: {fileID: 1538463193}
   - component: {fileID: 1538463194}
   - component: {fileID: 1538463195}
-  - component: {fileID: 1538463196}
   m_Layer: 0
   m_Name: MatchStateManager
   m_TagString: Untagged
@@ -1375,9 +1375,9 @@ MonoBehaviour:
   loadOnAwake: 1
   loadOnStart: 0
   matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
-  chessBoardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
-  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
-  chessBoardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
+  boardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
+  board: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  boardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   visualAnimationSystem: {fileID: 11400000, guid: f900482a81aeb4f65866fd62326b7d6e, type: 2}
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   onMatchSetup:
@@ -1439,35 +1439,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1538463196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1538463192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec80dc6fe68e4fd18b0e7bb6b88735b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Events.ChessBoardObjectAddedEventListener
-  gameEvent: {fileID: 11400000, guid: 8be6f3500e146484080931ca9cfcf2d7, type: 2}
-  logAddAndRemoveListener: 0
-  response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1538463194}
-        m_TargetAssemblyTypeName: QC.Match.Managers.MatchStateManager, QC.Match.Runtime
-        m_MethodName: OnChessBoardObjectAdded
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1580313332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,7 +1452,7 @@ GameObject:
   - component: {fileID: 1580313335}
   - component: {fileID: 1580313336}
   m_Layer: 0
-  m_Name: ChessBoardManager
+  m_Name: BoardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1517,7 +1488,7 @@ MonoBehaviour:
   snapshotRecord: {fileID: 11400000, guid: 027467ab1e1b0b3459e902ce03393db2, type: 2}
   loadOnAwake: 1
   loadOnStart: 0
-  chessBoard: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
+  board: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
 --- !u!114 &1580313335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1821,7 +1792,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 911416478762887979, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: m_Name
-      value: ChessBoardTilemap
+      value: BoardTilemap
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.size

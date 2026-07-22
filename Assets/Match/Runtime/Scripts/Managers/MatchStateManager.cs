@@ -25,9 +25,9 @@ namespace QC.Match.Managers
         protected override string FileName => FILE_NAME;
 
         [SerializeField] private MatchState matchState;
-        [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
-        [SerializeField] private ChessBoard chessBoard;
-        [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
+        [SerializeField] private BoardCommandExecutor boardCommandExecutor;
+        [SerializeField] private Board board;
+        [SerializeField] private BoardObjectSelection boardObjectSelection;
         [SerializeField] private VisualAnimationSystemUsingHandlers visualAnimationSystem;
         [SerializeField] private LuaRuntime luaRuntime;
         [SerializeField] private UnityEvent onMatchSetup = new();
@@ -42,7 +42,7 @@ namespace QC.Match.Managers
         private void OnDisable()
         {
             onMatchShutdown.Invoke();
-            chessBoardCommandExecutor.StopProcessing();
+            boardCommandExecutor.StopProcessing();
         }
         
         #endregion
@@ -73,8 +73,8 @@ namespace QC.Match.Managers
 
         public IEnumerator LoadAssets()
         {
-            ChessBoardCommandArgs args = CreateCommandArgs();
-            chessBoardCommandExecutor.BeginProcessing(args);
+            BoardCommandArgs args = CreateCommandArgs();
+            boardCommandExecutor.BeginProcessing(args);
 
             if (matchState.HasActiveScenario)
             {
@@ -82,18 +82,18 @@ namespace QC.Match.Managers
                 IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
                 
                 yield return matchState.LoadLastActiveScenario(turnStrategyArgs, winConditionArgs);
-                }
+            }
 
             onMatchSetup.Invoke();
         }
 
-        private ChessBoardCommandArgs CreateCommandArgs()
+        private BoardCommandArgs CreateCommandArgs()
         {
-            return new ChessBoardCommandArgs(
+            return new BoardCommandArgs(
                 matchState,
-                chessBoardCommandExecutor,
-                chessBoard,
-                chessBoardObjectSelection,
+                boardCommandExecutor,
+                board,
+                boardObjectSelection,
                 luaRuntime,
                 visualAnimationSystem,
                 rng);

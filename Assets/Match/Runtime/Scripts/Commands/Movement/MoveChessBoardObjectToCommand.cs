@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct MoveChessBoardObjectToCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct MoveChessBoardObjectToCommand : ICommand<BoardCommandArgs>
     {
-        private readonly ChessBoardObjectInstance chessBoardObjectInstance;
+        private readonly BoardObjectInstance boardObjectInstance;
         private readonly Vector2Int chessBoardObjectEndingPosition;
         
-        public MoveChessBoardObjectToCommand(ChessBoardObjectInstance instance, Vector2Int end)
+        public MoveChessBoardObjectToCommand(BoardObjectInstance instance, Vector2Int end)
         {
-            chessBoardObjectInstance = instance;
+            boardObjectInstance = instance;
             chessBoardObjectEndingPosition = end;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
             return MoveCommandUtilities.TryMoveChessBoardObject(
                 args, 
-                chessBoardObjectInstance, 
+                boardObjectInstance, 
                 chessBoardObjectEndingPosition);
         }
     }

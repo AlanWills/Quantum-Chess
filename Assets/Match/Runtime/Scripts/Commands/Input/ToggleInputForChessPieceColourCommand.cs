@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct ToggleInputForChessPieceColourCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct ToggleInputForChessPieceColourCommand : ICommand<BoardCommandArgs>
     {
         private readonly ChessPieceColour colour;
         private readonly bool inputEnabled;
@@ -14,9 +14,9 @@ namespace QC.Match.Commands
             this.inputEnabled = inputEnabled;
         }
         
-        public async UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public async UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            var commandState = await InputCommandUtilities.SetInteractableForColour(args.ChessBoard, colour, inputEnabled);
+            var commandState = await InputCommandUtilities.SetInteractableForColour(args.Board, colour, inputEnabled);
             
             if (commandState == CommandState.Completed)
             {

@@ -10,8 +10,8 @@ namespace QC.Match.AI
     {
         public static bool TryCalculate(
             ITurnStrategy.Args args,
-            List<ChessBoardObjectInstance> piecesToConsider,
-            out ICommand<ChessBoardCommandArgs> command)
+            List<BoardObjectInstance> piecesToConsider,
+            out ICommand<BoardCommandArgs> command)
         {
             List<Vector2Int> validAttacks = new();
             List<Vector2Int> validMoves = new();
@@ -21,22 +21,24 @@ namespace QC.Match.AI
 
             for (int i = 0; i < piecesToConsider.Count; --i)
             {
-                ChessBoardObjectInstance chessPiece = piecesToConsider[i];
+                BoardObjectInstance piece = piecesToConsider[i];
 
-                if (chessPiece.TryFindComponent<IGrid2DTransform>(out var transform) &&
-                    chessPiece.TryFindComponent<IActionProvider>(out var actionProvider))
+                if (piece.TryFindComponent<IGrid2DTransform>(out var transform) &&
+                    piece.TryFindComponent<IActionProvider>(out var actionProvider))
                 {
                     validAttacks.Clear();
                     validMoves.Clear();
                     
                     actionProvider.CalculateValidAttacks(
                         transform.GetPosition(), 
-                        args.ChessBoard, 
+                        args.Board,
+                        args.PlayerActionMaskLookup,
                         validAttacks);
                     
                     actionProvider.CalculateValidMoves(
                         transform.GetPosition(), 
-                        args.ChessBoard, 
+                        args.Board,
+                        args.PlayerActionMaskLookup,
                         validMoves);
                     
                     int totalActions = validAttacks.Count + validMoves.Count;
@@ -54,7 +56,7 @@ namespace QC.Match.AI
                         else
                         {
                             command = new MoveChessBoardObjectToCommand(
-                                chessPiece,
+                                piece,
                                 validMoves[randomActionIndex - validAttacks.Count]);
                             return true;
                         }

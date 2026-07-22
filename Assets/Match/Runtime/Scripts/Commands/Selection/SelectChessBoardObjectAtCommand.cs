@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct SelectChessBoardObjectAtCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct SelectChessBoardObjectAtCommand : ICommand<BoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectLocation;
         
@@ -14,16 +14,16 @@ namespace QC.Match.Commands
             chessBoardObjectLocation = location;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            ChessBoardObjectInstance chessBoardObjectInstance = args.ChessBoard.GetChessBoardObjectAt(chessBoardObjectLocation);
-            if (chessBoardObjectInstance == null)
+            BoardObjectInstance boardObjectInstance = args.Board.GetBoardObjectAt(chessBoardObjectLocation);
+            if (boardObjectInstance == null)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(ChessBoardObjectInstance)} at {chessBoardObjectLocation}, but there is no board object there.  Did you mean to clear selection?");
+                UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(BoardObjectInstance)} at {chessBoardObjectLocation}, but there is no board object there.  Did you mean to clear selection?");
                 return UniTask.FromResult(CommandState.Completed);
             }
             
-            args.Selection.CurrentSelectedObject = chessBoardObjectInstance;
+            args.Selection.CurrentSelectedObject = boardObjectInstance;
             return UniTask.FromResult(CommandState.Completed);
         }
     }

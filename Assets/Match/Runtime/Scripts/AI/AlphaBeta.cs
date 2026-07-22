@@ -23,14 +23,14 @@ namespace QC.Match.AI
            () => new List<Vector2Int>(k_defaultValidMovesAllocation),
            actionOnRelease: l => l.Clear(),
            defaultCapacity: k_defaultValidMovesPoolCapacity);
-        private static Tile[] s_tiles;
+        private static TileBlit[] s_tiles;
         
         #endregion
 
         public static bool TryCalculate(
             ITurnStrategy.Args args,
             AlphaBetaParameters alphaBetaParameters,
-            out ICommand<ChessBoardCommandArgs> command)
+            out ICommand<BoardCommandArgs> command)
         {
            if (alphaBetaParameters.Depth < 1)
            {
@@ -47,55 +47,54 @@ namespace QC.Match.AI
               int alpha = int.MinValue;
               int beta = int.MaxValue;
               
-              RectInt boundingBox = args.ChessBoard.CalculateBoundingBox();
+              RectInt boundingBox = args.Board.CalculateBoundingBox();
               if ( s_tiles == null || s_tiles.Length != boundingBox.size.x * boundingBox.size.y)
               {
-                 s_tiles = new Tile[boundingBox.size.x * boundingBox.size.y];
+                 s_tiles = new TileBlit[boundingBox.size.x * boundingBox.size.y];
               }
               
-              Board board = new Board(boundingBox, s_tiles);
-              board.SetTiles(args.ChessBoard.Tiles, alphaBetaParameters, args.RNG);
-              board.SetObjects(args.ChessBoard.Objects, alphaBetaParameters, args.RNG);
+              BoardBlit boardBlit = new BoardBlit(boundingBox, s_tiles);
+              boardBlit.SetTiles(args.Board.Tiles, alphaBetaParameters, args.RNG);
+              boardBlit.SetObjects(args.Board.Objects, alphaBetaParameters, args.RNG);
               
-              for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
+              for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
               {
-                 Tile tile = board.board[boardIndex];
+                 TileBlit tileBlit = boardBlit.board[boardIndex];
               
-                 if (!tile.IsValid)
+                 if (!tileBlit.IsValid)
                  {
                     continue;
                  }
               
-                 if (!tile.Piece.IsValid)
+                 if (!tileBlit.Piece.IsValid)
                  {
                     continue;
                  }
               
-                 if (tile.Piece.PieceColour != activeColour)
+                 if (tileBlit.Piece.PieceColour != activeColour)
                  {
                     continue;
                  }
                  
-                 Piece piece = tile.Piece;
-                 Vector2Int position = board.ToVector2Int(boardIndex);
+                 Piece piece = tileBlit.Piece;
+                 Vector2Int position = boardBlit.ToVector2Int(boardIndex);
 
                  List<Vector2Int> validActions = s_validMovesPool.Get();
                  validActions.Clear();
                  
                  // TODO: May have to change these to support the faster AlphaBeta structs
-                 tile.Piece.ActionProvider.CalculateValidAttacks(position, args.ChessBoard, validActions);
-                 tile.Piece.ActionProvider.CalculateValidMoves(position, args.ChessBoard, validActions);
+                 tileBlit.Piece.ActionProvider.CalculateValidAttacks(position, args.Board, args.PlayerActionMaskLookup, validActions);
+                 tileBlit.Piece.ActionProvider.CalculateValidMoves(position, args.Board, args.PlayerActionMaskLookup, validActions);
 
                  for (int i = 0, n = validActions.Count; i < n; ++i)
                  {
                     Vector2Int action = validActions[i];
-                    Piece pieceToCapture = board.GetPieceAt(action);
+                    Piece pieceToCapture = boardBlit.GetPieceAt(action);
                     Move move = new Move(piece, pieceToCapture, position, action);
 
-                    board.MakeMove(move);
-                    int score = AlphaBetaMin(alphaBetaParameters, board, activeColour, args.RNG, alpha, beta,
-                       alphaBetaParameters.Depth - 1);
-                    board.UndoMove(move);
+                    boardBlit.MakeMove(move);
+                    int score = AlphaBetaMin(alphaBetaParameters, args.PlayerActionMaskLookup, boardBlit, activeColour, args.RNG, alpha, beta, alphaBetaParameters.Depth - 1);
+                    boardBlit.UndoMove(move);
 
                     if (score > bestScore)
                     {
@@ -133,12 +132,12 @@ namespace QC.Match.AI
               UnityEngine.Debug.Assert(bestMove.PieceToMove.PieceColour == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
 
-              var objectAtBestMove = args.ChessBoard.GetChessBoardObjectAt(bestMove.Destination);
+              var objectAtBestMove = args.Board.GetBoardObjectAt(bestMove.Destination);
               if (objectAtBestMove != null)
               {
                  // Our best move involves an attack
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
-                 UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null,
+                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
                     $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
                  UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake),
                     $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
@@ -150,7 +149,7 @@ namespace QC.Match.AI
               {
                  // Our best move involves a move
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
-                 UnityEngine.Debug.Assert(args.ChessBoard.GetChessBoardObjectAt(bestMove.Position) != null,
+                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
                     $"Attempting to move a piece at {bestMove.Position}, but there is no object there!");
                  command = new MoveChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
               }
@@ -161,7 +160,8 @@ namespace QC.Match.AI
 
         private static int AlphaBetaMax(
            AlphaBetaParameters parameters,
-           Board board, 
+           IPlayerActionMaskLookup playerActionMaskLookup,
+           BoardBlit boardBlit,
            ChessPieceColour activeColour,
            IRNG rng,
            int alpha, 
@@ -170,49 +170,49 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour);
+              int currentBoardScore = EvaluateBoard(boardBlit, activeColour);
               return currentBoardScore;
            }
 
            int maxValue = int.MinValue;
            
-           for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
+           for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
-              Tile tile = board.board[boardIndex];
+              TileBlit tileBlit = boardBlit.board[boardIndex];
               
-              if (!tile.IsValid)
+              if (!tileBlit.IsValid)
               {
                  continue;
               }
               
-              if (!tile.Piece.IsValid)
+              if (!tileBlit.Piece.IsValid)
               {
                  continue;
               }
               
-              if (tile.Piece.PieceColour != activeColour)
+              if (tileBlit.Piece.PieceColour != activeColour)
               {
                  continue;
               }
 
-              Vector2Int boardPosition = board.ToVector2Int(boardIndex);
+              Vector2Int boardPosition = boardBlit.ToVector2Int(boardIndex);
               List<Vector2Int> validActions = s_validMovesPool.Get();
               
-              var actionProvider = tile.Piece.ActionProvider;
+              var actionProvider = tileBlit.Piece.ActionProvider;
               
               // TODO: May have to change these to support the faster AlphaBeta structs
-              actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
-              actionProvider.CalculateValidMoves(boardPosition, board, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, playerActionMaskLookup, validActions);
+              actionProvider.CalculateValidMoves(boardPosition, boardBlit, playerActionMaskLookup, validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
                  Vector2Int action = validActions[i];
-                 Piece pieceToCapture = board.GetPieceAt(action);
-                 Move move = new Move(tile.Piece, pieceToCapture, boardPosition, action);
+                 Piece pieceToCapture = boardBlit.GetPieceAt(action);
+                 Move move = new Move(tileBlit.Piece, pieceToCapture, boardPosition, action);
                  
-                 board.MakeMove(move);
-                 int score = AlphaBetaMin(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
-                 board.UndoMove(move);
+                 boardBlit.MakeMove(move);
+                 int score = AlphaBetaMin(parameters, playerActionMaskLookup, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 boardBlit.UndoMove(move);
                  
                  maxValue = Math.Max(maxValue, score);
                  alpha = Math.Max(alpha, score);
@@ -232,7 +232,8 @@ namespace QC.Match.AI
 
         private static int AlphaBetaMin(
            AlphaBetaParameters parameters,
-           Board board,
+           IPlayerActionMaskLookup playerActionMaskLookup,
+           BoardBlit boardBlit,
            ChessPieceColour activeColour,
            IRNG rng,
            int alpha, 
@@ -241,49 +242,49 @@ namespace QC.Match.AI
         {
            if (remainingDepth == 0)
            {
-              int currentBoardScore = EvaluateBoard(board, activeColour);
+              int currentBoardScore = EvaluateBoard(boardBlit, activeColour);
               return currentBoardScore;
            }
            
            int minValue = int.MaxValue;
            
-           for (int boardIndex = 0, numBoardIndices = board.board.Length; boardIndex < numBoardIndices; ++boardIndex)
+           for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
-              Tile tile = board.board[boardIndex];
+              TileBlit tileBlit = boardBlit.board[boardIndex];
               
-              if (!tile.IsValid)
+              if (!tileBlit.IsValid)
               {
                  continue;
               }
               
-              if (!tile.Piece.IsValid)
+              if (!tileBlit.Piece.IsValid)
               {
                  continue;
               }
               
-              if (tile.Piece.PieceColour != activeColour)
+              if (tileBlit.Piece.PieceColour != activeColour)
               {
                  continue;
               }
 
-              Vector2Int boardPosition = board.ToVector2Int(boardIndex);
+              Vector2Int boardPosition = boardBlit.ToVector2Int(boardIndex);
               List<Vector2Int> validActions = s_validMovesPool.Get();
 
-              var actionProvider = tile.Piece.ActionProvider;
+              var actionProvider = tileBlit.Piece.ActionProvider;
               
               // TODO: May have to change these to support the faster AlphaBeta structs
-              actionProvider.CalculateValidAttacks(boardPosition, board, validActions);
-              actionProvider.CalculateValidMoves(boardPosition, board, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, playerActionMaskLookup, validActions);
+              actionProvider.CalculateValidMoves(boardPosition, boardBlit, playerActionMaskLookup, validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
                  Vector2Int action = validActions[i];
-                 Piece pieceToCapture = board.GetPieceAt(action);
-                 Move move = new Move(tile.Piece, pieceToCapture, boardPosition, action);
+                 Piece pieceToCapture = boardBlit.GetPieceAt(action);
+                 Move move = new Move(tileBlit.Piece, pieceToCapture, boardPosition, action);
                  
-                 board.MakeMove(move);
-                 int score = AlphaBetaMax(parameters, board, activeColour, rng, alpha, beta, remainingDepth - 1);
-                 board.UndoMove(move);
+                 boardBlit.MakeMove(move);
+                 int score = AlphaBetaMax(parameters, playerActionMaskLookup, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 boardBlit.UndoMove(move);
                  
                  minValue = Math.Min(minValue, score);
                  beta = Math.Min(beta, score);
@@ -301,23 +302,23 @@ namespace QC.Match.AI
            return minValue;
         }
 
-        private static int EvaluateBoard(Board board, ChessPieceColour activeColour)
+        private static int EvaluateBoard(BoardBlit boardBlit, ChessPieceColour activeColour)
         {
            int total = 0;
 
-           for (int tileIndex = 0, n = board.board.Length; tileIndex < n; ++tileIndex)
+           for (int tileIndex = 0, n = boardBlit.board.Length; tileIndex < n; ++tileIndex)
            {
               // Interestingly, we don't account for the cost of NOT occupying a tile
               
-              Tile tile = board.board[tileIndex];
-              if (!tile.IsValid || !tile.Piece.IsValid)
+              TileBlit tileBlit = boardBlit.board[tileIndex];
+              if (!tileBlit.IsValid || !tileBlit.Piece.IsValid)
               {
                  continue;
               }
               
-              int colourModifier = tile.Piece.PieceColour == activeColour ? 1 : -1;
-              int tileImportance = tile.Importance;
-              int pieceValue = tile.Piece.Value;
+              int colourModifier = tileBlit.Piece.PieceColour == activeColour ? 1 : -1;
+              int tileImportance = tileBlit.Importance;
+              int pieceValue = tileBlit.Piece.Value;
               int totalValue = (tileImportance + pieceValue) * colourModifier;
               
               total += totalValue;

@@ -31,18 +31,18 @@ namespace QC.Match.Objects
             transformHandlers.Clear();
         }
 
-        public void RegisterHandlerFor(ChessBoardObjectInstance objectInstance, IVisualAnimationHandler handler)
+        public void RegisterHandlerFor(BoardObjectInstance objectInstance, IVisualAnimationHandler handler)
         {
             UnityEngine.Debug.Assert(!transformHandlers.ContainsKey(objectInstance.InstanceId), $"{nameof(IVisualAnimationHandler)} already registered for transform!");
             transformHandlers[objectInstance.InstanceId] = handler;
         }
 
-        public void DeregisterHandlerFor(ChessBoardObjectInstance objectInstance)
+        public void DeregisterHandlerFor(BoardObjectInstance objectInstance)
         {
             transformHandlers.Remove(objectInstance.InstanceId);
         }
         
-        public async UniTask AnimateTo(ChessBoardObjectInstance objectInstance, Vector2 position)
+        public async UniTask AnimateTo(BoardObjectInstance objectInstance, Vector2 position)
         {
             if (!transformHandlers.TryGetValue(objectInstance.InstanceId, out IVisualAnimationHandler handler))
             {

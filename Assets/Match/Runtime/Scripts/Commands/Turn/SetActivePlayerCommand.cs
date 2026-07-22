@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct SetActivePlayerCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct SetActivePlayerCommand : ICommand<BoardCommandArgs>
     {
         private readonly int PlayerIndex;
 
@@ -12,7 +12,7 @@ namespace QC.Match.Commands
             PlayerIndex = playerIndex;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
             ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs(PlayerIndex);
             IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct RemoveChessBoardObjectAtCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct RemoveChessBoardObjectAtCommand : ICommand<BoardCommandArgs>
     {
         private readonly Vector2Int BoardPosition;
 
@@ -14,9 +14,9 @@ namespace QC.Match.Commands
             BoardPosition = boardPosition;
         }
 
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            ChessBoardObjectInstance instance = args.ChessBoard.GetChessBoardObjectAt(BoardPosition);
+            BoardObjectInstance instance = args.Board.GetBoardObjectAt(BoardPosition);
             if (instance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Could not find chess board object at position {BoardPosition}.");

@@ -4,24 +4,24 @@ using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
-    public readonly struct SelectChessBoardObjectCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct SelectChessBoardObjectCommand : ICommand<BoardCommandArgs>
     {
-        private readonly ChessBoardObjectInstance chessBoardObjectInstance;
+        private readonly BoardObjectInstance boardObjectInstance;
         
-        public SelectChessBoardObjectCommand(ChessBoardObjectInstance instance)
+        public SelectChessBoardObjectCommand(BoardObjectInstance instance)
         {
-            chessBoardObjectInstance = instance;
+            boardObjectInstance = instance;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            if (chessBoardObjectInstance == null)
+            if (boardObjectInstance == null)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(ChessBoardObjectInstance)} that is null.");
+                UnityEngine.Debug.LogAssertion($"Attempting to select a {nameof(BoardObjectInstance)} that is null.");
                 return UniTask.FromResult(CommandState.Completed);
             }
             
-            args.Selection.CurrentSelectedObject = chessBoardObjectInstance;
+            args.Selection.CurrentSelectedObject = boardObjectInstance;
             return UniTask.FromResult(CommandState.Completed);
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct AddChessBoardTileCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct AddChessBoardTileCommand : ICommand<BoardCommandArgs>
     {
         private readonly int Guid;
         private readonly Vector2Int Position;
@@ -22,9 +22,9 @@ namespace QC.Match.Commands
             Importance = importance;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            ChessBoardTileInstance instance = args.ChessBoard.CreateChessBoardTile(Guid, Position);
+            BoardTileInstance instance = args.Board.CreateChessBoardTile(Guid, Position);
             if (instance == null)
             {
                 UnityEngine.Debug.LogError($"Failed to create chess board tile with guid {Guid} at position {Position}.");
@@ -36,7 +36,7 @@ namespace QC.Match.Commands
                 tileAIInfo.SetImportance(Importance);
             }
 
-            args.ChessBoard.AddChessBoardTileInstance(instance);
+            args.Board.AddChessBoardTileInstance(instance);
 
             return UniTask.FromResult(CommandState.Completed);
         }

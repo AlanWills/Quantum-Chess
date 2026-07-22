@@ -6,6 +6,6 @@ namespace QC.Match
 {
     public interface IVisualAnimationSystem
     {
-        UniTask AnimateTo(ChessBoardObjectInstance objectInstance, Vector2 position);
+        UniTask AnimateTo(BoardObjectInstance objectInstance, Vector2 position);
     }
 }

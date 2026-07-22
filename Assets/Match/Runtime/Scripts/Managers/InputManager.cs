@@ -7,7 +7,7 @@ namespace QC.Match.Managers
     {
         #region Properties and Fields
         
-        [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
+        [SerializeField] private BoardObjectSelection boardObjectSelection;
         
         #endregion
     }

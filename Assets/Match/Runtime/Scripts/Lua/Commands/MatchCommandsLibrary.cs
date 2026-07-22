@@ -51,12 +51,12 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int start = context.GetArgument<LuaVector2Int>(1);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(2);
             
             MoveChessBoardObjectFromToCommand moveFromToCommand = new MoveChessBoardObjectFromToCommand(start.v, end.v);
-            chessBoardCommandExecutor.QueueCommand(moveFromToCommand);
+            boardCommandExecutor.QueueCommand(moveFromToCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -65,11 +65,11 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(1);
             
             MoveSelectedChessBoardObjectToCommand moveSelectedToCommand = new MoveSelectedChessBoardObjectToCommand(end.v);
-            chessBoardCommandExecutor.QueueCommand(moveSelectedToCommand);
+            boardCommandExecutor.QueueCommand(moveSelectedToCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -78,11 +78,11 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int location = context.GetArgument<LuaVector2Int>(1);
             
             SelectChessBoardObjectAtCommand selectAtCommand = new SelectChessBoardObjectAtCommand(location.v);
-            chessBoardCommandExecutor.QueueCommand(selectAtCommand);
+            boardCommandExecutor.QueueCommand(selectAtCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -91,9 +91,9 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             ClearSelectedChessBoardObjectCommand clearSelectionCommand = new ClearSelectedChessBoardObjectCommand();
-            chessBoardCommandExecutor.QueueCommand(clearSelectionCommand);
+            boardCommandExecutor.QueueCommand(clearSelectionCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -102,7 +102,7 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             string colourString = context.GetArgument<string>(1);
 
             if (string.IsNullOrEmpty(colourString) ||
@@ -113,7 +113,7 @@ namespace QC.Match.Lua
             }
             
             ToggleInputForChessPieceColourCommand toggleInputCommand = new ToggleInputForChessPieceColourCommand(chessPieceColour, true);
-            chessBoardCommandExecutor.QueueCommand(toggleInputCommand);
+            boardCommandExecutor.QueueCommand(toggleInputCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -122,12 +122,12 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int start = context.GetArgument<LuaVector2Int>(1);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(2);
             
             AttackWithChessBoardObjectFromToCommand attackFromTo = new AttackWithChessBoardObjectFromToCommand(start.v, end.v);
-            chessBoardCommandExecutor.QueueCommand(attackFromTo);
+            boardCommandExecutor.QueueCommand(attackFromTo);
             
             return new ValueTask<int>(context.Return());
         }
@@ -135,10 +135,10 @@ namespace QC.Match.Lua
         private ValueTask<int> AttackWithSelectedTo( LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int end = context.GetArgument<LuaVector2Int>(1);
             AttackWithSelectedChessBoardObjectCommand attackWithSelectedTo = new AttackWithSelectedChessBoardObjectCommand(end.v);
-            chessBoardCommandExecutor.QueueCommand(attackWithSelectedTo);
+            boardCommandExecutor.QueueCommand(attackWithSelectedTo);
             
             return new ValueTask<int>(context.Return());
         }
@@ -147,10 +147,10 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int playerIndex = context.GetArgument<int>(1);
             SetActivePlayerCommand setActivePlayerCommand = new SetActivePlayerCommand(playerIndex);
-            chessBoardCommandExecutor.QueueCommand(setActivePlayerCommand);
+            boardCommandExecutor.QueueCommand(setActivePlayerCommand);
 
             return new ValueTask<int>(context.Return());
         }
@@ -159,7 +159,7 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int guid = context.GetArgument<int>(1);
             LuaTable config = context.GetArgument<LuaTable>(2);
 
@@ -197,7 +197,7 @@ namespace QC.Match.Lua
                 verticalDirection,
                 position,
                 interactable);
-            chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
+            boardCommandExecutor.QueueCommand(addChessPieceCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -206,7 +206,7 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int guid = context.GetArgument<int>(1);
             LuaTable config = context.GetArgument<LuaTable>(2);
 
@@ -296,7 +296,7 @@ namespace QC.Match.Lua
                 colour,
                 type,
                 value);
-            chessBoardCommandExecutor.QueueCommand(addChessPieceCommand);
+            boardCommandExecutor.QueueCommand(addChessPieceCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -305,11 +305,11 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             LuaVector2Int position = context.GetArgument<LuaVector2Int>(1);
             
             RemoveChessBoardObjectAtCommand removeChessBoardObjectCommand = new RemoveChessBoardObjectAtCommand(position.v);
-            chessBoardCommandExecutor.QueueCommand(removeChessBoardObjectCommand);
+            boardCommandExecutor.QueueCommand(removeChessBoardObjectCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -318,7 +318,7 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int tileGuid = context.GetArgument<int>(1);
             LuaTable config = context.GetArgument<LuaTable>(2);
 
@@ -340,7 +340,7 @@ namespace QC.Match.Lua
             }
 
             AddChessBoardTileCommand addChessBoardTileCommand = new AddChessBoardTileCommand(tileGuid, position, importance);
-            chessBoardCommandExecutor.QueueCommand(addChessBoardTileCommand);
+            boardCommandExecutor.QueueCommand(addChessBoardTileCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -349,9 +349,9 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             ClearChessBoardCommand clearChessBoardCommand = new ClearChessBoardCommand();
-            chessBoardCommandExecutor.QueueCommand(clearChessBoardCommand);
+            boardCommandExecutor.QueueCommand(clearChessBoardCommand);
             
             return new ValueTask<int>(context.Return());
         }
@@ -360,10 +360,10 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int playerIndex = context.GetArgument<int>(1);
             CheckPlayerWinConditionCommand checkPlayerWinCondition = new CheckPlayerWinConditionCommand(playerIndex);
-            chessBoardCommandExecutor.QueueCommand(checkPlayerWinCondition);
+            boardCommandExecutor.QueueCommand(checkPlayerWinCondition);
             
             return new ValueTask<int>(context.Return());
         }
@@ -372,11 +372,11 @@ namespace QC.Match.Lua
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
-            ChessBoardCommandExecutor chessBoardCommandExecutor = context.GetArgument<ChessBoardCommandExecutor>(0);
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
             int playerIndex = context.GetArgument<int>(1);
             bool dryRun = context.HasArgument(2) && context.GetArgument<bool>(2);
             ThinkForPlayerCommand thinkForPlayer = new ThinkForPlayerCommand(playerIndex, dryRun);
-            chessBoardCommandExecutor.QueueCommand(thinkForPlayer);
+            boardCommandExecutor.QueueCommand(thinkForPlayer);
             
             return new ValueTask<int>(context.Return());
         }

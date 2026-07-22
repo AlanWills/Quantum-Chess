@@ -4,16 +4,16 @@ using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
-    public readonly struct RemoveChessBoardObjectCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct RemoveChessBoardObjectCommand : ICommand<BoardCommandArgs>
     {
-        private readonly ChessBoardObjectInstance InstanceToRemove;
+        private readonly BoardObjectInstance InstanceToRemove;
 
-        public RemoveChessBoardObjectCommand(ChessBoardObjectInstance instanceToRemove)
+        public RemoveChessBoardObjectCommand(BoardObjectInstance instanceToRemove)
         {
             InstanceToRemove = instanceToRemove;
         }
 
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
             return RemoveCommandUtilities.RemoveChessBoardObject(args, InstanceToRemove);
         }

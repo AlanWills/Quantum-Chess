@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using Celeste.Components;
+using Celeste.Maths;
+using QC.Match.Events;
+using QC.Match.Objects;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+namespace QC.Match.Views
+{
+    public class BoardObjectActionView : MonoBehaviour
+    {
+        #region Properties and Fields
+
+        [SerializeField] private MatchState matchState;
+        [SerializeField] private Board board;
+        [SerializeField] private Tilemap movementTilemap;
+        [SerializeField] private Tilemap attackTilemap;
+        [SerializeField] private TileBase validMovementTile;
+        [SerializeField] private TileBase validAttackTile;
+
+        [NonSerialized] private readonly List<Vector2Int> boardPositionCache = new();
+
+        #endregion
+
+        private void UpdateValidActionsForObject(BoardObjectInstance instance)
+        {
+            movementTilemap.ClearAllTiles();
+            movementTilemap.CompressBounds();
+            
+            attackTilemap.ClearAllTiles();
+            attackTilemap.CompressBounds();
+            
+            if (instance == null ||
+                !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) ||
+                !instance.TryFindComponent<IActionProvider>(out var actionProvider))
+            {
+                return;
+            }
+
+            Vector2Int boardPosition = grid2DTransform.GetPosition();
+            CalculateValidMoves(boardPosition, actionProvider);
+            CalculateValidAttacks(boardPosition, actionProvider);
+        }
+
+        private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
+        {
+            boardPositionCache.Clear();
+            actionProvider.CalculateValidMoves(boardPosition, board, matchState, boardPositionCache);
+
+            foreach (Vector2Int validMove in boardPositionCache)
+            {
+                if (!board.DoesBoardTileExist(validMove) || 
+                    board.GetBoardObjectAt(validMove) != null)
+                {
+                    continue;
+                }
+                
+                Vector2Int boardPositionInActionTilemapSpace = validMove + movementTilemap.origin.ToVector2Int();
+                movementTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validMovementTile);
+            }
+            
+            boardPositionCache.Clear();
+        }
+
+        private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
+        {
+            boardPositionCache.Clear();
+            actionProvider.CalculateValidAttacks(boardPosition, board, matchState, boardPositionCache);
+
+            foreach (Vector2Int validAttack in boardPositionCache)
+            {
+                if (!board.DoesBoardTileExist(validAttack) ||
+                    board.GetBoardObjectAt(validAttack) == null)
+                {
+                    continue;
+                }
+                
+                Vector2Int boardPositionInActionTilemapSpace = validAttack + attackTilemap.origin.ToVector2Int();
+                attackTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
+            }
+            
+            boardPositionCache.Clear();
+        }
+        
+        #region Callbacks
+
+        public void OnChessBoardObjectSelectionChanged(BoardObjectSelectionChangedArgs args)
+        {
+            UpdateValidActionsForObject(args.NewSelectedObject);
+        }
+        
+        #endregion
+    }
+}

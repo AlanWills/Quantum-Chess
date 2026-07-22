@@ -9,14 +9,17 @@ namespace QC.Match
     {
         public readonly struct Args
         {
-            public readonly ChessBoard ChessBoard;
+            public readonly Board Board;
+            public readonly IPlayerActionMaskLookup PlayerActionMaskLookup;
             public readonly ILuaRuntime LuaRuntime;
 
             public Args(
-                ChessBoard chessBoard,
+                Board board,
+                IPlayerActionMaskLookup playerActionMaskLookup,
                 ILuaRuntime luaRuntime)
             {
-                ChessBoard = chessBoard;
+                Board = board;
+                PlayerActionMaskLookup = playerActionMaskLookup;
                 LuaRuntime = luaRuntime;
             }
         }

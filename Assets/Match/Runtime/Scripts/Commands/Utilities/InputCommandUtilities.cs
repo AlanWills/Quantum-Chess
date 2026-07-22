@@ -6,11 +6,11 @@ namespace QC.Match.Commands
     public static class InputCommandUtilities
     {
         public static UniTask<CommandState> SetInteractableForColour(
-            ChessBoard chessBoard,
+            Board board,
             ChessPieceColour colour, 
             bool isInteractable)
         {
-            foreach (var instance in chessBoard.Objects)
+            foreach (var instance in board.Objects)
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||
@@ -26,11 +26,11 @@ namespace QC.Match.Commands
         }
         
         public static UniTask<CommandState> SetInteractableForNotColour(
-            ChessBoard chessBoard,
+            Board board,
             ChessPieceColour colour, 
             bool isInteractable)
         {
-            foreach (var instance in chessBoard.Objects)
+            foreach (var instance in board.Objects)
             {
                 if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
                     !instance.TryFindComponent<IInteractable>(out var interactable) ||

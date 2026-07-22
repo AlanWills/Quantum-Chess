@@ -13,7 +13,7 @@ namespace QC.Match.Persistence
         public SerializableVector2Int position;
         public List<ComponentDTO> components = new();
 
-        public ChessBoardTileDTO(ChessBoardTileInstance instance)
+        public ChessBoardTileDTO(BoardTileInstance instance)
         {
             guid = instance.Guid;
             position = new SerializableVector2Int(instance.Position);

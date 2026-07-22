@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct MoveChessBoardObjectFromToCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct MoveChessBoardObjectFromToCommand : ICommand<BoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectStartingPosition;
         private readonly Vector2Int chessBoardObjectEndingPosition;
@@ -16,14 +16,14 @@ namespace QC.Match.Commands
             chessBoardObjectEndingPosition = end;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            ChessBoardObjectInstance chessBoardObjectInstance =
-                args.ChessBoard.GetChessBoardObjectAt(chessBoardObjectStartingPosition);
+            BoardObjectInstance boardObjectInstance =
+                args.Board.GetBoardObjectAt(chessBoardObjectStartingPosition);
 
             return MoveCommandUtilities.TryMoveChessBoardObject(
                 args, 
-                chessBoardObjectInstance, 
+                boardObjectInstance, 
                 chessBoardObjectEndingPosition);
         }
     }

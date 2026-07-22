@@ -13,9 +13,9 @@ namespace QC.Match
 
         [SerializeField] private MatchState matchState;
         [SerializeField] private MatchScenarioCatalogue matchScenarioCatalogue;
-        [SerializeField] private ChessBoard chessBoard;
-        [SerializeField] private ChessBoardObjectSelection chessBoardObjectSelection;
-        [SerializeField] private ChessBoardCommandExecutor chessBoardCommandExecutor;
+        [SerializeField] private Board board;
+        [SerializeField] private BoardObjectSelection boardObjectSelection;
+        [SerializeField] private BoardCommandExecutor boardCommandExecutor;
         
         #endregion
         
@@ -23,9 +23,9 @@ namespace QC.Match
         {
             luaRuntime.SetEnvironmentVariable(MatchState.kLuaName, matchState);
             luaRuntime.SetEnvironmentVariable(MatchScenarioCatalogue.kLuaName, matchScenarioCatalogue);
-            luaRuntime.SetEnvironmentVariable(ChessBoard.kLuaName, chessBoard);
-            luaRuntime.SetEnvironmentVariable(ChessBoardObjectSelection.kLuaName, chessBoardObjectSelection);
-            luaRuntime.SetEnvironmentVariable(ChessBoardCommandExecutor.kLuaName, chessBoardCommandExecutor);
+            luaRuntime.SetEnvironmentVariable(Board.kLuaName, board);
+            luaRuntime.SetEnvironmentVariable(BoardObjectSelection.kLuaName, boardObjectSelection);
+            luaRuntime.SetEnvironmentVariable(BoardCommandExecutor.kLuaName, boardCommandExecutor);
             luaRuntime.OpenLibrary(MatchCommandsLibrary.Instance);
             
             UnityEngine.Debug.Log("Match Lua Bindings set up successfully!", CelesteLog.Lua);
@@ -35,9 +35,9 @@ namespace QC.Match
         {
             luaRuntime.ClearEnvironmentVariable(MatchState.kLuaName);
             luaRuntime.ClearEnvironmentVariable(MatchScenarioCatalogue.kLuaName);
-            luaRuntime.ClearEnvironmentVariable(ChessBoard.kLuaName);
-            luaRuntime.ClearEnvironmentVariable(ChessBoardObjectSelection.kLuaName);
-            luaRuntime.ClearEnvironmentVariable(ChessBoardCommandExecutor.kLuaName);
+            luaRuntime.ClearEnvironmentVariable(Board.kLuaName);
+            luaRuntime.ClearEnvironmentVariable(BoardObjectSelection.kLuaName);
+            luaRuntime.ClearEnvironmentVariable(BoardCommandExecutor.kLuaName);
         }
     }
 }

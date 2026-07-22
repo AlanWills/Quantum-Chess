@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct AddChessPieceCommand : ICommand<ChessBoardCommandArgs>
+    public readonly struct AddChessPieceCommand : ICommand<BoardCommandArgs>
     {
         private readonly int Guid;
         private readonly ChessPieceVerticalDirection VerticalDirection;
@@ -43,9 +43,9 @@ namespace QC.Match.Commands
             Value = value;
         }
         
-        public UniTask<CommandState> Execute(ChessBoardCommandArgs args, CancellationToken token)
+        public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            ChessBoardObjectInstance instance = args.ChessBoard.CreateChessBoardObject(Guid);
+            BoardObjectInstance instance = args.Board.CreateChessBoardObject(Guid);
             if (instance == null)
             {
                 UnityEngine.Debug.LogError($"Failed to create chess board object with guid {Guid}.");
@@ -90,7 +90,7 @@ namespace QC.Match.Commands
                 interactable.SetInteractable(Interactable);
             }
             
-            args.ChessBoard.AddChessBoardObjectInstance(instance);
+            args.Board.AddChessBoardObjectInstance(instance);
 
             return UniTask.FromResult(CommandState.Completed);
         }
