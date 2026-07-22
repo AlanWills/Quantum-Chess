@@ -1,5 +1,5 @@
-local AddChessBoardTileCommand = require("Commands/AddChessBoardTileCommand.lua")
-local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
+local AddBoardTileCommand = require("Commands/AddBoardTileCommand.lua")
+local AddBoardObjectCommand = require("Commands/AddBoardObjectCommand.lua")
 local SetActivePlayerCommand = require("Commands/SetActivePlayerCommand.lua")
 
 local StandardChessMatchFactory = {}
@@ -45,7 +45,7 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
             local position = Vector2Int.new(x, y)
             local importance = 0
 
-            AddChessBoardTileCommand.new(tileGuid,
+            AddBoardTileCommand.new(tileGuid,
             {
                 position = position,
                 importance = importance
@@ -55,7 +55,7 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
 
     -- Set up White Pawns
     for xPos = leftMostXPosition, rightMostXPosition do
-        AddChessPieceCommand.preset(AddChessPieceCommand.whitePawn,
+        AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whitePawn,
         {
             position = Vector2Int.new(xPos, 2),
             verticalDirection = "Up",
@@ -63,26 +63,26 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
     end
 
     -- Set up White Rooks
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteRook, { position = Vector2Int.new(leftMostXPosition, 1) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteRook, { position = Vector2Int.new(rightMostXPosition, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteRook, { position = Vector2Int.new(leftMostXPosition, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteRook, { position = Vector2Int.new(rightMostXPosition, 1) })
 
     -- Set Up White Knights
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteKnight, { position = Vector2Int.new(leftMostXPosition + 1, 1) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteKnight, { position = Vector2Int.new(rightMostXPosition - 1, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteKnight, { position = Vector2Int.new(leftMostXPosition + 1, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteKnight, { position = Vector2Int.new(rightMostXPosition - 1, 1) })
 
     -- Set Up White Bishops
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteBishop, { position = Vector2Int.new(leftMostXPosition + 2, 1) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteBishop, { position = Vector2Int.new(rightMostXPosition - 2, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteBishop, { position = Vector2Int.new(leftMostXPosition + 2, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteBishop, { position = Vector2Int.new(rightMostXPosition - 2, 1) })
 
     -- Set Up White Queen
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteQueen, { position = Vector2Int.new(leftMostXPosition + 3, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteQueen, { position = Vector2Int.new(leftMostXPosition + 3, 1) })
 
     -- Set Up White King
-    AddChessPieceCommand.preset(AddChessPieceCommand.whiteKing, { position = Vector2Int.new(rightMostXPosition - 3, 1) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.whiteKing, { position = Vector2Int.new(rightMostXPosition - 3, 1) })
 
     -- Set up Black Pawns
     for xPos = leftMostXPosition, rightMostXPosition do
-        AddChessPieceCommand.preset(AddChessPieceCommand.blackPawn,
+        AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackPawn,
         {
             position = Vector2Int.new(xPos, boardHeight - 1),
             verticalDirection = "Down",
@@ -90,22 +90,22 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
     end
 
     -- Set up Black Rooks
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackRook, { position = Vector2Int.new(leftMostXPosition, boardHeight) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackRook, { position = Vector2Int.new(rightMostXPosition, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackRook, { position = Vector2Int.new(leftMostXPosition, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackRook, { position = Vector2Int.new(rightMostXPosition, boardHeight) })
 
     -- Set Up Black Knights
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackKnight, { position = Vector2Int.new(leftMostXPosition + 1, boardHeight) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackKnight, { position = Vector2Int.new(rightMostXPosition - 1, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackKnight, { position = Vector2Int.new(leftMostXPosition + 1, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackKnight, { position = Vector2Int.new(rightMostXPosition - 1, boardHeight) })
 
     -- Set Up Black Bishops
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackBishop, { position = Vector2Int.new(leftMostXPosition + 2, boardHeight) })
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackBishop, { position = Vector2Int.new(rightMostXPosition - 2, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackBishop, { position = Vector2Int.new(leftMostXPosition + 2, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackBishop, { position = Vector2Int.new(rightMostXPosition - 2, boardHeight) })
 
     -- Set Up Black Queen
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackQueen, { position = Vector2Int.new(leftMostXPosition + 3, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackQueen, { position = Vector2Int.new(leftMostXPosition + 3, boardHeight) })
 
     -- Set Up Black King
-    AddChessPieceCommand.preset(AddChessPieceCommand.blackKing, { position = Vector2Int.new(rightMostXPosition - 3, boardHeight) })
+    AddBoardObjectCommand.presetChessPiece(AddBoardObjectCommand.blackKing, { position = Vector2Int.new(rightMostXPosition - 3, boardHeight) })
 end
 
 function StandardChessMatchFactory.setStartingPlayer(startingColour)

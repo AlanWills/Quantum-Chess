@@ -58,7 +58,7 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1c71353a31bf431385557647e0b06171
-    m_Address: Commands/RemoveChessPieceCommand.lua
+    m_Address: Commands/RemoveBoardObjectCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
@@ -129,7 +129,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58738d4d8610416eaad59009cfbda9ed
-    m_Address: Commands/AddChessPieceCommand.lua
+    m_Address: Commands/AddBoardObjectCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
@@ -159,7 +159,7 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b8de2765a954d018560404f158fb06a
-    m_Address: Commands/ClearChessBoardCommand.lua
+    m_Address: Commands/ClearBoardCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
@@ -284,7 +284,7 @@ MonoBehaviour:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8439101cc4a4d74ae53741749fb3756
-    m_Address: Commands/AddChessBoardTileCommand.lua
+    m_Address: Commands/AddBoardTileCommand.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables

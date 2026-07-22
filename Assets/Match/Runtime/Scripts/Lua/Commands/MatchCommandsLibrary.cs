@@ -40,9 +40,9 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "setActivePlayerIndex", SetActivePlayerIndex));
             functions.Add(new LibraryFunction(kName, "addChessPiece", AddChessPiece));
             functions.Add(new LibraryFunction(kName, "addCustomisedChessPiece", AddCustomisedChessPiece));
-            functions.Add(new LibraryFunction(kName, "removeChessPieceAt", RemoveChessPieceAt));
-            functions.Add(new LibraryFunction(kName, "addChessBoardTile", AddChessBoardTile));
-            functions.Add(new LibraryFunction(kName, "clearChessBoard", ClearChessBoard));
+            functions.Add(new LibraryFunction(kName, "removeBoardObjectAt", RemoveBoardObjectAt));
+            functions.Add(new LibraryFunction(kName, "addBoardTile", AddBoardTile));
+            functions.Add(new LibraryFunction(kName, "clearBoard", ClearBoard));
             functions.Add(new LibraryFunction(kName, "checkWinConditionForPlayer", CheckWinConditionForPlayer));
             functions.Add(new LibraryFunction(kName, "thinkForPlayer", ThinkForPlayer));
         }
@@ -301,7 +301,7 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> RemoveChessPieceAt(
+        private ValueTask<int> RemoveBoardObjectAt(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
@@ -314,7 +314,7 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
 
-        private ValueTask<int> AddChessBoardTile(
+        private ValueTask<int> AddBoardTile(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {
@@ -345,7 +345,7 @@ namespace QC.Match.Lua
             return new ValueTask<int>(context.Return());
         }
         
-        private ValueTask<int> ClearChessBoard(
+        private ValueTask<int> ClearBoard(
             LuaFunctionExecutionContext context,
             CancellationToken cancellationToken)
         {

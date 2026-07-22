@@ -20,7 +20,7 @@ namespace QC.Match.Views
         [SerializeField] private BoardCommandExecutor boardCommandExecutor;
         [SerializeField] private MatchState matchState;
         [SerializeField] private Transform piecesViewRoot;
-        [SerializeField] private Tilemap chessBoardTilemap;
+        [SerializeField] private Tilemap boardTilemap;
         [SerializeField] private Collider2D hitBoxCollider;
 
         [Header("Events")] 
@@ -45,7 +45,7 @@ namespace QC.Match.Views
             boardObjectViews.Clear();
         }
 
-        private void CreateChessBoardObjectView(BoardObjectInstance boardObjectInstance)
+        private void CreateBoardObjectView(BoardObjectInstance boardObjectInstance)
         {
             GameObject chessBoardObjectGameObject = chessBoardObjectViewAllocator.AllocateWithResizeIfNecessary();
             chessBoardObjectGameObject.transform.SetParent(piecesViewRoot);
@@ -55,43 +55,43 @@ namespace QC.Match.Views
             boardObjectViews.Add(viewInstance);
         }
 
-        private void AddChessBoardTile(Vector2Int position, TileBase tile)
+        private void AddBoardTile(Vector2Int position, TileBase tile)
         {
-            chessBoardTilemap.SetTile(position.ToVector3Int(), tile);
-            chessBoardTilemap.CompressBounds();
+            boardTilemap.SetTile(position.ToVector3Int(), tile);
+            boardTilemap.CompressBounds();
             boardTilemapChanged.Invoke();
         }
 
-        private void RemoveChessBoardTile(Vector2Int position)
+        private void RemoveBoardTile(Vector2Int position)
         {
-            chessBoardTilemap.SetTile(position.ToVector3Int(), null);
-            chessBoardTilemap.CompressBounds();
+            boardTilemap.SetTile(position.ToVector3Int(), null);
+            boardTilemap.CompressBounds();
             boardTilemapChanged.Invoke();
         }
         
         #region Callbacks
 
-        public void OnChessBoardTileAdded(BoardTileAddedArgs args)
+        public void OnBoardTileAdded(BoardTileAddedArgs args)
         {
-            AddChessBoardTile(args.Instance.Position, args.Instance.Tile);
+            AddBoardTile(args.Instance.Position, args.Instance.Tile);
         }
 
-        public void OnChessBoardTileRemoved(BoardTileRemovedArgs args)
+        public void OnBoardTileRemoved(BoardTileRemovedArgs args)
         {
-            RemoveChessBoardTile(args.BoardPosition);
+            RemoveBoardTile(args.BoardPosition);
         }
 
-        public void OnChessBoardObjectSelectionChanged(BoardObjectSelectionChangedArgs args)
+        public void OnBoardObjectSelectionChanged(BoardObjectSelectionChangedArgs args)
         {
             hitBoxCollider.enabled = args.NewSelectedObject != null;
         }
 
-        public void OnChessBoardObjectAdded(BoardObjectAddedArgs args)
+        public void OnBoardObjectAdded(BoardObjectAddedArgs args)
         {
-            CreateChessBoardObjectView(args.AddedObject);
+            CreateBoardObjectView(args.AddedObject);
         }
 
-        public void OnChessBoardObjectRemoved(BoardObjectRemovedArgs args)
+        public void OnBoardObjectRemoved(BoardObjectRemovedArgs args)
         {
             int viewIndex = boardObjectViews.FindIndex(x => x.Instance == args.RemovedInstance);
             if (viewIndex >= 0)
@@ -102,28 +102,28 @@ namespace QC.Match.Views
             }
         }
 
-        public void OnChessBoardBackgroundPressed(InputState inputState)
+        public void OnBoardBackgroundPressed(InputState inputState)
         {
             ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
             boardCommandExecutor.QueueCommand(clearSelectionCommands);
         }
 
-        public void OnChessBoardPressed(InputState inputState)
+        public void OnBoardPressed(InputState inputState)
         {
             ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
             boardCommandExecutor.QueueCommand(clearSelectionCommands);
         }
 
-        public void OnChessBoardMovementActionPressed(InputState inputState)
+        public void OnBoardMovementActionPressed(InputState inputState)
         {
-            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
+            Vector2Int position = boardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
             boardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
         }
 
-        public void OnChessBoardAttackActionPressed(InputState inputState)
+        public void OnBoardAttackActionPressed(InputState inputState)
         {
-            Vector2Int position = chessBoardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
+            Vector2Int position = boardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
             AttackWithSelectedChessBoardObjectCommand attackWithSelectedChessBoardObjectCommand = new AttackWithSelectedChessBoardObjectCommand(position);
             boardCommandExecutor.QueueCommand(attackWithSelectedChessBoardObjectCommand);
         }

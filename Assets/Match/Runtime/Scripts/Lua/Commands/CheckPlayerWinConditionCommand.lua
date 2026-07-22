@@ -1,7 +1,7 @@
 local CheckPlayerWinConditionCommand = { }
 
 function CheckPlayerWinConditionCommand.new(index)
-    MatchCommands.checkWinConditionForPlayer(ChessBoardCommandExecutor, index)
+    MatchCommands.checkWinConditionForPlayer(BoardCommandExecutor, index)
 end
 
 return CheckPlayerWinConditionCommand

@@ -1,7 +1,7 @@
-local ChessBoardObjectSelectionDebugMenu = { }
+local BoardObjectSelectionDebugMenu = { }
 
-function ChessBoardObjectSelectionDebugMenu:onDrawMenu()
-    GUILayout.label("Has Selected Object: " .. tostring(ChessBoardObjectSelection.hasSelectedObject))
+function BoardObjectSelectionDebugMenu:onDrawMenu()
+    GUILayout.label("Has Selected Object: " .. tostring(BoardObjectSelection.hasSelectedObject))
 end
 
-return ChessBoardObjectSelectionDebugMenu
+return BoardObjectSelectionDebugMenu

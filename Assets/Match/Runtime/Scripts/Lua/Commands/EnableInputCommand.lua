@@ -1,7 +1,7 @@
 local EnableInputCommand = { }
 
 function EnableInputCommand.forColour(colour)
-    MatchCommands.enableInputForColour(ChessBoardCommandExecutor, colour)
+    MatchCommands.enableInputForColour(BoardCommandExecutor, colour)
 end
 
 function EnableInputCommand.forWhite()

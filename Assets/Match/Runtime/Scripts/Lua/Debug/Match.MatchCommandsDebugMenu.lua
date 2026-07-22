@@ -3,9 +3,9 @@ local AttackCommand = require("Commands/AttackCommand.lua")
 local SelectCommand = require("Commands/SelectCommand.lua")
 local EnableInputCommand = require("Commands/EnableInputCommand.lua") 
 local EndTurnCommand = require("Commands/EndTurnCommand.lua")
-local AddChessPieceCommand = require("Commands/AddChessPieceCommand.lua")
-local RemoveChessPieceCommand = require("Commands/RemoveChessPieceCommand.lua")
-local ClearChessBoardCommand = require("Commands/ClearChessBoardCommand.lua")
+local AddBoardObjectCommand = require("Commands/AddBoardObjectCommand.lua")
+local RemoveBoardObjectCommand = require("Commands/RemoveBoardObjectCommand.lua")
+local ClearBoardCommand = require("Commands/ClearBoardCommand.lua")
 
 local MatchCommandsDebugMenu = { }
 MatchCommandsDebugMenu.fromMovePosition = Vector2Int.new(0, 0)
@@ -13,9 +13,9 @@ MatchCommandsDebugMenu.toMovePosition = Vector2Int.new(1, 1)
 MatchCommandsDebugMenu.fromAttackPosition = Vector2Int.new(0, 0)
 MatchCommandsDebugMenu.toAttackPosition = Vector2Int.new(1, 1)
 MatchCommandsDebugMenu.selectPosition = Vector2Int.new(0, 0)
-MatchCommandsDebugMenu.addPieceGuid = 0
-MatchCommandsDebugMenu.addPiecePosition = Vector2Int.new(0, 0)
-MatchCommandsDebugMenu.removePiecePosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.addBoardObjectGuid = 0
+MatchCommandsDebugMenu.addBoardObjectPosition = Vector2Int.new(0, 0)
+MatchCommandsDebugMenu.removeBoardObjectPosition = Vector2Int.new(0, 0)
 
 function MatchCommandsDebugMenu:onDrawMenu()
     GUILayout.beginSection("Move")
@@ -69,8 +69,8 @@ function MatchCommandsDebugMenu:onDrawMenu()
     GUILayout.endSection()
     
     GUILayout.beginSection("Add Pieces")
-        self.addPieceGuid = GUILayout.intField("Guid", self.addPieceGuid)
-        self.addPiecePosition = GUILayout.vector2IntField("Position", self.addPiecePosition)
+        self.addBoardObjectGuid = GUILayout.intField("Guid", self.addBoardObjectGuid)
+        self.addBoardObjectPosition = GUILayout.vector2IntField("Position", self.addBoardObjectPosition)
         
         self:drawAddPieces("Pawn")
         self:drawAddPieces("Knight")
@@ -80,12 +80,12 @@ function MatchCommandsDebugMenu:onDrawMenu()
         self:drawAddPieces("King")
     GUILayout.endSection()
     
-    GUILayout.beginSection("Remove Pieces")
-        self.removePiecePosition = GUILayout.vector2IntField("Position", self.removePiecePosition)
+    GUILayout.beginSection("Remove Board Objects")
+        self.removeBoardObjectPosition = GUILayout.vector2IntField("Position", self.removeBoardObjectPosition)
         
         GUILayout.beginHorizontal()
             if GUILayout.button("Remove") then
-                RemoveChessPieceCommand.at(self.removePiecePosition)
+                RemoveBoardObjectCommand.at(self.removeBoardObjectPosition)
             end
         GUILayout.endHorizontal()
     GUILayout.endSection()
@@ -93,7 +93,7 @@ function MatchCommandsDebugMenu:onDrawMenu()
     GUILayout.beginSection("Board")
         GUILayout.beginHorizontal()
             if GUILayout.button("Clear") then
-                ClearChessBoardCommand.new()
+                ClearBoardCommand.new()
             end
         GUILayout.endHorizontal()
     GUILayout.endSection()
@@ -114,11 +114,11 @@ end
 function MatchCommandsDebugMenu:drawAddPieces(type)
     GUILayout.beginHorizontal()
         if GUILayout.button("White " .. type) then
-            AddChessPieceCommand.new(self.addPieceGuid, { colour = "White", type = type, position = self.addPiecePosition })
+            AddBoardObjectCommand.presetChessPiece(self.addBoardObjectGuid, { colour = "White", type = type, position = self.addBoardObjectPosition })
         end
     
         if GUILayout.button("Black " .. type) then
-            AddChessPieceCommand.new(self.addPieceGuid, { colour = "Black", type = type, position = self.addPiecePosition })
+            AddChessPieceCommand.presetChessPiece(self.addBoardObjectGuid, { colour = "Black", type = type, position = self.addBoardObjectPosition })
         end
     GUILayout.endHorizontal()
 end

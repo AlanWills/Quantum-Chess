@@ -1,7 +1,7 @@
 local EndTurnCommand = { }
 
 function EndTurnCommand.new()
-    MatchCommands.setActivePlayerIndex(ChessBoardCommandExecutor, MatchState.nextPlayerIndex)
+    MatchCommands.setActivePlayerIndex(BoardCommandExecutor, MatchState.nextPlayerIndex)
 end
 
 return EndTurnCommand

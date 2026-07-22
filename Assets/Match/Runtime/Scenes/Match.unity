@@ -199,12 +199,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Visuals.ChessBoardView
   chessBoardObjectViewAllocator: {fileID: 932586496}
-  boardCommandExecutor: {fileID: 0}
+  boardCommandExecutor: {fileID: 11400000, guid: e0fde318b778d45c5b476fddd2e196dc, type: 2}
   matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}
   piecesViewRoot: {fileID: 1255884393}
-  chessBoardTilemap: {fileID: 690885639}
+  boardTilemap: {fileID: 690885639}
   hitBoxCollider: {fileID: 690885640}
-  boardTilemapChanged: {fileID: 0}
+  boardTilemapChanged: {fileID: 11400000, guid: 1f206a4a1434c4b4185d03e0c81833f1, type: 2}
 --- !u!4 &277367575
 Transform:
   m_ObjectHideFlags: 0
@@ -239,8 +239,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 277367574}
-        m_TargetAssemblyTypeName: QC.Match.Visuals.ChessBoardView, QC.Match.Runtime
-        m_MethodName: OnChessBoardObjectAdded
+        m_TargetAssemblyTypeName: QC.Match.Views.BoardView, QC.Match.Runtime
+        m_MethodName: OnBoardObjectAdded
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -268,8 +268,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 277367574}
-        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
-        m_MethodName: OnChessBoardObjectSelectionChanged
+        m_TargetAssemblyTypeName: QC.Match.Views.BoardView, QC.Match.Runtime
+        m_MethodName: OnBoardObjectSelectionChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -297,8 +297,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 277367574}
-        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
-        m_MethodName: OnChessBoardObjectRemoved
+        m_TargetAssemblyTypeName: QC.Match.Views.BoardView, QC.Match.Runtime
+        m_MethodName: OnBoardObjectRemoved
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -326,8 +326,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 277367574}
-        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
-        m_MethodName: OnChessBoardTileAdded
+        m_TargetAssemblyTypeName: QC.Match.Views.BoardView, QC.Match.Runtime
+        m_MethodName: OnBoardTileAdded
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -355,8 +355,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 277367574}
-        m_TargetAssemblyTypeName: QC.Match.Views.ChessBoardView, QC.Match.Runtime
-        m_MethodName: OnChessBoardTileRemoved
+        m_TargetAssemblyTypeName: QC.Match.Views.BoardView, QC.Match.Runtime
+        m_MethodName: OnBoardTileRemoved
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
