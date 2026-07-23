@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace QC.Match.Players
 {
-    public class BoardActionMask
+    public class BoardActionMask : IBoardActionMask
     {
         private readonly TileActionMask[] board;
         private readonly int width;

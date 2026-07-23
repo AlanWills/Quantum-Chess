@@ -40,7 +40,7 @@ namespace QC.Match.Players
             oppositionKingActionProvider.CalculateValidMoves(
                 oppositionKingTransform.GetPosition(),
                 args.Board,
-                args.PlayerActionMaskLookup,
+                args.OpponentBoardActionMask,
                 validActionsCache);
 
             if (validActionsCache.Count > 0)
@@ -53,7 +53,7 @@ namespace QC.Match.Players
             oppositionKingActionProvider.CalculateValidAttacks(
                 oppositionKingTransform.GetPosition(),
                 args.Board,
-                args.PlayerActionMaskLookup,
+                args.OpponentBoardActionMask,
                 validActionsCache);
 
             if (validActionsCache.Count > 0)

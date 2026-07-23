@@ -16,7 +16,7 @@ namespace QC.Match.Objects
 {
     [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(MatchState), menuName = "QC/Match/Match State")]
-    public partial class MatchState : ScriptableObject, IPlayerInfo, IPlayerActionMaskLookup
+    public partial class MatchState : ScriptableObject, IPlayerInfo
     {
         #region Properties and Fields
 
@@ -222,27 +222,47 @@ namespace QC.Match.Objects
 
         private void BuildBoardActionMasks(Board board)
         {
+            // So the plan is, we build a mask for non-active players and it's just the possible moves
+            // Then we build the player's mask, but ensure the King respects squares which could put it in check
+            // We can pass an IBoardActionMask filter that disallows moves that would result in it being taken
+            // For non-active players we just pass an empty implementation
+            
             for (int i = 0, n = NumPlayers; i < n; ++i)
             {
-                BuildBoardActionMaskForPlayer(i, board); 
+                if (i == ActivePlayerIndex)
+                {
+                    // Skip the active player
+                    // We need to build up the masks of everyone else before we can do the player's
+                    // As certain moves from the player will actually be disallowed (e.g. the King can't attack a square that would put it in check)
+                    continue;
+                }
+
+                BuildBoardActionMaskForPlayer(i, board, new NoAttacksBoardActionMask()); 
             }
+            
+            BoardActionMask nextPlayerBoardActionMask = players[NextPlayerIndex].BoardActionMask;
+            BuildBoardActionMaskForPlayer(ActivePlayerIndex, board, nextPlayerBoardActionMask);
         }
 
-        private void BuildBoardActionMaskForPlayer(int playerIndex, Board board)
+        private void BuildBoardActionMaskForPlayer(int playerIndex, Board board, IBoardActionMask opponentBoardActionMask)
         {
             Player player = players[playerIndex];
             ChessPieceColour playerColour = player.Colour;
             RectInt boundingBox = board.CalculateBoundingBox();
 
             player.EnsureBoardActionMaskMatches(boundingBox);
-            UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board);
+            UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board, opponentBoardActionMask);
         }
 
-        private void UpdateBoardActionMaskForColour(BoardActionMask mask, ChessPieceColour colour, Board board)
+        private void UpdateBoardActionMaskForColour(
+            BoardActionMask actionMaskToUpdate,
+            ChessPieceColour colour, 
+            Board board, 
+            IBoardActionMask opponentBoardActionMask)
         {
             List<Vector2Int> validAttacks = new List<Vector2Int>();
 
-            mask.ResetAllTiles();
+            actionMaskToUpdate.ResetAllTiles();
             
             foreach (BoardObjectInstance instance in board.Objects)
             {
@@ -263,11 +283,11 @@ namespace QC.Match.Objects
                 }
 
                 validAttacks.Clear();
-                actionProvider.CalculateValidAttacks(grid2DTransform.GetPosition(), board, this, validAttacks);
+                actionProvider.CalculateValidAttacks(grid2DTransform.GetPosition(), board, opponentBoardActionMask, validAttacks);
 
                 foreach (Vector2Int validAttack in validAttacks)
                 {
-                    mask.SetTileAttackable(validAttack);
+                    actionMaskToUpdate.SetTileAttackable(validAttack);
                 }
             }
         }

@@ -117,7 +117,7 @@ namespace QC.Match.Components
             Instance instance, 
             Vector2Int currentBoardPosition, 
             IBoardLookup boardLookup,
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
             SaveData saveData = instance.data as SaveData;
@@ -135,6 +135,7 @@ namespace QC.Match.Components
                     saveData.hasMoved,
                     currentBoardPosition,
                     boardLookup,
+                    opponentBoardActionMask,
                     validMoves);
             }
         }
@@ -143,7 +144,7 @@ namespace QC.Match.Components
             Instance instance, 
             Vector2Int currentBoardPosition, 
             IBoardLookup boardLookup,
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
             SaveData saveData = instance.data as SaveData;
@@ -161,6 +162,7 @@ namespace QC.Match.Components
                     (int)saveData.verticalDirection,
                     currentBoardPosition,
                     boardLookup,
+                    opponentBoardActionMask,
                     validAttacks);
             }
         }
@@ -171,6 +173,7 @@ namespace QC.Match.Components
             bool hasMoved,
             Vector2Int currentBoardPosition, 
             IBoardLookup boardLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
             switch (type)
@@ -240,21 +243,45 @@ namespace QC.Match.Components
                     return;
 
                 case ChessPieceType.King:
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, -1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(-1, -1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 0), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(-1, 0), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(-1, 1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(-1, 1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, -1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(1, -1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 0), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(1, 0), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(1, 1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(1, 1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, -1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(0, -1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1), boardLookup,
+                    AddIfVacantAndSafeBoardPosition(
+                        currentBoardPosition + new Vector2Int(0, 1), 
+                        boardLookup,
+                        opponentBoardActionMask,
                         validMoves);
                     return;
             }
@@ -266,6 +293,7 @@ namespace QC.Match.Components
             int verticalDirection,
             Vector2Int currentBoardPosition, 
             IBoardLookup boardLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
             switch (type)
@@ -320,14 +348,14 @@ namespace QC.Match.Components
                     return;
                
                 case ChessPieceType.King:
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, -1), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 0), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, -1), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 0), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, -1), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(0, 1), currentColour, boardLookup, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(-1, -1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(-1, 0), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(1, -1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(1, 0), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(1, 1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(0, -1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
+                    TryFindSafeAttackablePiece(currentBoardPosition + new Vector2Int(0, 1), currentColour, boardLookup, opponentBoardActionMask, validAttacks);
                     
                     return;
             }
@@ -344,6 +372,26 @@ namespace QC.Match.Components
             IList<Vector2Int> list)
         {
             if (!IsBoardPositionVacant(position, boardLookup))
+            {
+                return false;
+            }
+            
+            list.Add(position);
+            return true;
+        }
+
+        private static bool AddIfVacantAndSafeBoardPosition(
+            Vector2Int position,
+            IBoardLookup boardLookup,
+            IBoardActionMask opponentBoardActionMask,
+            IList<Vector2Int> list)
+        {
+            if (!IsBoardPositionVacant(position, boardLookup))
+            {
+                return false;
+            }
+
+            if (opponentBoardActionMask.IsTileAttackable(position))
             {
                 return false;
             }
@@ -372,6 +420,21 @@ namespace QC.Match.Components
             }
 
             return true;
+        }
+
+        private static bool TryFindSafeAttackablePiece(
+            Vector2Int position,
+            ChessPieceColour currentColour,
+            IBoardLookup boardLookup,
+            IBoardActionMask opponentBoardActionMask,
+            IList<Vector2Int> list)
+        {
+            if (opponentBoardActionMask.IsTileAttackable(position))
+            {
+                return false;
+            }
+
+            return TryFindAttackablePiece(position, currentColour, boardLookup, list);
         }
 
         private static void FloodFillDirection(

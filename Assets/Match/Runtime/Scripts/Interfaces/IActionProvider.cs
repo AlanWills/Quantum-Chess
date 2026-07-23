@@ -12,13 +12,13 @@ namespace QC.Match
             Instance instance, 
             Vector2Int currentBoardPosition,
             IBoardLookup boardLookup,
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves);
         void CalculateValidAttacks(
             Instance instance, 
             Vector2Int currentBoardPosition,
             IBoardLookup boardLookup, 
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks);
     }
     
@@ -29,10 +29,10 @@ namespace QC.Match
             this InterfaceHandle<IActionProvider> provider, 
             Vector2Int currentBoardPosition,
             IBoardLookup boardLookup,
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
-            provider.iFace.CalculateValidMoves(provider.instance, currentBoardPosition, boardLookup, playerActionMaskLookup, validMoves);
+            provider.iFace.CalculateValidMoves(provider.instance, currentBoardPosition, boardLookup, opponentBoardActionMask, validMoves);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,10 +40,10 @@ namespace QC.Match
             this InterfaceHandle<IActionProvider> provider, 
             Vector2Int currentBoardPosition,
             IBoardLookup boardLookup,
-            IPlayerActionMaskLookup playerActionMaskLookup,
+            IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
-            provider.iFace.CalculateValidAttacks(provider.instance, currentBoardPosition, boardLookup, playerActionMaskLookup, validAttacks);
+            provider.iFace.CalculateValidAttacks(provider.instance, currentBoardPosition, boardLookup, opponentBoardActionMask, validAttacks);
         }
     }
 }

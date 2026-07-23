@@ -15,7 +15,6 @@ namespace QC.Match
             
             public readonly int PlayerIndex;
             public readonly IPlayerInfo PlayerInfo;
-            public readonly IPlayerActionMaskLookup PlayerActionMaskLookup;
             public readonly Board Board;
             public readonly BoardCommandExecutor CommandExecutor;
             public readonly ILuaRuntime LuaRuntime;
@@ -24,7 +23,6 @@ namespace QC.Match
             public Args(
                 int playerIndex,
                 IPlayerInfo playerInfo,
-                IPlayerActionMaskLookup playerActionMaskLookup,
                 Board board,
                 BoardCommandExecutor commandExecutor,
                 ILuaRuntime luaRuntime,
@@ -32,7 +30,6 @@ namespace QC.Match
             {
                 PlayerIndex = playerIndex;
                 PlayerInfo = playerInfo;
-                PlayerActionMaskLookup = playerActionMaskLookup;
                 Board = board;
                 CommandExecutor = commandExecutor;
                 LuaRuntime = luaRuntime;
