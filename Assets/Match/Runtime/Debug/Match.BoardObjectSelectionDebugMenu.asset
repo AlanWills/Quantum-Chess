@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2d37b7fa0646bdad161a68f994dcdc, type: 3}
   m_Name: Match.BoardObjectSelectionDebugMenu
   m_EditorClassIdentifier: Celeste.Lua::Celeste.Lua.Debug.LuaScriptDebugMenu
-  displayName: Chess Board Object Selection
+  displayName: Board Object Selection
   menuPriority: 0
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   script:
