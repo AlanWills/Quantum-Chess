@@ -36,9 +36,7 @@ function StandardChessMatchFactory.createAIBlackPlayer(turnStrategyData)
     })
 end
 
-function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMostXPosition)
-    local rightMostXPosition = leftMostXPosition + 7
-
+function StandardChessMatchFactory.createBoard(boardWidth, boardHeight)
     for y = 1, boardHeight do
         for x = 1, boardWidth do
             local tileGuid = ((x + y + 1) % 2) + 1
@@ -52,6 +50,10 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight, leftMost
             })
         end
     end
+end
+
+function StandardChessMatchFactory.createPieces(boardWidth, boardHeight, leftMostXPosition)
+    local rightMostXPosition = leftMostXPosition + 7
 
     -- Set up White Pawns
     for xPos = leftMostXPosition, rightMostXPosition do

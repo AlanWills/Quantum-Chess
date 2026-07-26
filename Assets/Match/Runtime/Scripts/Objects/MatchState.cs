@@ -204,6 +204,9 @@ namespace QC.Match.Objects
             }
 
             await UniTask.WaitUntil(player, p => p.HasPerformedAllAllowedActions);
+            
+            BuildBoardActionMasks(turnStrategyArgs.Board);
+            
             await player.TurnStrategy.OnTurnEnd(turnStrategyArgs);
                 
             if (await player.WinCondition.CalculateIfWinConditionIsMet(winConditionArgs))
