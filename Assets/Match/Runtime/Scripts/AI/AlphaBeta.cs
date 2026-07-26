@@ -83,8 +83,9 @@ namespace QC.Match.AI
                  validActions.Clear();
                  
                  // TODO: May have to change these to support the faster AlphaBeta structs
-                 tileBlit.Piece.ActionProvider.CalculateValidAttacks(position, args.Board, args.PlayerActionMaskLookup, validActions);
-                 tileBlit.Piece.ActionProvider.CalculateValidMoves(position, args.Board, args.PlayerActionMaskLookup, validActions);
+                 IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
+                 tileBlit.Piece.ActionProvider.CalculateValidAttacks(position, args.Board, opponentBoardActionMask, validActions);
+                 tileBlit.Piece.ActionProvider.CalculateValidMoves(position, args.Board, opponentBoardActionMask, validActions);
 
                  for (int i = 0, n = validActions.Count; i < n; ++i)
                  {
@@ -93,7 +94,7 @@ namespace QC.Match.AI
                     Move move = new Move(piece, pieceToCapture, position, action);
 
                     boardBlit.MakeMove(move);
-                    int score = AlphaBetaMin(alphaBetaParameters, args.PlayerActionMaskLookup, boardBlit, activeColour, args.RNG, alpha, beta, alphaBetaParameters.Depth - 1);
+                    int score = AlphaBetaMin(alphaBetaParameters, boardBlit, activeColour, args.RNG, alpha, beta, alphaBetaParameters.Depth - 1);
                     boardBlit.UndoMove(move);
 
                     if (score > bestScore)
@@ -160,7 +161,6 @@ namespace QC.Match.AI
 
         private static int AlphaBetaMax(
            AlphaBetaParameters parameters,
-           IPlayerActionMaskLookup playerActionMaskLookup,
            BoardBlit boardBlit,
            ChessPieceColour activeColour,
            IRNG rng,
@@ -201,8 +201,8 @@ namespace QC.Match.AI
               var actionProvider = tileBlit.Piece.ActionProvider;
               
               // TODO: May have to change these to support the faster AlphaBeta structs
-              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, playerActionMaskLookup, validActions);
-              actionProvider.CalculateValidMoves(boardPosition, boardBlit, playerActionMaskLookup, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, new EmptyBoardActionMask(), validActions);
+              actionProvider.CalculateValidMoves(boardPosition, boardBlit, new EmptyBoardActionMask(), validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
@@ -211,7 +211,7 @@ namespace QC.Match.AI
                  Move move = new Move(tileBlit.Piece, pieceToCapture, boardPosition, action);
                  
                  boardBlit.MakeMove(move);
-                 int score = AlphaBetaMin(parameters, playerActionMaskLookup, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMin(parameters, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
                  boardBlit.UndoMove(move);
                  
                  maxValue = Math.Max(maxValue, score);
@@ -232,7 +232,6 @@ namespace QC.Match.AI
 
         private static int AlphaBetaMin(
            AlphaBetaParameters parameters,
-           IPlayerActionMaskLookup playerActionMaskLookup,
            BoardBlit boardBlit,
            ChessPieceColour activeColour,
            IRNG rng,
@@ -273,8 +272,8 @@ namespace QC.Match.AI
               var actionProvider = tileBlit.Piece.ActionProvider;
               
               // TODO: May have to change these to support the faster AlphaBeta structs
-              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, playerActionMaskLookup, validActions);
-              actionProvider.CalculateValidMoves(boardPosition, boardBlit, playerActionMaskLookup, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, new EmptyBoardActionMask(), validActions);
+              actionProvider.CalculateValidMoves(boardPosition, boardBlit, new EmptyBoardActionMask(), validActions);
 
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
@@ -283,7 +282,7 @@ namespace QC.Match.AI
                  Move move = new Move(tileBlit.Piece, pieceToCapture, boardPosition, action);
                  
                  boardBlit.MakeMove(move);
-                 int score = AlphaBetaMax(parameters, playerActionMaskLookup, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
+                 int score = AlphaBetaMax(parameters, boardBlit, activeColour, rng, alpha, beta, remainingDepth - 1);
                  boardBlit.UndoMove(move);
                  
                  minValue = Math.Min(minValue, score);

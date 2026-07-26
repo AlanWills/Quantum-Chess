@@ -48,9 +48,10 @@ namespace QC.Match.Commands
                 args.RNG);
         }
 
-        public static IWinCondition.Args ToWinConditionArgs(this BoardCommandArgs args)
+        public static IWinCondition.Args ToWinConditionArgs(this BoardCommandArgs args, int playerIndex)
         {
             return new IWinCondition.Args(
+                playerIndex,
                 args.Board,
                 args.MatchState,
                 args.LuaRuntime);

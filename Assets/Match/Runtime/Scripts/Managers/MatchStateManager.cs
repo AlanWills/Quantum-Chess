@@ -78,10 +78,7 @@ namespace QC.Match.Managers
 
             if (matchState.HasActiveScenario)
             {
-                ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs(args.MatchState.ActivePlayerIndex);
-                IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
-                
-                yield return matchState.LoadLastActiveScenario(turnStrategyArgs, winConditionArgs);
+                yield return matchState.LoadLastActiveScenario(args);
             }
 
             onMatchSetup.Invoke();

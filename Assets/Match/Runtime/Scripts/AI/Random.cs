@@ -28,17 +28,18 @@ namespace QC.Match.AI
                 {
                     validAttacks.Clear();
                     validMoves.Clear();
-                    
+
+                    IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
                     actionProvider.CalculateValidAttacks(
                         transform.GetPosition(), 
                         args.Board,
-                        args.PlayerActionMaskLookup,
+                        opponentBoardActionMask,
                         validAttacks);
                     
                     actionProvider.CalculateValidMoves(
                         transform.GetPosition(), 
                         args.Board,
-                        args.PlayerActionMaskLookup,
+                        opponentBoardActionMask,
                         validMoves);
                     
                     int totalActions = validAttacks.Count + validMoves.Count;

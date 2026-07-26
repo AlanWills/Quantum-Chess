@@ -14,7 +14,7 @@ namespace QC.Match.Commands
 
         public async UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken cancellationToken)
         {
-            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
+            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs(playerIndex);
             await args.MatchState.CheckPlayerWinCondition(playerIndex, winConditionArgs);
 
             return CommandState.Completed;

@@ -167,6 +167,31 @@ namespace QC.Match.Components
             }
         }
 
+        public void CalculateValidThreats(
+            Instance instance, 
+            Vector2Int currentBoardPosition, 
+            IBoardLookup boardLookup,
+            IList<Vector2Int> validThreats)
+        {
+            SaveData saveData = instance.data as SaveData;
+            for (int i = 1; i < (int)ChessPieceTypeExtensions.Everything; i <<= 1)
+            {
+                ChessPieceType currentType = (ChessPieceType)i;
+                if (!saveData.currentPieceType.HasFlag(currentType))
+                {
+                    continue;
+                }
+                
+                CalculateValidThreats(
+                    currentType,
+                    saveData.currentPieceColour,
+                    (int)saveData.verticalDirection,
+                    currentBoardPosition,
+                    boardLookup,
+                    validThreats);
+            }
+        }
+
         private static void CalculateValidMoves(
             ChessPieceType type,
             int verticalDirection,
@@ -182,13 +207,13 @@ namespace QC.Match.Components
                     return;
 
                 case ChessPieceType.Pawn:
-                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection),
+                    AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, verticalDirection),
                         boardLookup, validMoves);
 
                     // The space in front must be free for the pawn to move two
-                    if (!hasMoved && IsBoardPositionVacant(currentBoardPosition + new Vector2Int(0, 1 * verticalDirection), boardLookup))
+                    if (!hasMoved && IsBoardPositionVacant(currentBoardPosition + new Vector2Int(0, verticalDirection), boardLookup))
                     {
-                        AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, 2 * verticalDirection),
+                        AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, verticalDirection),
                             boardLookup, validMoves);
                     }
 
@@ -215,30 +240,30 @@ namespace QC.Match.Components
                     return;
 
                 case ChessPieceType.Bishop:
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, 1), boardLookup, validMoves);
 
                     return;
 
                 case ChessPieceType.Rook:
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, 0), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, 0), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(0, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(0, 1), boardLookup, validMoves);
 
                     return;
 
                 case ChessPieceType.Queen:
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(-1, 0), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(1, 0), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, -1), boardLookup, validMoves);
-                    FloodFillDirection(currentBoardPosition, new Vector2Int(0, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, 1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(-1, 0), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(1, 0), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(0, -1), boardLookup, validMoves);
+                    TryFindMovesInDirection(currentBoardPosition, new Vector2Int(0, 1), boardLookup, validMoves);
 
                     return;
 
@@ -302,8 +327,8 @@ namespace QC.Match.Components
                     return;
                
                 case ChessPieceType.Pawn:
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, 1 * verticalDirection), currentColour, boardLookup, validAttacks);
-                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, 1 * verticalDirection), currentColour, boardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(-1, verticalDirection), currentColour, boardLookup, validAttacks);
+                    TryFindAttackablePiece(currentBoardPosition + new Vector2Int(1, verticalDirection), currentColour, boardLookup, validAttacks);
                     
                     return;
                
@@ -361,9 +386,96 @@ namespace QC.Match.Components
             }
         }
 
+        private static void CalculateValidThreats(
+            ChessPieceType type,
+            ChessPieceColour currentColour,
+            int verticalDirection,
+            Vector2Int currentBoardPosition, 
+            IBoardLookup boardLookup,
+            IList<Vector2Int> validThreats)
+        {
+            switch (type)
+            {
+                case ChessPieceType.None:
+                    return;
+               
+                case ChessPieceType.Pawn:
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, verticalDirection), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, verticalDirection), boardLookup, validThreats);
+                    
+                    return;
+               
+                case ChessPieceType.Knight:
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-2, -1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-2, 1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(2, -1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(2, 1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, -2), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, 2), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, -2), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, 2), boardLookup, validThreats);
+                    
+                    return;
+               
+                case ChessPieceType.Bishop:
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, 1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, 1), currentColour, boardLookup, validThreats);
+                    
+                    return;
+               
+                case ChessPieceType.Rook:
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, 0), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, 0), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(0, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(0, 1), currentColour, boardLookup, validThreats);
+                    
+                    return;
+               
+                case ChessPieceType.Queen:
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, 1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, 1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(-1, 0), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(1, 0), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(0, -1), currentColour, boardLookup, validThreats);
+                    TryFindAttackableTilesInDirection(currentBoardPosition, new Vector2Int(0, 1), currentColour, boardLookup, validThreats);
+                    
+                    return;
+               
+                case ChessPieceType.King:
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, -1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, 0), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(-1, 1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, -1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, 0), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(1, 1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(0, -1), boardLookup, validThreats);
+                    AddIfBoardPositionExists(currentBoardPosition + new Vector2Int(0, 1), boardLookup, validThreats);
+                    
+                    return;
+            }
+        }
+
         private static bool IsBoardPositionVacant(Vector2Int position, IBoardLookup boardLookup)
         {
             return boardLookup.DoesBoardTileExist(position) && boardLookup.GetBoardObjectAt(position) == null;
+        }
+
+        private static bool AddIfBoardPositionExists(
+            Vector2Int position,
+            IBoardLookup boardLookup,
+            IList<Vector2Int> list)
+        {
+            if (!boardLookup.DoesBoardTileExist(position))
+            {
+                return false;
+            }
+            
+            list.Add(position);
+            return true;
         }
 
         private static bool AddIfVacantBoardPosition(
@@ -437,7 +549,7 @@ namespace QC.Match.Components
             return TryFindAttackablePiece(position, currentColour, boardLookup, list);
         }
 
-        private static void FloodFillDirection(
+        private static void TryFindMovesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
             IBoardLookup boardLookup,
@@ -464,6 +576,30 @@ namespace QC.Match.Components
             while (boardLookup.DoesBoardTileExist(nextPosition) &&
                    !TryFindAttackablePiece(nextPosition, currentColour, boardLookup, validAttacks))
             {
+                nextPosition += direction;
+            }
+        }
+
+        private static void TryFindAttackableTilesInDirection(
+            Vector2Int startingPosition,
+            Vector2Int direction,
+            ChessPieceColour currentColour,
+            IBoardLookup boardLookup,
+            IList<Vector2Int> validAttackableTiles)
+        {
+            Vector2Int nextPosition = startingPosition + direction;
+            
+            // Stop at the first piece we find in this direction
+            // Even friendlies will block subsequent attacks
+            while (boardLookup.DoesBoardTileExist(nextPosition))
+            {
+                validAttackableTiles.Add(nextPosition);
+
+                if (TryFindAttackablePiece(nextPosition, currentColour, boardLookup, validAttackableTiles))
+                {
+                    break;
+                }
+                
                 nextPosition += direction;
             }
         }

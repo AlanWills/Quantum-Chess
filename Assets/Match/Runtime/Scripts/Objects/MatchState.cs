@@ -16,7 +16,7 @@ namespace QC.Match.Objects
 {
     [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(MatchState), menuName = "QC/Match/Match State")]
-    public partial class MatchState : ScriptableObject, IPlayerInfo
+    public partial class MatchState : ScriptableObject, IPlayerInfo, IBoardActionMaskLookup
     {
         #region Properties and Fields
 
@@ -71,18 +71,14 @@ namespace QC.Match.Objects
             Initialize(dto.activePlayerIndex, dto.activeScenarioGuid);
         }
 
-        private void Initialize(
-            int activePlayerIndex,
-            string activeScenarioGuid)
+        private void Initialize(int activePlayerIndex, string activeScenarioGuid)
         {
             this.activePlayerIndex = activePlayerIndex;
             this.activeScenarioGuid = activeScenarioGuid;
             players.Clear();
         }
 
-        public async UniTask LoadLastActiveScenario(
-            ITurnStrategy.Args turnStrategyArgs,
-            IWinCondition.Args winConditionArgs)
+        public async UniTask LoadLastActiveScenario(BoardCommandArgs boardCommandArgs)
         {
             if (!HasActiveScenario)
             {
@@ -92,6 +88,9 @@ namespace QC.Match.Objects
 
             await LoadScenarioAsync(activeScenarioGuid);
             
+            ITurnStrategy.Args turnStrategyArgs = boardCommandArgs.ToTurnStrategyArgs(ActivePlayerIndex);
+            IWinCondition.Args winConditionArgs = boardCommandArgs.ToWinConditionArgs(ActivePlayerIndex);
+
             BeginTurnForPlayer(ActivePlayerIndex, turnStrategyArgs, winConditionArgs);
         }
 
@@ -102,7 +101,7 @@ namespace QC.Match.Objects
                 UnityEngine.Debug.LogAssertion("Attempting to load a scenario with an empty guid.  Ignoring...");
                 return false;
             }
-            
+
             players.Clear();
 
             MatchScenario matchScenario = matchScenarioCatalogue.MustFindByGuid(scenarioGuid);
@@ -222,45 +221,28 @@ namespace QC.Match.Objects
 
         private void BuildBoardActionMasks(Board board)
         {
-            // So the plan is, we build a mask for non-active players and it's just the possible moves
-            // Then we build the player's mask, but ensure the King respects squares which could put it in check
-            // We can pass an IBoardActionMask filter that disallows moves that would result in it being taken
-            // For non-active players we just pass an empty implementation
-            
             for (int i = 0, n = NumPlayers; i < n; ++i)
             {
-                if (i == ActivePlayerIndex)
-                {
-                    // Skip the active player
-                    // We need to build up the masks of everyone else before we can do the player's
-                    // As certain moves from the player will actually be disallowed (e.g. the King can't attack a square that would put it in check)
-                    continue;
-                }
-
-                BuildBoardActionMaskForPlayer(i, board, new NoAttacksBoardActionMask()); 
+                BuildBoardActionMaskForPlayer(i, board); 
             }
-            
-            BoardActionMask nextPlayerBoardActionMask = players[NextPlayerIndex].BoardActionMask;
-            BuildBoardActionMaskForPlayer(ActivePlayerIndex, board, nextPlayerBoardActionMask);
         }
 
-        private void BuildBoardActionMaskForPlayer(int playerIndex, Board board, IBoardActionMask opponentBoardActionMask)
+        private void BuildBoardActionMaskForPlayer(int playerIndex, Board board)
         {
             Player player = players[playerIndex];
             ChessPieceColour playerColour = player.Colour;
             RectInt boundingBox = board.CalculateBoundingBox();
 
             player.EnsureBoardActionMaskMatches(boundingBox);
-            UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board, opponentBoardActionMask);
+            UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board);
         }
 
         private void UpdateBoardActionMaskForColour(
             BoardActionMask actionMaskToUpdate,
             ChessPieceColour colour, 
-            Board board, 
-            IBoardActionMask opponentBoardActionMask)
+            Board board)
         {
-            List<Vector2Int> validAttacks = new List<Vector2Int>();
+            List<Vector2Int> validThreats = new List<Vector2Int>();
 
             actionMaskToUpdate.ResetAllTiles();
             
@@ -282,20 +264,28 @@ namespace QC.Match.Objects
                     continue;
                 }
 
-                validAttacks.Clear();
-                actionProvider.CalculateValidAttacks(grid2DTransform.GetPosition(), board, opponentBoardActionMask, validAttacks);
+                validThreats.Clear();
+                actionProvider.CalculateValidThreats(grid2DTransform.GetPosition(), board, validThreats);
 
-                foreach (Vector2Int validAttack in validAttacks)
+                foreach (Vector2Int validThreat in validThreats)
                 {
-                    actionMaskToUpdate.SetTileAttackable(validAttack);
+                    actionMaskToUpdate.SetTileAttackable(validThreat);
                 }
             }
         }
 
-        public bool DoesPlayerHavePieceAbleToAttack(ChessPieceColour playerColour, Vector2Int boardPosition)
+        public IBoardActionMask GetBoardActionMaskForPlayer(int playerIndex)
         {
-            int playerIndex = GetPlayerIndex(playerColour);
-            return IsPlayerIndexValid(playerIndex) && players[playerIndex].BoardActionMask.IsTileAttackable(boardPosition);
+            UnityEngine.Debug.Assert(IsPlayerIndexValid(playerIndex), $"Invalid player index {playerIndex} passed into {nameof(GetBoardActionMaskForPlayer)}.");
+            return players[activePlayerIndex].BoardActionMask;
+        }
+
+        public IBoardActionMask GetOpponentBoardActionMaskForPlayer(int playerIndex)
+        {
+            // This will break if we have more than 2 players or multiple factions/teams
+            // We will need to amalgamate them all into a mask relative to the inputted player (depending on their affiliation)
+            int opponentIndex = (playerIndex + 1) % NumPlayers;
+            return players[opponentIndex].BoardActionMask;
         }
 
         public async UniTask ThinkForPlayer(int playerIndex, ITurnStrategy.Args turnStrategyArgs, bool dryRun)
@@ -351,6 +341,7 @@ namespace QC.Match.Objects
         [LuaMember("startScenario")]
         private void StartScenario(string scenarioGuid)
         {
+            activePlayerIndex = -1;
             StartScenarioAsync(scenarioGuid).Forget();
         }
 

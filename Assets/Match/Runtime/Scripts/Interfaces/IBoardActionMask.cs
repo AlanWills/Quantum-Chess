@@ -7,7 +7,7 @@ namespace QC.Match
         bool IsTileAttackable(Vector2Int boardPosition);
     }
 
-    public struct NoAttacksBoardActionMask : IBoardActionMask
+    public readonly struct EmptyBoardActionMask : IBoardActionMask
     {
         public bool IsTileAttackable(Vector2Int boardPosition)
         {

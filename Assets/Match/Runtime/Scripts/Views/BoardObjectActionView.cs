@@ -47,7 +47,10 @@ namespace QC.Match.Views
         private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.CalculateValidMoves(boardPosition, board, matchState, boardPositionCache);
+
+            int activePlayerIndex = matchState.ActivePlayerIndex;
+            IBoardActionMask opponentBoardActionMask = matchState.GetOpponentBoardActionMaskForPlayer(activePlayerIndex);
+            actionProvider.CalculateValidMoves(boardPosition, board, opponentBoardActionMask, boardPositionCache);
 
             foreach (Vector2Int validMove in boardPositionCache)
             {
@@ -67,12 +70,34 @@ namespace QC.Match.Views
         private void CalculateValidAttacks(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.CalculateValidAttacks(boardPosition, board, matchState, boardPositionCache);
+            
+            int activePlayerIndex = matchState.ActivePlayerIndex;
+            IBoardActionMask opponentBoardActionMask = matchState.GetOpponentBoardActionMaskForPlayer(activePlayerIndex);
+            actionProvider.CalculateValidAttacks(boardPosition, board, opponentBoardActionMask, boardPositionCache);
 
             foreach (Vector2Int validAttack in boardPositionCache)
             {
                 if (!board.DoesBoardTileExist(validAttack) ||
                     board.GetBoardObjectAt(validAttack) == null)
+                {
+                    continue;
+                }
+                
+                Vector2Int boardPositionInActionTilemapSpace = validAttack + attackTilemap.origin.ToVector2Int();
+                attackTilemap.SetTile(boardPositionInActionTilemapSpace.ToVector3Int(), validAttackTile);
+            }
+            
+            boardPositionCache.Clear();
+        }
+
+        private void CalculateValidThreats(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
+        {
+            boardPositionCache.Clear();
+            actionProvider.CalculateValidThreats(boardPosition, board, boardPositionCache);
+
+            foreach (Vector2Int validAttack in boardPositionCache)
+            {
+                if (!board.DoesBoardTileExist(validAttack))
                 {
                     continue;
                 }

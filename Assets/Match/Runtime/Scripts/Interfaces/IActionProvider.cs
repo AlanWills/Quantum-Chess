@@ -20,6 +20,11 @@ namespace QC.Match
             IBoardLookup boardLookup, 
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks);
+        void CalculateValidThreats(
+            Instance instance, 
+            Vector2Int currentBoardPosition,
+            IBoardLookup boardLookup,
+            IList<Vector2Int> validThreats);
     }
     
     public static class ActionProviderExtensions
@@ -44,6 +49,16 @@ namespace QC.Match
             IList<Vector2Int> validAttacks)
         {
             provider.iFace.CalculateValidAttacks(provider.instance, currentBoardPosition, boardLookup, opponentBoardActionMask, validAttacks);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void CalculateValidThreats(
+            this InterfaceHandle<IActionProvider> provider, 
+            Vector2Int currentBoardPosition,
+            IBoardLookup boardLookup,
+            IList<Vector2Int> validThreats)
+        {
+            provider.iFace.CalculateValidThreats(provider.instance, currentBoardPosition, boardLookup, validThreats);
         }
     }
 }

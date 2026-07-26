@@ -15,7 +15,7 @@ namespace QC.Match.Commands
         public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
             ITurnStrategy.Args turnStrategyArgs = args.ToTurnStrategyArgs(PlayerIndex);
-            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs();
+            IWinCondition.Args winConditionArgs = args.ToWinConditionArgs(PlayerIndex);
             args.MatchState.SetActivePlayerIndex(PlayerIndex, turnStrategyArgs, winConditionArgs);
 
             return UniTask.FromResult(CommandState.Completed);

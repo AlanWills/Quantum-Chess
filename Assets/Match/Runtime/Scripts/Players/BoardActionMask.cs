@@ -38,15 +38,14 @@ namespace QC.Match.Players
         public void SetTileAttackable(Vector2Int position)
         {
             int positionIndex = ToIndex(position);
-            UnityEngine.Debug.Assert(0 <= positionIndex && positionIndex < board.Length, $"Invalid position {position} entered into {nameof(SetTileAttackable)}.");
+            UnityEngine.Debug.Assert(0 <= positionIndex && positionIndex < board.Length, $"Invalid position {position} entered into {nameof(SetTileAttackable)}.  Board array size is: {board.Length}.");
             board[positionIndex] = new TileActionMask(true);
         }
 
         public bool IsTileAttackable(Vector2Int position)
         {
             int positionIndex = ToIndex(position);
-            UnityEngine.Debug.Assert(0 <= positionIndex && positionIndex < board.Length, $"Invalid position {position} entered into {nameof(IsTileAttackable)}.");
-            return board[positionIndex].CanPieceAttack;
+            return 0 <= positionIndex && positionIndex < board.Length && board[positionIndex].CanPieceAttack;
         }
 
         private int ToIndex(Vector2Int position)

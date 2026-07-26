@@ -36,11 +36,20 @@ namespace QC.Match.Players
                 return UniTask.FromResult(true);
             }
 
+            IBoardActionMask playerBoardActionMask = args.BoardActionMaskLookup.GetBoardActionMaskForPlayer(args.PlayerIndex);
+            Vector2Int oppositionKingPosition = oppositionKingTransform.GetPosition();
+
+            if (!playerBoardActionMask.IsTileAttackable(oppositionKingPosition))
+            {
+                // King is not currently under attack so it can't be checkmate
+                return UniTask.FromResult(false);
+            }
+            
             validActionsCache.Clear();
             oppositionKingActionProvider.CalculateValidMoves(
-                oppositionKingTransform.GetPosition(),
+                oppositionKingPosition,
                 args.Board,
-                args.OpponentBoardActionMask,
+                playerBoardActionMask,
                 validActionsCache);
 
             if (validActionsCache.Count > 0)
@@ -51,9 +60,9 @@ namespace QC.Match.Players
 
             validActionsCache.Clear();
             oppositionKingActionProvider.CalculateValidAttacks(
-                oppositionKingTransform.GetPosition(),
+                oppositionKingPosition,
                 args.Board,
-                args.OpponentBoardActionMask,
+                playerBoardActionMask,
                 validActionsCache);
 
             if (validActionsCache.Count > 0)

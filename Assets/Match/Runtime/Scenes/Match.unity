@@ -1780,11 +1780,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnChessBoardAttackActionPressed
+      value: OnBoardAttackActionPressed
       objectReference: {fileID: 0}
     - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      value: QC.Match.Views.BoardView, QC.Match.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 596001094882015075, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1808,11 +1808,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnChessBoardMovementActionPressed
+      value: OnBoardMovementActionPressed
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      value: QC.Match.Views.BoardView, QC.Match.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 1927173107458240308, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1836,11 +1836,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5135411952546777369, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnChessBoardPressed
+      value: OnBoardPressed
       objectReference: {fileID: 0}
     - target: {fileID: 5135411952546777369, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      value: QC.Match.Views.BoardView, QC.Match.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 5135411952546777369, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1900,11 +1900,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5685566965820634526, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnChessBoardBackgroundPressed
+      value: OnBoardBackgroundPressed
       objectReference: {fileID: 0}
     - target: {fileID: 5685566965820634526, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QC.Match.Views.ChessBoardView, QC.Match.Runtime
+      value: QC.Match.Views.BoardView, QC.Match.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 5685566965820634526, guid: 08c8e61f3f7724bcfb81b694d5d1a383, type: 3}
       propertyPath: onPointerFirstDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
