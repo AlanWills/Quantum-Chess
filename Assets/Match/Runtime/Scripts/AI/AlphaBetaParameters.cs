@@ -43,6 +43,12 @@ namespace QC.Match.AI
             set => depth = value;
         }
 
+        public float BlunderChance
+        {
+            get => blunderChance;
+            set => blunderChance = value;
+        }
+
         public int MinThinkingTime
         {
             get => minThinkingTimeMilliseconds;
@@ -50,6 +56,7 @@ namespace QC.Match.AI
         }
 
         [SerializeField] private int depth;
+        [SerializeField, Celeste.Tools.Attributes.GUI.Range(0f, 1f)] private float blunderChance;
         [SerializeField] private int minThinkingTimeMilliseconds;
         [SerializeField] private List<CoordinateImportance> coordinateImportanceOverrides;
         [SerializeField] private List<PieceValue> pieceValueOverrides;
@@ -109,7 +116,8 @@ namespace QC.Match.AI
             AlphaBetaParameters data = parameters;
             data.depth = overrideTable.TryGet("depth", data.depth);
             data.minThinkingTimeMilliseconds = overrideTable.TryGet("minThinkingTime", data.minThinkingTimeMilliseconds);
-
+            data.blunderChance = overrideTable.TryGet("blunderChance", data.blunderChance);
+            
             // Coordinate Importance Overrides
             {
                 if (overrideTable.TryGetTable("coordinateImportanceOverrides", out LuaTable importanceOverridesTable) &&

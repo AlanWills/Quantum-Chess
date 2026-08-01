@@ -213,7 +213,7 @@ namespace QC.Match.Components
                     // The space in front must be free for the pawn to move two
                     if (!hasMoved && IsBoardPositionVacant(currentBoardPosition + new Vector2Int(0, verticalDirection), boardLookup))
                     {
-                        AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, verticalDirection),
+                        AddIfVacantBoardPosition(currentBoardPosition + new Vector2Int(0, verticalDirection * 2),
                             boardLookup, validMoves);
                     }
 

@@ -49,6 +49,7 @@ namespace QC.Match.Debug
                 {
                     parameters.Depth = GUIExtensions.IntField("Depth", parameters.Depth);
                     parameters.MinThinkingTime = GUIExtensions.IntField("Min Thinking Time", parameters.MinThinkingTime);
+                    parameters.BlunderChance = GUIExtensions.FloatField("Blunder Chance", parameters.BlunderChance, 0, 1);
                     
                     // Should probably add read only paginated information on overrides here
 
