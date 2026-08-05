@@ -16,7 +16,7 @@ namespace QC.Match.Views
     {
         #region Properties and Fields
 
-        [SerializeField] private GameObjectAllocator chessBoardObjectViewAllocator;
+        [SerializeField] private GameObjectAllocator_List chessBoardObjectViewAllocator;
         [SerializeField] private BoardCommandExecutor boardCommandExecutor;
         [SerializeField] private MatchState matchState;
         [SerializeField] private Transform piecesViewRoot;
