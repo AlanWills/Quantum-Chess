@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using QC.Match.AI;
-using QC.Match.Commands;
 
 namespace QC.Match.Players
 {
@@ -35,6 +34,8 @@ namespace QC.Match.Players
                 UnityEngine.Debug.LogAssertion($"Failed to calculate any valid action for colour {args.PlayerColour}.  This will result in a skipped turn...");
                 return;
             }
+            
+            UnityEngine.Debug.Log($"Alpha Beta Move ({args.PlayerColour}): {command}");
             
             int remainingTime = parameters.MinThinkingTime - (int)turnCalculationTimer.ElapsedMilliseconds;
             if (remainingTime > 0)

@@ -19,5 +19,10 @@ namespace QC.Match.Commands
 
             return CommandState.Completed;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(CheckPlayerWinConditionCommand)} - Player Index: {playerIndex}";
+        }
     }
 }

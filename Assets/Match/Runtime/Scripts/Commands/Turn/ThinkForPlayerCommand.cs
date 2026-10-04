@@ -21,5 +21,10 @@ namespace QC.Match.Commands
 
             return CommandState.Completed;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ThinkForPlayerCommand)} - Player Index: {playerIndex} - Dry Run: {dryRun}";
+        }
     }
 }

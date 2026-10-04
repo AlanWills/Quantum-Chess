@@ -94,5 +94,10 @@ namespace QC.Match.Commands
 
             return UniTask.FromResult(CommandState.Completed);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(AddChessPieceCommand)} - Guid: {Guid} - Position: {Position}";
+        }
     }
 }

@@ -27,5 +27,10 @@ namespace QC.Match.Commands
             
             return commandState;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ToggleInputIfNotChessPieceColourCommand)} - Colour: {colour} - Input Enabled: {inputEnabled}";
+        }
     }
 }

@@ -235,6 +235,9 @@ namespace QC.Match.AI
                  Vector2Int action = validActions[i];
                  Piece pieceToCapture = boardBlit.GetPieceAt(action);
                  outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPosition, action));
+                 
+                 UnityEngine.Debug.Assert(tileBlit.Piece.Instance.FindInterface<IGrid2DTransform>().GetPosition() == boardPosition,
+                    $"Piece Found At {tileBlit.Piece.Instance.FindInterface<IGrid2DTransform>().GetPosition()}, but Move created from {boardPosition}.");
               }
 
               s_validMovesPool.Release(validActions);

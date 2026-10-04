@@ -22,5 +22,10 @@ namespace QC.Match.Commands
                 boardObjectInstance,
                 chessBoardObjectEndingPosition);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(AttackWithSelectedChessBoardObjectCommand)} - Ending Position: {chessBoardObjectEndingPosition}";
+        }
     }
 }

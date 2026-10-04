@@ -17,5 +17,10 @@ namespace QC.Match.Commands
         {
             return RemoveCommandUtilities.RemoveChessBoardObject(args, InstanceToRemove);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(RemoveChessBoardObjectCommand)} - Instance Id: {InstanceToRemove.InstanceId}";
+        }
     }
 }

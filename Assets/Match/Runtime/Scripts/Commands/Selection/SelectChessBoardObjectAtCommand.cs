@@ -26,5 +26,10 @@ namespace QC.Match.Commands
             args.Selection.CurrentSelectedObject = boardObjectInstance;
             return UniTask.FromResult(CommandState.Completed);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(SelectChessBoardObjectAtCommand)} - Location: {chessBoardObjectLocation}";
+        }
     }
 }

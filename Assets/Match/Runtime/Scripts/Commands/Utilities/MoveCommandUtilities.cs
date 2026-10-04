@@ -23,6 +23,13 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
+            RectInt boundingBox = args.Board.CalculateBoundingBox();
+            if (!boundingBox.Contains(endingPosition))
+            {
+                UnityEngine.Debug.LogAssertion($"Ending Position for movement {endingPosition} is outside the bounding box of the board {boundingBox}.");
+                return CommandState.Abandoned;
+            }
+            
             CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
             UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected chess board object after trying to move it.");
 

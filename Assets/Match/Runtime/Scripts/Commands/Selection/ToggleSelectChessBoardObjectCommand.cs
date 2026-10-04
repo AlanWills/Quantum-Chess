@@ -30,5 +30,10 @@ namespace QC.Match.Commands
                 return await args.CommandExecutor.ExecuteCommandImmediately(new SelectChessBoardObjectCommand(boardObjectInstance), args);
             }
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ToggleSelectChessBoardObjectCommand)} - Instance Id: {boardObjectInstance.InstanceId}";
+        }
     }
 }
