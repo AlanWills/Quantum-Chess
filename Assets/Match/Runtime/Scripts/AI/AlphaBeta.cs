@@ -107,9 +107,12 @@ namespace QC.Match.AI
               }
 
               s_movesToCheckPool.Release(moves);
+              s_tilesPool.Release(tiles);
 
               if (scoredMoves.Count == 0)
               {
+                 s_scoredMovesPool.Release(scoredMoves);
+                 
                  UnityEngine.Debug.LogAssertion(
                     $"{nameof(AlphaBeta)} failed to find any valid moves (possibly Checkmate or Stalemate).");
                  command = null;
@@ -128,6 +131,8 @@ namespace QC.Match.AI
                  int newMoveIndex = args.RNG.FromRangeInclusive(0, scoredMoves.Count - 1);
                  bestMove = scoredMoves[newMoveIndex].Move;
               }
+              
+              s_scoredMovesPool.Release(scoredMoves);
               
               UnityEngine.Debug.Assert(bestMove.PieceToMove.PieceColour == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
