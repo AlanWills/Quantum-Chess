@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe69b9c42687084386a47620586f999, type: 3}
+  m_Name: AllPlatformBuildSettings
+  m_EditorClassIdentifier: Celeste.BuildSystem.Editor::CelesteEditor.BuildSystem.AllPlatformSettings
+  iOSDebug: {fileID: 11400000, guid: db6053e150d2e4a8f976e65473cae79b, type: 2}
+  iOSRelease: {fileID: 11400000, guid: 34fb482c89fa84ce7936ecc77a83bb72, type: 2}
+  androidDebugApk: {fileID: 11400000, guid: 04e705568cc6d40b989aea5b9b3c4df0, type: 2}
+  androidDebugBundle: {fileID: 11400000, guid: 7c033200638a643e39953054ae0dc1ca, type: 2}
+  androidReleaseApk: {fileID: 11400000, guid: 9fb6a65822e7542d99e2273dc9c572a6, type: 2}
+  androidReleaseBundle: {fileID: 11400000, guid: 9c785fa05b56e4693a01bbd3d4cfad8b, type: 2}
+  windowsDebug: {fileID: 11400000, guid: 6bb5ff98621544ba6a561795fde2b134, type: 2}
+  windowsRelease: {fileID: 11400000, guid: c3b4894ea00f24a839dc1026072403d6, type: 2}
+  macDebug: {fileID: 11400000, guid: a718029f18374c848a0e95e6b511ec04, type: 2}
+  macRelease: {fileID: 11400000, guid: 8a554fcc0b3546f49bd882a7e2d6f23f, type: 2}
+  linuxDebug: {fileID: 11400000, guid: e42aac98edfc84b4d869ede68d6c1033, type: 2}
+  linuxRelease: {fileID: 0}
+  webGLDebug: {fileID: 11400000, guid: 8b93a0fce460b42798b2739093dd96a4, type: 2}
+  webGLRelease: {fileID: 11400000, guid: 3e617cd602e3b49f8972d008299d0b9b, type: 2}
