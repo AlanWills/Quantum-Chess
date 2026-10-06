@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.AI.AIStrategyDefaultParameters
   defaultAlphaBetaEasy:
     depth: 2
-    blunderChance: 0
+    blunderChance: 0.2
     minThinkingTimeMilliseconds: 3000
     coordinateImportanceOverrides:
     - position: {x: 4, y: 4}
@@ -50,7 +50,7 @@ MonoBehaviour:
       variance: {x: 0, y: 0}
   defaultAlphaBetaMedium:
     depth: 4
-    blunderChance: 0
+    blunderChance: 0.1
     minThinkingTimeMilliseconds: 2500
     coordinateImportanceOverrides:
     - position: {x: 4, y: 4}
@@ -86,7 +86,7 @@ MonoBehaviour:
       variance: {x: 0, y: 0}
   defaultAlphaBetaHard:
     depth: 6
-    blunderChance: 0
+    blunderChance: 0.05
     minThinkingTimeMilliseconds: 2000
     coordinateImportanceOverrides:
     - position: {x: 3, y: 3}
