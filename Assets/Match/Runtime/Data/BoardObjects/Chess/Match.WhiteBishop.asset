@@ -39,6 +39,56 @@ MonoBehaviour:
   startingColour: 2
   startingPieceType: 4
   startingValue: 30
+  startingMovementPatterns:
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: 1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: -1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: 1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  startingAttackPatterns:
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: 1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: -1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 1
+    distanceIfNotMoved: 0
+    distanceIfMoved: 0
+    pattern: {x: 1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

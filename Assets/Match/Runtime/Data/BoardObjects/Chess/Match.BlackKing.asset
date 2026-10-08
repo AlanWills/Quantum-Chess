@@ -27,6 +27,104 @@ MonoBehaviour:
   startingColour: 1
   startingPieceType: 32
   startingValue: 9000
+  startingMovementPatterns:
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 0, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: 0}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 0, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: 0}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  startingAttackPatterns:
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 0, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: 1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: 0}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: 0, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: 0}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
+  - range: 0
+    distanceIfNotMoved: 1
+    distanceIfMoved: 1
+    pattern: {x: -1, y: -1}
+    relativeToVerticalDirection: 0
+    mustBeSafe: 0
 --- !u!114 &-1037797547609353635
 MonoBehaviour:
   m_ObjectHideFlags: 0
