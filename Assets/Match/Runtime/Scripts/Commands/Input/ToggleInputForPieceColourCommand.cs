@@ -3,12 +3,12 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public readonly struct ToggleInputForChessPieceColourCommand : ICommand<BoardCommandArgs>
+    public readonly struct ToggleInputForPieceColourCommand : ICommand<BoardCommandArgs>
     {
-        private readonly ChessPieceColour colour;
+        private readonly PieceColour colour;
         private readonly bool inputEnabled;
 
-        public ToggleInputForChessPieceColourCommand(ChessPieceColour colour, bool inputEnabled)
+        public ToggleInputForPieceColourCommand(PieceColour colour, bool inputEnabled)
         {
             this.colour = colour;
             this.inputEnabled = inputEnabled;
@@ -21,7 +21,7 @@ namespace QC.Match.Commands
             if (commandState == CommandState.Completed)
             {
                 // Clear the selection when changing what pieces are interactable
-                CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
+                CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedBoardObjectCommand(), args);
                 UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult != CommandState.Abandoned, $"There was an issue clearing the selected chess board object after toggling input for {colour}.");
             }
             
@@ -30,7 +30,7 @@ namespace QC.Match.Commands
 
         public override string ToString()
         {
-            return $"{nameof(ToggleInputForChessPieceColourCommand)} - Colour: {colour} - Input Enabled: {inputEnabled}";
+            return $"{nameof(ToggleInputForPieceColourCommand)} - Colour: {colour} - Input Enabled: {inputEnabled}";
         }
     }
 }

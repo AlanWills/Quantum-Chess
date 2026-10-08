@@ -4,7 +4,7 @@ using QC.Match.Objects;
 
 namespace QCEditor.Match.Persistence.AssetPostProcess
 {
-    public class ChessBoardTileCatalogueAssetPostProcessor : CataloguePostProcessor<BoardTile, ChessBoardTileCatalogue>
+    public class ChessBoardTileCatalogueAssetPostProcessor : CataloguePostProcessor<BoardTile, BoardTileCatalogue>
     {
         private static void OnPostprocessAllAssets(
             string[] importedAssets, 

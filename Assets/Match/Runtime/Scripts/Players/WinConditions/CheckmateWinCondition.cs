@@ -6,17 +6,17 @@ namespace QC.Match.Players
 {
     public class CheckmateWinCondition : IWinCondition
     {
-        private readonly ChessPieceColour OppositionColour;
+        private readonly PieceColour OppositionColour;
         private readonly List<Vector2Int> validActionsCache = new();
         
-        public CheckmateWinCondition(ChessPieceColour oppositionColour)
+        public CheckmateWinCondition(PieceColour oppositionColour)
         {
             OppositionColour = oppositionColour;
         }
         
         public UniTask<bool> CalculateIfWinConditionIsMet(IWinCondition.Args args)
         {
-            if (!args.Board.TryFindChessPiece(OppositionColour, ChessPieceType.King, out var oppositionKing))
+            if (!args.Board.TryFindPiece(OppositionColour, PieceType.King, out var oppositionKing))
             {
                 // The King straight up does not exist, game over!
                 return UniTask.FromResult(true);

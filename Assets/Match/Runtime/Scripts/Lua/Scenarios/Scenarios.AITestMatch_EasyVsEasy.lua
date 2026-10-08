@@ -7,8 +7,8 @@ function Scenario:setUp()
     local boardHeight = 8
     local leftMostXPosition = 1
 
-    StandardChessMatchFactory.createBoard(boardHeight, boardWidth)
-    StandardChessMatchFactory.createPieces(boardHeight, boardWidth, leftMostXPosition)
+    StandardChessMatchFactory.createBoard(boardWidth, boardHeight)
+    StandardChessMatchFactory.createPieces(boardWidth, boardHeight, leftMostXPosition)
     StandardChessMatchFactory.setStartingPlayer("White")
 end
 

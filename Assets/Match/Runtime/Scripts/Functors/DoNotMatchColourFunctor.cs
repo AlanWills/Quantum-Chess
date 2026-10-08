@@ -2,14 +2,14 @@ namespace QC.Match.Functors
 {
     public readonly struct DoNotMatchColourFunctor : IColourFunctor
     {
-        private readonly ChessPieceColour colourToNotMatch;
+        private readonly PieceColour colourToNotMatch;
 
-        public DoNotMatchColourFunctor(ChessPieceColour colourToNotMatch)
+        public DoNotMatchColourFunctor(PieceColour colourToNotMatch)
         {
             this.colourToNotMatch = colourToNotMatch;
         }
         
-        public bool IsAMatch(ChessPieceColour colour)
+        public bool IsAMatch(PieceColour colour)
         {
             return colour != colourToNotMatch;
         }

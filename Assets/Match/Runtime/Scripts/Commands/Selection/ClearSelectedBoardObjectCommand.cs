@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace QC.Match.Commands
 {
-    public struct ClearSelectedChessBoardObjectCommand : ICommand<BoardCommandArgs>
+    public struct ClearSelectedBoardObjectCommand : ICommand<BoardCommandArgs>
     {
         public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
@@ -13,7 +13,7 @@ namespace QC.Match.Commands
 
         public override string ToString()
         {
-            return $"{nameof(ClearSelectedChessBoardObjectCommand)}";
+            return $"{nameof(ClearSelectedBoardObjectCommand)}";
         }
     }
 }

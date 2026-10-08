@@ -6,20 +6,20 @@ namespace QC.Match.Commands
 {
     public static class MoveCommandUtilities
     {
-        public static async UniTask<CommandState> TryMoveChessBoardObject(
+        public static async UniTask<CommandState> TryMoveBoardObject(
             BoardCommandArgs args,
             BoardObjectInstance instance,
             Vector2Int endingPosition)
         {
             if (instance == null)
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to move a null chess board object when executing move command.");
+                UnityEngine.Debug.LogAssertion($"Attempting to move a null board object when executing move command.");
                 return CommandState.Abandoned;
             }
 
             if (!instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
             {
-                UnityEngine.Debug.LogAssertion("Could not find transform component for chess board object when executing move object command.");
+                UnityEngine.Debug.LogAssertion("Could not find transform component for board object when executing move object command.");
                 return CommandState.Abandoned;
             }
             
@@ -30,8 +30,8 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
-            UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected chess board object after trying to move it.");
+            CommandState clearSelectedChessBoardObjectResult = await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedBoardObjectCommand(), args);
+            UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected board object after trying to move it.");
 
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
             
@@ -44,7 +44,7 @@ namespace QC.Match.Commands
             
             if (instance.TryFindComponent<IChessPiece>(out var chessPiece))
             {
-                ChessPieceColour pieceColour = chessPiece.GetPieceColour();
+                PieceColour pieceColour = chessPiece.GetPieceColour();
                 int playerIndex = args.MatchState.GetPlayerIndex(pieceColour);
                 args.MatchState.RecordActionTakenByPlayer(playerIndex);
             }

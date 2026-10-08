@@ -41,7 +41,7 @@ namespace QC.Match.Objects
         
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
         [LuaMember("nextPlayerIndex")] private int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
-        private ChessPieceColour ActiveColour => players.Get(activePlayerIndex)?.Colour ?? ChessPieceColour.Unknown;
+        private PieceColour ActiveColour => players.Get(activePlayerIndex)?.Colour ?? PieceColour.Unknown;
         [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
 
         [SerializeField] private LuaRuntime luaRuntime;
@@ -233,7 +233,7 @@ namespace QC.Match.Objects
         private void BuildBoardActionMaskForPlayer(int playerIndex, Board board)
         {
             Player player = players[playerIndex];
-            ChessPieceColour playerColour = player.Colour;
+            PieceColour playerColour = player.Colour;
             RectInt boundingBox = board.CalculateBoundingBox();
 
             player.EnsureBoardActionMaskMatches(boundingBox);
@@ -242,7 +242,7 @@ namespace QC.Match.Objects
 
         private void UpdateBoardActionMaskForColour(
             BoardActionMask actionMaskToUpdate,
-            ChessPieceColour colour, 
+            PieceColour colour, 
             Board board)
         {
             List<Vector2Int> validThreats = new List<Vector2Int>();
@@ -316,16 +316,16 @@ namespace QC.Match.Objects
             ++players[playerIndex].ActionsTakenThisTurn;
         }
         
-        public ChessPieceColour GetPlayerColour(int index)
+        public PieceColour GetPlayerColour(int index)
         {
-            return index < players.Count ? players[index].Colour : ChessPieceColour.Unknown;
+            return index < players.Count ? players[index].Colour : PieceColour.Unknown;
         }
         
-        public int GetPlayerIndex(ChessPieceColour chessPieceColour)
+        public int GetPlayerIndex(PieceColour pieceColour)
         {
             for (int i = 0, n = NumPlayers; i < n; ++i)
             {
-                if (players[i].Colour == chessPieceColour)
+                if (players[i].Colour == pieceColour)
                 {
                     return i;
                 }
@@ -351,9 +351,9 @@ namespace QC.Match.Objects
         [LuaMember("addPlayer")]
         private void AddPlayer(LuaTable playerConfig)
         {
-            if (!playerConfig.TryGetEnum("colour", out ChessPieceColour playerColour))
+            if (!playerConfig.TryGetEnum("colour", out PieceColour playerColour))
             {
-                UnityEngine.Debug.LogAssertion($"Failed to successfully parse player colour value as a valid {nameof(ChessPieceColour)}.");
+                UnityEngine.Debug.LogAssertion($"Failed to successfully parse player colour value as a valid {nameof(PieceColour)}.");
                 return;
             }
 
@@ -402,7 +402,7 @@ namespace QC.Match.Objects
         [LuaMember("findPlayerIndexOfColour")]
         private int FindPlayerIndexOfColour(string colourString)
         {
-            if (Enum.TryParse(colourString, out ChessPieceColour colour))
+            if (Enum.TryParse(colourString, out PieceColour colour))
             {
                 return players.FindIndex(x => x.Colour == colour);
             }

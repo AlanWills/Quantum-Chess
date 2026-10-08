@@ -1,6 +1,6 @@
 ﻿namespace QC.Match
 {
-    public enum ChessPieceVerticalDirection
+    public enum PieceVerticalDirection
     {
         Up = 1,
         Down = -1

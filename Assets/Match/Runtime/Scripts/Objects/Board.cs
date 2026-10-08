@@ -28,8 +28,8 @@ namespace QC.Match.Objects
         public IReadOnlyList<BoardTileInstance> Tiles => tiles;
         public IReadOnlyList<BoardObjectInstance> Objects => objects;
 
-        [SerializeField] private ChessBoardTileCatalogue chessBoardTileCatalogue;
-        [SerializeField] private ChessBoardObjectCatalogue chessBoardObjectCatalogue;
+        [SerializeField] private BoardTileCatalogue boardTileCatalogue;
+        [SerializeField] private BoardObjectCatalogue boardObjectCatalogue;
         
         [Header("Events")] 
         [SerializeField] private BoardTileAddedEvent onBoardTileAdded;
@@ -53,29 +53,29 @@ namespace QC.Match.Objects
         {
             Initialize();
 
-            foreach (ChessBoardTileDTO tile in boardDto.tiles)
+            foreach (BoardTileDTO tile in boardDto.tiles)
             {
-                CreateAndAddChessBoardTile(tile);
+                CreateAndAddBoardTile(tile);
             }
             
-            foreach (var chessBoardObjectInstanceDTO in boardDto.objects)
+            foreach (var boardObjectInstanceDTO in boardDto.objects)
             {
-                CreateAndAddChessBoardObject(chessBoardObjectInstanceDTO);
+                CreateAndAddBoardObject(boardObjectInstanceDTO);
             }
         }
 
         public void Shutdown()
         {
-            foreach (BoardObjectInstance chessBoardObjectInstance in objects)
+            foreach (BoardObjectInstance boardObjectInstance in objects)
             {
-                chessBoardObjectInstance.ComponentDataChanged.RemoveListener(OnChessBoardObjectComponentDataChanged);
-                chessBoardObjectInstance.ShutdownComponents();
+                boardObjectInstance.ComponentDataChanged.RemoveListener(OnBoardObjectComponentDataChanged);
+                boardObjectInstance.ShutdownComponents();
             }
         }
 
-        public BoardTileInstance CreateChessBoardTile(int guid, Vector2Int position)
+        public BoardTileInstance CreateBoardTile(int guid, Vector2Int position)
         {
-            BoardTile boardTile = chessBoardTileCatalogue.MustFindItemByGuid(guid);
+            BoardTile boardTile = boardTileCatalogue.MustFindItemByGuid(guid);
             if (boardTile == null)
             {
                 return null;
@@ -85,27 +85,27 @@ namespace QC.Match.Objects
             return new BoardTileInstance(boardTile, position);
         }
 
-        private void CreateAndAddChessBoardTile(ChessBoardTileDTO tileDTO)
+        private void CreateAndAddBoardTile(BoardTileDTO tileDTO)
         {
-            BoardTileInstance instance = CreateChessBoardTile(tileDTO.guid, tileDTO.position.v);
+            BoardTileInstance instance = CreateBoardTile(tileDTO.guid, tileDTO.position.v);
             if (instance == null)
             {
                 UnityEngine.Debug.LogAssertion($"Failed to create and add chess board tile from dto with guid: {tileDTO.guid}.");
                 return;
             }
             
-            AddChessBoardTileInstance(instance);
+            AddBoardTileInstance(instance);
         }
 
-        public void AddChessBoardTileInstance(BoardTileInstance tileInstance)
+        public void AddBoardTileInstance(BoardTileInstance tileInstance)
         {
             tiles.Add(tileInstance);
-            tileInstance.ComponentDataChanged.AddListener(OnChessBoardTileComponentDataChanged);
+            tileInstance.ComponentDataChanged.AddListener(OnBoardTileComponentDataChanged);
             onBoardTileAdded?.Invoke(new BoardTileAddedArgs(tileInstance));
             onChanged?.Invoke();
         }
         
-        private void RemoveChessBoardTileAt(int indexOfTile)
+        private void RemoveBoardTileAt(int indexOfTile)
         {
             if (0 > indexOfTile || indexOfTile >= tiles.Count)
             {
@@ -114,7 +114,7 @@ namespace QC.Match.Objects
             
             BoardTileInstance tileInstance = tiles[indexOfTile];
             tiles.RemoveAt(indexOfTile);
-            tileInstance.ComponentDataChanged.RemoveListener(OnChessBoardTileComponentDataChanged);
+            tileInstance.ComponentDataChanged.RemoveListener(OnBoardTileComponentDataChanged);
             onBoardTileRemoved?.Invoke(new BoardTileRemovedArgs(tileInstance.Position));
             onChanged?.Invoke();
         }
@@ -132,9 +132,9 @@ namespace QC.Match.Objects
             return false;
         }
 
-        public BoardObjectInstance CreateChessBoardObject(int guid)
+        public BoardObjectInstance CreateBoardObject(int guid)
         {
-            BoardObject boardObject = chessBoardObjectCatalogue.MustFindItemByGuid(guid);
+            BoardObject boardObject = boardObjectCatalogue.MustFindItemByGuid(guid);
             if (boardObject == null)
             {
                 return null;
@@ -146,9 +146,9 @@ namespace QC.Match.Objects
             return instance;
         }
         
-        private void CreateAndAddChessBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
+        private void CreateAndAddBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
         {
-            BoardObject boardObject = chessBoardObjectCatalogue.MustFindItemByGuid(chessBoardObjectDto.guid);
+            BoardObject boardObject = boardObjectCatalogue.MustFindItemByGuid(chessBoardObjectDto.guid);
             if (boardObject == null)
             {
                 return;
@@ -158,14 +158,14 @@ namespace QC.Match.Objects
             EnsureInstanceComponentsExist(instance);
             instance.LoadComponents(chessBoardObjectDto.components.ToLookup());
             
-            AddChessBoardObjectInstance(instance);
+            AddBoardObjectInstance(instance);
         }
 
-        public void AddChessBoardObjectInstance(BoardObjectInstance instance)
+        public void AddBoardObjectInstance(BoardObjectInstance instance)
         {
             EnsureInstanceComponentsExist(instance);
             
-            instance.ComponentDataChanged.AddListener(OnChessBoardObjectComponentDataChanged);
+            instance.ComponentDataChanged.AddListener(OnBoardObjectComponentDataChanged);
             objects.Add(instance);
             
             onBoardObjectAdded?.Invoke(new BoardObjectAddedArgs(instance));
@@ -198,7 +198,7 @@ namespace QC.Match.Objects
             return null;
         }
 
-        public bool TryFindChessPiece(ChessPieceColour colour, ChessPieceType type, out BoardObjectInstance instance)
+        public bool TryFindPiece(PieceColour colour, PieceType type, out BoardObjectInstance instance)
         {
             foreach (var objectInstance in objects)
             {
@@ -215,7 +215,7 @@ namespace QC.Match.Objects
             return false;
         }
 
-        public bool RemoveChessBoardObject(BoardObjectInstance instance)
+        public bool RemoveBoardObject(BoardObjectInstance instance)
         {
             bool result = objects.Remove(instance);
             if (result)
@@ -230,12 +230,12 @@ namespace QC.Match.Objects
         {
             for (int i = objects.Count - 1; i >= 0; --i)
             {
-                RemoveChessBoardObject(objects[i]);
+                RemoveBoardObject(objects[i]);
             }
 
             for (int i = tiles.Count - 1; i >= 0; --i)
             {
-                RemoveChessBoardTileAt(i);
+                RemoveBoardTileAt(i);
             }
         }
 
@@ -263,12 +263,12 @@ namespace QC.Match.Objects
         
         #region Callback
 
-        private void OnChessBoardObjectComponentDataChanged()
+        private void OnBoardObjectComponentDataChanged()
         {
             onChanged?.InvokeSilently();
         }
         
-        private void OnChessBoardTileComponentDataChanged()
+        private void OnBoardTileComponentDataChanged()
         {
             onChanged?.Invoke();
         }
@@ -288,15 +288,15 @@ namespace QC.Match.Objects
         {
             string colourString = luaTable.GetString("colour", string.Empty);
             string typeString = luaTable.GetString("type", string.Empty);
-            ChessPieceColour? colour = null;
-            ChessPieceType? type = null;
+            PieceColour? colour = null;
+            PieceType? type = null;
             
-            if (!string.IsNullOrEmpty(colourString) && Enum.TryParse(colourString, out ChessPieceColour chessPieceColour))
+            if (!string.IsNullOrEmpty(colourString) && Enum.TryParse(colourString, out PieceColour chessPieceColour))
             {
                 colour = chessPieceColour;
             }
 
-            if (!string.IsNullOrEmpty(typeString) && Enum.TryParse(typeString, out ChessPieceType chessPieceType))
+            if (!string.IsNullOrEmpty(typeString) && Enum.TryParse(typeString, out PieceType chessPieceType))
             {
                 type = chessPieceType;
             }

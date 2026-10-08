@@ -2,6 +2,6 @@
 {
     public interface IPlayerInfo
     {
-        ChessPieceColour GetPlayerColour(int playerIndex);
+        PieceColour GetPlayerColour(int playerIndex);
     }
 }

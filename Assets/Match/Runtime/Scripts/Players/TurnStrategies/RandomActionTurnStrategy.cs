@@ -16,7 +16,7 @@ namespace QC.Match.Players
         public UniTask OnTurn(ITurnStrategy.Args args, bool dryRun)
         {
             List<BoardObjectInstance> activePlayerPieces = new List<BoardObjectInstance>();
-            ChessPieceColour activeColour = args.PlayerColour;
+            PieceColour activeColour = args.PlayerColour;
             activePlayerPieces.AddRange(args.Board.Objects.Where(x =>
                 x.HasComponent<IActionProvider>() &&
                 x.HasComponent<IGrid2DTransform>() &&

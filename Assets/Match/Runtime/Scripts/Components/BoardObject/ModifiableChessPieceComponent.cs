@@ -20,10 +20,10 @@ namespace QC.Match.Components
         [Serializable]
         public class SaveData : ComponentData
         {
-            public ChessPieceColour currentPieceColour;
-            public ChessPieceType currentPieceType;
+            public PieceColour currentPieceColour;
+            public PieceType currentPieceType;
             public int currentValue;
-            public ChessPieceVerticalDirection verticalDirection;
+            public PieceVerticalDirection verticalDirection;
             public bool hasMoved;
             public List<ActionPattern> movementPatterns = new();
             public List<ActionPattern> attackPatterns = new();
@@ -33,8 +33,8 @@ namespace QC.Match.Components
         
         #region Properties and Fields
         
-        [SerializeField] private ChessPieceColour startingColour = ChessPieceColour.Unknown;
-        [SerializeField] private ChessPieceType startingPieceType = ChessPieceTypeExtensions.Everything;
+        [SerializeField] private PieceColour startingColour = PieceColour.Unknown;
+        [SerializeField] private PieceType startingPieceType = PieceTypeExtensions.Everything;
         [SerializeField] private int startingValue = 1;
         [SerializeField] private List<ActionPattern> startingMovementPatterns = new();
         [SerializeField] private List<ActionPattern> startingAttackPatterns = new();
@@ -48,19 +48,19 @@ namespace QC.Match.Components
                 currentPieceColour = startingColour,
                 currentPieceType = startingPieceType,
                 currentValue = startingValue,
-                verticalDirection = ChessPieceVerticalDirection.Up,
+                verticalDirection = PieceVerticalDirection.Up,
                 hasMoved = false,
                 movementPatterns = new List<ActionPattern>(startingMovementPatterns),
                 attackPatterns = new List<ActionPattern>(startingAttackPatterns)
             };
         }
 
-        public ChessPieceColour GetPieceColour(Instance instance)
+        public PieceColour GetPieceColour(Instance instance)
         {
             return (instance.data as SaveData).currentPieceColour;
         }
 
-        public void SetColour(Instance instance, ChessPieceColour colour)
+        public void SetColour(Instance instance, PieceColour colour)
         {
             SaveData saveData = instance.data as SaveData;
             if (saveData.currentPieceColour != colour)
@@ -70,12 +70,12 @@ namespace QC.Match.Components
             }
         }
 
-        public ChessPieceType GetPieceType(Instance instance)
+        public PieceType GetPieceType(Instance instance)
         {
             return (instance.data as SaveData).currentPieceType;
         }
         
-        public void SetType(Instance instance, ChessPieceType type)
+        public void SetType(Instance instance, PieceType type)
         {
             SaveData saveData = instance.data as SaveData;
             if (saveData.currentPieceType != type)
@@ -100,7 +100,7 @@ namespace QC.Match.Components
             }
         }
 
-        public void SetVerticalDirection(Instance instance, ChessPieceVerticalDirection verticalDirection)
+        public void SetVerticalDirection(Instance instance, PieceVerticalDirection verticalDirection)
         {
             SaveData saveData = instance.data as SaveData;
             if (saveData.verticalDirection != verticalDirection)
@@ -235,7 +235,7 @@ namespace QC.Match.Components
 
         private static void CalculateValidAttacks(
             IReadOnlyList<ActionPattern> attackPatterns,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
             Vector2Int currentBoardPosition, 
@@ -259,7 +259,7 @@ namespace QC.Match.Components
 
         private static void CalculateValidAttacks(
             ActionPattern actionPattern,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
             Vector2Int currentBoardPosition,
@@ -343,7 +343,7 @@ namespace QC.Match.Components
 
         private static void CalculateValidThreats(
             IReadOnlyList<ActionPattern> attackPatterns,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
             Vector2Int currentBoardPosition, 
@@ -365,7 +365,7 @@ namespace QC.Match.Components
 
         private static void CalculateValidThreats(
             ActionPattern actionPattern,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
             Vector2Int currentBoardPosition,
@@ -457,7 +457,7 @@ namespace QC.Match.Components
 
         private static bool TryFindAttackablePiece(
             Vector2Int position,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IList<Vector2Int> list)
         {
@@ -479,7 +479,7 @@ namespace QC.Match.Components
 
         private static bool TryFindSafeAttackablePiece(
             Vector2Int position,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> list)
@@ -522,7 +522,7 @@ namespace QC.Match.Components
         private static void TryFindSafeAttackablePiecesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
@@ -541,7 +541,7 @@ namespace QC.Match.Components
         private static void TryFindAttackablePiecesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IList<Vector2Int> validAttacks)
         {
@@ -559,7 +559,7 @@ namespace QC.Match.Components
         private static void TryFindSafeAttackableTilesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttackableTiles)
@@ -584,7 +584,7 @@ namespace QC.Match.Components
         private static void TryFindAttackableTilesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
-            ChessPieceColour currentColour,
+            PieceColour currentColour,
             IBoardLookup boardLookup,
             IList<Vector2Int> validAttackableTiles)
         {

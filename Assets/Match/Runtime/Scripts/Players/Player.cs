@@ -4,7 +4,7 @@ namespace QC.Match.Players
 {
     public class Player
     {
-        public ChessPieceColour Colour { get; }
+        public PieceColour Colour { get; }
         public ITurnStrategy TurnStrategy { get; }
         public IWinCondition WinCondition { get; }
         public bool AutoThink { get; set; }
@@ -15,7 +15,7 @@ namespace QC.Match.Players
         public BoardActionMask BoardActionMask { get; private set; }
 
         public Player(
-            ChessPieceColour colour, 
+            PieceColour colour, 
             ITurnStrategy turnStrategy, 
             IWinCondition winCondition, 
             bool autoThink, 

@@ -19,7 +19,7 @@ namespace QC.Match.Players
             {
                 case Type.Checkmate:
                 {
-                    if (luaTable.TryGetEnum("winConditionData", out ChessPieceColour oppositionColour))
+                    if (luaTable.TryGetEnum("winConditionData", out PieceColour oppositionColour))
                     {
                         return new CheckmateWinCondition(oppositionColour);
                     }

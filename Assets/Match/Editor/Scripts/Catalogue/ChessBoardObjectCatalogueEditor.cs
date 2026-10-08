@@ -5,7 +5,7 @@ using QC.Match.Catalogue;
 
 namespace QCEditor.Match.Catalogue
 {
-    [CustomEditor(typeof(ChessBoardObjectCatalogue))]
+    [CustomEditor(typeof(BoardObjectCatalogue))]
     public class ChessBoardObjectCatalogueEditor : IIndexableItemsEditor<BoardObject>
     {
     }

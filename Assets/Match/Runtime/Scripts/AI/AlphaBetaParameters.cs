@@ -28,7 +28,7 @@ namespace QC.Match.AI
         [Serializable]
         private struct PieceValue
         {
-            public ChessPieceType pieceType;
+            public PieceType pieceType;
             public int value;
             public Vector2Int variance;
         }
@@ -87,13 +87,13 @@ namespace QC.Match.AI
             return coordinateImportanceOverrides[indexOfMatchingCoordinate].importance + randomVariance;
         }
 
-        public int GetValueOverrideForPiece(ChessPieceType chessPieceType, IRNG rng, int defaultValue)
+        public int GetValueOverrideForPiece(PieceType pieceType, IRNG rng, int defaultValue)
         {
             int indexOfMatchingPiece = -1;
 
             for (int i = 0, n = pieceValueOverrides.Count; i < n; ++i)
             {
-                if (pieceValueOverrides[i].pieceType == chessPieceType)
+                if (pieceValueOverrides[i].pieceType == pieceType)
                 {
                     indexOfMatchingPiece = i;
                     break;
@@ -181,7 +181,7 @@ namespace QC.Match.AI
 
                         if (!table.TryGetEnum("pieceType", out pieceValue.pieceType))
                         {
-                            UnityEngine.Debug.LogAssertion($"Failed to parse 'pieceType' as a {nameof(ChessPieceType)}.");
+                            UnityEngine.Debug.LogAssertion($"Failed to parse 'pieceType' as a {nameof(PieceType)}.");
                             continue;
                         }
 

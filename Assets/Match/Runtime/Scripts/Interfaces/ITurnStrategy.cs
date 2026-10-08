@@ -11,7 +11,7 @@ namespace QC.Match
     {
         public readonly struct Args
         {
-            public ChessPieceColour PlayerColour => PlayerInfo.GetPlayerColour(PlayerIndex);
+            public PieceColour PlayerColour => PlayerInfo.GetPlayerColour(PlayerIndex);
             
             public readonly int PlayerIndex;
             public readonly IPlayerInfo PlayerInfo;

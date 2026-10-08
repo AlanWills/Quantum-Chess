@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb3897c39e01458bb0cd0f7bc3aafe6, type: 3}
   m_Name: Match.Board
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Record.BoardState
-  chessBoardTileCatalogue: {fileID: 11400000, guid: 19a9b750519fb424a8b1dc8cf9f4a8cf, type: 2}
-  chessBoardObjectCatalogue: {fileID: 11400000, guid: 497d82b2ca63a4c59bcfbd954c056548, type: 2}
+  boardTileCatalogue: {fileID: 11400000, guid: 19a9b750519fb424a8b1dc8cf9f4a8cf, type: 2}
+  boardObjectCatalogue: {fileID: 11400000, guid: 497d82b2ca63a4c59bcfbd954c056548, type: 2}
   onBoardTileAdded: {fileID: 11400000, guid: 6b9eaabc94e3e48d1b192a8eb2aecde4, type: 2}
   onBoardTileRemoved: {fileID: 11400000, guid: fcb37d6423cea6a46a81e8eea672aaac, type: 2}
   onBoardObjectAdded: {fileID: 11400000, guid: 8be6f3500e146484080931ca9cfcf2d7, type: 2}

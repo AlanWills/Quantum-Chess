@@ -4,11 +4,11 @@ using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
-    public readonly struct SelectChessBoardObjectCommand : ICommand<BoardCommandArgs>
+    public readonly struct SelectBoardObjectCommand : ICommand<BoardCommandArgs>
     {
         private readonly BoardObjectInstance boardObjectInstance;
         
-        public SelectChessBoardObjectCommand(BoardObjectInstance instance)
+        public SelectBoardObjectCommand(BoardObjectInstance instance)
         {
             boardObjectInstance = instance;
         }
@@ -27,7 +27,7 @@ namespace QC.Match.Commands
 
         public override string ToString()
         {
-            return $"{nameof(SelectChessBoardObjectCommand)} - Instance ID: {boardObjectInstance.InstanceId}";
+            return $"{nameof(SelectBoardObjectCommand)} - Instance ID: {boardObjectInstance.InstanceId}";
         }
     }
 }

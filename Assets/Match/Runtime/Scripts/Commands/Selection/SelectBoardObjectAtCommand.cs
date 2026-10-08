@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct SelectChessBoardObjectAtCommand : ICommand<BoardCommandArgs>
+    public readonly struct SelectBoardObjectAtCommand : ICommand<BoardCommandArgs>
     {
         private readonly Vector2Int chessBoardObjectLocation;
         
-        public SelectChessBoardObjectAtCommand(Vector2Int location)
+        public SelectBoardObjectAtCommand(Vector2Int location)
         {
             chessBoardObjectLocation = location;
         }
@@ -29,7 +29,7 @@ namespace QC.Match.Commands
 
         public override string ToString()
         {
-            return $"{nameof(SelectChessBoardObjectAtCommand)} - Location: {chessBoardObjectLocation}";
+            return $"{nameof(SelectBoardObjectAtCommand)} - Location: {chessBoardObjectLocation}";
         }
     }
 }

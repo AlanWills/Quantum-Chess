@@ -5,18 +5,18 @@ namespace QC.Match.AI.Internals
 {
     public readonly struct Piece
     {
-        public bool IsValid => Instance != null && PieceType != ChessPieceType.None && PieceColour != ChessPieceColour.Unknown && ActionProvider.IsValid;
+        public bool IsValid => Instance != null && PieceType != Match.PieceType.None && PieceColour != Match.PieceColour.Unknown && ActionProvider.IsValid;
            
         public readonly BoardObjectInstance Instance;
-        public readonly ChessPieceType PieceType;
-        public readonly ChessPieceColour PieceColour;
+        public readonly PieceType PieceType;
+        public readonly PieceColour PieceColour;
         public readonly int Value;
         public readonly InterfaceHandle<IActionProvider> ActionProvider;
 
         public Piece(
             BoardObjectInstance instance, 
-            ChessPieceType pieceType,
-            ChessPieceColour pieceColour,
+            PieceType pieceType,
+            PieceColour pieceColour,
             int value,
             InterfaceHandle<IActionProvider> actionProvider)
         {

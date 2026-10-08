@@ -1,6 +1,6 @@
 namespace QC.Match
 {
-    public enum ChessPieceColour
+    public enum PieceColour
     {
         Unknown,
         Black,

@@ -4,11 +4,11 @@ using QC.Match.Objects;
 
 namespace QC.Match.Commands
 {
-    public readonly struct ToggleSelectChessBoardObjectCommand : ICommand<BoardCommandArgs>
+    public readonly struct ToggleSelectBoardObjectCommand : ICommand<BoardCommandArgs>
     {
         private readonly BoardObjectInstance boardObjectInstance;
         
-        public ToggleSelectChessBoardObjectCommand(BoardObjectInstance instance)
+        public ToggleSelectBoardObjectCommand(BoardObjectInstance instance)
         {
             boardObjectInstance = instance;
         }
@@ -23,17 +23,17 @@ namespace QC.Match.Commands
 
             if (args.Selection.CurrentSelectedObject == boardObjectInstance)
             {
-                return await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedChessBoardObjectCommand(), args);
+                return await args.CommandExecutor.ExecuteCommandImmediately(new ClearSelectedBoardObjectCommand(), args);
             }
             else
             {
-                return await args.CommandExecutor.ExecuteCommandImmediately(new SelectChessBoardObjectCommand(boardObjectInstance), args);
+                return await args.CommandExecutor.ExecuteCommandImmediately(new SelectBoardObjectCommand(boardObjectInstance), args);
             }
         }
 
         public override string ToString()
         {
-            return $"{nameof(ToggleSelectChessBoardObjectCommand)} - Instance Id: {boardObjectInstance.InstanceId}";
+            return $"{nameof(ToggleSelectBoardObjectCommand)} - Instance Id: {boardObjectInstance.InstanceId}";
         }
     }
 }

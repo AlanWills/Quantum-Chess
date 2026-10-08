@@ -7,7 +7,7 @@ namespace QC.Match.Commands
     {
         public static UniTask<CommandState> SetInteractableForColour(
             Board board,
-            ChessPieceColour colour, 
+            PieceColour colour, 
             bool isInteractable)
         {
             foreach (var instance in board.Objects)
@@ -27,7 +27,7 @@ namespace QC.Match.Commands
         
         public static UniTask<CommandState> SetInteractableForNotColour(
             Board board,
-            ChessPieceColour colour, 
+            PieceColour colour, 
             bool isInteractable)
         {
             foreach (var instance in board.Objects)

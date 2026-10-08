@@ -12,8 +12,8 @@ namespace QC.Match.Objects
         [Serializable]
         private struct PieceTypeColourAndSprite
         {
-            public ChessPieceType Type;
-            public ChessPieceColour Colour;
+            public PieceType Type;
+            public PieceColour Colour;
             public Sprite Sprite;
         }
         
@@ -26,14 +26,14 @@ namespace QC.Match.Objects
 
         #endregion
 
-        public Sprite GetSprite(ChessPieceColour colour, ChessPieceType type)
+        public Sprite GetSprite(PieceColour colour, PieceType type)
         {
-            if (colour == ChessPieceColour.Unknown)
+            if (colour == PieceColour.Unknown)
             {
                 return fallbackSprite;
             }
 
-            if (type == ChessPieceType.None)
+            if (type == PieceType.None)
             {
                 return fallbackSprite;
             }

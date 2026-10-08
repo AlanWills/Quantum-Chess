@@ -14,12 +14,12 @@ AddBoardObjectCommand.blackRook = 11
 AddBoardObjectCommand.blackQueen = 12
 AddBoardObjectCommand.blackKing = 13
 
-function AddBoardObjectCommand.presetChessPiece(guid, config)
-    MatchCommands.addChessPiece(BoardCommandExecutor, guid, config)
+function AddBoardObjectCommand.presetPiece(guid, config)
+    MatchCommands.addPiece(BoardCommandExecutor, guid, config)
 end
 
-function AddBoardObjectCommand.customisedChessPiece(config)
-    MatchCommands.addCustomisedChessPiece(BoardCommandExecutor, AddBoardObjectCommand.customisableChessPiece, config)
+function AddBoardObjectCommand.customisedPiece(config)
+    MatchCommands.addCustomisedPiece(BoardCommandExecutor, AddBoardObjectCommand.customisableChessPiece, config)
 end
 
 return AddBoardObjectCommand

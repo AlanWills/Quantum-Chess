@@ -104,28 +104,28 @@ namespace QC.Match.Views
 
         public void OnBoardBackgroundPressed(InputState inputState)
         {
-            ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
+            ClearSelectedBoardObjectCommand clearSelectionCommands = new ClearSelectedBoardObjectCommand();
             boardCommandExecutor.QueueCommand(clearSelectionCommands);
         }
 
         public void OnBoardPressed(InputState inputState)
         {
-            ClearSelectedChessBoardObjectCommand clearSelectionCommands = new ClearSelectedChessBoardObjectCommand();
+            ClearSelectedBoardObjectCommand clearSelectionCommands = new ClearSelectedBoardObjectCommand();
             boardCommandExecutor.QueueCommand(clearSelectionCommands);
         }
 
         public void OnBoardMovementActionPressed(InputState inputState)
         {
             Vector2Int position = boardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
-            MoveSelectedChessBoardObjectToCommand moveSelectedChessBoardObjectToCommand = new MoveSelectedChessBoardObjectToCommand(position);
-            boardCommandExecutor.QueueCommand(moveSelectedChessBoardObjectToCommand);
+            MoveSelectedBoardObjectToCommand moveSelectedBoardObjectToCommand = new MoveSelectedBoardObjectToCommand(position);
+            boardCommandExecutor.QueueCommand(moveSelectedBoardObjectToCommand);
         }
 
         public void OnBoardAttackActionPressed(InputState inputState)
         {
             Vector2Int position = boardTilemap.WorldToCell(inputState.PointerWorldPosition).ToVector2Int();
-            AttackWithSelectedChessBoardObjectCommand attackWithSelectedChessBoardObjectCommand = new AttackWithSelectedChessBoardObjectCommand(position);
-            boardCommandExecutor.QueueCommand(attackWithSelectedChessBoardObjectCommand);
+            AttackWithSelectedBoardObjectCommand attackWithSelectedBoardObjectCommand = new AttackWithSelectedBoardObjectCommand(position);
+            boardCommandExecutor.QueueCommand(attackWithSelectedBoardObjectCommand);
         }
         
         #endregion

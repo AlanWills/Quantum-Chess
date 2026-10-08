@@ -6,32 +6,32 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct AddChessPieceCommand : ICommand<BoardCommandArgs>
+    public readonly struct AddPieceCommand : ICommand<BoardCommandArgs>
     {
         private readonly int Guid;
-        private readonly ChessPieceVerticalDirection VerticalDirection;
+        private readonly PieceVerticalDirection VerticalDirection;
         private readonly Vector2Int Position;
         private readonly bool Interactable;
-        private readonly ChessPieceColour Colour;
-        private readonly ChessPieceType Type;
+        private readonly PieceColour? Colour;
+        private readonly PieceType? Type;
         private readonly int? Value;
 
-        public AddChessPieceCommand(
+        public AddPieceCommand(
             int guid,
-            ChessPieceVerticalDirection verticalDirection,
+            PieceVerticalDirection verticalDirection,
             Vector2Int position,
             bool interactable)
-        : this(guid, verticalDirection, position, interactable, ChessPieceColour.Unknown, ChessPieceType.None, null)
+        : this(guid, verticalDirection, position, interactable, null, null, null)
         {
         }
 
-        public AddChessPieceCommand(
+        public AddPieceCommand(
             int guid,
-            ChessPieceVerticalDirection verticalDirection,
+            PieceVerticalDirection verticalDirection,
             Vector2Int position,
             bool interactable,
-            ChessPieceColour colour,
-            ChessPieceType type,
+            PieceColour? colour,
+            PieceType? type,
             int? value)
         {
             Guid = guid;
@@ -45,7 +45,7 @@ namespace QC.Match.Commands
         
         public UniTask<CommandState> Execute(BoardCommandArgs args, CancellationToken token)
         {
-            BoardObjectInstance instance = args.Board.CreateChessBoardObject(Guid);
+            BoardObjectInstance instance = args.Board.CreateBoardObject(Guid);
             if (instance == null)
             {
                 UnityEngine.Debug.LogError($"Failed to create chess board object with guid {Guid}.");
@@ -64,17 +64,24 @@ namespace QC.Match.Commands
                 return UniTask.FromResult(CommandState.Abandoned);
             }
 
-            if (Colour != ChessPieceColour.Unknown && Type != ChessPieceType.None)
+            if (Colour.HasValue || Type.HasValue)
             {
-                // We have specified type and colour rather than leave it to the preset, so we need a modifiable chess piece component
+                // We have specified type or colour rather than leave it to the preset, so we need a modifiable chess piece component
                 if (!instance.TryFindComponent<IModifiableChessPiece>(out var modifiableChessPiece))
                 {
                     UnityEngine.Debug.LogAssertion($"No {nameof(IModifiableChessPiece)} exists, but it looks like you're trying to customise colour and type of the chess piece you're creating.");
                     return UniTask.FromResult(CommandState.Abandoned);
                 }
-                
-                modifiableChessPiece.SetColour(Colour);
-                modifiableChessPiece.SetType(Type);
+
+                if (Colour.HasValue)
+                {
+                    modifiableChessPiece.SetColour(Colour.Value);
+                }
+
+                if (Type.HasValue)
+                {
+                    modifiableChessPiece.SetType(Type.Value);
+                }
             }
 
             if (Value.HasValue)
@@ -90,14 +97,14 @@ namespace QC.Match.Commands
                 interactable.SetInteractable(Interactable);
             }
             
-            args.Board.AddChessBoardObjectInstance(instance);
+            args.Board.AddBoardObjectInstance(instance);
 
             return UniTask.FromResult(CommandState.Completed);
         }
 
         public override string ToString()
         {
-            return $"{nameof(AddChessPieceCommand)} - Guid: {Guid} - Position: {Position}";
+            return $"{nameof(AddPieceCommand)} - Guid: {Guid} - Position: {Position}";
         }
     }
 }

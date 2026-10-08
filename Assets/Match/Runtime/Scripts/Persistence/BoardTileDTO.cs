@@ -7,13 +7,13 @@ using QC.Match.Objects;
 namespace QC.Match.Persistence
 {
     [Serializable]
-    public class ChessBoardTileDTO
+    public class BoardTileDTO
     {
         public int guid;
         public SerializableVector2Int position;
         public List<ComponentDTO> components = new();
 
-        public ChessBoardTileDTO(BoardTileInstance instance)
+        public BoardTileDTO(BoardTileInstance instance)
         {
             guid = instance.Guid;
             position = new SerializableVector2Int(instance.Position);

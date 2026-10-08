@@ -49,14 +49,14 @@ namespace QC.Match.AI
 
                         if (randomActionIndex < validAttacks.Count)
                         {
-                            command = new AttackWithChessBoardObjectFromToCommand(
+                            command = new AttackWithBoardObjectFromToCommand(
                                 transform.GetPosition(),
                                 validAttacks[randomActionIndex]);
                             return true;
                         }
                         else
                         {
-                            command = new MoveChessBoardObjectToCommand(
+                            command = new MoveBoardObjectToCommand(
                                 piece,
                                 validMoves[randomActionIndex - validAttacks.Count]);
                             return true;

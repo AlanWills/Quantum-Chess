@@ -7,8 +7,8 @@ namespace QC.Match.Players
     {
         public UniTask OnTurnBegin(ITurnStrategy.Args args)
         {
-            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.PlayerColour, true));
-            args.CommandExecutor.QueueCommand(new ToggleInputIfNotChessPieceColourCommand(args.PlayerColour, false));
+            args.CommandExecutor.QueueCommand(new ToggleInputForPieceColourCommand(args.PlayerColour, true));
+            args.CommandExecutor.QueueCommand(new ToggleInputIfNotPieceColourCommand(args.PlayerColour, false));
             
             return UniTask.CompletedTask;
         }
@@ -20,7 +20,7 @@ namespace QC.Match.Players
 
         public UniTask OnTurnEnd(ITurnStrategy.Args args)
         {
-            args.CommandExecutor.QueueCommand(new ToggleInputForChessPieceColourCommand(args.PlayerColour, false));
+            args.CommandExecutor.QueueCommand(new ToggleInputForPieceColourCommand(args.PlayerColour, false));
 
             return UniTask.CompletedTask;
         }

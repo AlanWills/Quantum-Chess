@@ -54,8 +54,8 @@ namespace QC.Match.Input
                 return;
             }
             
-            ToggleSelectChessBoardObjectCommand toggleSelectedChessBoardObject = new ToggleSelectChessBoardObjectCommand(Instance);
-            commandExecutor.QueueCommand(toggleSelectedChessBoardObject);
+            ToggleSelectBoardObjectCommand toggleSelectedBoardObject = new ToggleSelectBoardObjectCommand(Instance);
+            commandExecutor.QueueCommand(toggleSelectedBoardObject);
         }
         
         #endregion

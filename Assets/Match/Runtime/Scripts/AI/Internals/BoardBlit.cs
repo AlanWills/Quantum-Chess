@@ -56,8 +56,8 @@ namespace QC.Match.AI.Internals
             Vector2Int piecePosition = transform.GetPosition();
             int boardIndex = ToIndex(piecePosition);
 
-            ChessPieceType pieceType = chessPiece.GetPieceType();
-            ChessPieceColour pieceColour = chessPiece.GetPieceColour();
+            PieceType pieceType = chessPiece.GetPieceType();
+            PieceColour pieceColour = chessPiece.GetPieceColour();
             int pieceValue = chessPiece.GetValue();
             int pieceValueOverride = parameters.GetValueOverrideForPiece(pieceType, rng, pieceValue);
             Piece piece = new Piece(chessBoardObjectInstance, pieceType, pieceColour, pieceValueOverride,

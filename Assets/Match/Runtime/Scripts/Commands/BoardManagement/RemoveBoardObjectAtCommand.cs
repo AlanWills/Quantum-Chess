@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace QC.Match.Commands
 {
-    public readonly struct RemoveChessBoardObjectAtCommand : ICommand<BoardCommandArgs>
+    public readonly struct RemoveBoardObjectAtCommand : ICommand<BoardCommandArgs>
     {
         private readonly Vector2Int BoardPosition;
 
-        public RemoveChessBoardObjectAtCommand(Vector2Int boardPosition)
+        public RemoveBoardObjectAtCommand(Vector2Int boardPosition)
         {
             BoardPosition = boardPosition;
         }
@@ -23,12 +23,12 @@ namespace QC.Match.Commands
                 return UniTask.FromResult(CommandState.Abandoned);
             }
             
-            return RemoveCommandUtilities.RemoveChessBoardObject(args, instance);
+            return RemoveCommandUtilities.RemoveBoardObject(args, instance);
         }
 
         public override string ToString()
         {
-            return $"{nameof(RemoveChessBoardObjectAtCommand)} - Position: {BoardPosition}";
+            return $"{nameof(RemoveBoardObjectAtCommand)} - Position: {BoardPosition}";
         }
     }
 }

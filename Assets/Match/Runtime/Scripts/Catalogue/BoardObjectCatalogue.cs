@@ -4,8 +4,8 @@ using QC.Match.Objects;
 
 namespace QC.Match.Catalogue
 {
-    [CreateAssetMenu(fileName = nameof(ChessBoardObjectCatalogue), menuName = "QC/Match/Objects/Chess Board Object Catalogue")]
-    public class ChessBoardObjectCatalogue : ListScriptableObject<BoardObject>, IAutomaticImportSettings
+    [CreateAssetMenu(fileName = nameof(BoardObjectCatalogue), menuName = "QC/Match/Objects/Board Object Catalogue")]
+    public class BoardObjectCatalogue : ListScriptableObject<BoardObject>, IAutomaticImportSettings
     {
         #region Properties and Fields
 

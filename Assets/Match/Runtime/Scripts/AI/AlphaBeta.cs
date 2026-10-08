@@ -63,8 +63,8 @@ namespace QC.Match.AI
               // As a result, white is looking for the highest scored move
               // And black is looking for the lowest scored move
               // We use this colour modifier to change the algo to always try and find the best move for the current player
-              ChessPieceColour activeColour = args.PlayerColour;
-              int colorModifier = activeColour == ChessPieceColour.White ? 1 : -1;
+              PieceColour activeColour = args.PlayerColour;
+              int colorModifier = activeColour == PieceColour.White ? 1 : -1;
 
               // Use -int.MaxValue to prevent overflow when we invert signs in Negamax
               int bestScore = -int.MaxValue;
@@ -148,7 +148,7 @@ namespace QC.Match.AI
                     $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
                  UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.PlayerColour,
                     $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
-                 command = new AttackWithChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+                 command = new AttackWithBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
               }
               else
               {
@@ -156,7 +156,7 @@ namespace QC.Match.AI
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
                  UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
                     $"Attempting to move a piece at {bestMove.Position}, but there is no object there!");
-                 command = new MoveChessBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+                 command = new MoveBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
               }
            }
 
@@ -267,8 +267,8 @@ namespace QC.Match.AI
               // As a result, white is looking for the highest scored move
               // And black is looking for the lowest scored move
               // We account for this further up in Negamax
-              int colourModifier = tileBlit.Piece.PieceColour == ChessPieceColour.White ? 1 
-                 : tileBlit.Piece.PieceColour == ChessPieceColour.Black ? -1 : 0;
+              int colourModifier = tileBlit.Piece.PieceColour == PieceColour.White ? 1 
+                 : tileBlit.Piece.PieceColour == PieceColour.Black ? -1 : 0;
               int tileImportance = tileBlit.Importance;
               int pieceValue = tileBlit.Piece.Value;
               int totalValue = (tileImportance + pieceValue) * colourModifier;
