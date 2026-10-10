@@ -1,0 +1,14 @@
+{
+    "name": "QC.Campaign.Runtime",
+    "rootNamespace": "QC.Campaign",
+    "references": ["GUID:0e2cf0bdf0b4fc54db141044a6b4c2fe","GUID:c95af7bc4649e4b4da85b957be8cc138","GUID:bc28c6dc120e98e408c12c7c01932dc4"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

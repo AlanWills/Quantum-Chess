@@ -1,0 +1,21 @@
+{
+    "name": "QC.Campaign.Editor",
+    "rootNamespace": "QCEditor.Campaign",
+    "references": [
+        "QC.Campaign.Runtime",
+        "Celeste.Persistence.Editor",
+        "Celeste.Persistence.Runtime",
+        "Celeste.DataStructures.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
