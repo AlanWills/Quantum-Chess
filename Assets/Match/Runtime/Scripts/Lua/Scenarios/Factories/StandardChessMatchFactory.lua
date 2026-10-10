@@ -69,7 +69,7 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight)
             {
                 requiredPieceType = "Pawn",
                 requiredPieceColour = "Black",
-                promotedPieceType = "Queen"
+                promotedPieceGuid = AddBoardObjectCommand.blackQueen
             }
         }
 
@@ -83,7 +83,7 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight)
             {
                 requiredPieceType = "Pawn",
                 requiredPieceColour = "White",
-                promotedPieceType = "Queen"
+                promotedPieceGuid = AddBoardObjectCommand.whiteQueen
             }
         }
 

@@ -33,13 +33,15 @@ namespace QC.Match.Commands
             UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected board object after trying to move it.");
 
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
-
-            if (args.PromotionSystem.CanPromote(instance, args.Board, endingPosition))
-            {
-                await args.PromotionSystem.Promote(instance, args.Board, endingPosition);
-            }
-            
+                
             grid2DTransform.SetPosition(endingPosition);
+
+            if (args.PromotionSystem.CanPromote(instance, endingPosition, args.Board))
+            {
+                BoardObjectInstance newInstance = await args.PromotionSystem.Promote(instance, endingPosition, args.Board);
+                UnityEngine.Debug.Assert(newInstance != null, $"{nameof(IPromotionSystem)} returned a null promoted piece, meaning something has gone wrong!");
+                instance = newInstance != null ? newInstance : instance;
+            }
             
             if (instance.TryFindInterface<IObjectStatus>(out var status))
             {

@@ -6,7 +6,13 @@ namespace QC.Match
 {
     public interface IPromotionSystem
     {
-        bool CanPromote(BoardObjectInstance instance, IBoardLookup boardLookup, Vector2Int position);
-        UniTask Promote(BoardObjectInstance instance, IBoardLookup boardLookup, Vector2Int position);
+        bool CanPromote(
+            BoardObjectInstance instance, 
+            Vector2Int position,
+            IBoardLookup boardLookup);
+        UniTask<BoardObjectInstance> Promote(
+            BoardObjectInstance instance, 
+            Vector2Int position,
+            Board board);
     }
 }

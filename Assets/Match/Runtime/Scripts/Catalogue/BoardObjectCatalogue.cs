@@ -17,9 +17,14 @@ namespace QC.Match.Catalogue
         
         public BoardObject MustFindItemByGuid(int guid)
         {
-            BoardObject boardObject = FindItem(x => x.Guid == guid);
-            UnityEngine.Debug.Assert(boardObject != null, $"Failed to find {nameof(BoardObject)} wit guid '{guid}' in {name}.");
+            BoardObject boardObject = FindItemByGuid(guid);
+            UnityEngine.Debug.Assert(boardObject != null, $"Failed to find {nameof(BoardObject)} with guid '{guid}' in {name}.");
             return boardObject;
+        }
+        
+        public BoardObject FindItemByGuid(int guid)
+        {
+            return FindItem(x => x.Guid == guid);
         }
     }
 }

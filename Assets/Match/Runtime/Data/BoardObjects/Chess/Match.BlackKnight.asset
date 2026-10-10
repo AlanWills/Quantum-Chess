@@ -46,48 +46,56 @@ MonoBehaviour:
   startingValue: 30
   startingMovementPatterns:
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -1, y: 2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -1, y: -2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -2, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -2, y: -1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 1, y: 2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 1, y: -2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 2, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 2, y: -1}
@@ -95,48 +103,56 @@ MonoBehaviour:
     mustBeSafe: 0
   startingAttackPatterns:
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -1, y: 2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -1, y: -2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -2, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: -2, y: -1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 1, y: 2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 1, y: -2}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 2, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 0
+    moveType: 1
     distanceIfNotMoved: 1
     distanceIfMoved: 1
     pattern: {x: 2, y: -1}

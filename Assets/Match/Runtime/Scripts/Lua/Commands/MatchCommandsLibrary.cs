@@ -466,9 +466,13 @@ namespace QC.Match.Lua
                     promotion.requiredPieceColour = pieceColour;
                 }
 
-                if (promotionTable.TryGetEnum("promotedPieceType", out PieceType promotedPieceType))
+                if (promotionTable.TryGet("promotedPieceGuid", out int promotedPieceGuid))
                 {
-                    promotion.promotedPieceType = promotedPieceType;
+                    promotion.promotedPieceGuid = promotedPieceGuid;
+                }
+                else
+                {
+                    UnityEngine.Debug.LogAssertion($"Failed to find field 'promotedPieceGuid' in promotion table.  This will lead to this promotion zone at {position.v} not working!");
                 }
                 
                 promotions.Add(promotion);

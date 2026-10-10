@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Celeste.Components;
 using Cysharp.Threading.Tasks;
+using QC.Match.Commands;
 using UnityEngine;
 
 namespace QC.Match.Components
@@ -49,16 +50,14 @@ namespace QC.Match.Components
             return GetMatchingPromotionIndex(saveData, piece) >= 0;
         }
 
-        public UniTask Promote(Instance instance, InterfaceHandle<IPiece> piece)
+        public UniTask<int> Promote(Instance instance, InterfaceHandle<IPiece> piece)
         {
             UnityEngine.Debug.Assert(CanPromote(instance, piece), "Attempting to promote a piece that cannot be promoted!");
             SaveData saveData = instance.data as SaveData;
             int promotionIndex = GetMatchingPromotionIndex(saveData, piece);
             Promotion promotion = saveData.possiblePromotions[promotionIndex];
             
-            piece.SetType(promotion.promotedPieceType);
-
-            return UniTask.CompletedTask;
+            return UniTask.FromResult(promotion.promotedPieceGuid);
         }
 
         private int GetMatchingPromotionIndex(SaveData saveData, InterfaceHandle<IPiece> piece)

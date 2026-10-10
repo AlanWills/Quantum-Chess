@@ -41,24 +41,28 @@ MonoBehaviour:
   startingValue: 30
   startingMovementPatterns:
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: 1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: -1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: -1, y: -1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: 1, y: -1}
@@ -66,24 +70,28 @@ MonoBehaviour:
     mustBeSafe: 0
   startingAttackPatterns:
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: 1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: -1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: -1, y: -1}
     relativeToVerticalDirection: 0
     mustBeSafe: 0
   - range: 1
+    moveType: 0
     distanceIfNotMoved: 0
     distanceIfMoved: 0
     pattern: {x: 1, y: -1}

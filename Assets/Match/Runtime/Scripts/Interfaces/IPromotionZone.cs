@@ -9,12 +9,12 @@ namespace QC.Match
     {
         public PieceType requiredPieceType;
         public PieceColour requiredPieceColour;
-        public PieceType promotedPieceType;
+        public int promotedPieceGuid;
     }
     
     public interface IPromotionZone
     {
         bool CanPromote(Instance instance, InterfaceHandle<IPiece> piece);
-        UniTask Promote(Instance instance, InterfaceHandle<IPiece> piece);
+        UniTask<int> Promote(Instance instance, InterfaceHandle<IPiece> piece);
     }
 }
