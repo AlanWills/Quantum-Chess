@@ -234,7 +234,7 @@ namespace QC.Match.Objects
         {
             Player player = players[playerIndex];
             PieceColour playerColour = player.Colour;
-            RectInt boundingBox = board.CalculateBoundingBox();
+            RectInt boundingBox = board.Bounds;
 
             player.EnsureBoardActionMaskMatches(boundingBox);
             UpdateBoardActionMaskForColour(player.BoardActionMask, playerColour, board);

@@ -88,8 +88,8 @@ namespace QC.Match.AI.Internals
 
       public void MakeMove(Move moveToMake)
       {
-         UnityEngine.Debug.Assert(IsInBounds(moveToMake.Position), $"Attempting to make a move from position {moveToMake.Position}, but it is outside of board bounds.");
-         UnityEngine.Debug.Assert(IsInBounds(moveToMake.Destination), $"Attempting to make a move to destination {moveToMake.Destination}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Position), $"Attempting to make a move from position {moveToMake.Position}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Destination), $"Attempting to make a move to destination {moveToMake.Destination}, but it is outside of board bounds.");
          int indexOfPosition = ToIndex(moveToMake.Position);
          int indexOfDestination = ToIndex(moveToMake.Destination);
 
@@ -108,8 +108,8 @@ namespace QC.Match.AI.Internals
 
       public void UndoMove(Move moveToUndo)
       {
-         UnityEngine.Debug.Assert(IsInBounds(moveToUndo.Position), $"Attempting to undo a move from position {moveToUndo.Position}, but it is outside of board bounds.");
-         UnityEngine.Debug.Assert(IsInBounds(moveToUndo.Destination), $"Attempting to undo a move to destination {moveToUndo.Destination}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Position), $"Attempting to undo a move from position {moveToUndo.Position}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Destination), $"Attempting to undo a move to destination {moveToUndo.Destination}, but it is outside of board bounds.");
          int indexOfPosition = ToIndex(moveToUndo.Position);
          int indexOfDestination = ToIndex(moveToUndo.Destination);
 
@@ -130,7 +130,7 @@ namespace QC.Match.AI.Internals
 
       public bool DoesBoardTileExist(Vector2Int boardPosition)
       {
-         if (!IsInBounds(boardPosition))
+         if (!IsPositionInBoard(boardPosition))
          {
             return false;
          }
@@ -142,7 +142,7 @@ namespace QC.Match.AI.Internals
 
       public BoardTileInstance GetBoardTileAt(Vector2Int boardTilePosition)
       {
-         if (!IsInBounds(boardTilePosition))
+         if (!IsPositionInBoard(boardTilePosition))
          {
             return null;
          }
@@ -153,7 +153,7 @@ namespace QC.Match.AI.Internals
 
       public BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition)
       {
-         if (!IsInBounds(boardPosition))
+         if (!IsPositionInBoard(boardPosition))
          {
             return null;
          }
@@ -163,7 +163,7 @@ namespace QC.Match.AI.Internals
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      private bool IsInBounds(Vector2Int boardPosition)
+      public bool IsPositionInBoard(Vector2Int boardPosition)
       {
          return boardPosition.x >= xMin &&
                 boardPosition.y >= yMin &&

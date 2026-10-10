@@ -71,7 +71,7 @@ namespace QC.Match.AI
               int alpha = -int.MaxValue;
               int beta = int.MaxValue;
               
-              RectInt boundingBox = args.Board.CalculateBoundingBox();
+              RectInt boundingBox = args.Board.Bounds;
               List<TileBlit> tiles = s_tilesPool.Get();
               
               if (tiles.Count != boundingBox.size.x * boundingBox.size.y)

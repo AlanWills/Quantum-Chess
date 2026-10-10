@@ -169,6 +169,7 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
+            UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, $"Attempting to calculate relative movement with a 0 vertical direction!");
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
@@ -237,60 +238,20 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
+            UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, $"Attempting to calculate relative attacks with a 0 vertical direction!");
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
+            int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
-            switch (actionPattern.range)
-            {
-                case RangeType.Infinite:
-                    if (actionPattern.mustBeSafe)
-                    {
-                        TryFindSafeAttackablePiecesInDirection(
-                            currentBoardPosition, 
-                            pattern, 
-                            currentColour, 
-                            boardLookup, 
-                            opponentBoardActionMask, 
-                            validAttacks);
-                    }
-                    else
-                    {
-                        TryFindAttackablePiecesInDirection(
-                            currentBoardPosition, 
-                            pattern, 
-                            currentColour, 
-                            boardLookup, 
-                            validAttacks);
-                    }
-                    break;
-                
-                case RangeType.Finite:
-                    int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
-                    for (int i = 1; i <= distanceToCheck; ++i)
-                    {
-                        if (actionPattern.mustBeSafe)
-                        {
-                            TryFindSafeAttackablePiece(
-                                currentBoardPosition + pattern * i,
-                                currentColour,
-                                boardLookup,
-                                opponentBoardActionMask,
-                                validAttacks);
-                        }
-                        else
-                        {
-                            TryFindAttackablePiece(
-                                currentBoardPosition + pattern * i,
-                                currentColour,
-                                boardLookup,
-                                validAttacks);
-                        }
-                    }
-                    break;
-                
-                default:
-                    UnityEngine.Debug.LogAssertion($"Invalid {nameof(RangeType)} value {actionPattern.range} when trying to calculate valid moves.");
-                    break;
-            }
+            TryFindAttackablePiecesInDirection(
+                currentBoardPosition,
+                pattern, 
+                currentColour,
+                actionPattern.moveType,
+                actionPattern.mustBeSafe,
+                actionPattern.range == RangeType.Finite ? distanceToCheck : int.MaxValue,
+                boardLookup,
+                opponentBoardActionMask,
+                validAttacks);
         }
 
         public void CalculateValidThreats(
@@ -342,56 +303,28 @@ namespace QC.Match.Components
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
+            
+            UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, $"Attempting to calculate relative threats with a 0 vertical direction!");
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
+            int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
-            switch (actionPattern.range)
-            {
-                case RangeType.Infinite:
-                    TryFindAttackableTilesInDirection(
-                        currentBoardPosition, 
-                        pattern, 
-                        currentColour, 
-                        boardLookup,
-                        validThreats);
-                    break;
-                
-                case RangeType.Finite:
-                    int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
-                    for (int i = 1; i <= distanceToCheck; ++i)
-                    {
-                        AddIfBoardPositionExists(
-                            currentBoardPosition + pattern * i, 
-                            boardLookup, 
-                            validThreats);
-                    }
-                    break;
-                
-                default:
-                    UnityEngine.Debug.LogAssertion($"Invalid {nameof(RangeType)} value {actionPattern.range} when trying to calculate valid moves.");
-                    break;
-            }
-        }
-
-        private static bool AddIfBoardPositionExists(
-            Vector2Int position,
-            IBoardLookup boardLookup,
-            IList<Vector2Int> list)
-        {
-            if (!boardLookup.DoesBoardTileExist(position))
-            {
-                return false;
-            }
-            
-            list.Add(position);
-            return true;
+            TryFindAttackablePiecesInDirection(
+                currentBoardPosition,
+                pattern, 
+                currentColour,
+                actionPattern.moveType,
+                false,
+                actionPattern.range == RangeType.Finite ? distanceToCheck : int.MaxValue,
+                boardLookup,
+                new EmptyBoardActionMask(),
+                validThreats);
         }
 
         private static bool IsValidAndVacantBoardPosition(
             Vector2Int position,
             bool mustBeSafe,
             IBoardLookup boardLookup,
-            IBoardActionMask opponentBoardActionMask,
-            IList<Vector2Int> list)
+            IBoardActionMask opponentBoardActionMask)
         {
             if (!boardLookup.IsPositionInBoard(position))
             {
@@ -416,41 +349,40 @@ namespace QC.Match.Components
             return true;
         }
 
-        private static bool TryFindAttackablePiece(
+        private static bool IsValidAndAttackableBoardPosition(
             Vector2Int position,
             PieceColour currentColour,
+            bool mustBeSafe,
             IBoardLookup boardLookup,
-            IList<Vector2Int> list)
+            IBoardActionMask opponentBoardActionMask)
         {
-            BoardObjectInstance objectInstance = boardLookup.GetBoardObjectAt(position);
+            if (!boardLookup.IsPositionInBoard(position))
+            {
+                return false;
+            }
 
+            if (!boardLookup.DoesBoardTileExist(position))
+            {
+                return false;
+            }
+            
+            if (mustBeSafe && opponentBoardActionMask.IsTileAttackable(position))
+            {
+                return false;
+            }
+            
+            BoardObjectInstance objectInstance = boardLookup.GetBoardObjectAt(position);
             if (objectInstance == null || !objectInstance.TryFindInterface<IPiece>(out var chessPiece))
             {
                 return false;
             }
 
-            if (chessPiece.GetPieceColour() != currentColour)
-            {
-                // Attacks are only valid on non-matching colours, but all pieces block attacks
-                list.Add(position);
-            }
-
-            return true;
-        }
-
-        private static bool TryFindSafeAttackablePiece(
-            Vector2Int position,
-            PieceColour currentColour,
-            IBoardLookup boardLookup,
-            IBoardActionMask opponentBoardActionMask,
-            IList<Vector2Int> list)
-        {
-            if (opponentBoardActionMask.IsTileAttackable(position))
+            if (chessPiece.GetPieceColour() == currentColour)
             {
                 return false;
             }
-
-            return TryFindAttackablePiece(position, currentColour, boardLookup, list);
+            
+            return true;
         }
 
         private static void TryFindMovesInDirection(
@@ -467,14 +399,8 @@ namespace QC.Match.Components
             {
                 Vector2Int nextPosition = startingPosition + i * direction;
 
-                // Searching outside the valid bounds of the board now
-                if (!boardLookup.IsPositionInBoard(nextPosition))
-                {
-                    break;
-                }
-                
                 // If this position fails one of the criteria we've mandated and we're doing continuous movement we should finish searching
-                if (!IsValidAndVacantBoardPosition(nextPosition, mustBeSafe, boardLookup, opponentActionMask, validMoves) &&
+                if (!IsValidAndVacantBoardPosition(nextPosition, mustBeSafe, boardLookup, opponentActionMask) &&
                     moveType == MoveType.Continuous)
                 {
                     break;
@@ -484,89 +410,29 @@ namespace QC.Match.Components
             }
         }
 
-        private static void TryFindSafeAttackablePiecesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
-            PieceColour currentColour,
-            IBoardLookup boardLookup,
-            IBoardActionMask opponentBoardActionMask,
-            IList<Vector2Int> validAttacks)
-        {
-            Vector2Int nextPosition = startingPosition + direction;
-            
-            // Stop at the first piece we find in this direction
-            // Even friendlies will block subsequent attacks
-            while (boardLookup.DoesBoardTileExist(nextPosition) &&
-                   !TryFindSafeAttackablePiece(nextPosition, currentColour, boardLookup, opponentBoardActionMask, validAttacks))
-            {
-                nextPosition += direction;
-            }
-        }
-
         private static void TryFindAttackablePiecesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
             PieceColour currentColour,
+            MoveType moveType,
+            bool mustBeSafe,
+            int maxDistanceToSearch,
             IBoardLookup boardLookup,
+            IBoardActionMask opponentActionMask,
             IList<Vector2Int> validAttacks)
         {
-            Vector2Int nextPosition = startingPosition + direction;
-            
-            // Stop at the first piece we find in this direction
-            // Even friendlies will block subsequent attacks
-            while (boardLookup.DoesBoardTileExist(nextPosition) &&
-                   !TryFindAttackablePiece(nextPosition, currentColour, boardLookup, validAttacks))
+            for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                nextPosition += direction;
-            }
-        }
+                Vector2Int nextPosition = startingPosition + i * direction;
 
-        private static void TryFindSafeAttackableTilesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
-            PieceColour currentColour,
-            IBoardLookup boardLookup,
-            IBoardActionMask opponentBoardActionMask,
-            IList<Vector2Int> validAttackableTiles)
-        {
-            Vector2Int nextPosition = startingPosition + direction;
-            
-            // Stop at the first piece we find in this direction
-            // Even friendlies will block subsequent attacks
-            while (boardLookup.DoesBoardTileExist(nextPosition))
-            {
-                validAttackableTiles.Add(nextPosition);
-
-                if (TryFindSafeAttackablePiece(nextPosition, currentColour, boardLookup, opponentBoardActionMask, validAttackableTiles))
+                // If this position fails one of the criteria we've mandated and we're doing continuous movement we should finish searching
+                if (!IsValidAndAttackableBoardPosition(nextPosition, currentColour, mustBeSafe, boardLookup, opponentActionMask) &&
+                    moveType == MoveType.Continuous)
                 {
                     break;
                 }
                 
-                nextPosition += direction;
-            }
-        }
-
-        private static void TryFindAttackableTilesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
-            PieceColour currentColour,
-            IBoardLookup boardLookup,
-            IList<Vector2Int> validAttackableTiles)
-        {
-            Vector2Int nextPosition = startingPosition + direction;
-            
-            // Stop at the first piece we find in this direction
-            // Even friendlies will block subsequent attacks
-            while (boardLookup.DoesBoardTileExist(nextPosition))
-            {
-                validAttackableTiles.Add(nextPosition);
-
-                if (TryFindAttackablePiece(nextPosition, currentColour, boardLookup, validAttackableTiles))
-                {
-                    break;
-                }
-                
-                nextPosition += direction;
+                validAttacks.Add(nextPosition);
             }
         }
     }

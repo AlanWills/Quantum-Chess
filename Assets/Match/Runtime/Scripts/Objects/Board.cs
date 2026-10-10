@@ -27,6 +27,7 @@ namespace QC.Match.Objects
 
         public IReadOnlyList<BoardTileInstance> Tiles => tiles;
         public IReadOnlyList<BoardObjectInstance> Objects => objects;
+        public RectInt Bounds => bounds;
 
         [SerializeField] private BoardTileCatalogue boardTileCatalogue;
         [SerializeField] private BoardObjectCatalogue boardObjectCatalogue;
@@ -40,6 +41,7 @@ namespace QC.Match.Objects
         
         [NonSerialized] private readonly List<BoardTileInstance> tiles = new();
         [NonSerialized] private readonly List<BoardObjectInstance> objects = new();
+        [NonSerialized] private RectInt bounds = new();
         
         #endregion
 
@@ -47,6 +49,7 @@ namespace QC.Match.Objects
         {
             tiles.Clear();
             objects.Clear();
+            bounds = new RectInt();
         }
 
         public void Initialize(BoardDTO boardDto)
@@ -101,6 +104,9 @@ namespace QC.Match.Objects
         {
             tiles.Add(tileInstance);
             tileInstance.ComponentDataChanged.AddListener(OnBoardTileComponentDataChanged);
+
+            RecalculateBounds();
+            
             onBoardTileAdded?.Invoke(new BoardTileAddedArgs(tileInstance));
             onChanged?.Invoke();
         }
@@ -115,8 +121,16 @@ namespace QC.Match.Objects
             BoardTileInstance tileInstance = tiles[indexOfTile];
             tiles.RemoveAt(indexOfTile);
             tileInstance.ComponentDataChanged.RemoveListener(OnBoardTileComponentDataChanged);
+
+            RecalculateBounds();
+            
             onBoardTileRemoved?.Invoke(new BoardTileRemovedArgs(tileInstance.Position));
             onChanged?.Invoke();
+        }
+
+        public bool IsPositionInBoard(Vector2Int boardPosition)
+        {
+            return bounds.Contains(boardPosition);
         }
 
         public bool DoesBoardTileExist(Vector2Int boardPosition)
@@ -252,7 +266,7 @@ namespace QC.Match.Objects
             }
         }
 
-        public RectInt CalculateBoundingBox()
+        private void RecalculateBounds()
         {
             Vector2Int minCoords = new Vector2Int(int.MaxValue, int.MaxValue);
             Vector2Int maxCoords = new Vector2Int(int.MinValue, int.MinValue);
@@ -266,7 +280,7 @@ namespace QC.Match.Objects
                 maxCoords.y = Mathf.Max(tilePosition.y, maxCoords.y);
             }
 
-            return new RectInt(minCoords.x, minCoords.y, maxCoords.x + 1 - minCoords.x, maxCoords.y + 1 - minCoords.y);
+            bounds = new RectInt(minCoords.x, minCoords.y, maxCoords.x + 1 - minCoords.x, maxCoords.y + 1 - minCoords.y);
         }
 
         public BoardDTO Serialize()
@@ -283,6 +297,8 @@ namespace QC.Match.Objects
         
         private void OnBoardTileComponentDataChanged()
         {
+            RecalculateBounds();
+
             onChanged?.Invoke();
         }
 

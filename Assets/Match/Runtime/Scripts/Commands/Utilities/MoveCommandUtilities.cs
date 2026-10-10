@@ -23,10 +23,9 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            RectInt boundingBox = args.Board.CalculateBoundingBox();
-            if (!boundingBox.Contains(endingPosition))
+            if (!args.Board.IsPositionInBoard(endingPosition))
             {
-                UnityEngine.Debug.LogAssertion($"Ending Position for movement {endingPosition} is outside the bounding box of the board {boundingBox}.");
+                UnityEngine.Debug.LogAssertion($"Ending Position for movement {endingPosition} is outside the bounding box of the board.");
                 return CommandState.Abandoned;
             }
             

@@ -13,11 +13,13 @@ function Scenario:setUp()
     AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whitePawn,
     { 
         position = Vector2Int.new(3, 7),
+        verticalDirection = "Up",
         interactable = true
     })
     AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackPawn, 
     { 
         position = Vector2Int.new(5, 2),
+        verticalDirection = "Down",
         interactable = true
     })
     
