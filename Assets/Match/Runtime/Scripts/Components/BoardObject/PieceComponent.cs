@@ -170,46 +170,17 @@ namespace QC.Match.Components
             IList<Vector2Int> validMoves)
         {
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
+            int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
-            switch (actionPattern.range)
-            {
-                case RangeType.Infinite:
-                    if (actionPattern.mustBeSafe)
-                    {
-                        TryFindSafeMovesInDirection(currentBoardPosition, pattern, boardLookup, opponentBoardActionMask, validMoves);
-                    }
-                    else
-                    {
-                        TryFindMovesInDirection(currentBoardPosition, pattern, boardLookup, validMoves);
-                    }
-                    break;
-                
-                case RangeType.Finite:
-                    int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
-                    for (int i = 1; i <= distanceToCheck; ++i)
-                    {
-                        if (actionPattern.mustBeSafe)
-                        {
-                            AddIfVacantAndSafeBoardPosition(
-                                currentBoardPosition + pattern * i,
-                                boardLookup,
-                                opponentBoardActionMask,
-                                validMoves);
-                        }
-                        else
-                        {
-                            AddIfVacantBoardPosition(
-                                currentBoardPosition + pattern * i, 
-                                boardLookup,
-                                validMoves);    
-                        }
-                    }
-                    break;
-                
-                default:
-                    UnityEngine.Debug.LogAssertion($"Invalid {nameof(RangeType)} value {actionPattern.range} when trying to calculate valid moves.");
-                    break;
-            }
+            TryFindMovesInDirection(
+                currentBoardPosition, 
+                pattern,
+                actionPattern.moveType, 
+                actionPattern.mustBeSafe,
+                actionPattern.range == RangeType.Finite ? distanceToCheck : int.MaxValue,
+                boardLookup, 
+                opponentBoardActionMask, 
+                validMoves);
         }
 
         public void CalculateValidAttacks(
@@ -401,11 +372,6 @@ namespace QC.Match.Components
             }
         }
 
-        private static bool IsBoardPositionVacant(Vector2Int position, IBoardLookup boardLookup)
-        {
-            return boardLookup.DoesBoardTileExist(position) && boardLookup.GetBoardObjectAt(position) == null;
-        }
-
         private static bool AddIfBoardPositionExists(
             Vector2Int position,
             IBoardLookup boardLookup,
@@ -420,37 +386,33 @@ namespace QC.Match.Components
             return true;
         }
 
-        private static bool AddIfVacantBoardPosition(
+        private static bool IsValidAndVacantBoardPosition(
             Vector2Int position,
-            IBoardLookup boardLookup,
-            IList<Vector2Int> list)
-        {
-            if (!IsBoardPositionVacant(position, boardLookup))
-            {
-                return false;
-            }
-            
-            list.Add(position);
-            return true;
-        }
-
-        private static bool AddIfVacantAndSafeBoardPosition(
-            Vector2Int position,
+            bool mustBeSafe,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> list)
         {
-            if (!IsBoardPositionVacant(position, boardLookup))
+            if (!boardLookup.IsPositionInBoard(position))
             {
                 return false;
             }
 
-            if (opponentBoardActionMask.IsTileAttackable(position))
+            if (!boardLookup.DoesBoardTileExist(position))
             {
                 return false;
             }
             
-            list.Add(position);
+            if (boardLookup.GetBoardObjectAt(position) != null)
+            {
+                return false;
+            }
+
+            if (mustBeSafe && opponentBoardActionMask.IsTileAttackable(position))
+            {
+                return false;
+            }
+            
             return true;
         }
 
@@ -494,27 +456,31 @@ namespace QC.Match.Components
         private static void TryFindMovesInDirection(
             Vector2Int startingPosition,
             Vector2Int direction,
+            MoveType moveType,
+            bool mustBeSafe,
+            int maxDistanceToSearch,
             IBoardLookup boardLookup,
+            IBoardActionMask opponentActionMask,
             IList<Vector2Int> validMoves)
         {
-            Vector2Int nextPosition = startingPosition + direction;
-            while (AddIfVacantBoardPosition(nextPosition, boardLookup, validMoves))
+            for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                nextPosition += direction;
-            }
-        }
+                Vector2Int nextPosition = startingPosition + i * direction;
 
-        private static void TryFindSafeMovesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
-            IBoardLookup boardLookup,
-            IBoardActionMask opponentBoardActionMask,
-            IList<Vector2Int> validMoves)
-        {
-            Vector2Int nextPosition = startingPosition + direction;
-            while (AddIfVacantAndSafeBoardPosition(nextPosition, boardLookup, opponentBoardActionMask, validMoves))
-            {
-                nextPosition += direction;
+                // Searching outside the valid bounds of the board now
+                if (!boardLookup.IsPositionInBoard(nextPosition))
+                {
+                    break;
+                }
+                
+                // If this position fails one of the criteria we've mandated and we're doing continuous movement we should finish searching
+                if (!IsValidAndVacantBoardPosition(nextPosition, mustBeSafe, boardLookup, opponentActionMask, validMoves) &&
+                    moveType == MoveType.Continuous)
+                {
+                    break;
+                }
+                
+                validMoves.Add(nextPosition);
             }
         }
 

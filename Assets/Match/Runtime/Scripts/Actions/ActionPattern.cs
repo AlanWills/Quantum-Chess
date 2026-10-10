@@ -8,6 +8,7 @@ namespace QC.Match.Actions
     public struct ActionPattern
     {
         public RangeType range;
+        public MoveType moveType;
         [ShowIfEnum(nameof(range), (int)RangeType.Finite)] public int distanceIfNotMoved;
         [ShowIfEnum(nameof(range), (int)RangeType.Finite)] public int distanceIfMoved;
         public Vector2Int pattern;
