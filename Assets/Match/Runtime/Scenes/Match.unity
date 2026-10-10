@@ -1478,6 +1478,8 @@ MonoBehaviour:
   board: {fileID: 11400000, guid: 1aba5d75d6bc8444e855b361baf81391, type: 2}
   boardObjectSelection: {fileID: 11400000, guid: 0f2c349f84b614187b334613caf7ce4f, type: 2}
   visualAnimationSystem: {fileID: 11400000, guid: f900482a81aeb4f65866fd62326b7d6e, type: 2}
+  promotionSystem: {fileID: 11400000, guid: 65116ced837e8a8459236cc66971eb5e, type: 2}
+  componentCatalogue: {fileID: 11400000, guid: 98e1c97f8203733408c17ab129a12407, type: 2}
   luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
   onMatchSetup:
     m_PersistentCalls:

@@ -1,7 +1,7 @@
+using Celeste.Components.Catalogue;
 using Celeste.Core.Interfaces;
 using Celeste.Lua;
 using QC.Match.Objects;
-using QC.Match.Players;
 
 namespace QC.Match.Commands
 {
@@ -13,7 +13,9 @@ namespace QC.Match.Commands
         public readonly BoardObjectSelection Selection;
         public readonly ILuaRuntime LuaRuntime;
         public readonly IVisualAnimationSystem VisualAnimationSystem;
+        public readonly IPromotionSystem PromotionSystem;
         public readonly IRNG RNG;
+        public readonly ComponentCatalogue ComponentCatalogue;
 
         public BoardCommandArgs(
             MatchState matchState,
@@ -22,7 +24,9 @@ namespace QC.Match.Commands
             BoardObjectSelection selection,
             ILuaRuntime luaRuntime,
             IVisualAnimationSystem visualAnimationSystem,
-            IRNG rng)
+            IPromotionSystem promotionSystem,
+            IRNG rng,
+            ComponentCatalogue componentCatalogue)
         {
             MatchState = matchState;
             CommandExecutor = commandExecutor;
@@ -30,7 +34,9 @@ namespace QC.Match.Commands
             Selection = selection;
             LuaRuntime = luaRuntime;
             VisualAnimationSystem = visualAnimationSystem;
+            PromotionSystem = promotionSystem;
             RNG = rng;
+            ComponentCatalogue = componentCatalogue;
         }
     }
 

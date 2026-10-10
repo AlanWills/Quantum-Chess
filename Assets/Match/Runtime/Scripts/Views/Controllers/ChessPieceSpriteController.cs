@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace QC.Match.Views
 {
-    public class ChessPieceSpriteController : InterfaceController<IChessPiece, BoardObjectComponent, BoardObjectInstance>
+    public class ChessPieceSpriteController : InterfaceController<IPiece, BoardObjectComponent, BoardObjectInstance>
     {
         #region Properties and Fields
         

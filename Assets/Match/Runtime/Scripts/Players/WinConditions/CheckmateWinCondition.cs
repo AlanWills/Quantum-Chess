@@ -22,14 +22,14 @@ namespace QC.Match.Players
                 return UniTask.FromResult(true);
             }
 
-            if (!oppositionKing.TryFindComponent<IActionProvider>(out var oppositionKingActionProvider))
+            if (!oppositionKing.TryFindInterface<IActionProvider>(out var oppositionKingActionProvider))
             {
                 // The King does not have an action provider... weird, game over!
                 UnityEngine.Debug.LogAssertion($"The King piece for colour {OppositionColour} doesn't seem to have an {nameof(IActionProvider)} component...");
                 return UniTask.FromResult(true);
             }
 
-            if (!oppositionKing.TryFindComponent<IGrid2DTransform>(out var oppositionKingTransform))
+            if (!oppositionKing.TryFindInterface<IGrid2DTransform>(out var oppositionKingTransform))
             {
                 // The King does not have a transform... weird, game over!
                 UnityEngine.Debug.LogAssertion($"The King piece for colour {OppositionColour} doesn't seem to have an {nameof(IGrid2DTransform)} component...");

@@ -17,9 +17,9 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+            if (!instance.TryFindInterface<IPiece>(out var chessPiece))
             {
-                UnityEngine.Debug.LogAssertion($"Could not find {nameof(IChessPiece)} component for board object when executing attack command.");
+                UnityEngine.Debug.LogAssertion($"Could not find {nameof(IPiece)} component for board object when executing attack command.");
                 return CommandState.Abandoned;
             }
             
@@ -31,9 +31,9 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            if (!endingPositionInstance.TryFindComponent<IChessPiece>(out var otherChessPiece))
+            if (!endingPositionInstance.TryFindInterface<IPiece>(out var otherChessPiece))
             {
-                UnityEngine.Debug.LogAssertion($"Attempting to attack with board object at {endingPosition}, but there is no board object there with an {nameof(IChessPiece)} interface.");
+                UnityEngine.Debug.LogAssertion($"Attempting to attack with board object at {endingPosition}, but there is no board object there with an {nameof(IPiece)} interface.");
                 return CommandState.Abandoned;
             }
 

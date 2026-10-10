@@ -62,6 +62,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cbdb6836bfd43fc96137cf04aedab73
+    m_Address: Commands/MakeAutomaticPromotionZoneCommand.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e94da5cef2b0304e9fd5e17d31aa918
     m_Address: Assets/Celeste/Loading/Parameters/ShouldFallbackLoadAssets.asset
     m_ReadOnly: 0

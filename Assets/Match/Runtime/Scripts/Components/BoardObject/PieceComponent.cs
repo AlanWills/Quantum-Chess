@@ -2,23 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Celeste.Components;
-using Celeste.DataStructures;
 using QC.Match.Actions;
 using QC.Match.Objects;
 using UnityEngine;
 
 namespace QC.Match.Components
 {
-    [DisplayName("Modifiable Chess Piece")]
-    public class ModifiableChessPieceComponent : BoardObjectComponent, 
-        IModifiableChessPiece, 
+    [DisplayName("Piece")]
+    public class PieceComponent : BoardObjectComponent, 
+        IPiece, 
         IActionProvider, 
         IObjectStatus
     {
         #region Save Data
 
         [Serializable]
-        public class SaveData : ComponentData
+        private class SaveData : ComponentData
         {
             public PieceColour currentPieceColour;
             public PieceType currentPieceType;
@@ -33,7 +32,7 @@ namespace QC.Match.Components
         
         #region Properties and Fields
         
-        [SerializeField] private PieceColour startingColour = PieceColour.Unknown;
+        [SerializeField] private PieceColour startingColour = PieceColour.None;
         [SerializeField] private PieceType startingPieceType = PieceTypeExtensions.Everything;
         [SerializeField] private int startingValue = 1;
         [SerializeField] private List<ActionPattern> startingMovementPatterns = new();
@@ -463,7 +462,7 @@ namespace QC.Match.Components
         {
             BoardObjectInstance objectInstance = boardLookup.GetBoardObjectAt(position);
 
-            if (objectInstance == null || !objectInstance.TryFindComponent<IModifiableChessPiece>(out var chessPiece))
+            if (objectInstance == null || !objectInstance.TryFindInterface<IPiece>(out var chessPiece))
             {
                 return false;
             }

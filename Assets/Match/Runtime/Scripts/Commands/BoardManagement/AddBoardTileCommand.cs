@@ -31,7 +31,7 @@ namespace QC.Match.Commands
                 return UniTask.FromResult(CommandState.Abandoned);
             }
 
-            if (instance.TryFindComponent<ITileAIInfo>(out var tileAIInfo))
+            if (instance.TryFindInterface<ITileAIInfo>(out var tileAIInfo))
             {
                 tileAIInfo.SetImportance(Importance);
             }

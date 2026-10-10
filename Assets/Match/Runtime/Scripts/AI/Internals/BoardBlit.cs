@@ -39,7 +39,7 @@ namespace QC.Match.AI.Internals
             int tileImportance = tile.FindInterface<ITileAIInfo>().GetImportance();
             int tileImportanceOverride =
                alphaBetaParameters.GetImportanceOverrideForPosition(tilePosition, rng, tileImportance);
-            board[index] = new TileBlit(true, tileImportanceOverride);
+            board[index] = new TileBlit(tile, true, tileImportanceOverride);
          }
       }
 
@@ -50,7 +50,7 @@ namespace QC.Match.AI.Internals
       {
          foreach (var chessBoardObjectInstance in objects)
          {
-            var chessPiece = chessBoardObjectInstance.FindInterface<IChessPiece>();
+            var chessPiece = chessBoardObjectInstance.FindInterface<IPiece>();
             var actionProvider = chessBoardObjectInstance.FindInterface<IActionProvider>();
             var transform = chessBoardObjectInstance.FindInterface<IGrid2DTransform>();
             Vector2Int piecePosition = transform.GetPosition();
@@ -138,6 +138,17 @@ namespace QC.Match.AI.Internals
          // Now check if the tile within the board actually exists (could be a hole)
          int index = ToIndex(boardPosition);
          return 0 <= index && index < board.Count && board[index].IsValid;
+      }
+
+      public BoardTileInstance GetBoardTileAt(Vector2Int boardTilePosition)
+      {
+         if (!IsInBounds(boardTilePosition))
+         {
+            return null;
+         }
+         
+         int index = ToIndex(boardTilePosition);
+         return 0 <= index && index < board.Count ? board[index].Instance : null;
       }
 
       public BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition)

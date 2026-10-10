@@ -1,6 +1,7 @@
 local AddBoardTileCommand = require("Commands/AddBoardTileCommand.lua")
 local AddBoardObjectCommand = require("Commands/AddBoardObjectCommand.lua")
 local SetActivePlayerCommand = require("Commands/SetActivePlayerCommand.lua")
+local MakeAutomaticPromotionZoneCommand = require("Commands/MakeAutomaticPromotionZoneCommand.lua")
 
 local StandardChessMatchFactory = {}
 
@@ -10,6 +11,16 @@ function StandardChessMatchFactory.createHumanWhitePlayer()
         colour = "White",
         winCondition = "Checkmate",
         winConditionData = "Black",
+        turnStrategy = "Manual"
+    })
+end
+
+function StandardChessMatchFactory.createHumanBlackPlayer()
+    MatchState:addPlayer(
+    {
+        colour = "Black",
+        winCondition = "Checkmate",
+        winConditionData = "White",
         turnStrategy = "Manual"
     })
 end
@@ -49,6 +60,34 @@ function StandardChessMatchFactory.createBoard(boardWidth, boardHeight)
                 importance = importance
             })
         end
+    end
+    
+    -- Black Promotion Zones
+    for x = 1, boardWidth do
+        local position = Vector2Int.new(x, 1)
+        local blackPromotions = {
+            {
+                requiredPieceType = "Pawn",
+                requiredPieceColour = "Black",
+                promotedPieceType = "Queen"
+            }
+        }
+
+        MakeAutomaticPromotionZoneCommand.new(position, blackPromotions)
+    end
+    
+    -- White Promotion Zones
+    for x = 1, boardWidth do
+        local position = Vector2Int.new(x, boardHeight)
+        local whitePromotions = {
+            {
+                requiredPieceType = "Pawn",
+                requiredPieceColour = "White",
+                promotedPieceType = "Queen"
+            }
+        }
+
+        MakeAutomaticPromotionZoneCommand.new(position, whitePromotions)
     end
 end
 

@@ -18,9 +18,9 @@ namespace QC.Match.Players
             List<BoardObjectInstance> activePlayerPieces = new List<BoardObjectInstance>();
             PieceColour activeColour = args.PlayerColour;
             activePlayerPieces.AddRange(args.Board.Objects.Where(x =>
-                x.HasComponent<IActionProvider>() &&
-                x.HasComponent<IGrid2DTransform>() &&
-                x.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                x.HasInterface<IActionProvider>() &&
+                x.HasInterface<IGrid2DTransform>() &&
+                x.TryFindInterface<IPiece>(out var chessPiece) &&
                 chessPiece.GetPieceColour() == activeColour));
             
             if (!RandomAction.TryCalculate(args, activePlayerPieces, out var command))

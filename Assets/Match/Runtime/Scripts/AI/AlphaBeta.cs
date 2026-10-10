@@ -144,8 +144,8 @@ namespace QC.Match.AI
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
                  UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
                     $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
-                 UnityEngine.Debug.Assert(objectAtBestMove.TryFindComponent<IChessPiece>(out var pieceToTake),
-                    $"Failed to find a {nameof(IChessPiece)} interface on a piece that we have decided to take.");
+                 UnityEngine.Debug.Assert(objectAtBestMove.TryFindInterface<IPiece>(out var pieceToTake),
+                    $"Failed to find a {nameof(IPiece)} interface on a piece that we have decided to take.");
                  UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.PlayerColour,
                     $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
                  command = new AttackWithBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);

@@ -5,7 +5,7 @@ namespace QC.Match.AI.Internals
 {
     public readonly struct Piece
     {
-        public bool IsValid => Instance != null && PieceType != Match.PieceType.None && PieceColour != Match.PieceColour.Unknown && ActionProvider.IsValid;
+        public bool IsValid => Instance != null && PieceType != Match.PieceType.None && PieceColour != Match.PieceColour.None && ActionProvider.IsValid;
            
         public readonly BoardObjectInstance Instance;
         public readonly PieceType PieceType;

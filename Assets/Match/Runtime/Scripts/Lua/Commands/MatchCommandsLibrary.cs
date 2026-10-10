@@ -45,6 +45,7 @@ namespace QC.Match.Lua
             functions.Add(new LibraryFunction(kName, "clearBoard", ClearBoard));
             functions.Add(new LibraryFunction(kName, "checkWinConditionForPlayer", CheckWinConditionForPlayer));
             functions.Add(new LibraryFunction(kName, "thinkForPlayer", ThinkForPlayer));
+            functions.Add(new LibraryFunction(kName, "makeAutomaticPromotionZone", MakeAutomaticPromotionZone));
         }
         
         private ValueTask<int> MoveFromTo(
@@ -431,6 +432,49 @@ namespace QC.Match.Lua
             bool dryRun = context.HasArgument(2) && context.GetArgument<bool>(2);
             ThinkForPlayerCommand thinkForPlayer = new ThinkForPlayerCommand(playerIndex, dryRun);
             boardCommandExecutor.QueueCommand(thinkForPlayer);
+            
+            return new ValueTask<int>(context.Return());
+        }
+        
+        private ValueTask<int> MakeAutomaticPromotionZone(
+            LuaFunctionExecutionContext context,
+            CancellationToken cancellationToken)
+        {
+            BoardCommandExecutor boardCommandExecutor = context.GetArgument<BoardCommandExecutor>(0);
+            LuaVector2Int position = context.GetArgument<LuaVector2Int>(1);
+            LuaTable promotionsTable = context.GetArgument<LuaTable>(2);
+            List<Promotion> promotions = new List<Promotion>();
+
+            foreach (var promotionsTableEntry in promotionsTable)
+            {
+                if (!promotionsTableEntry.Value.IsTable())
+                {
+                    UnityEngine.Debug.LogAssertion($"Expected table for promotion definition in {nameof(MakeAutomaticPromotionZone)} command.");
+                    continue;
+                }
+
+                LuaTable promotionTable = promotionsTableEntry.Value.ReadTable();
+                Promotion promotion = new();
+
+                if (promotionTable.TryGetEnum("requiredPieceType", out PieceType requiredPieceType))
+                {
+                    promotion.requiredPieceType = requiredPieceType;
+                }
+
+                if (promotionTable.TryGetEnum("requiredPieceColour", out PieceColour pieceColour))
+                {
+                    promotion.requiredPieceColour = pieceColour;
+                }
+
+                if (promotionTable.TryGetEnum("promotedPieceType", out PieceType promotedPieceType))
+                {
+                    promotion.promotedPieceType = promotedPieceType;
+                }
+                
+                promotions.Add(promotion);
+            }
+            
+            boardCommandExecutor.QueueCommand(new MakeAutomaticPromotionZoneCommand(position.v, promotions));
             
             return new ValueTask<int>(context.Return());
         }

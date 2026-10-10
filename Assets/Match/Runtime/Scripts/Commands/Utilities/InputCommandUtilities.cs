@@ -12,8 +12,8 @@ namespace QC.Match.Commands
         {
             foreach (var instance in board.Objects)
             {
-                if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
-                    !instance.TryFindComponent<IInteractable>(out var interactable) ||
+                if (!instance.TryFindInterface<IPiece>(out var piece) ||
+                    !instance.TryFindInterface<IInteractable>(out var interactable) ||
                     piece.GetPieceColour() != colour)
                 {
                     continue;
@@ -32,8 +32,8 @@ namespace QC.Match.Commands
         {
             foreach (var instance in board.Objects)
             {
-                if (!instance.TryFindComponent<IChessPiece>(out var piece) ||
-                    !instance.TryFindComponent<IInteractable>(out var interactable) ||
+                if (!instance.TryFindInterface<IPiece>(out var piece) ||
+                    !instance.TryFindInterface<IInteractable>(out var interactable) ||
                     piece.GetPieceColour() == colour)
                 {
                     continue;

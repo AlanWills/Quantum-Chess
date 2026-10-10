@@ -2,7 +2,7 @@ namespace QC.Match
 {
     public enum PieceColour
     {
-        Unknown,
+        None,
         Black,
         White
     }

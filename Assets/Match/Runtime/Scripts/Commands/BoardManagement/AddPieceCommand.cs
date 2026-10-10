@@ -52,36 +52,26 @@ namespace QC.Match.Commands
                 return UniTask.FromResult(CommandState.Abandoned);
             }
             
-            if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+            if (!instance.TryFindInterface<IPiece>(out var chessPiece))
             {
-                UnityEngine.Debug.LogAssertion($"No {nameof(IChessPiece)} interface found on chess board object {Guid}.  Did you mean to try and add a chess piece?");
+                UnityEngine.Debug.LogAssertion($"No {nameof(IPiece)} interface found on chess board object {Guid}.  Did you mean to try and add a chess piece?");
                 return UniTask.FromResult(CommandState.Abandoned);
             }
 
-            if (!instance.TryFindComponent<IGrid2DTransform>(out var gridTransform))
+            if (!instance.TryFindInterface<IGrid2DTransform>(out var gridTransform))
             {
                 UnityEngine.Debug.LogAssertion($"No {nameof(IGrid2DTransform)} exists, this is a serious issue and should've been injected automatically, as it is a mandatory component.");
                 return UniTask.FromResult(CommandState.Abandoned);
             }
 
-            if (Colour.HasValue || Type.HasValue)
+            if (Colour.HasValue)
             {
-                // We have specified type or colour rather than leave it to the preset, so we need a modifiable chess piece component
-                if (!instance.TryFindComponent<IModifiableChessPiece>(out var modifiableChessPiece))
-                {
-                    UnityEngine.Debug.LogAssertion($"No {nameof(IModifiableChessPiece)} exists, but it looks like you're trying to customise colour and type of the chess piece you're creating.");
-                    return UniTask.FromResult(CommandState.Abandoned);
-                }
+                chessPiece.SetColour(Colour.Value);
+            }
 
-                if (Colour.HasValue)
-                {
-                    modifiableChessPiece.SetColour(Colour.Value);
-                }
-
-                if (Type.HasValue)
-                {
-                    modifiableChessPiece.SetType(Type.Value);
-                }
+            if (Type.HasValue)
+            {
+                chessPiece.SetType(Type.Value);
             }
 
             if (Value.HasValue)
@@ -92,7 +82,7 @@ namespace QC.Match.Commands
             chessPiece.SetVerticalDirection(VerticalDirection);
             gridTransform.SetPosition(Position);
              
-            if (instance.TryFindComponent<IInteractable>(out var interactable))
+            if (instance.TryFindInterface<IInteractable>(out var interactable))
             {
                 interactable.SetInteractable(Interactable);
             }

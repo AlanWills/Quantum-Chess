@@ -1,5 +1,5 @@
 {
-    "name": "QC.GameSystems.Lua",
+    "name": "QC.GameSystems.Runtime.Lua",
     "rootNamespace": "QC.GameSystems.Lua",
     "references": [],
     "includePlatforms": [],

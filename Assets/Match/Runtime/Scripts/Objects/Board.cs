@@ -132,6 +132,19 @@ namespace QC.Match.Objects
             return false;
         }
 
+        public BoardTileInstance GetBoardTileAt(Vector2Int boardPosition)
+        {
+            foreach (var tile in tiles)
+            {
+                if (tile.Position == boardPosition)
+                {
+                    return tile;
+                }
+            }
+
+            return null;
+        }
+
         public BoardObjectInstance CreateBoardObject(int guid)
         {
             BoardObject boardObject = boardObjectCatalogue.MustFindItemByGuid(guid);
@@ -174,7 +187,7 @@ namespace QC.Match.Objects
         
         private void EnsureInstanceComponentsExist(BoardObjectInstance instance)
         {
-            if (!instance.HasComponent<IGrid2DTransform>())
+            if (!instance.HasInterface<IGrid2DTransform>())
             {
                 // If we don't have a transform component assigned we inject one here, as all chess board objects must have one
                 Grid2DTransformComponent grid2DTransform = CreateInstance<Grid2DTransformComponent>();
@@ -188,7 +201,7 @@ namespace QC.Match.Objects
             {
                 var objectInstance = objects[i];
 
-                if (objectInstance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) &&
+                if (objectInstance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform) &&
                     grid2DTransform.GetPosition() == boardPosition)
                 {
                     return objectInstance;
@@ -202,7 +215,7 @@ namespace QC.Match.Objects
         {
             foreach (var objectInstance in objects)
             {
-                if (objectInstance.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                if (objectInstance.TryFindInterface<IPiece>(out var chessPiece) &&
                     chessPiece.GetPieceColour() == colour &&
                     chessPiece.GetPieceType().HasFlag(type))
                 {
@@ -305,7 +318,7 @@ namespace QC.Match.Objects
             {
                 var objectInstance = objects[i];
                 
-                if (objectInstance.TryFindComponent<IChessPiece>(out var chessPiece) &&
+                if (objectInstance.TryFindInterface<IPiece>(out var chessPiece) &&
                     (!colour.HasValue || colour.Value == chessPiece.GetPieceColour()) &&
                     (!type.HasValue || type.Value == chessPiece.GetPieceType()))
                 {

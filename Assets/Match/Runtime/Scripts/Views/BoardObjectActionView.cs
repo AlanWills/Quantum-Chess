@@ -33,8 +33,8 @@ namespace QC.Match.Views
             attackTilemap.CompressBounds();
             
             if (instance == null ||
-                !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform) ||
-                !instance.TryFindComponent<IActionProvider>(out var actionProvider))
+                !instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform) ||
+                !instance.TryFindInterface<IActionProvider>(out var actionProvider))
             {
                 return;
             }

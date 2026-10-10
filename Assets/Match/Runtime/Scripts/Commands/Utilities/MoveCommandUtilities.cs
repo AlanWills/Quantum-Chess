@@ -17,7 +17,7 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            if (!instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
+            if (!instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform))
             {
                 UnityEngine.Debug.LogAssertion("Could not find transform component for board object when executing move object command.");
                 return CommandState.Abandoned;
@@ -34,15 +34,20 @@ namespace QC.Match.Commands
             UnityEngine.Debug.Assert(clearSelectedChessBoardObjectResult == CommandState.Completed, $"There was an issue clearing the selected board object after trying to move it.");
 
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
+
+            if (args.PromotionSystem.CanPromote(instance, args.Board, endingPosition))
+            {
+                await args.PromotionSystem.Promote(instance, args.Board, endingPosition);
+            }
             
             grid2DTransform.SetPosition(endingPosition);
             
-            if (instance.TryFindComponent<IObjectStatus>(out var status))
+            if (instance.TryFindInterface<IObjectStatus>(out var status))
             {
                 status.SetHasMoved(true);
             }
             
-            if (instance.TryFindComponent<IChessPiece>(out var chessPiece))
+            if (instance.TryFindInterface<IPiece>(out var chessPiece))
             {
                 PieceColour pieceColour = chessPiece.GetPieceColour();
                 int playerIndex = args.MatchState.GetPlayerIndex(pieceColour);

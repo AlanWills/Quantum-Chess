@@ -1,18 +1,22 @@
+using QC.Match.Objects;
+
 namespace QC.Match.AI.Internals
 {
     public readonly struct TileBlit
     {
         public readonly bool IsValid;
         public readonly int Importance;
+        public readonly BoardTileInstance Instance;
         public readonly Piece Piece;
 
-        public TileBlit(bool isValid, int importance) :
-            this(isValid, importance, default)
+        public TileBlit(BoardTileInstance instance, bool isValid, int importance) :
+            this(instance, isValid, importance, default)
         {
         }
            
-        public TileBlit(bool isValid, int importance, Piece piece)
+        public TileBlit(BoardTileInstance instance, bool isValid, int importance, Piece piece)
         {
+            Instance = instance;
             IsValid = isValid;
             Importance = importance;
             Piece = piece;
@@ -20,12 +24,12 @@ namespace QC.Match.AI.Internals
 
         public TileBlit WithoutPiece()
         {
-            return new TileBlit(IsValid, Importance);
+            return new TileBlit(Instance, IsValid, Importance);
         }
            
         public TileBlit WithPiece(Piece piece)
         {
-            return new TileBlit(IsValid, Importance, piece);
+            return new TileBlit(Instance, IsValid, Importance, piece);
         }
     }
 }

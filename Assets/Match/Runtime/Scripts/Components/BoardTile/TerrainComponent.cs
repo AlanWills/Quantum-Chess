@@ -6,7 +6,7 @@ using UnityEngine;
 namespace QC.Match.Components
 {
     [DisplayName("Terrain")]
-    public class BoardTileTerrainComponent : BoardTileComponent, ITileAIInfo
+    public class TerrainComponent : BoardTileComponent, ITileAIInfo
     {
         #region Save Data
 

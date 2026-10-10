@@ -23,8 +23,8 @@ namespace QC.Match.AI
             {
                 BoardObjectInstance piece = piecesToConsider[i];
 
-                if (piece.TryFindComponent<IGrid2DTransform>(out var transform) &&
-                    piece.TryFindComponent<IActionProvider>(out var actionProvider))
+                if (piece.TryFindInterface<IGrid2DTransform>(out var transform) &&
+                    piece.TryFindInterface<IActionProvider>(out var actionProvider))
                 {
                     validAttacks.Clear();
                     validMoves.Clear();

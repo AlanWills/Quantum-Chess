@@ -28,7 +28,7 @@ namespace QC.Match.Objects
 
         public Sprite GetSprite(PieceColour colour, PieceType type)
         {
-            if (colour == PieceColour.Unknown)
+            if (colour == PieceColour.None)
             {
                 return fallbackSprite;
             }

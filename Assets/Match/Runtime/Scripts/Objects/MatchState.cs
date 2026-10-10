@@ -41,7 +41,7 @@ namespace QC.Match.Objects
         
         [LuaMember("activePlayerIndex")] public int ActivePlayerIndex => activePlayerIndex;
         [LuaMember("nextPlayerIndex")] private int NextPlayerIndex => (activePlayerIndex + 1) % NumPlayers;
-        private PieceColour ActiveColour => players.Get(activePlayerIndex)?.Colour ?? PieceColour.Unknown;
+        private PieceColour ActiveColour => players.Get(activePlayerIndex)?.Colour ?? PieceColour.None;
         [LuaMember("activeColour")] private string ActiveColourString => ActiveColour.ToString();
 
         [SerializeField] private LuaRuntime luaRuntime;
@@ -251,7 +251,7 @@ namespace QC.Match.Objects
             
             foreach (BoardObjectInstance instance in board.Objects)
             {
-                if (!instance.TryFindComponent<IChessPiece>(out var chessPiece))
+                if (!instance.TryFindInterface<IPiece>(out var chessPiece))
                 {
                     continue;
                 }
@@ -261,8 +261,8 @@ namespace QC.Match.Objects
                     continue;
                 }
 
-                if (!instance.TryFindComponent<IActionProvider>(out var actionProvider) ||
-                    !instance.TryFindComponent<IGrid2DTransform>(out var grid2DTransform))
+                if (!instance.TryFindInterface<IActionProvider>(out var actionProvider) ||
+                    !instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform))
                 {
                     continue;
                 }
@@ -318,7 +318,7 @@ namespace QC.Match.Objects
         
         public PieceColour GetPlayerColour(int index)
         {
-            return index < players.Count ? players[index].Colour : PieceColour.Unknown;
+            return index < players.Count ? players[index].Colour : PieceColour.None;
         }
         
         public int GetPlayerIndex(PieceColour pieceColour)
