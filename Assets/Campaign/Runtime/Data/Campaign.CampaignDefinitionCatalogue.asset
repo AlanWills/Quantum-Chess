@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e197c7a70e945b444adcd40bb09392c9, type: 3}
   m_Name: Campaign.CampaignDefinitionCatalogue
   m_EditorClassIdentifier: QC.Campaign.Runtime::QC.Campaign.Catalogue.CampaignDefinitionCatalogue
-  items: []
+  items:
+  - {fileID: 11400000, guid: 02b95c2ab86204442947a538936622c0, type: 2}
+  - {fileID: 11400000, guid: 04966b412ceb54647bf49134a627813a, type: 2}
+  importBehaviour: 0

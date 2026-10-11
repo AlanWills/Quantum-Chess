@@ -9,7 +9,7 @@ namespace QC.Match.Events
     public class BoardObjectRemovedUnityEvent : UnityEvent<BoardObjectRemovedArgs> { }
 
     [Serializable]
-    [CreateAssetMenu(fileName = nameof(BoardObjectRemovedEvent), menuName = "QC/Events/Board Object Removed Event")]
+    [CreateAssetMenu(fileName = nameof(BoardObjectRemovedEvent), menuName = "QC/Events/Board/Board Object Removed Event")]
     public class BoardObjectRemovedEvent : ParameterisedEvent<BoardObjectRemovedArgs> { }
     
     [Serializable]

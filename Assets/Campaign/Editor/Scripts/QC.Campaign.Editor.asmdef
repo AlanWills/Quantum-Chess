@@ -5,7 +5,10 @@
         "QC.Campaign.Runtime",
         "Celeste.Persistence.Editor",
         "Celeste.Persistence.Runtime",
-        "Celeste.DataStructures.Editor"
+        "Celeste.DataStructures.Editor",
+        "Celeste.Objects.Editor",
+        "Celeste.Objects.Runtime",
+        "Celeste.DataStructures.Runtime"
     ],
     "includePlatforms": [
         "Editor"

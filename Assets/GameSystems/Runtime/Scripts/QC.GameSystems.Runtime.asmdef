@@ -1,0 +1,14 @@
+{
+    "name": "QC.GameSystems.Runtime",
+    "rootNamespace": "QC.GameSystems",
+    "references": ["GUID:7cfedb47a7dec8d4e8681b760be55faf"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

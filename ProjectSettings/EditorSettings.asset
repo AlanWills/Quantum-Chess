@@ -6,9 +6,9 @@ EditorSettings:
   serializedVersion: 15
   m_SerializationMode: 2
   m_LineEndingsForNewScripts: 0
-  m_DefaultBehaviorMode: 0
+  m_DefaultBehaviorMode: 1
   m_PrefabRegularEnvironment: {fileID: 0}
-  m_PrefabUIEnvironment: {fileID: 0}
+  m_PrefabUIEnvironment: {fileID: 102900000, guid: 52bfdef933d885145bdcb9d0ba75cfc3, type: 3}
   m_SpritePackerMode: 0
   m_SpritePackerCacheSize: 10
   m_SpritePackerPaddingPower: 1
@@ -35,7 +35,7 @@ EditorSettings:
   m_DisableCookiesInLightmapper: 0
   m_ShadowmaskStitching: 0
   m_AssetPipelineMode: 1
-  m_RefreshImportMode: 0
+  m_RefreshImportMode: 1
   m_CacheServerMode: 0
   m_CacheServerEndpoint: 
   m_CacheServerNamespacePrefix: default

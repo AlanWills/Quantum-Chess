@@ -9,7 +9,7 @@ namespace QC.Match.Events
     public class BoardObjectAddedUnityEvent : UnityEvent<BoardObjectAddedArgs> { }
 
     [Serializable]
-    [CreateAssetMenu(fileName = nameof(BoardObjectAddedEvent), menuName = "QC/Events/Board Object Added Event")]
+    [CreateAssetMenu(fileName = nameof(BoardObjectAddedEvent), menuName = "QC/Events/Board/Board Object Added Event")]
     public class BoardObjectAddedEvent : ParameterisedEvent<BoardObjectAddedArgs> { }
     
     [Serializable]

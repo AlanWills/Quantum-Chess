@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5219632005550048216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3d6eaf5230ee24aa876dc04a9cb690, type: 3}
+  m_Name: Execute Load Job
+  m_EditorClassIdentifier: Celeste.Loading.Nodes.Runtime::Celeste.Loading.Nodes.ExecuteLoadJobNode
+  graph: {fileID: 11400000}
+  position: {x: 360, y: -88}
+  ports:
+    keys:
+    - argument
+    - ' '
+    - 
+    values:
+    - _fieldName: argument
+      _node: {fileID: -5219632005550048216}
+      _typeQualifiedName: Celeste.Loading.Parameters.LoadJobReference, Celeste.Loading.Runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: ' '
+      _node: {fileID: -5219632005550048216}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: 
+        node: {fileID: 281124022655760714}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: 
+      _node: {fileID: -5219632005550048216}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: eade6e11-5b64-4634-b990-f7681b1d3bc9
+  toRaise: {fileID: 11400000, guid: e1ad3c596fdd9ab459e8ccb8682786ef, type: 2}
+  argument: {fileID: -4623408667502651544}
+--- !u!114 &-4623408667502651544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee97d5c2d98abd439777b236c735fdd, type: 3}
+  m_Name: _argument
+  m_EditorClassIdentifier: Celeste.Loading.Runtime::Celeste.Loading.Parameters.LoadJobReference
+  helpText: 
+  isConstant: 1
+  constantValue: {fileID: 11400000, guid: 1f178385ef81ee244a57066d76b48425, type: 2}
+  referenceValue: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae22ebe00c8798d4bb46b12fbdcffdfb, type: 3}
+  m_Name: Campaign.PickCampaignFSM
+  m_EditorClassIdentifier: Celeste.FSM.Runtime::Celeste.FSM.FSMGraph
+  nodes:
+  - {fileID: 2552730639846951589}
+  - {fileID: 281124022655760714}
+  - {fileID: -5219632005550048216}
+  startNode: {fileID: 2552730639846951589}
+  parameters:
+  - {fileID: -4623408667502651544}
+--- !u!114 &281124022655760714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e4db13ad394eb285bc56b1efde1e17, type: 3}
+  m_Name: Start Campaign
+  m_EditorClassIdentifier: QC.Campaign.Nodes.Runtime::QC.Campaign.Nodes.StartCampaignNode
+  graph: {fileID: 11400000}
+  position: {x: 88, y: -72}
+  ports:
+    keys:
+    - campaignDefinition
+    - ' '
+    - 
+    values:
+    - _fieldName: campaignDefinition
+      _node: {fileID: 281124022655760714}
+      _typeQualifiedName: QC.Campaign.Objects.CampaignDefinition, QC.Campaign.Runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: argument
+        node: {fileID: 2552730639846951589}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: ' '
+      _node: {fileID: 281124022655760714}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: Campaign.CampaignSelected
+        node: {fileID: 2552730639846951589}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: 
+      _node: {fileID: 281124022655760714}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: ' '
+        node: {fileID: -5219632005550048216}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: 1542890e-d783-4ed5-ac86-275e90c94f93
+  campaignDefinition: {fileID: 0}
+  campaignRecord: {fileID: 11400000, guid: e7248bd9a2c2cd7469bb3be55de9ff59, type: 2}
+--- !u!114 &1215192213242639797
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9d7dc730be4b28a7a9116cbbb20e29, type: 3}
+  m_Name: Campaign.CampaignSelected
+  m_EditorClassIdentifier: QC.Campaign.Nodes.Runtime::QC.Campaign.Nodes.Events.CampaignDefinitionEventCondition
+  listenFor: {fileID: 11400000, guid: 3e1f646b59b85814ea2791bfff0acd22, type: 2}
+--- !u!114 &2552730639846951589
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d3d684a2fdcd6e4e8336fa62bb135eb, type: 3}
+  m_Name: Multi Event Listener
+  m_EditorClassIdentifier: Celeste.FSM.Nodes.Runtime::Celeste.FSM.Nodes.Events.MultiEventListenerNode
+  graph: {fileID: 11400000}
+  position: {x: -232, y: -72}
+  ports:
+    keys:
+    - argument
+    - ' '
+    - Campaign.CampaignSelected
+    values:
+    - _fieldName: argument
+      _node: {fileID: 2552730639846951589}
+      _typeQualifiedName: System.Object, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: campaignDefinition
+        node: {fileID: 281124022655760714}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: ' '
+      _node: {fileID: 2552730639846951589}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: Campaign.CampaignSelected
+      _node: {fileID: 2552730639846951589}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: ' '
+        node: {fileID: 281124022655760714}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: fca88769-84c1-45da-9db6-d1188db08cba
+  events:
+  - {fileID: 1215192213242639797}

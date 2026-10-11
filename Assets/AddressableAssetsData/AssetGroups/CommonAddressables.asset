@@ -289,6 +289,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: daebdc799528c154db1e01769dac7557
+    m_Address: Campaign.PickLevel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e061463112bba478ea83968bed31bd7c
     m_Address: Assets/EngineSystems/Data/MusicSettings.asset
     m_ReadOnly: 0

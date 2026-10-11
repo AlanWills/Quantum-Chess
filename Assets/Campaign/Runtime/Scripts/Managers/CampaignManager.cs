@@ -1,6 +1,7 @@
 using UnityEngine;
 using Celeste.Persistence;
 using QC.Campaign.Catalogue;
+using QC.Campaign.Objects;
 using QC.Campaign.Persistence;
 using QC.Campaign.Record;
 
@@ -11,7 +12,7 @@ namespace QC.Campaign.Managers
     {
 		#region Properties and Fields
 	
-        public const string FILE_NAME = "CampaignManager.dat";
+        public const string FILE_NAME = "campaign.dat";
 		
         protected override string FileName => FILE_NAME;
 
@@ -29,6 +30,9 @@ namespace QC.Campaign.Managers
 
         protected override void Deserialize(CampaignManagerDTO dto)
         {
+	        CampaignDefinition campaignDefinition =
+		        campaignDefinitionCatalogue.MustFindItemByGuid(dto.CurrentCampaignGuid);
+	        campaignRecord.Initialize(campaignDefinition, dto.CurrentUnits);
         }
 
         protected override void SetDefaultValues()

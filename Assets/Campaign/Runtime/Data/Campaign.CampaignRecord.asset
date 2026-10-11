@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4480b88a5fb6f4b82468c25bfdd97b, type: 3}
   m_Name: Campaign.CampaignRecord
   m_EditorClassIdentifier: QC.Campaign.Runtime::QC.Campaign.Record.CampaignRecord
+  onChanged: {fileID: 11400000, guid: e8d2b8d056a876a4f95d6f7fea98efdc, type: 2}

@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5290470914428001732
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f016a81e3c9bf4ab366826b7cf7e67, type: 3}
+  m_Name: Campaign Record Info
+  m_EditorClassIdentifier: QC.Campaign.Nodes.Runtime::QC.Campaign.CampaignRecordInfoNode
+  graph: {fileID: 11400000}
+  position: {x: -248, y: 88}
+  ports:
+    keys:
+    - hasCurrentCampaign
+    values:
+    - _fieldName: hasCurrentCampaign
+      _node: {fileID: -5290470914428001732}
+      _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: isEnabled
+        node: {fileID: 2094002675666594395}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  hasCurrentCampaign: 0
+  campaignRecord: {fileID: 11400000, guid: e7248bd9a2c2cd7469bb3be55de9ff59, type: 2}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a72f06e35a5389418d857b340813945, type: 3}
+  m_Name: MainMenu.DataGraph
+  m_EditorClassIdentifier: Celeste.DS.Runtime::Celeste.DS.DataGraph
+  nodes:
+  - {fileID: 4037408163724823735}
+  - {fileID: -5290470914428001732}
+  - {fileID: 2094002675666594395}
+--- !u!114 &2094002675666594395
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e404cdf47721470cb223b8ecf7d265c4, type: 3}
+  m_Name: Button
+  m_EditorClassIdentifier: Celeste.DS.Nodes.Runtime::Celeste.DS.Nodes.UI.ButtonNode
+  graph: {fileID: 11400000}
+  position: {x: 56, y: -24}
+  ports:
+    keys:
+    - button
+    - isEnabled
+    values:
+    - _fieldName: button
+      _node: {fileID: 2094002675666594395}
+      _typeQualifiedName: UnityEngine.UI.Button, UnityEngine.UI, Version=1.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: gameObject
+        node: {fileID: 4037408163724823735}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: isEnabled
+      _node: {fileID: 2094002675666594395}
+      _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: hasCurrentCampaign
+        node: {fileID: -5290470914428001732}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  button: {fileID: 0}
+  isEnabled: 0
+--- !u!114 &4037408163724823735
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcd5c5d1aae7744e8a0935fdfdfdabc, type: 3}
+  m_Name: Find Game Object
+  m_EditorClassIdentifier: Celeste.DS.Nodes.Runtime::Celeste.DS.Nodes.Objects.FindGameObjectNode
+  graph: {fileID: 11400000}
+  position: {x: -248, y: -104}
+  ports:
+    keys:
+    - gameObjectName
+    - gameObject
+    values:
+    - _fieldName: gameObjectName
+      _node: {fileID: 4037408163724823735}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: gameObject
+      _node: {fileID: 4037408163724823735}
+      _typeQualifiedName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: button
+        node: {fileID: 2094002675666594395}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  gameObjectName: Button - Continue
+  gameObject: {fileID: 0}
+  gameObjectCache: {fileID: 0}
+  findConstraint: 0
+  cache: 1

@@ -295,6 +295,8 @@ MonoBehaviour:
   snapshotRecord: {fileID: 11400000, guid: 027467ab1e1b0b3459e902ce03393db2, type: 2}
   loadOnAwake: 1
   loadOnStart: 0
+  campaignRecord: {fileID: 11400000, guid: e7248bd9a2c2cd7469bb3be55de9ff59, type: 2}
+  campaignDefinitionCatalogue: {fileID: 11400000, guid: b293d9c651108b943bdf46fbfba51597, type: 2}
 --- !u!1001 &997545327
 PrefabInstance:
   m_ObjectHideFlags: 0

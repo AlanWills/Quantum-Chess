@@ -1,0 +1,21 @@
+{
+    "name": "QC.Campaign.Nodes.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "QC.Campaign.Runtime",
+        "Celeste.DS.Runtime",
+        "XNode.Runtime",
+        "Celeste.FSM.Runtime",
+        "Celeste.FSM.Nodes.Runtime",
+        "Celeste.Events.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

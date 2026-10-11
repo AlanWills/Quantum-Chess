@@ -20,7 +20,8 @@
         "Celeste.Memory.Runtime",
         "Celeste.Core.Runtime",
         "Celeste.RemoteConfig.Runtime",
-        "Celeste.Debug.Runtime"
+        "Celeste.Debug.Runtime",
+        "Celeste.Loading.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

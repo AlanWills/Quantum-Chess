@@ -9,7 +9,7 @@ namespace QC.Match.Events
     public class BoardObjectSelectionChangedUnityEvent : UnityEvent<BoardObjectSelectionChangedArgs> { }
 
     [Serializable]
-    [CreateAssetMenu(fileName = nameof(BoardObjectSelectionChangedEvent), menuName = "QC/Events/Board Object Selection Changed Event")]
+    [CreateAssetMenu(fileName = nameof(BoardObjectSelectionChangedEvent), menuName = "QC/Events/Board/Board Object Selection Changed Event")]
     public class BoardObjectSelectionChangedEvent : ParameterisedEvent<BoardObjectSelectionChangedArgs> { }
     
     [Serializable]

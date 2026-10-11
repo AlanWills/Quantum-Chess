@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6320602370675360388
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d3d684a2fdcd6e4e8336fa62bb135eb, type: 3}
+  m_Name: Multi Event Listener
+  m_EditorClassIdentifier: Celeste.FSM.Nodes.Runtime::Celeste.FSM.Nodes.Events.MultiEventListenerNode
+  graph: {fileID: 11400000}
+  position: {x: -216, y: -88}
+  ports:
+    keys:
+    - argument
+    - ' '
+    - MainMenu.PlayButtonPressed
+    - MainMenu.ContinueButtonPressed
+    values:
+    - _fieldName: argument
+      _node: {fileID: -6320602370675360388}
+      _typeQualifiedName: System.Object, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: ' '
+      _node: {fileID: -6320602370675360388}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: MainMenu.PlayButtonPressed
+      _node: {fileID: -6320602370675360388}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: ' '
+        node: {fileID: 9031676942033137354}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: MainMenu.ContinueButtonPressed
+      _node: {fileID: -6320602370675360388}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: 225e17dc-1c54-4c0b-b94f-7aaf3299e0a1
+  events:
+  - {fileID: -713110827665472160}
+  - {fileID: 1535072852883738513}
+--- !u!114 &-1714041838157429004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee97d5c2d98abd439777b236c735fdd, type: 3}
+  m_Name: _argument
+  m_EditorClassIdentifier: Celeste.Loading.Runtime::Celeste.Loading.Parameters.LoadJobReference
+  helpText: 
+  isConstant: 1
+  constantValue: {fileID: 11400000, guid: 9726d3ae210cc1248b417ee36ab8baca, type: 2}
+  referenceValue: {fileID: 0}
+--- !u!114 &-713110827665472160
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0efdd2cf93fbd9489957a3bb755b622, type: 3}
+  m_Name: MainMenu.ContinueButtonPressed
+  m_EditorClassIdentifier: Celeste.FSM.Nodes.Runtime::Celeste.FSM.Nodes.Events.Conditions.VoidEventCondition
+  listenFor: {fileID: 11400000, guid: cce296150668e2641b423acca9975ace, type: 2}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae22ebe00c8798d4bb46b12fbdcffdfb, type: 3}
+  m_Name: MainMenu.FSM
+  m_EditorClassIdentifier: Celeste.FSM.Runtime::Celeste.FSM.FSMGraph
+  nodes:
+  - {fileID: -6320602370675360388}
+  - {fileID: 9031676942033137354}
+  startNode: {fileID: -6320602370675360388}
+  parameters:
+  - {fileID: -1714041838157429004}
+--- !u!114 &1535072852883738513
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0efdd2cf93fbd9489957a3bb755b622, type: 3}
+  m_Name: MainMenu.PlayButtonPressed
+  m_EditorClassIdentifier: Celeste.FSM.Nodes.Runtime::Celeste.FSM.Nodes.Events.Conditions.VoidEventCondition
+  listenFor: {fileID: 11400000, guid: 6ef2273e5fb2f194b969144b71ed0ac8, type: 2}
+--- !u!114 &9031676942033137354
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3d6eaf5230ee24aa876dc04a9cb690, type: 3}
+  m_Name: Execute Load Job
+  m_EditorClassIdentifier: Celeste.Loading.Nodes.Runtime::Celeste.Loading.Nodes.ExecuteLoadJobNode
+  graph: {fileID: 11400000}
+  position: {x: 56, y: -136}
+  ports:
+    keys:
+    - argument
+    - ' '
+    - 
+    values:
+    - _fieldName: argument
+      _node: {fileID: 9031676942033137354}
+      _typeQualifiedName: Celeste.Loading.Parameters.LoadJobReference, Celeste.Loading.Runtime,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: ' '
+      _node: {fileID: 9031676942033137354}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: MainMenu.PlayButtonPressed
+        node: {fileID: -6320602370675360388}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: 
+      _node: {fileID: 9031676942033137354}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: e124c361-6be6-4021-995b-2084cfe43799
+  toRaise: {fileID: 11400000, guid: aa8053b538b3b594e8d0938f58ca2f5a, type: 2}
+  argument: {fileID: -1714041838157429004}

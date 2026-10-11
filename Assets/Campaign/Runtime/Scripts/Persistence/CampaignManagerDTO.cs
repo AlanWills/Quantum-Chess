@@ -9,9 +9,10 @@ namespace QC.Campaign.Persistence
     [Serializable]
     public class CampaignManagerDTO : VersionedDTO
     {
-        public int CurrentCampaignGuid => currentCampaignGuid;
+        public string CurrentCampaignGuid => currentCampaignGuid;
+        public IReadOnlyList<int> CurrentUnits => currentUnits;
 
-        [SerializeField] private int currentCampaignGuid;
+        [SerializeField] private string currentCampaignGuid;
         [SerializeField] private List<int> currentUnits = new();
         
         public CampaignManagerDTO(CampaignRecord campaignRecord)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Celeste.Objects;
 using QC.Campaign.Objects;
 using UnityEngine;
 
@@ -9,9 +10,12 @@ namespace QC.Campaign.Record
     public class CampaignRecord : ScriptableObject
     {
         #region Properties and Fields
-        
-        public int CurrentCampaignGuid => currentCampaignDefinition?.Guid ?? -1;
+
+        public bool HasCurrentCampaign => currentCampaignDefinition != null;
+        public string CurrentCampaignGuid => HasCurrentCampaign ? currentCampaignDefinition.Guid : IGuid.Invalid;
         public IReadOnlyList<int> CurrentUnits => currentUnits;
+
+        [SerializeField] private Celeste.Events.Event onChanged;
         
         [NonSerialized] private CampaignDefinition currentCampaignDefinition;
         [NonSerialized] private readonly List<int> currentUnits = new();
@@ -30,6 +34,19 @@ namespace QC.Campaign.Record
 
             currentUnits.Clear();
             currentUnits.AddRange(units);
+        }
+
+        public void StartCampaign(CampaignDefinition campaignDefinition)
+        {
+            Initialize(campaignDefinition, campaignDefinition.StartingUnits);
+            
+            onChanged.Invoke();
+        }
+
+        public string NextScenarioGuid()
+        {
+            // TODO, need to track which scenarios we have completed
+            return HasCurrentCampaign ? currentCampaignDefinition.Scenarios[0] : IGuid.Invalid;
         }
     }
 }
