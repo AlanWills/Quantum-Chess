@@ -83,7 +83,7 @@ namespace QC.Match.AI.Internals
       public Piece GetPieceAt(Vector2Int boardPosition)
       {
          int index = ToIndex(boardPosition);
-         return board[index].Piece;
+         return 0 <= index && index < board.Count ? board[index].Piece : default;
       }
 
       public void MakeMove(Move moveToMake)

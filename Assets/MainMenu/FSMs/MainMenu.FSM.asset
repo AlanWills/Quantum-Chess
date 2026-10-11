@@ -137,22 +137,12 @@ MonoBehaviour:
   m_Name: Execute Load Job
   m_EditorClassIdentifier: Celeste.Loading.Nodes.Runtime::Celeste.Loading.Nodes.ExecuteLoadJobNode
   graph: {fileID: 11400000}
-  position: {x: 56, y: -136}
+  position: {x: 56, y: -104}
   ports:
     keys:
-    - argument
     - ' '
     - 
     values:
-    - _fieldName: argument
-      _node: {fileID: 9031676942033137354}
-      _typeQualifiedName: Celeste.Loading.Parameters.LoadJobReference, Celeste.Loading.Runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
     - _fieldName: ' '
       _node: {fileID: 9031676942033137354}
       _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
@@ -176,4 +166,6 @@ MonoBehaviour:
       _dynamic: 1
   guid: e124c361-6be6-4021-995b-2084cfe43799
   toRaise: {fileID: 11400000, guid: aa8053b538b3b594e8d0938f58ca2f5a, type: 2}
-  argument: {fileID: -1714041838157429004}
+  argument:
+    loadJob: {fileID: 11400000, guid: 9726d3ae210cc1248b417ee36ab8baca, type: 2}
+    contextProvider: {fileID: 11400000, guid: 43de0310a2336c042ba9f5b4d70e2a16, type: 2}

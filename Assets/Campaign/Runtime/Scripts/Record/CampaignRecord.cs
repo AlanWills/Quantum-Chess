@@ -38,6 +38,7 @@ namespace QC.Campaign.Record
 
         public void StartCampaign(CampaignDefinition campaignDefinition)
         {
+            UnityEngine.Debug.Assert(campaignDefinition != null, $"Attempting to start a campaign, but it is null!");
             Initialize(campaignDefinition, campaignDefinition.StartingUnits);
             
             onChanged.Invoke();

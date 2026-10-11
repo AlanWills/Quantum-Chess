@@ -205,8 +205,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 456125399}
-        m_TargetAssemblyTypeName: GUS.Core.Loading.LoadingManager, GUS.Core
-        m_MethodName: OnLoadContext
+        m_TargetAssemblyTypeName: Celeste.Core.Loading.LoadingManager, Celeste.Loading.Runtime
+        m_MethodName: OnLoadSceneWithContext
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

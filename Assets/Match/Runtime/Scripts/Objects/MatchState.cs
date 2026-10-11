@@ -119,8 +119,11 @@ namespace QC.Match.Objects
             return loadedSuccessfully;
         }
         
-        private async UniTask StartScenarioAsync(string scenarioGuid)
+        public async UniTask StartScenarioAsync(string scenarioGuid)
         {
+            // We may set the active player as part of the setup, so we make sure we clear this to ensure that process succeeds
+            activePlayerIndex = -1;
+            
             if (!await LoadScenarioAsync(scenarioGuid))
             {
                 return;
@@ -251,12 +254,12 @@ namespace QC.Match.Objects
             
             foreach (BoardObjectInstance instance in board.Objects)
             {
-                if (!instance.TryFindInterface<IPiece>(out var chessPiece))
+                if (!instance.TryFindInterface<IPiece>(out var piece))
                 {
                     continue;
                 }
 
-                if (chessPiece.GetPieceColour() != colour)
+                if (piece.GetPieceColour() != colour)
                 {
                     continue;
                 }
@@ -272,6 +275,7 @@ namespace QC.Match.Objects
 
                 foreach (Vector2Int validThreat in validThreats)
                 {
+                    UnityEngine.Debug.Assert(board.IsPositionInBoard(validThreat), $"Calculated an invalid threat for piece: {piece.GetPieceColour()} - {piece.GetPieceType()} - {grid2DTransform.GetPosition()}!");
                     actionMaskToUpdate.SetTileAttackable(validThreat);
                 }
             }
@@ -344,7 +348,6 @@ namespace QC.Match.Objects
         [LuaMember("startScenario")]
         private void StartScenario(string scenarioGuid)
         {
-            activePlayerIndex = -1;
             StartScenarioAsync(scenarioGuid).Forget();
         }
 

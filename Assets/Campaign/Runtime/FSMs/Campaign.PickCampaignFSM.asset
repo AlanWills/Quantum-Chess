@@ -16,19 +16,9 @@ MonoBehaviour:
   position: {x: 360, y: -88}
   ports:
     keys:
-    - argument
     - ' '
     - 
     values:
-    - _fieldName: argument
-      _node: {fileID: -5219632005550048216}
-      _typeQualifiedName: Celeste.Loading.Parameters.LoadJobReference, Celeste.Loading.Runtime,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
     - _fieldName: ' '
       _node: {fileID: -5219632005550048216}
       _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
@@ -52,7 +42,9 @@ MonoBehaviour:
       _dynamic: 1
   guid: eade6e11-5b64-4634-b990-f7681b1d3bc9
   toRaise: {fileID: 11400000, guid: e1ad3c596fdd9ab459e8ccb8682786ef, type: 2}
-  argument: {fileID: -4623408667502651544}
+  argument:
+    loadJob: {fileID: 11400000, guid: 1f178385ef81ee244a57066d76b48425, type: 2}
+    contextProvider: {fileID: 11400000, guid: 43de0310a2336c042ba9f5b4d70e2a16, type: 2}
 --- !u!114 &-4623408667502651544
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -313,21 +313,20 @@ namespace QC.Match.Components
                 validThreats);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsBoardPositionInBounds(
+            Vector2Int position,
+            IBoardLookup boardLookup)
+        {
+            return boardLookup.IsPositionInBoard(position);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsValidBoardPosition(
             Vector2Int position,
             IBoardLookup boardLookup)
         {
-            if (!boardLookup.IsPositionInBoard(position))
-            {
-                return false;
-            }
-
-            if (!boardLookup.DoesBoardTileExist(position))
-            {
-                return false;
-            }
-            
-            return true;
+            return boardLookup.DoesBoardTileExist(position);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -376,24 +375,49 @@ namespace QC.Match.Components
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
                 Vector2Int nextPosition = startingPosition + i * direction;
+
+                // If this position is outside of our board bounds we stop searching immediately, no more valid moves exist in this direction
+                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
+                {
+                    break;
+                }
+                
                 bool isContinousMovement = moveType == MoveType.Continuous;
 
-                // If this position is not valid and we're doing continuous movement we should finish searching
-                if (!IsValidBoardPosition(nextPosition, boardLookup) && isContinousMovement)
+                if (!IsValidBoardPosition(nextPosition, boardLookup))
                 {
-                    break;
+                    if (isContinousMovement)
+                    {
+                        // If this position is not valid and we're doing continuous movement we should finish searching
+                        break;
+                    }
+                    
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just a hole in the board 
+                    continue;
                 }
 
-                // If this board position is not vacant, no matter who is there and we're doing continuous movement, we should finish search 
-                if (!IsVacantBoardPosition(nextPosition, boardLookup) && isContinousMovement)
+                if (!IsVacantBoardPosition(nextPosition, boardLookup))
                 {
-                    break;
+                    if (isContinousMovement)
+                    {
+                        // If this board position is not vacant, no matter who is there and we're doing continuous movement, we should finish search 
+                        break;
+                    }
+
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just not a square we can move to
+                    continue;
                 }
 
-                // If this board position is not safe and we're doing continuous movement, we should finish search 
-                if (!IsSafeBoardPosition(nextPosition, opponentActionMask) && mustBeSafe && isContinousMovement)
+                if (mustBeSafe && !IsSafeBoardPosition(nextPosition, opponentActionMask))
                 {
-                    break;
+                    if (isContinousMovement)
+                    {
+                        // If this board position is not safe and we're doing continuous movement, we should finish search 
+                        break;
+                    }
+
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just not a safe square we can move to
+                    continue;
                 }
                 
                 validMoves.Add(nextPosition);
@@ -414,18 +438,37 @@ namespace QC.Match.Components
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
                 Vector2Int nextPosition = startingPosition + i * direction;
-                bool isContinousMovement = moveType == MoveType.Continuous;
-
-                // If this position is not valid and we're doing continuous movement we should finish searching
-                if (!IsValidBoardPosition(nextPosition, boardLookup) && isContinousMovement)
+                
+                // If this position is outside of our board bounds we stop searching immediately, no more valid attackable pieces exist in this direction
+                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
                 {
                     break;
                 }
+                
+                bool isContinousMovement = moveType == MoveType.Continuous;
 
-                // If this board position is not safe and we're doing continuous movement, we should finish search 
-                if (!IsSafeBoardPosition(nextPosition, opponentActionMask) && mustBeSafe && isContinousMovement)
+                if (!IsValidBoardPosition(nextPosition, boardLookup))
                 {
-                    break;
+                    if (isContinousMovement)
+                    {
+                        // If this position is not valid and we're doing continuous movement we should finish searching
+                        break;
+                    }
+                    
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just a hole in the board 
+                    continue;
+                }
+
+                if (mustBeSafe && !IsSafeBoardPosition(nextPosition, opponentActionMask))
+                {
+                    if (isContinousMovement)
+                    {   
+                        // If this board position is not safe and we're doing continuous movement, we should finish search 
+                        break;
+                    }
+
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just an invalid place to attack
+                    continue;
                 }
                 
                 // If this board position is vacant it's not a valid attack target, but it shouldn't stop our search
@@ -437,10 +480,16 @@ namespace QC.Match.Components
                 BoardObjectInstance pieceToAttack = boardLookup.GetBoardObjectAt(nextPosition);
                 UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at {nextPosition}, we've not managed to retrieve it when calculating attacks...");
                 
-                // There's a piece on this position, but we can't attack it so if we're doing continuous movement we should stop our search
-                if (!IsAttackable(pieceToAttack, currentColour) && isContinousMovement)
+                if (!IsAttackable(pieceToAttack, currentColour))
                 {
-                    break;
+                    if (isContinousMovement)
+                    {
+                        // There's a piece on this position, but we can't attack it so if we're doing continuous movement we should stop our search
+                        break;
+                    }
+
+                    // We can continue looking as we're within board bounds and doing jump movement, this is just an invalid place to attack
+                    continue;
                 }
                 
                 validAttacks.Add(nextPosition);
@@ -458,17 +507,26 @@ namespace QC.Match.Components
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
                 Vector2Int nextPosition = startingPosition + i * direction;
-                bool isContinousMovement = moveType == MoveType.Continuous;
-
-                // If this position is not valid and we're doing continuous movement we should finish searching
-                if (!IsValidBoardPosition(nextPosition, boardLookup) && isContinousMovement)
+                
+                // If this position is outside of our board bounds we stop searching immediately, no more valid threats exist in this direction
+                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
                 {
                     break;
                 }
                 
-                // If it's a valid board position that we can reach via a move, it's a valid threatened square
-                validThreats.Add(nextPosition);
+                bool isContinousMovement = moveType == MoveType.Continuous;
                 
+                if (IsValidBoardPosition(nextPosition, boardLookup))
+                {
+                    // If it's a valid board position that we can reach via a move, it's a valid threatened square, even if there's a piece there (even if it's one of ours!)
+                    validThreats.Add(nextPosition);
+                }
+                else if (isContinousMovement)
+                {
+                    // If this position is not valid and we're doing continuous movement we should finish searching
+                    break;
+                }
+
                 // There's a piece on this position, so if we're doing continuous movement we have reached the limit of what we can threaten
                 if (!IsVacantBoardPosition(nextPosition, boardLookup) && isContinousMovement)
                 {

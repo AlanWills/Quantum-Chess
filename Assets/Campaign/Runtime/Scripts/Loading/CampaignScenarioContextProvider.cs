@@ -1,5 +1,4 @@
 ﻿using Celeste.Scene;
-using Celeste.Scene.Events;
 using QC.Campaign.Record;
 using QC.GameSystems;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace QC.Campaign.Loading
     {
         [SerializeField] private CampaignRecord campaignRecord;
         
-        public override Context Create()
+        public override ILoadContext Create()
         {
             string nextScenarioGuid = campaignRecord.NextScenarioGuid();
             return new LoadScenarioContext(nextScenarioGuid);

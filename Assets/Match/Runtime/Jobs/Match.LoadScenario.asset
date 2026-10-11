@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Match.LoadScenario
   m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Loading.LoadScenarioLoadJob
   showOutputInLoadingScreen: 1
+  matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}

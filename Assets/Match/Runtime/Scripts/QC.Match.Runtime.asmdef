@@ -21,7 +21,9 @@
         "Celeste.Core.Runtime",
         "Celeste.RemoteConfig.Runtime",
         "Celeste.Debug.Runtime",
-        "Celeste.Loading.Runtime"
+        "Celeste.Loading.Runtime",
+        "Celeste.Scene.Runtime",
+        "QC.GameSystems.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -238,6 +238,7 @@ namespace QC.Match.AI
               for (int i = 0, n = validActions.Count; i < n; ++i)
               {
                  Vector2Int action = validActions[i];
+                 UnityEngine.Debug.Assert(boardBlit.IsPositionInBoard(action), $"Generated an invalid action ({action}) for Piece: {tileBlit.Piece.PieceColour} - {tileBlit.Piece.PieceType} - {boardPosition}.");
                  Piece pieceToCapture = boardBlit.GetPieceAt(action);
                  outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPosition, action));
               }

@@ -19,8 +19,10 @@ namespace QC.Campaign.Nodes
         protected override void OnEnter()
         {
             base.OnEnter();
-            
-            campaignRecord.StartCampaign(campaignDefinition);
+
+            CampaignDefinition campaignToStart = GetInputValue<CampaignDefinition>(nameof(campaignDefinition));
+            UnityEngine.Debug.Assert(campaignToStart, $"Failed to obtain a campaign to start in {nameof(StartCampaignNode)} in FSM graph {graph.name}.");
+            campaignRecord.StartCampaign(campaignToStart);
         }
     }
 }
