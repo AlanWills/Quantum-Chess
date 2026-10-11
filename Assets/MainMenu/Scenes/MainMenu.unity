@@ -264,6 +264,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1131804002}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Celeste.Events.EventRaiser, Celeste.Events.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
       propertyPath: m_Name
       value: Button - Continue
@@ -271,7 +299,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1131804002}
   m_SourcePrefab: {fileID: 100100000, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
 --- !u!224 &231276014 stripped
 RectTransform:
@@ -508,6 +539,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1131803998 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+  m_PrefabInstance: {fileID: 231276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1131804002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131803998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a0d147401428146b5daed6a3cee729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events.Runtime::Celeste.Events.EventRaiser
+  gameEvent: {fileID: 11400000, guid: cce296150668e2641b423acca9975ace, type: 2}
 --- !u!1 &1920273940
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +619,11 @@ MonoBehaviour:
       m_Calls: []
   startAutomatically: 1
   lateUpdate: 0
+--- !u!1 &2033421179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+  m_PrefabInstance: {fileID: 2120088953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2120088953
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,6 +724,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2120088958}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Celeste.Events.EventRaiser, Celeste.Events.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6191592729197578153, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
       propertyPath: m_Name
       value: Button - Play
@@ -677,13 +759,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6191592729197578155, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2120088958}
   m_SourcePrefab: {fileID: 100100000, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
 --- !u!224 &2120088954 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6191592729197578152, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
   m_PrefabInstance: {fileID: 2120088953}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2120088958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033421179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a0d147401428146b5daed6a3cee729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Events.Runtime::Celeste.Events.EventRaiser
+  gameEvent: {fileID: 11400000, guid: 6ef2273e5fb2f194b969144b71ed0ac8, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

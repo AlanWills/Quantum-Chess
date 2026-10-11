@@ -23,7 +23,7 @@ MonoBehaviour:
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
-      - fieldName: isEnabled
+      - fieldName: isInteractable
         node: {fileID: 2094002675666594395}
         reroutePoints: []
       _direction: 1
@@ -65,7 +65,7 @@ MonoBehaviour:
   ports:
     keys:
     - button
-    - isEnabled
+    - isInteractable
     values:
     - _fieldName: button
       _node: {fileID: 2094002675666594395}
@@ -79,7 +79,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: isEnabled
+    - _fieldName: isInteractable
       _node: {fileID: 2094002675666594395}
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
@@ -92,7 +92,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   button: {fileID: 0}
-  isEnabled: 0
+  isInteractable: 0
 --- !u!114 &4037408163724823735
 MonoBehaviour:
   m_ObjectHideFlags: 1
