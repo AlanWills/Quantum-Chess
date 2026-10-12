@@ -16,4 +16,5 @@ MonoBehaviour:
   displayName: Campaign 1
   scenarios:
   - 3bef3040-6e8e-4fab-9cbc-1ae6692f2045
-  startingUnits: 00000000
+  - 3bef3040-6e8e-4fab-9cbc-1ae6692f2045
+  startingUnits: 07000000

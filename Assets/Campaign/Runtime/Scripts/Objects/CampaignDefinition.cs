@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Celeste.Objects;
 using Celeste.Objects.Attributes.GUI;
@@ -32,8 +33,8 @@ namespace QC.Campaign.Objects
 
         [SerializeField, StringAsSystemGuid] private string guid;
         [SerializeField] private string displayName;
-        [SerializeField] private List<string> scenarios = new();
-        [SerializeField] private List<int> startingUnits = new();
+        [SerializeField, GuidPicker("MatchScenario")] private List<string> scenarios = new();
+        [SerializeField, GuidPicker("BoardObject")] private List<int> startingUnits = new();
 
         #endregion
     }
