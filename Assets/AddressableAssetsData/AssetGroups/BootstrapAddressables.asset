@@ -85,6 +85,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - BootstrapAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afdf84d66cb842eebc708ebc56aa4870
+    m_Address: Factories/CampaignFactory.lua
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba64917a51ae04cabb8b30ac66a306c3
     m_Address: Assets/Bootstrap/Jobs/LoadEngineSystemsSceneSet.asset
     m_ReadOnly: 0

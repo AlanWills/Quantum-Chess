@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &353675679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 353675680}
+  - component: {fileID: 353675681}
+  m_Layer: 0
+  m_Name: LuaBindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &353675680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353675679}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1080038754}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &353675681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353675679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b740800ac2845f0ac4ef624d3ee24e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Lua.Runtime::Celeste.Lua.Proxies.SetUpLuaBindings
+  luaRuntime: {fileID: 11400000, guid: 056010b9419ec428fa177d1140449ce2, type: 2}
+  bindings:
+  - {fileID: 1080038755}
 --- !u!1 &391681922
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +481,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1080038753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1080038754}
+  - component: {fileID: 1080038755}
+  m_Layer: 0
+  m_Name: Campaign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1080038754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080038753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 353675680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1080038755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080038753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f02888cb24648a9abaef3bd30820f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: QC.Campaign.Runtime.Lua::QC.Campaign.CampaignLuaBindings
+  campaignRecord: {fileID: 11400000, guid: e7248bd9a2c2cd7469bb3be55de9ff59, type: 2}
 --- !u!1 &1122172109
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,12 +659,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
       propertyPath: assetsToLoad.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
       propertyPath: 'assetsToLoad.Array.data[0]'
       value: 
+      objectReference: {fileID: 1122172109}
+    - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+      propertyPath: 'assetsToLoad.Array.data[1]'
+      value: 
       objectReference: {fileID: 391681922}
+    - target: {fileID: 779649805085777981, guid: c1c8e2f49fd89db4aad206f5344030f9, type: 3}
+      propertyPath: 'assetsToLoad.Array.data[2]'
+      value: 
+      objectReference: {fileID: 353675679}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -588,3 +689,4 @@ SceneRoots:
   - {fileID: 1018552173}
   - {fileID: 660437249}
   - {fileID: 555103314}
+  - {fileID: 353675680}

@@ -15,6 +15,5 @@ MonoBehaviour:
   guid: 0dcd13eb-ce1b-4fc8-8a53-7eb484c435cc
   displayName: Campaign 1
   scenarios:
-  - 3bef3040-6e8e-4fab-9cbc-1ae6692f2045
-  - 3bef3040-6e8e-4fab-9cbc-1ae6692f2045
-  startingUnits: 07000000
+  - 5a083694-1f08-4ca1-b330-49ec9f180c5f
+  startingUnits: 0700000006000000

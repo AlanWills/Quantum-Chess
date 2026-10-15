@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Celeste.Objects;
+using Lua;
 using QC.Campaign.Objects;
 using UnityEngine;
 
 namespace QC.Campaign.Record
 {
+    [LuaObject(kLuaName)]
     [CreateAssetMenu(fileName = nameof(CampaignRecord), menuName = "QC/Campaign/Campaign Record")]
-    public class CampaignRecord : ScriptableObject
+    public partial class CampaignRecord : ScriptableObject
     {
         #region Properties and Fields
 
+        public const string kLuaName = nameof(CampaignRecord);
+        
         public bool HasCurrentCampaign => currentCampaignDefinition != null;
         public string CurrentCampaignGuid => HasCurrentCampaign ? currentCampaignDefinition.Guid : IGuid.Invalid;
         public IReadOnlyList<int> CurrentUnits => currentUnits;
@@ -49,5 +53,21 @@ namespace QC.Campaign.Record
             // TODO, need to track which scenarios we have completed
             return HasCurrentCampaign ? currentCampaignDefinition.Scenarios[0] : IGuid.Invalid;
         }
+        
+        #region Lua
+
+        [LuaMember("getCurrentUnits")]
+        private LuaTable Lua_GetCurrentUnits()
+        {
+            LuaTable luaTable = new LuaTable(currentUnits.Count, 0);
+            for (int i = 0, n = currentUnits.Count; i < n; i++)
+            {
+                luaTable[i + 1] = currentUnits[i];
+            }
+
+            return luaTable;
+        }
+        
+        #endregion
     }
 }
