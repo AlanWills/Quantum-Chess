@@ -2,6 +2,7 @@
 using System.Collections;
 using Celeste.Loading;
 using Celeste.Scene;
+using Cysharp.Threading.Tasks;
 using QC.GameSystems;
 using QC.Match.Objects;
 using UnityEngine;
@@ -17,7 +18,12 @@ namespace QC.Match.Loading
         {
             LoadScenarioContext loadScenarioContext = context as LoadScenarioContext;
             UnityEngine.Debug.Assert(loadScenarioContext != null, $"Attempting to call {nameof(StartScenarioLoadJob)} {name} without a valid {nameof(LoadScenarioContext)}.");
-            yield return matchState.StartScenarioAsync(loadScenarioContext.ScenarioGuid);
+            var scenarioTask = matchState.StartScenarioAsync(loadScenarioContext.ScenarioGuid);
+
+            while (scenarioTask.Status == UniTaskStatus.Pending)
+            {
+                yield return null;
+            }
         }
     }
 }

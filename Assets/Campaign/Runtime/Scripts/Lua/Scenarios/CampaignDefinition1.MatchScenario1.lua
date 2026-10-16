@@ -3,7 +3,7 @@ local CampaignFactory = require("Factories/CampaignFactory.lua")
 
 local Scenario = { }
 
-function Scenario:setUp()
+function Scenario.setUp()
     local boardHeight = 8
     local boardWidth = 8
     local deploymentZones =
@@ -17,7 +17,7 @@ function Scenario:setUp()
     StandardChessMatchFactory.setStartingPlayer("White")
 end
 
-function Scenario:load()
+function Scenario.load()
     StandardChessMatchFactory.createHumanWhitePlayer()
     StandardChessMatchFactory.createAIBlackPlayer({
         difficulty = "Medium"
