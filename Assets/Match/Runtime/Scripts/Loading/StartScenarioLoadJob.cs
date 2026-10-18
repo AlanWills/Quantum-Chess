@@ -18,12 +18,7 @@ namespace QC.Match.Loading
         {
             LoadScenarioContext loadScenarioContext = context as LoadScenarioContext;
             UnityEngine.Debug.Assert(loadScenarioContext != null, $"Attempting to call {nameof(StartScenarioLoadJob)} {name} without a valid {nameof(LoadScenarioContext)}.");
-            var scenarioTask = matchState.StartScenarioAsync(loadScenarioContext.ScenarioGuid);
-
-            while (scenarioTask.Status == UniTaskStatus.Pending)
-            {
-                yield return null;
-            }
+            yield return matchState.StartScenarioAsync(loadScenarioContext.ScenarioGuid).ToCoroutine();
         }
     }
 }
