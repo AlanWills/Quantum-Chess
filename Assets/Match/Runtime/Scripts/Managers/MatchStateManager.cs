@@ -76,12 +76,9 @@ namespace QC.Match.Managers
             BoardCommandArgs args = CreateCommandArgs();
             boardCommandExecutor.BeginProcessing(args);
 
-            if (matchState.HasActiveScenario)
-            {
-                yield return matchState.LoadLastActiveScenario(args);
-            }
-
             onMatchSetup.Invoke();
+
+            yield break;
         }
 
         private BoardCommandArgs CreateCommandArgs()

@@ -81,7 +81,7 @@ MonoBehaviour:
     moveType: 0
     distanceIfNotMoved: 1
     distanceIfMoved: 1
-    pattern: {x: -1, y: -1}
+    pattern: {x: -1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 1
   startingAttackPatterns:
@@ -138,7 +138,7 @@ MonoBehaviour:
     moveType: 0
     distanceIfNotMoved: 1
     distanceIfMoved: 1
-    pattern: {x: -1, y: -1}
+    pattern: {x: -1, y: 1}
     relativeToVerticalDirection: 0
     mustBeSafe: 1
 --- !u!114 &-1037797547609353635

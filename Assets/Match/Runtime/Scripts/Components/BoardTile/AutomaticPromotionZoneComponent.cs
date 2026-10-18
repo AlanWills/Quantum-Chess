@@ -65,7 +65,7 @@ namespace QC.Match.Components
             PieceType pieceType = piece.GetPieceType();
             PieceColour pieceColour = piece.GetPieceColour();
 
-            for (int i = 0, n = saveData.possiblePromotions.Capacity; i < n; ++i)
+            for (int i = 0, n = saveData.possiblePromotions.Count; i < n; ++i)
             {
                 Promotion promotion = saveData.possiblePromotions[i];
                 bool pieceTypeMatches = promotion.requiredPieceType == PieceType.None ||

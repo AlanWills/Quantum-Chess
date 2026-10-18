@@ -23,10 +23,7 @@ MonoBehaviour:
       _node: {fileID: -5219632005550048216}
       _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: 
-        node: {fileID: 281124022655760714}
-        reroutePoints: []
+      connections: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -61,6 +58,51 @@ MonoBehaviour:
   isConstant: 1
   constantValue: {fileID: 11400000, guid: 1f178385ef81ee244a57066d76b48425, type: 2}
   referenceValue: {fileID: 0}
+--- !u!114 &-303219060430616636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c6ad2460454cebbd6daaf331621805, type: 3}
+  m_Name: Execute Load Task
+  m_EditorClassIdentifier: Celeste.Loading.Runtime.Nodes::Celeste.Loading.Nodes.ExecuteLoadTaskNode
+  graph: {fileID: 11400000}
+  position: {x: 360, y: 104}
+  ports:
+    keys:
+    - ' '
+    - 
+    values:
+    - _fieldName: ' '
+      _node: {fileID: -303219060430616636}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: 
+        node: {fileID: 281124022655760714}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: 
+      _node: {fileID: -303219060430616636}
+      _typeQualifiedName: System.Void, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  guid: 4b7f58f0-345a-45ae-8df2-6c3fcaf03f85
+  toRaise: {fileID: 11400000, guid: 771baed86c895384fbd07c372540da76, type: 2}
+  argument:
+    loadTask: {fileID: 11400000, guid: a2ad1bf1387a8b54782490151a4b0b81, type: 2}
+    contextProvider: {fileID: 11400000, guid: 43de0310a2336c042ba9f5b4d70e2a16, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +119,7 @@ MonoBehaviour:
   - {fileID: 2552730639846951589}
   - {fileID: 281124022655760714}
   - {fileID: -5219632005550048216}
+  - {fileID: -303219060430616636}
   startNode: {fileID: 2552730639846951589}
   parameters:
   - {fileID: -4623408667502651544}
@@ -130,7 +173,7 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: ' '
-        node: {fileID: -5219632005550048216}
+        node: {fileID: -303219060430616636}
         reroutePoints: []
       _direction: 1
       _connectionType: 1

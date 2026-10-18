@@ -8,12 +8,10 @@ namespace QC.Match.Persistence
     public class MatchStateDTO : VersionedDTO
     {
         public int activePlayerIndex;
-        public string activeScenarioGuid;
         
         public MatchStateDTO(MatchState matchState)
         {
             activePlayerIndex = matchState.ActivePlayerIndex;
-            activeScenarioGuid = matchState.ActiveScenarioGuid;
         }
     }
 }
