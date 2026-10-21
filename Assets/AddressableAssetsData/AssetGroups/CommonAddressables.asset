@@ -75,6 +75,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2249567918737e04781ff36b63dec769
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadTaskSilently.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e86d9e384dbd4ff6a65627b02e0b894
     m_Address: Assets/Match/Runtime/Scenes/MatchSceneSet.asset
     m_ReadOnly: 0
@@ -123,6 +128,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 495e0897358b6eb4eb1310c9ddcac323
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteTaskWithOverlay.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 569209f7d0d042e2a431c35ad1728173
     m_Address: Commands/ThinkForPlayerCommand.lua
     m_ReadOnly: 0
@@ -146,11 +156,22 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71cc3509798b1a74ba512b81985db883
+    m_Address: Assets/Campaign/Runtime/Scenes/Campaign.PickCampaignSceneSet.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 74b6e3c456b59406c88a240a64a123d1
     m_Address: GameSystemsDebug
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 771baed86c895384fbd07c372540da76
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadTaskWithScreen.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77d139f7eebbec040b12fa6b96d97e56
     m_Address: Assets/Celeste/Sound/Data/Events/PlayMusicOneShotWithSettings.asset
@@ -247,6 +268,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa8053b538b3b594e8d0938f58ca2f5a
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadJobSilently.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac7c838877b9a1743bf5058873818358
     m_Address: Assets/Celeste/Localisation/Parameters/CurrentLanguage.asset
     m_ReadOnly: 0
@@ -277,11 +303,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3dd33e6c4b97f7419079330d438c34b
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadTaskWithOverlay.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd9c49480df7f400d84095c23adf239e
     m_Address: MatchDebug
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d741abe51cde02a42837ddd5a95b1a2f
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadJobWithOverlay.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8439101cc4a4d74ae53741749fb3756
     m_Address: Commands/AddBoardTileCommand.lua
@@ -300,6 +336,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1ad3c596fdd9ab459e8ccb8682786ef
+    m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadJobWithScreen.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef966062692627148a3dd8fe640184f2
     m_Address: Assets/Celeste/Sound/Data/Events/PlaySFXWithRawClip.asset
