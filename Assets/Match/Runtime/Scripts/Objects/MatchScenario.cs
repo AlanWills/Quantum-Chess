@@ -81,7 +81,6 @@ return Scenario";
             return luaRuntime.ExecuteScriptAsClassAsync(scenarioScript);
         }
 
-#if UNITY_EDITOR
         public void Editor_Initialize()
         {
             if (scenarioScript != null)
@@ -98,6 +97,5 @@ return Scenario";
             EditorOnly.SetDirty(this);
             EditorOnly.SaveAsset(this);
         }
-#endif
     }
 }

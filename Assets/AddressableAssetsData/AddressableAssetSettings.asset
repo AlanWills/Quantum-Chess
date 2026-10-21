@@ -76,11 +76,11 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 3e69f56148b10489a94558e0dda5cd5a
-        m_Value: ServerData/StandaloneOSX/Debug/1.0
+        m_Value: ServerData/Android/Debug/1.0
       - m_Id: 6dd05efca99d841bd802cfeda0552411
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 8d6c5bbff7a31417cb588c83608f0f33
-        m_Value: https://storage.googleapis.com/celeste-games/ServerData/StandaloneOSX/Debug/1.0
+        m_Value: https://storage.googleapis.com/celeste-games/ServerData/Android/Debug/1.0
       - m_Id: 9f46ee18214e54aa9a13bc8eb72f9a27
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: c404e0b9db75c4503be2bedfedf19924
