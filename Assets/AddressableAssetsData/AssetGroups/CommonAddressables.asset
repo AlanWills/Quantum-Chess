@@ -116,11 +116,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e1f646b59b85814ea2791bfff0acd22
+    m_Address: Assets/Campaign/Runtime/Events/Campaign.CampaignSelected.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4267ee0495522b748b2932da05a16789
     m_Address: Assets/Celeste/Loading/Events/LoadContext.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43de0310a2336c042ba9f5b4d70e2a16
+    m_Address: Assets/Campaign/Runtime/Data/Loading/Campaign.NextCampaignScenarioContextProvider.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 48cb7be28c92f1944aed44df0a6c29c2
     m_Address: Assets/Celeste/Sound/Data/Events/PlaySFXOneShotWithRawClip.asset
@@ -149,6 +159,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - CommonAddressables
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e487d26caab01d4a97fcec9ea53b11f
+    m_Address: Assets/Campaign/Runtime/FSMs/Campaign.PickCampaignFSM.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e60b11d2a4389641b69eadaf7d97ecd
     m_Address: Assets/Celeste/Input/Data/Events/SingleTouch.asset
@@ -244,6 +259,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2ad1bf1387a8b54782490151a4b0b81
+    m_Address: Assets/Campaign/Runtime/Tasks/Campaign.LoadNextCampaignScenarioASync.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3aa7b1cee5289041a03094b573b5bf5
     m_Address: Assets/Celeste/Input/Data/Events/MiddleMouseButtonFirstUp.asset
     m_ReadOnly: 0
@@ -297,6 +317,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - CommonAddressables
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b293d9c651108b943bdf46fbfba51597
+    m_Address: Assets/Campaign/Runtime/Data/Campaign.CampaignDefinitionCatalogue.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: be39b6918ae84918b58d75b040681258
     m_Address: Commands/AllCommands.lua
     m_ReadOnly: 0
@@ -339,6 +364,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e1ad3c596fdd9ab459e8ccb8682786ef
     m_Address: Assets/Celeste/Loading/Runtime/Events/ExecuteLoadJobWithScreen.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7248bd9a2c2cd7469bb3be55de9ff59
+    m_Address: Assets/Campaign/Runtime/Data/Campaign.CampaignRecord.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8d2b8d056a876a4f95d6f7fea98efdc
+    m_Address: Assets/Campaign/Runtime/Events/Campaign.CampaignRecordChanged.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

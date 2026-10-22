@@ -144,6 +144,9 @@ GameObject:
   - component: {fileID: 456125401}
   - component: {fileID: 456125402}
   - component: {fileID: 456125403}
+  - component: {fileID: 456125407}
+  - component: {fileID: 456125406}
+  - component: {fileID: 456125405}
   - component: {fileID: 456125404}
   m_Layer: 0
   m_Name: LoadingManager
@@ -323,6 +326,93 @@ MonoBehaviour:
       - m_Target: {fileID: 456125399}
         m_TargetAssemblyTypeName: Celeste.Core.Loading.LoadingManager, Celeste.Loading
         m_MethodName: OnExecuteTaskWithOverlay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456125405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456125397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f86bfeb9d7ff24dad87b0824ac1a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Loading.Runtime::Celeste.Loading.Events.ExecuteLoadTaskEventListener
+  gameEvent: {fileID: 11400000, guid: 2249567918737e04781ff36b63dec769, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 456125399}
+        m_TargetAssemblyTypeName: Celeste.Core.Loading.LoadingManager, Celeste.Loading.Runtime
+        m_MethodName: OnExecuteLoadTaskSilently
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456125406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456125397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f86bfeb9d7ff24dad87b0824ac1a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Loading.Runtime::Celeste.Loading.Events.ExecuteLoadTaskEventListener
+  gameEvent: {fileID: 11400000, guid: c3dd33e6c4b97f7419079330d438c34b, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 456125399}
+        m_TargetAssemblyTypeName: Celeste.Core.Loading.LoadingManager, Celeste.Loading.Runtime
+        m_MethodName: OnExecuteLoadTaskWithOverlay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &456125407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456125397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f86bfeb9d7ff24dad87b0824ac1a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Celeste.Loading.Runtime::Celeste.Loading.Events.ExecuteLoadTaskEventListener
+  gameEvent: {fileID: 11400000, guid: 771baed86c895384fbd07c372540da76, type: 2}
+  logAddAndRemoveListener: 0
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 456125399}
+        m_TargetAssemblyTypeName: Celeste.Core.Loading.LoadingManager, Celeste.Loading.Runtime
+        m_MethodName: OnExecuteLoadTaskWithScreen
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
