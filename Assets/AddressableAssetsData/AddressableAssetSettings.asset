@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: 86df0e01a12c9430f8ff733e9a8eecb6
+  m_DefaultGroup: 97e0f998c5fc44012b274bd98b6ddab6
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 86689ebc3b26c5968884da9ecb2c9fcd
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
@@ -76,11 +76,11 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 3e69f56148b10489a94558e0dda5cd5a
-        m_Value: ServerData/StandaloneOSX/Debug/1.0
+        m_Value: ServerData/Android/Debug/1.0
       - m_Id: 6dd05efca99d841bd802cfeda0552411
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: 8d6c5bbff7a31417cb588c83608f0f33
-        m_Value: https://storage.googleapis.com/celeste-games/ServerData/StandaloneOSX/Debug/1.0
+        m_Value: https://storage.googleapis.com/celeste-games/ServerData/Android/Debug/1.0
       - m_Id: 9f46ee18214e54aa9a13bc8eb72f9a27
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: c404e0b9db75c4503be2bedfedf19924

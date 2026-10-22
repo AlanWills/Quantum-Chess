@@ -96,11 +96,7 @@ function StandardChessMatchFactory.createPieces(boardWidth, boardHeight, leftMos
 
     -- Set up White Pawns
     for xPos = leftMostXPosition, rightMostXPosition do
-        AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whitePawn,
-        {
-            position = Vector2Int.new(xPos, 2),
-            verticalDirection = "Up",
-        })
+        StandardChessMatchFactory.addWhitePawn(Vector2Int.new(xPos, 2))
     end
 
     -- Set up White Rooks
@@ -123,11 +119,7 @@ function StandardChessMatchFactory.createPieces(boardWidth, boardHeight, leftMos
 
     -- Set up Black Pawns
     for xPos = leftMostXPosition, rightMostXPosition do
-        AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackPawn,
-        {
-            position = Vector2Int.new(xPos, boardHeight - 1),
-            verticalDirection = "Down",
-        })
+        StandardChessMatchFactory.addBlackPawn(Vector2Int.new(xPos, boardHeight - 1))
     end
 
     -- Set up Black Rooks
@@ -147,6 +139,62 @@ function StandardChessMatchFactory.createPieces(boardWidth, boardHeight, leftMos
 
     -- Set Up Black King
     AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackKing, { position = Vector2Int.new(rightMostXPosition - 3, boardHeight) })
+end
+
+function StandardChessMatchFactory.addWhitePawn(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whitePawn,
+    {
+        position = position,
+        verticalDirection = "Up",
+    })
+end
+
+function StandardChessMatchFactory.addWhiteKnight(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whiteKnight, { position = position })
+end
+
+function StandardChessMatchFactory.addWhiteBishop(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whiteBishop, { position = position })
+end
+
+function StandardChessMatchFactory.addWhiteRook(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whiteRook, { position = position })
+end
+
+function StandardChessMatchFactory.addWhiteQueen(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whiteQueen, { position = position })
+end
+
+function StandardChessMatchFactory.addWhiteKing(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.whiteKing, { position = position })
+end
+
+function StandardChessMatchFactory.addBlackPawn(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackPawn,
+    {
+        position = position,
+        verticalDirection = "Down",
+    })
+end
+
+function StandardChessMatchFactory.addBlackKnight(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackKnight, { position = position })
+end
+
+function StandardChessMatchFactory.addBlackBishop(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackBishop, { position = position })
+end
+
+function StandardChessMatchFactory.addBlackRook(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackRook, { position = position })
+end
+
+function StandardChessMatchFactory.addBlackQueen(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackQueen, { position = position })
+end
+
+function StandardChessMatchFactory.addBlackKing(position)
+    AddBoardObjectCommand.presetPiece(AddBoardObjectCommand.blackKing, { position = position })
 end
 
 function StandardChessMatchFactory.setStartingPlayer(startingColour)

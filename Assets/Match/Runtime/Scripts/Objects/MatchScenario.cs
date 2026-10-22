@@ -11,7 +11,7 @@ namespace QC.Match.Objects
 {
     [LuaObject]
     [CreateAssetMenu(fileName = nameof(MatchScenario), menuName = "QC/Match/Match Scenario")]
-    public partial class MatchScenario : ScriptableObject, IGuid
+    public partial class MatchScenario : ScriptableObject, IGuid, IEditorInitializable
     {
         #region Properties and Fields
 
@@ -37,11 +37,65 @@ namespace QC.Match.Objects
         public const string kScenarioLoadFunctionName = "load";
         public const string kScenarioSetUpFunctionName = "setUp";
 
+        private const string kDefaultScenarioScript = @"
+local StandardChessMatchFactory = require(""Factories/StandardChessMatchFactory.lua"")
+local CampaignFactory = require(""Factories/CampaignFactory.lua"")
+
+local Scenario = { }
+
+function Scenario.setUp()
+    local boardHeight = 8
+    local boardWidth = 8
+    local deploymentZones =
+    {
+        Vector2Int.new(4, 1),
+        Vector2Int.new(5, 1)
+    }
+
+    -- Create Board
+    StandardChessMatchFactory.createBoard(boardHeight, boardWidth)
+    
+    -- Add Enemy Units
+    StandardChessMatchFactory.addBlackKing(Vector2Int.new(4, 8))
+    
+    -- Load Player's Units
+    CampaignFactory.loadPlayerCurrentUnits(deploymentZones)
+    
+    -- Set Starting Player
+    StandardChessMatchFactory.setStartingPlayer(""White"")
+end
+
+function Scenario.load()
+    StandardChessMatchFactory.createHumanWhitePlayer()
+    StandardChessMatchFactory.createAIBlackPlayer({
+        difficulty = ""Medium""
+    })
+end
+
+return Scenario";
+
         #endregion
 
         public ValueTask<LuaTable> Load(ILuaRuntime luaRuntime)
         {
             return luaRuntime.ExecuteScriptAsClassAsync(scenarioScript);
+        }
+
+        public void Editor_Initialize()
+        {
+            if (scenarioScript != null)
+            {
+                return;
+            }
+            
+            LuaScript luaScript = CreateInstance<LuaScript>();
+            luaScript.name = $"{name}.Script";
+            luaScript.Text = kDefaultScenarioScript;
+            EditorOnly.CreateAssetInFolder(luaScript, EditorOnly.GetAssetFolderPath(this));
+
+            scenarioScript = luaScript;
+            EditorOnly.SetDirty(this);
+            EditorOnly.SaveAsset(this);
         }
     }
 }

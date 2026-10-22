@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77d3c53aa1a7491fb52263db3b952253, type: 3}
-  m_Name: Match.LoadScenario
-  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Loading.LoadScenarioLoadJob
+  m_Script: {fileID: 11500000, guid: 874a1b3505f449c69bd0989725fff9d6, type: 3}
+  m_Name: Match.StartScenarioAsync
+  m_EditorClassIdentifier: QC.Match.Runtime::QC.Match.Loading.StartScenarioLoadTask
   showOutputInLoadingScreen: 1
   matchState: {fileID: 11400000, guid: 9d272af1a57f12d44882d45a96c773e0, type: 2}

@@ -63,35 +63,19 @@ namespace QC.Match.Objects
 
         public void Initialize()
         {
-            Initialize(-1, string.Empty);
+            Initialize(-1);
         }
 
         public void Initialize(MatchStateDTO dto)
         {
-            Initialize(dto.activePlayerIndex, dto.activeScenarioGuid);
+            Initialize(dto.activePlayerIndex);
         }
 
-        private void Initialize(int activePlayerIndex, string activeScenarioGuid)
+        private void Initialize(int _activePlayerIndex)
         {
-            this.activePlayerIndex = activePlayerIndex;
-            this.activeScenarioGuid = activeScenarioGuid;
+            activePlayerIndex = _activePlayerIndex;
+            activeScenarioGuid = string.Empty;
             players.Clear();
-        }
-
-        public async UniTask LoadLastActiveScenario(BoardCommandArgs boardCommandArgs)
-        {
-            if (!HasActiveScenario)
-            {
-                UnityEngine.Debug.LogAssertion($"Attempting to load a scenario, but we don't actually have one active.  Did you forget to call {nameof(HasActiveScenario)}?");
-                return;
-            }
-
-            await LoadScenarioAsync(activeScenarioGuid);
-            
-            ITurnStrategy.Args turnStrategyArgs = boardCommandArgs.ToTurnStrategyArgs(ActivePlayerIndex);
-            IWinCondition.Args winConditionArgs = boardCommandArgs.ToWinConditionArgs(ActivePlayerIndex);
-
-            BeginTurnForPlayer(ActivePlayerIndex, turnStrategyArgs, winConditionArgs);
         }
 
         private async UniTask<bool> LoadScenarioAsync(string scenarioGuid)
