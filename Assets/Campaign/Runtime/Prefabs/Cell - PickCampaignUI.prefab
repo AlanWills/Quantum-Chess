@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 301e9b3a354f2bd4f99d788ebc80c5c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: QC.Campaign.Runtime::QC.Campaign.UI.PickCampaignUI
-  displayName: {fileID: 4018765488255976367}
+  displayName: {fileID: 3903730099172322065}
   campaignSelected: {fileID: 11400000, guid: 3e1f646b59b85814ea2791bfff0acd22, type: 2}
 --- !u!1 &4123665535489850296
 GameObject:
@@ -407,14 +407,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6191592729197578152, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
   m_PrefabInstance: {fileID: 7073309086605797139}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4018765488255976367 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6191592728476165308, guid: a7f4aba8559154c43af28e7c80252349, type: 3}
-  m_PrefabInstance: {fileID: 7073309086605797139}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
