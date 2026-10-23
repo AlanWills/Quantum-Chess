@@ -238,28 +238,31 @@ namespace QC.Match.Objects
             
             foreach (BoardObjectInstance instance in board.Objects)
             {
-                if (!instance.TryFindInterface<IPiece>(out var piece))
+                if (!instance.Piece.IsValid)
                 {
                     continue;
                 }
 
-                if (piece.GetPieceColour() != colour)
+                if (instance.Piece.GetPieceColour() != colour)
                 {
                     continue;
                 }
 
-                if (!instance.TryFindInterface<IActionProvider>(out var actionProvider) ||
-                    !instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform))
+                if (!instance.ActionProvider.IsValid || !instance.Grid2DTransform.IsValid)
                 {
                     continue;
                 }
 
                 validThreats.Clear();
-                actionProvider.CalculateValidThreats(grid2DTransform.GetPosition(), board, validThreats);
+
+                Vector2Int position = instance.Grid2DTransform.GetPosition();
+                instance.ActionProvider.CalculateValidThreats(position, board, validThreats);
 
                 foreach (Vector2Int validThreat in validThreats)
                 {
-                    UnityEngine.Debug.Assert(board.IsPositionInBoard(validThreat), $"Calculated an invalid threat for piece: {piece.GetPieceColour()} - {piece.GetPieceType()} - {grid2DTransform.GetPosition()}!");
+#if ULTRA_DEBUG_CHECKS
+                    UnityEngine.Debug.Assert(board.IsPositionInBoard(validThreat), $"Calculated an invalid threat for piece: {piece.GetPieceColour()} - {piece.GetPieceType()} - {position}!");
+#endif
                     actionMaskToUpdate.SetTileAttackable(validThreat);
                 }
             }
@@ -287,10 +290,19 @@ namespace QC.Match.Objects
                 return;
             }
             
+#if ULTRA_DEBUG_CHECKS
             onPlayerStartedThinking.Invoke();
+#else
+            onPlayerStartedThinking.InvokeSilently();
+#endif
             Player player = players[playerIndex];
             await player.TurnStrategy.OnTurn(turnStrategyArgs, dryRun);
+            
+#if ULTRA_DEBUG_CHECKS
             onPlayerFinishedThinking.Invoke();
+#else
+            onPlayerFinishedThinking.InvokeSilently();
+#endif
         }
 
         public void RecordActionTakenByPlayer(int playerIndex)

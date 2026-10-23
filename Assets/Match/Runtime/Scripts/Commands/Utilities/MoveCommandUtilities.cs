@@ -17,7 +17,7 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            if (!instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform))
+            if (!instance.Grid2DTransform.IsValid)
             {
                 UnityEngine.Debug.LogAssertion("Could not find transform component for board object when executing move object command.");
                 return CommandState.Abandoned;
@@ -34,7 +34,7 @@ namespace QC.Match.Commands
 
             await args.VisualAnimationSystem.AnimateTo(instance, endingPosition);
                 
-            grid2DTransform.SetPosition(endingPosition);
+            instance.Grid2DTransform.SetPosition(endingPosition);
 
             if (args.PromotionSystem.CanPromote(instance, endingPosition, args.Board))
             {
@@ -48,9 +48,9 @@ namespace QC.Match.Commands
                 status.SetHasMoved(true);
             }
             
-            if (instance.TryFindInterface<IPiece>(out var chessPiece))
+            if (instance.Piece.IsValid)
             {
-                PieceColour pieceColour = chessPiece.GetPieceColour();
+                PieceColour pieceColour = instance.Piece.GetPieceColour();
                 int playerIndex = args.MatchState.GetPlayerIndex(pieceColour);
                 args.MatchState.RecordActionTakenByPlayer(playerIndex);
             }

@@ -69,17 +69,20 @@ namespace QC.Match.AI.Internals
          }
       }
 
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
       public int ToIndex(Vector2Int position)
       {
          int index = (position.x - xMin) + (position.y - yMin) * width;
          return index;
       }
 
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
       public Vector2Int ToVector2Int(int boardIndex)
       {
          return new Vector2Int((boardIndex % width) + xMin, (boardIndex / width) + yMin);
       }
 
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
       public Piece GetPieceAt(Vector2Int boardPosition)
       {
          int index = ToIndex(boardPosition);
@@ -88,44 +91,56 @@ namespace QC.Match.AI.Internals
 
       public void MakeMove(Move moveToMake)
       {
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Position), $"Attempting to make a move from position {moveToMake.Position}, but it is outside of board bounds.");
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Destination), $"Attempting to make a move to destination {moveToMake.Destination}, but it is outside of board bounds.");
+#endif
          int indexOfPosition = ToIndex(moveToMake.Position);
          int indexOfDestination = ToIndex(moveToMake.Destination);
 
          TileBlit tileBlit = board[indexOfPosition];
          TileBlit tileBlitWithoutPiece = tileBlit.WithoutPiece();
          board[indexOfPosition] = tileBlitWithoutPiece;
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(tileBlit.Importance == tileBlitWithoutPiece.Importance);
          UnityEngine.Debug.Assert(tileBlit.Importance == board[indexOfPosition].Importance);
+#endif
 
          TileBlit destinationTileBlit = board[indexOfDestination];
          TileBlit destinationTileBlitWithPiece = destinationTileBlit.WithPiece(moveToMake.PieceToMove);
          board[indexOfDestination] = destinationTileBlitWithPiece;
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(destinationTileBlit.Importance == destinationTileBlitWithPiece.Importance);
          UnityEngine.Debug.Assert(destinationTileBlit.Importance == board[indexOfDestination].Importance);
+#endif
       }
 
       public void UndoMove(Move moveToUndo)
       {
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Position), $"Attempting to undo a move from position {moveToUndo.Position}, but it is outside of board bounds.");
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Destination), $"Attempting to undo a move to destination {moveToUndo.Destination}, but it is outside of board bounds.");
+#endif
          int indexOfPosition = ToIndex(moveToUndo.Position);
          int indexOfDestination = ToIndex(moveToUndo.Destination);
 
          TileBlit tileBlit = board[indexOfPosition];
          TileBlit tileBlitPiece = tileBlit.WithPiece(moveToUndo.PieceToMove);
          board[indexOfPosition] = tileBlitPiece;
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(tileBlit.Importance == tileBlitPiece.Importance);
          UnityEngine.Debug.Assert(tileBlit.Importance == board[indexOfPosition].Importance);
+#endif
 
          TileBlit destinationTileBlit = board[indexOfDestination];
          TileBlit destinationTileBlitWithPiece = moveToUndo.PieceToCapture.IsValid
             ? destinationTileBlit.WithPiece(moveToUndo.PieceToCapture)
             : destinationTileBlit.WithoutPiece();
          board[indexOfDestination] = destinationTileBlitWithPiece;
+#if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(destinationTileBlit.Importance == destinationTileBlitWithPiece.Importance);
          UnityEngine.Debug.Assert(destinationTileBlit.Importance == board[indexOfDestination].Importance);
+#endif
       }
 
       public bool DoesBoardTileExist(Vector2Int boardPosition)

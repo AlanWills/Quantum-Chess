@@ -23,21 +23,21 @@ namespace QC.Match.AI
             {
                 BoardObjectInstance piece = piecesToConsider[i];
 
-                if (piece.TryFindInterface<IGrid2DTransform>(out var transform) &&
-                    piece.TryFindInterface<IActionProvider>(out var actionProvider))
+                if (piece.Grid2DTransform.IsValid && piece.ActionProvider.IsValid)
                 {
                     validAttacks.Clear();
                     validMoves.Clear();
 
+                    Vector2Int position = piece.Grid2DTransform.GetPosition();
                     IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
-                    actionProvider.CalculateValidAttacks(
-                        transform.GetPosition(), 
+                    piece.ActionProvider.CalculateValidAttacks(
+                        position, 
                         args.Board,
                         opponentBoardActionMask,
                         validAttacks);
                     
-                    actionProvider.CalculateValidMoves(
-                        transform.GetPosition(), 
+                    piece.ActionProvider.CalculateValidMoves(
+                        position, 
                         args.Board,
                         opponentBoardActionMask,
                         validMoves);
@@ -50,7 +50,7 @@ namespace QC.Match.AI
                         if (randomActionIndex < validAttacks.Count)
                         {
                             command = new AttackWithBoardObjectFromToCommand(
-                                transform.GetPosition(),
+                                position,
                                 validAttacks[randomActionIndex]);
                             return true;
                         }

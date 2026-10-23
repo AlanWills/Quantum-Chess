@@ -33,15 +33,15 @@ namespace QC.Match.Views
             attackTilemap.CompressBounds();
             
             if (instance == null ||
-                !instance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform) ||
-                !instance.TryFindInterface<IActionProvider>(out var actionProvider))
+                !instance.Grid2DTransform.IsValid ||
+                !instance.ActionProvider.IsValid)
             {
                 return;
             }
 
-            Vector2Int boardPosition = grid2DTransform.GetPosition();
-            CalculateValidMoves(boardPosition, actionProvider);
-            CalculateValidAttacks(boardPosition, actionProvider);
+            Vector2Int boardPosition = instance.Grid2DTransform.GetPosition();
+            CalculateValidMoves(boardPosition, instance.ActionProvider);
+            CalculateValidAttacks(boardPosition, instance.ActionProvider);
         }
 
         private void CalculateValidMoves(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)

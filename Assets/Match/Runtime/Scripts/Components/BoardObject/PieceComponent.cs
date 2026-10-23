@@ -148,10 +148,10 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
-            foreach (ActionPattern actionPattern in movementPatterns)
+            for (int i = 0, n = movementPatterns.Count; i < n; ++i)
             {
                 CalculateValidMoves(
-                    actionPattern, 
+                    movementPatterns[i], 
                     verticalDirection, 
                     hasMoved, 
                     currentBoardPosition, 
@@ -170,7 +170,9 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
+#if ULTRA_DEBUG_CHECKS
             UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, $"Attempting to calculate relative movement with a 0 vertical direction!");
+#endif
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
@@ -215,10 +217,10 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
-            foreach (ActionPattern actionPattern in attackPatterns)
+            for (int i = 0, n = attackPatterns.Count; i < n; ++i)
             {
                 CalculateValidAttacks(
-                    actionPattern, 
+                    attackPatterns[i], 
                     currentColour, 
                     verticalDirection, 
                     hasMoved, 
@@ -239,7 +241,9 @@ namespace QC.Match.Components
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
+#if ULTRA_DEBUG_CHECKS
             UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, $"Attempting to calculate relative attacks with a 0 vertical direction!");
+#endif
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
@@ -280,10 +284,10 @@ namespace QC.Match.Components
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
-            foreach (ActionPattern actionPattern in attackPatterns)
+            for (int i = 0, n = attackPatterns.Count; i < n; ++i)
             {
                 CalculateValidThreats(
-                    actionPattern,
+                    attackPatterns[i],
                     verticalDirection,
                     hasMoved,
                     currentBoardPosition,
@@ -300,7 +304,9 @@ namespace QC.Match.Components
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
+#if ULTRA_DEBUG_CHECKS
             UnityEngine.Debug.Assert(!actionPattern.relativeToVerticalDirection || verticalDirection != 0, "Attempting to calculate relative threats with a 0 vertical direction!");
+#endif
             Vector2Int pattern = actionPattern.relativeToVerticalDirection ? actionPattern.pattern * verticalDirection : actionPattern.pattern;
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
@@ -349,12 +355,12 @@ namespace QC.Match.Components
             BoardObjectInstance objectInstance,
             PieceColour currentColour)
         {
-            if (!objectInstance.TryFindInterface<IPiece>(out var chessPiece))
+            if (!objectInstance.Piece.IsValid)
             {
                 return false;
             }
 
-            if (chessPiece.GetPieceColour() == currentColour)
+            if (objectInstance.Piece.GetPieceColour() == currentColour)
             {
                 return false;
             }
@@ -478,7 +484,9 @@ namespace QC.Match.Components
                 }
 
                 BoardObjectInstance pieceToAttack = boardLookup.GetBoardObjectAt(nextPosition);
+#if ULTRA_DEBUG_CHECKS
                 UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at {nextPosition}, we've not managed to retrieve it when calculating attacks...");
+#endif
                 
                 if (!IsAttackable(pieceToAttack, currentColour))
                 {
@@ -491,7 +499,7 @@ namespace QC.Match.Components
                     // We can continue looking as we're within board bounds and doing jump movement, this is just an invalid place to attack
                     continue;
                 }
-                
+
                 validAttacks.Add(nextPosition);
             }
         }

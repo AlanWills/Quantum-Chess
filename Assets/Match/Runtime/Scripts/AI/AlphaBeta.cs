@@ -18,29 +18,20 @@ namespace QC.Match.AI
        
        #region Properties and Fields
        
-        private const int k_defaultValidMovesAllocation = 20;
+        private const int k_defaultValidMovesAllocation = 30;
         private const int k_defaultScoredMovesAllocation = 100;
         private const int k_defaultValidMovesPoolCapacity = 1000;
-        
-        private static readonly MoveOrderingComparer s_moveComparer = new();
+
+        private static readonly IBoardActionMask s_emptyBoardActionMask = new EmptyBoardActionMask();
         
         // Does this leak memory between domain reloads?
-        private static readonly ObjectPool<List<Vector2Int>> s_validMovesPool = new(
-           () => new List<Vector2Int>(k_defaultValidMovesAllocation),
-           actionOnRelease: l => l.Clear(),
-           defaultCapacity: k_defaultValidMovesPoolCapacity);
+        private static readonly List<Vector2Int> s_validActionsCache = new(k_defaultValidMovesAllocation);
         private static readonly ObjectPool<List<Move>> s_movesToCheckPool = new(
-           () => new List<Move>(k_defaultScoredMovesAllocation),
+           createFunc: () => new List<Move>(k_defaultScoredMovesAllocation),
            actionOnRelease: l => l.Clear(),
            defaultCapacity: k_defaultValidMovesPoolCapacity);
-        private static readonly ObjectPool<List<ScoredMove>> s_scoredMovesPool = new(
-           () => new List<ScoredMove>(k_defaultScoredMovesAllocation),
-           actionOnRelease: l => l.Clear(),
-           defaultCapacity: 1);
-        private static readonly ObjectPool<List<TileBlit>> s_tilesPool = new(
-           () => new List<TileBlit>(),
-           actionOnRelease: l => l.Clear(),
-           defaultCapacity: 1);
+        private static readonly List<ScoredMove> s_scoredMovesCache = new(k_defaultScoredMovesAllocation);
+        private static readonly List<TileBlit> s_tilesCache = new();
         
         #endregion
 
@@ -51,7 +42,7 @@ namespace QC.Match.AI
         {
            if (alphaBetaParameters.Depth < 1)
            {
-              UnityEngine.Debug.LogAssertion($"Failed to calculate best move as calculate depth was insufficient - please provide a value of at least 1.");
+              UnityEngine.Debug.LogAssertion("Failed to calculate best move as calculate depth was insufficient - please provide a value of at least 1.");
               command = null;
               return false;
            }
@@ -72,21 +63,21 @@ namespace QC.Match.AI
               int beta = int.MaxValue;
               
               RectInt boundingBox = args.Board.Bounds;
-              List<TileBlit> tiles = s_tilesPool.Get();
+              s_tilesCache.Clear();
+              s_scoredMovesCache.Clear();
               
-              if (tiles.Count != boundingBox.size.x * boundingBox.size.y)
+              if (s_tilesCache.Count != boundingBox.size.x * boundingBox.size.y)
               {
-                 tiles.Capacity = boundingBox.size.x * boundingBox.size.y;
-                 tiles.Fill(default);
+                 s_tilesCache.Capacity = boundingBox.size.x * boundingBox.size.y;
+                 s_tilesCache.Fill(default);
               }
               
-              IColourFunctor matchActiveColour = new MatchColourFunctor(args.PlayerColour);
-              BoardBlit boardBlit = new BoardBlit(boundingBox, tiles);
+              ColourFunctor matchActiveColour = ColourFunctor.Match(args.PlayerColour);
+              BoardBlit boardBlit = new BoardBlit(boundingBox, s_tilesCache);
               boardBlit.SetTiles(args.Board.Tiles, alphaBetaParameters, args.RNG);
               boardBlit.SetObjects(args.Board.Objects, alphaBetaParameters, args.RNG);
               
               IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
-              List<ScoredMove> scoredMoves = s_scoredMovesPool.Get();
               List<Move> moves = s_movesToCheckPool.Get();
               GenerateMoves(boardBlit, matchActiveColour, opponentBoardActionMask, moves);
 
@@ -98,7 +89,7 @@ namespace QC.Match.AI
                  int score = -Negamax(boardBlit, matchActiveColour.Invert(), -beta, -alpha, alphaBetaParameters.Depth - 1, -colorModifier);
                  boardBlit.UndoMove(move);
 
-                 scoredMoves.Add(new ScoredMove { Move = move, Score = score });
+                 s_scoredMovesCache.Add(new ScoredMove { Move = move, Score = score });
 
                  if (score > bestScore) bestScore = score;
                  if (score > alpha) alpha = score;
@@ -107,12 +98,9 @@ namespace QC.Match.AI
               }
 
               s_movesToCheckPool.Release(moves);
-              s_tilesPool.Release(tiles);
 
-              if (scoredMoves.Count == 0)
+              if (s_scoredMovesCache.Count == 0)
               {
-                 s_scoredMovesPool.Release(scoredMoves);
-                 
                  UnityEngine.Debug.LogAssertion(
                     $"{nameof(AlphaBeta)} failed to find any valid moves (possibly Checkmate or Stalemate).");
                  command = null;
@@ -121,18 +109,16 @@ namespace QC.Match.AI
 
               // Technically don't need to do this unless in the blunder branch (and instead keep track of the best move in the loop)
               // But I think it's fine
-              scoredMoves.Sort((a, b) => a.Score.CompareTo(b.Score));
+              s_scoredMovesCache.Sort((a, b) => a.Score.CompareTo(b.Score));
 
-              Move bestMove = scoredMoves[^1].Move;
+              Move bestMove = s_scoredMovesCache[^1].Move;
 
               if (args.RNG.FromRange01() <= alphaBetaParameters.BlunderChance)
               {
                  // We always ignore the best move when doing a blunder otherwise it wouldn't be a blunder!
-                 int newMoveIndex = args.RNG.FromRangeInclusive(0, scoredMoves.Count - 1);
-                 bestMove = scoredMoves[newMoveIndex].Move;
+                 int newMoveIndex = args.RNG.FromRangeInclusive(0, s_scoredMovesCache.Count - 1);
+                 bestMove = s_scoredMovesCache[newMoveIndex].Move;
               }
-              
-              s_scoredMovesPool.Release(scoredMoves);
               
               UnityEngine.Debug.Assert(bestMove.PieceToMove.PieceColour == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
@@ -144,9 +130,9 @@ namespace QC.Match.AI
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
                  UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
                     $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
-                 UnityEngine.Debug.Assert(objectAtBestMove.TryFindInterface<IPiece>(out var pieceToTake),
+                 UnityEngine.Debug.Assert(objectAtBestMove.Piece.IsValid,
                     $"Failed to find a {nameof(IPiece)} interface on a piece that we have decided to take.");
-                 UnityEngine.Debug.Assert(pieceToTake.GetPieceColour() != args.PlayerColour,
+                 UnityEngine.Debug.Assert(objectAtBestMove.Piece.GetPieceColour() != args.PlayerColour,
                     $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
                  command = new AttackWithBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
               }
@@ -165,7 +151,7 @@ namespace QC.Match.AI
 
         private static int Negamax(
            BoardBlit boardBlit,
-           IColourFunctor colourFunctor,
+           ColourFunctor colourFunctor,
            int alpha,
            int beta,
            int remainingDepth,
@@ -181,7 +167,7 @@ namespace QC.Match.AI
            List<Move> moves = s_movesToCheckPool.Get();
     
            // Generate ALL moves for the current player in one go
-           GenerateMoves(boardBlit, colourFunctor, new EmptyBoardActionMask(), moves);
+           GenerateMoves(boardBlit, colourFunctor, s_emptyBoardActionMask, moves);
 
            for (int i = 0, n = moves.Count; i < n; ++i)
            {
@@ -205,7 +191,7 @@ namespace QC.Match.AI
         
         private static void GenerateMoves(
            BoardBlit boardBlit,
-           IColourFunctor colourFunctor,
+           ColourFunctor colourFunctor,
            IBoardActionMask actionMask,
            List<Move> outMoves)
         {
@@ -227,26 +213,30 @@ namespace QC.Match.AI
               {
                  continue;
               }
-
+              
               Vector2Int boardPosition = boardBlit.ToVector2Int(boardIndex);
-              List<Vector2Int> validActions = s_validMovesPool.Get();
-
+              s_validActionsCache.Clear();
+              
               var actionProvider = tileBlit.Piece.ActionProvider;
-              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, actionMask, validActions);
-              actionProvider.CalculateValidMoves(boardPosition, boardBlit, actionMask, validActions);
+              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, actionMask, s_validActionsCache);
+              actionProvider.CalculateValidMoves(boardPosition, boardBlit, actionMask, s_validActionsCache);
 
-              for (int i = 0, n = validActions.Count; i < n; ++i)
+              for (int i = 0, n = s_validActionsCache.Count; i < n; ++i)
               {
-                 Vector2Int action = validActions[i];
+                 Vector2Int action = s_validActionsCache[i];
+#if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(boardBlit.IsPositionInBoard(action), $"Generated an invalid action ({action}) for Piece: {tileBlit.Piece.PieceColour} - {tileBlit.Piece.PieceType} - {boardPosition}.");
+#endif
                  Piece pieceToCapture = boardBlit.GetPieceAt(action);
+#if ULTRA_DEBUG_CHECKS
+                 UnityEngine.Debug.Assert(outMoves.Capacity > outMoves.Count, $"Reallocation!  Capacity: {outMoves.Capacity}, Count: {outMoves.Count}.");
+#endif
                  outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPosition, action));
               }
-
-              s_validMovesPool.Release(validActions);
            }
            
-           outMoves.Sort(s_moveComparer);
+           //outMoves.Sort(s_moveComparer);
+           outMoves.SortNoGC();
         }
         
         private static int EvaluateBoard(BoardBlit boardBlit)

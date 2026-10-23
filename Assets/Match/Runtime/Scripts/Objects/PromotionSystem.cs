@@ -9,7 +9,7 @@ namespace QC.Match.Objects
     {
         public bool CanPromote(BoardObjectInstance instance, Vector2Int position, IBoardLookup boardLookup)
         {
-            if (!instance.TryFindInterface<IPiece>(out var piece))
+            if (!instance.Piece.IsValid)
             {
                 return false;
             }
@@ -25,7 +25,7 @@ namespace QC.Match.Objects
                 return false;
             }
 
-            return promotionZone.iFace.CanPromote(promotionZone.instance, piece);
+            return promotionZone.iFace.CanPromote(promotionZone.instance, instance.Piece);
         }
 
         public async UniTask<BoardObjectInstance> Promote(
@@ -39,9 +39,8 @@ namespace QC.Match.Objects
             BoardTileInstance boardTileInstance = board.GetBoardTileAt(position);
             
             boardTileInstance.TryFindInterface<IPromotionZone>(out var promotionZone);
-            instance.TryFindInterface<IPiece>(out var piece);
 
-            int newPieceGuid = await promotionZone.iFace.Promote(promotionZone.instance, piece);
+            int newPieceGuid = await promotionZone.iFace.Promote(promotionZone.instance, instance.Piece);
             BoardObjectInstance promotedInstance = board.CreateBoardObject(newPieceGuid);
 
             if (promotedInstance == null)
@@ -56,9 +55,9 @@ namespace QC.Match.Objects
                 newInteractable.SetInteractable(originalInteractable.IsInteractable());
             }
 
-            if (promotedInstance.TryFindInterface<IGrid2DTransform>(out var transform))
+            if (promotedInstance.Grid2DTransform.IsValid)
             {
-                transform.SetPosition(position);
+                promotedInstance.Grid2DTransform.SetPosition(position);
             }
 
             board.RemoveBoardObject(instance);

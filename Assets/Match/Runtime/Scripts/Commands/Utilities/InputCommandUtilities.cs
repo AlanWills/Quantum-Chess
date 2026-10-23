@@ -12,9 +12,9 @@ namespace QC.Match.Commands
         {
             foreach (var instance in board.Objects)
             {
-                if (!instance.TryFindInterface<IPiece>(out var piece) ||
-                    !instance.TryFindInterface<IInteractable>(out var interactable) ||
-                    piece.GetPieceColour() != colour)
+                if (!instance.Piece.IsValid ||
+                    instance.Piece.GetPieceColour() != colour ||
+                    !instance.TryFindInterface<IInteractable>(out var interactable))
                 {
                     continue;
                 }
@@ -32,9 +32,9 @@ namespace QC.Match.Commands
         {
             foreach (var instance in board.Objects)
             {
-                if (!instance.TryFindInterface<IPiece>(out var piece) ||
-                    !instance.TryFindInterface<IInteractable>(out var interactable) ||
-                    piece.GetPieceColour() == colour)
+                if (!instance.Piece.IsValid ||
+                    instance.Piece.GetPieceColour() == colour ||
+                    !instance.TryFindInterface<IInteractable>(out var interactable))
                 {
                     continue;
                 }

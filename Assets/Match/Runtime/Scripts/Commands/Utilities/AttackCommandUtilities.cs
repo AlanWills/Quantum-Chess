@@ -17,7 +17,7 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
             
-            if (!instance.TryFindInterface<IPiece>(out var chessPiece))
+            if (!instance.Piece.IsValid)
             {
                 UnityEngine.Debug.LogAssertion($"Could not find {nameof(IPiece)} component for board object when executing attack command.");
                 return CommandState.Abandoned;
@@ -31,14 +31,14 @@ namespace QC.Match.Commands
                 return CommandState.Abandoned;
             }
 
-            if (!endingPositionInstance.TryFindInterface<IPiece>(out var otherChessPiece))
+            if (!endingPositionInstance.Piece.IsValid)
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to attack with board object at {endingPosition}, but there is no board object there with an {nameof(IPiece)} interface.");
                 return CommandState.Abandoned;
             }
 
-            PieceColour pieceColour = chessPiece.GetPieceColour();
-            if (pieceColour == otherChessPiece.GetPieceColour())
+            PieceColour pieceColour = instance.Piece.GetPieceColour();
+            if (pieceColour == endingPositionInstance.Piece.GetPieceColour())
             {
                 UnityEngine.Debug.LogAssertion($"Attempting to attack with board object at {endingPosition}, but there is a board object there with the same colour ({pieceColour}).");
                 return CommandState.Abandoned;

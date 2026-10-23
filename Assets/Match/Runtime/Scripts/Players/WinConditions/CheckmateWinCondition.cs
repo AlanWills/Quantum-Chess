@@ -22,14 +22,14 @@ namespace QC.Match.Players
                 return UniTask.FromResult(true);
             }
 
-            if (!oppositionKing.TryFindInterface<IActionProvider>(out var oppositionKingActionProvider))
+            if (!oppositionKing.ActionProvider.IsValid)
             {
                 // The King does not have an action provider... weird, game over!
                 UnityEngine.Debug.LogAssertion($"The King piece for colour {OppositionColour} doesn't seem to have an {nameof(IActionProvider)} component...");
                 return UniTask.FromResult(true);
             }
 
-            if (!oppositionKing.TryFindInterface<IGrid2DTransform>(out var oppositionKingTransform))
+            if (!oppositionKing.Grid2DTransform.IsValid)
             {
                 // The King does not have a transform... weird, game over!
                 UnityEngine.Debug.LogAssertion($"The King piece for colour {OppositionColour} doesn't seem to have an {nameof(IGrid2DTransform)} component...");
@@ -37,7 +37,7 @@ namespace QC.Match.Players
             }
 
             IBoardActionMask playerBoardActionMask = args.BoardActionMaskLookup.GetBoardActionMaskForPlayer(args.PlayerIndex);
-            Vector2Int oppositionKingPosition = oppositionKingTransform.GetPosition();
+            Vector2Int oppositionKingPosition = oppositionKing.Grid2DTransform.GetPosition();
 
             if (!playerBoardActionMask.IsTileAttackable(oppositionKingPosition))
             {
@@ -46,7 +46,7 @@ namespace QC.Match.Players
             }
             
             validActionsCache.Clear();
-            oppositionKingActionProvider.CalculateValidMoves(
+            oppositionKing.ActionProvider.CalculateValidMoves(
                 oppositionKingPosition,
                 args.Board,
                 playerBoardActionMask,
@@ -59,7 +59,7 @@ namespace QC.Match.Players
             }
 
             validActionsCache.Clear();
-            oppositionKingActionProvider.CalculateValidAttacks(
+            oppositionKing.ActionProvider.CalculateValidAttacks(
                 oppositionKingPosition,
                 args.Board,
                 playerBoardActionMask,

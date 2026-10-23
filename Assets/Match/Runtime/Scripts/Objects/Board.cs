@@ -167,10 +167,7 @@ namespace QC.Match.Objects
                 return null;
             }
             
-            BoardObjectInstance instance = new BoardObjectInstance(boardObject);
-            EnsureInstanceComponentsExist(instance);
-            
-            return instance;
+            return new BoardObjectInstance(boardObject);
         }
         
         private void CreateAndAddBoardObject(ChessBoardObjectDTO chessBoardObjectDto)
@@ -182,7 +179,6 @@ namespace QC.Match.Objects
             }
 
             BoardObjectInstance instance = new BoardObjectInstance(boardObject);
-            EnsureInstanceComponentsExist(instance);
             instance.LoadComponents(chessBoardObjectDto.components.ToLookup());
             
             AddBoardObjectInstance(instance);
@@ -190,23 +186,11 @@ namespace QC.Match.Objects
 
         public void AddBoardObjectInstance(BoardObjectInstance instance)
         {
-            EnsureInstanceComponentsExist(instance);
-            
             instance.ComponentDataChanged.AddListener(OnBoardObjectComponentDataChanged);
             objects.Add(instance);
             
             onBoardObjectAdded?.Invoke(new BoardObjectAddedArgs(instance));
             onChanged?.Invoke();
-        }
-        
-        private void EnsureInstanceComponentsExist(BoardObjectInstance instance)
-        {
-            if (!instance.HasInterface<IGrid2DTransform>())
-            {
-                // If we don't have a transform component assigned we inject one here, as all chess board objects must have one
-                Grid2DTransformComponent grid2DTransform = CreateInstance<Grid2DTransformComponent>();
-                instance.AddComponent(grid2DTransform);
-            }
         }
         
         public BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition)
@@ -215,8 +199,7 @@ namespace QC.Match.Objects
             {
                 var objectInstance = objects[i];
 
-                if (objectInstance.TryFindInterface<IGrid2DTransform>(out var grid2DTransform) &&
-                    grid2DTransform.GetPosition() == boardPosition)
+                if (objectInstance.Grid2DTransform.GetPosition() == boardPosition)
                 {
                     return objectInstance;
                 }
@@ -229,9 +212,9 @@ namespace QC.Match.Objects
         {
             foreach (var objectInstance in objects)
             {
-                if (objectInstance.TryFindInterface<IPiece>(out var chessPiece) &&
-                    chessPiece.GetPieceColour() == colour &&
-                    chessPiece.GetPieceType().HasFlag(type))
+                if (objectInstance.Piece.IsValid &&
+                    objectInstance.Piece.GetPieceColour() == colour &&
+                    objectInstance.Piece.GetPieceType().HasFlag(type))
                 {
                     instance = objectInstance;
                     return true;
@@ -334,9 +317,9 @@ namespace QC.Match.Objects
             {
                 var objectInstance = objects[i];
                 
-                if (objectInstance.TryFindInterface<IPiece>(out var chessPiece) &&
-                    (!colour.HasValue || colour.Value == chessPiece.GetPieceColour()) &&
-                    (!type.HasValue || type.Value == chessPiece.GetPieceType()))
+                if (objectInstance.Piece.IsValid &&
+                    (!colour.HasValue || colour.Value == objectInstance.Piece.GetPieceColour()) &&
+                    (!type.HasValue || type.Value == objectInstance.Piece.GetPieceType()))
                 {
                     return true;
                 }

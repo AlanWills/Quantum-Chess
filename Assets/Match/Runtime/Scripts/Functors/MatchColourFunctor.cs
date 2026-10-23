@@ -1,6 +1,8 @@
+using System.Runtime.CompilerServices;
+
 namespace QC.Match.Functors
 {
-    public readonly struct MatchColourFunctor : IColourFunctor
+    public class MatchColourFunctor : IColourFunctor
     {
         private readonly PieceColour colourToMatch;
 
@@ -9,14 +11,10 @@ namespace QC.Match.Functors
             this.colourToMatch = colourToMatch;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsAMatch(PieceColour colour)
         {
             return colour == colourToMatch;
-        }
-
-        public IColourFunctor Invert()
-        {
-            return new DoNotMatchColourFunctor(colourToMatch);
         }
     }
 }

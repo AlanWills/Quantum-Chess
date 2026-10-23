@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace QC.Match.AI.Internals
 {
-    public struct MoveOrderingComparer : IComparer<Move>
+    public class MoveOrderingComparer : IComparer<Move>
     {
         public int Compare(Move x, Move y)
         {

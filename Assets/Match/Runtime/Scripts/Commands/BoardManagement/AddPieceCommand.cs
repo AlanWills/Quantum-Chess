@@ -52,13 +52,13 @@ namespace QC.Match.Commands
                 return UniTask.FromResult(CommandState.Abandoned);
             }
             
-            if (!instance.TryFindInterface<IPiece>(out var chessPiece))
+            if (!instance.Piece.IsValid)
             {
                 UnityEngine.Debug.LogAssertion($"No {nameof(IPiece)} interface found on chess board object {Guid}.  Did you mean to try and add a chess piece?");
                 return UniTask.FromResult(CommandState.Abandoned);
             }
 
-            if (!instance.TryFindInterface<IGrid2DTransform>(out var gridTransform))
+            if (!instance.Grid2DTransform.IsValid)
             {
                 UnityEngine.Debug.LogAssertion($"No {nameof(IGrid2DTransform)} exists, this is a serious issue and should've been injected automatically, as it is a mandatory component.");
                 return UniTask.FromResult(CommandState.Abandoned);
@@ -66,21 +66,21 @@ namespace QC.Match.Commands
 
             if (Colour.HasValue)
             {
-                chessPiece.SetColour(Colour.Value);
+                instance.Piece.SetColour(Colour.Value);
             }
 
             if (Type.HasValue)
             {
-                chessPiece.SetType(Type.Value);
+                instance.Piece.SetType(Type.Value);
             }
 
             if (Value.HasValue)
             {
-                chessPiece.SetValue(Value.Value);
+                instance.Piece.SetValue(Value.Value);
             }
 
-            chessPiece.SetVerticalDirection(VerticalDirection);
-            gridTransform.SetPosition(Position);
+            instance.Piece.SetVerticalDirection(VerticalDirection);
+            instance.Grid2DTransform.SetPosition(Position);
              
             if (instance.TryFindInterface<IInteractable>(out var interactable))
             {
