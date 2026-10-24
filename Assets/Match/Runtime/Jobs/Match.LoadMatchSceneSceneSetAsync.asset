@@ -15,5 +15,5 @@ MonoBehaviour:
   showOutputInLoadingScreen: 1
   sceneSet: {fileID: 11400000, guid: 2e86d9e384dbd4ff6a65627b02e0b894, type: 2}
   loadSceneMode: 0
-  unloadUnusedAssets: 1
+  unloadUnusedAssets: 0
   onContextLoadedEvent: {fileID: 0}

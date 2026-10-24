@@ -9,7 +9,7 @@ namespace QC.Match.Commands
     public readonly struct AddPieceCommand : ICommand<BoardCommandArgs>
     {
         private readonly int Guid;
-        private readonly PieceVerticalDirection VerticalDirection;
+        private readonly PieceVerticalDirection? VerticalDirection;
         private readonly Vector2Int Position;
         private readonly bool Interactable;
         private readonly PieceColour? Colour;
@@ -27,7 +27,7 @@ namespace QC.Match.Commands
 
         public AddPieceCommand(
             int guid,
-            PieceVerticalDirection verticalDirection,
+            PieceVerticalDirection? verticalDirection,
             Vector2Int position,
             bool interactable,
             PieceColour? colour,
@@ -79,7 +79,11 @@ namespace QC.Match.Commands
                 instance.Piece.SetValue(Value.Value);
             }
 
-            instance.Piece.SetVerticalDirection(VerticalDirection);
+            if (VerticalDirection.HasValue)
+            {
+                instance.Piece.SetVerticalDirection(VerticalDirection.Value);
+            }
+
             instance.Grid2DTransform.SetPosition(Position);
              
             if (instance.TryFindInterface<IInteractable>(out var interactable))

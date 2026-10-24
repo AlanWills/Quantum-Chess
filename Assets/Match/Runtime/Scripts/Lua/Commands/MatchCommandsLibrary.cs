@@ -169,9 +169,9 @@ namespace QC.Match.Lua
                 return new ValueTask<int>(context.Return());
             }
 
-            PieceVerticalDirection verticalDirection;
             Vector2Int position;
             bool interactable;
+            PieceVerticalDirection? verticalDirection = null;
             PieceColour? pieceColour = null;
             PieceType? pieceType = null;
             int? value = null;
@@ -179,7 +179,10 @@ namespace QC.Match.Lua
             // Vertical Direction
             {
                 // This is technically OK to be missing, so we don't log assertions if there's a failure here
-                config.TryGetEnum("verticalDirection", out verticalDirection);
+                if (config.TryGetEnum("verticalDirection", out PieceVerticalDirection direction))
+                {
+                    verticalDirection = direction;
+                }
             }
             
             // Position

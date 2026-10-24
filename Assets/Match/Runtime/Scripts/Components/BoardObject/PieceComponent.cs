@@ -508,19 +508,17 @@ namespace QC.Match.Components
                 UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at ({nextPositionX}, {nextPositionY}), we've not managed to retrieve it when calculating attacks...");
 #endif
                 
-                if (pieceToAttack.Piece.GetPieceColour() == currentColour)
+                if (pieceToAttack.Piece.GetPieceColour() != currentColour)
                 {
-                    if (isContinousMovement)
-                    {
-                        // There's a piece on this position, but we can't attack it so if we're doing continuous movement we should stop our search
-                        break;
-                    }
-
-                    // We can continue looking as we're within board bounds and doing jump movement, this is just an invalid place to attack
-                    continue;
+                    // This piece is of the opposite colour - it's a valid attack target!
+                    validAttacks.Add(new Vector2Int(nextPositionX, nextPositionY));
                 }
-
-                validAttacks.Add(new Vector2Int(nextPositionX, nextPositionY));
+                
+                if (isContinousMovement)
+                {
+                    // There's a piece on this position.  No matter the colour, if we're doing continuous movement we've reached the end of our search
+                    break;
+                }
             }
         }
 
