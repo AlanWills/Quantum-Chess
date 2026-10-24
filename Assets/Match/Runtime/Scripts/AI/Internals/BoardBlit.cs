@@ -155,34 +155,24 @@ namespace QC.Match.AI.Internals
 
       public bool DoesBoardTileExist(int x, int y)
       {
-         if (!IsPositionInBoard(x, y))
-         {
-            return false;
-         }
-
-         // Now check if the tile within the board actually exists (could be a hole)
          int index = ToIndex(x, y);
          return 0 <= index && index < board.Count && board[index].IsValid;
       }
 
       public BoardTileInstance GetBoardTileAt(int x, int y)
-      {
-         if (!IsPositionInBoard(x, y))
-         {
-            return null;
-         }
-         
+      {  
          int index = ToIndex(x, y);
          return 0 <= index && index < board.Count ? board[index].Instance : null;
       }
 
       public BoardObjectInstance GetBoardObjectAt(int x, int y)
       {
-         if (!IsPositionInBoard(x, y))
-         {
-            return null;
-         }
+         int index = ToIndex(x, y);
+         return 0 <= index && index < board.Count ? board[index].Piece.Instance : null;
+      }
 
+      public BoardObjectInstance GetBoardObjectAt_SkipBoundsCheck(int x, int y)
+      {
          int index = ToIndex(x, y);
          return 0 <= index && index < board.Count ? board[index].Piece.Instance : null;
       }

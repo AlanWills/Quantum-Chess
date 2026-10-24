@@ -19,8 +19,8 @@ namespace QC.Match.AI
        #region Properties and Fields
        
         private const int k_defaultValidMovesAllocation = 30;
+        private const int k_defaultValidMovesPoolCapacity = 3000;
         private const int k_defaultScoredMovesAllocation = 100;
-        private const int k_defaultValidMovesPoolCapacity = 1000;
 
         private static readonly IBoardActionMask s_emptyBoardActionMask = new EmptyBoardActionMask();
         

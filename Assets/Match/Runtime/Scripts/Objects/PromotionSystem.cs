@@ -14,6 +14,11 @@ namespace QC.Match.Objects
                 return false;
             }
             
+            if (!boardLookup.IsPositionInBoard(position.x, position.y))
+            {
+                return false;
+            }
+            
             if (!boardLookup.DoesBoardTileExist(position.x, position.y))
             {
                 return false;

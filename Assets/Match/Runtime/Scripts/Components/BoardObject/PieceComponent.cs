@@ -350,7 +350,7 @@ namespace QC.Match.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsValidBoardPosition(
+        private static bool IsValidBoardPosition_SkipBoundsCheck(
             int x,
             int y,
             IBoardLookup boardLookup)
@@ -359,7 +359,7 @@ namespace QC.Match.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsVacantBoardPosition(
+        private static bool IsVacantBoardPosition_SkipBoundsCheck(
             int x,
             int y,
             IBoardLookup boardLookup)
@@ -418,7 +418,7 @@ namespace QC.Match.Components
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
 
-                if (!IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
+                if (!IsValidBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -430,7 +430,7 @@ namespace QC.Match.Components
                     continue;
                 }
 
-                if (!IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup))
+                if (!IsVacantBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -484,7 +484,7 @@ namespace QC.Match.Components
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
 
-                if (!IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
+                if (!IsValidBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -509,7 +509,7 @@ namespace QC.Match.Components
                 }
                 
                 // If this board position is vacant it's not a valid attack target, but it shouldn't stop our search
-                if (IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup))
+                if (IsVacantBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup))
                 {
                     continue;
                 }
@@ -558,7 +558,7 @@ namespace QC.Match.Components
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
                 
-                if (IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
+                if (IsValidBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup))
                 {
                     // If it's a valid board position that we can reach via a move, it's a valid threatened square, even if there's a piece there (even if it's one of ours!)
                     validThreats.Add(new Vector2Int(nextPositionX, nextPositionY));
@@ -570,7 +570,7 @@ namespace QC.Match.Components
                 }
 
                 // There's a piece on this position, so if we're doing continuous movement we have reached the limit of what we can threaten
-                if (!IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup) && isContinousMovement)
+                if (!IsVacantBoardPosition_SkipBoundsCheck(nextPositionX, nextPositionY, boardLookup) && isContinousMovement)
                 {
                     break;
                 }
