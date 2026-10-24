@@ -236,7 +236,25 @@ namespace QC.Match.AI
               }
            }
            
-           outMoves.SortNoGC();
+           SortNoGC(outMoves);
+        }
+
+        private static void SortNoGC(IList<Move> list)
+        {
+           int count = list.Count;
+           for (int i = 1; i < count; i++)
+           {
+              Move key = list[i];
+              int j = i - 1;
+
+              // Shift elements until the correct position for 'key' is found
+              while (j >= 0 && list[j].CompareTo(in key) > 0)
+              {
+                 list[j + 1] = list[j];
+                 j--;
+              }
+              list[j + 1] = key;
+           }
         }
         
         private static int EvaluateBoard(BoardBlit boardBlit)

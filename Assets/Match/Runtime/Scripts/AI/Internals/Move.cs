@@ -5,19 +5,12 @@ namespace QC.Match.AI.Internals
 {
     public readonly struct Move : IComparable<Move>
     {
-        public bool IsValid => PositionX != DestinationX && PositionY != DestinationY && PieceToMove.IsValid;
-           
         public readonly Piece PieceToMove;
         public readonly Piece PieceToCapture;
         public readonly int PositionX;
         public readonly int PositionY;
         public readonly int DestinationX;
         public readonly int DestinationY;
-
-        public Move(Piece pieceToMove, Piece pieceToCapture, Vector2Int position, Vector2Int destination)
-            : this(pieceToMove, pieceToCapture, position.x, position.y, destination.x, destination.y)
-        {
-        }
 
         public Move(Piece pieceToMove, Piece pieceToCapture, int positionX, int positionY, int destinationX, int destinationY)
         {
@@ -33,8 +26,13 @@ namespace QC.Match.AI.Internals
         {
             return GuessMoveScore(other).CompareTo(GuessMoveScore(this));
         }
+
+        public int CompareTo(in Move other)
+        {
+            return GuessMoveScore(in other).CompareTo(GuessMoveScore(in this));
+        }
         
-        private static int GuessMoveScore(Move move)
+        private static int GuessMoveScore(in Move move)
         {
             int score = 0;
 
