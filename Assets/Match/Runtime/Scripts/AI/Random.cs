@@ -31,13 +31,15 @@ namespace QC.Match.AI
                     Vector2Int position = piece.Grid2DTransform.GetPosition();
                     IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
                     piece.ActionProvider.CalculateValidAttacks(
-                        position, 
+                        position.x,
+                        position.y, 
                         args.Board,
                         opponentBoardActionMask,
                         validAttacks);
                     
                     piece.ActionProvider.CalculateValidMoves(
-                        position, 
+                        position.x,
+                        position.y,
                         args.Board,
                         opponentBoardActionMask,
                         validMoves);

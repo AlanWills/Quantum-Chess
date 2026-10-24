@@ -39,7 +39,7 @@ namespace QC.Match.Players
             IBoardActionMask playerBoardActionMask = args.BoardActionMaskLookup.GetBoardActionMaskForPlayer(args.PlayerIndex);
             Vector2Int oppositionKingPosition = oppositionKing.Grid2DTransform.GetPosition();
 
-            if (!playerBoardActionMask.IsTileAttackable(oppositionKingPosition))
+            if (!playerBoardActionMask.IsTileAttackable(oppositionKingPosition.x, oppositionKingPosition.y))
             {
                 // King is not currently under attack so it can't be checkmate
                 return UniTask.FromResult(false);
@@ -47,7 +47,8 @@ namespace QC.Match.Players
             
             validActionsCache.Clear();
             oppositionKing.ActionProvider.CalculateValidMoves(
-                oppositionKingPosition,
+                oppositionKingPosition.x,
+                oppositionKingPosition.y,
                 args.Board,
                 playerBoardActionMask,
                 validActionsCache);
@@ -60,7 +61,8 @@ namespace QC.Match.Players
 
             validActionsCache.Clear();
             oppositionKing.ActionProvider.CalculateValidAttacks(
-                oppositionKingPosition,
+                oppositionKingPosition.x,
+                oppositionKingPosition.y,
                 args.Board,
                 playerBoardActionMask,
                 validActionsCache);

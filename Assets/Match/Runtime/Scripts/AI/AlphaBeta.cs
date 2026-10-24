@@ -123,26 +123,26 @@ namespace QC.Match.AI
               UnityEngine.Debug.Assert(bestMove.PieceToMove.PieceColour == activeColour,
                  $"Attempting to perform a move with a piece that is not the active colour: '{activeColour}'!");
 
-              var objectAtBestMove = args.Board.GetBoardObjectAt(bestMove.Destination);
+              var objectAtBestMove = args.Board.GetBoardObjectAt(bestMove.DestinationX, bestMove.DestinationY);
               if (objectAtBestMove != null)
               {
                  // Our best move involves an attack
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
-                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
-                    $"Attempting to attack with a piece at {bestMove.Position}, but there is no object there!");
+                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.PositionX, bestMove.PositionY) != null,
+                    $"Attempting to attack with a piece at ({bestMove.PositionX}, {bestMove.PositionY}), but there is no object there!");
                  UnityEngine.Debug.Assert(objectAtBestMove.Piece.IsValid,
                     $"Failed to find a {nameof(IPiece)} interface on a piece that we have decided to take.");
                  UnityEngine.Debug.Assert(objectAtBestMove.Piece.GetPieceColour() != args.PlayerColour,
-                    $"We're attempting to move on top of a piece at {bestMove.Destination} of the same colour.  Something has gone wrong with the AI here...");
-                 command = new AttackWithBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+                    $"We're attempting to move on top of a piece at ({bestMove.DestinationX}, {bestMove.DestinationY}) of the same colour.  Something has gone wrong with the AI here...");
+                 command = new AttackWithBoardObjectFromToCommand(new Vector2Int(bestMove.PositionX, bestMove.PositionY), new Vector2Int(bestMove.DestinationX, bestMove.DestinationY));
               }
               else
               {
                  // Our best move involves a move
                  // We run a few basic checks first to ensure the algorithm hasn't done something weird
-                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.Position) != null,
-                    $"Attempting to move a piece at {bestMove.Position}, but there is no object there!");
-                 command = new MoveBoardObjectFromToCommand(bestMove.Position, bestMove.Destination);
+                 UnityEngine.Debug.Assert(args.Board.GetBoardObjectAt(bestMove.PositionX, bestMove.PositionY) != null,
+                    $"Attempting to move a piece at ({bestMove.PositionX}, {bestMove.PositionY}), but there is no object there!");
+                 command = new MoveBoardObjectFromToCommand(new Vector2Int(bestMove.PositionX, bestMove.PositionY), new Vector2Int(bestMove.DestinationX, bestMove.DestinationY));
               }
            }
 
@@ -214,12 +214,13 @@ namespace QC.Match.AI
                  continue;
               }
               
-              Vector2Int boardPosition = boardBlit.ToVector2Int(boardIndex);
+              int boardPositionX = boardBlit.ToX(boardIndex);
+              int boardPositionY = boardBlit.ToY(boardIndex);
               s_validActionsCache.Clear();
               
               var actionProvider = tileBlit.Piece.ActionProvider;
-              actionProvider.CalculateValidAttacks(boardPosition, boardBlit, actionMask, s_validActionsCache);
-              actionProvider.CalculateValidMoves(boardPosition, boardBlit, actionMask, s_validActionsCache);
+              actionProvider.CalculateValidAttacks(boardPositionX, boardPositionY, boardBlit, actionMask, s_validActionsCache);
+              actionProvider.CalculateValidMoves(boardPositionX, boardPositionY, boardBlit, actionMask, s_validActionsCache);
 
               for (int i = 0, n = s_validActionsCache.Count; i < n; ++i)
               {
@@ -227,15 +228,14 @@ namespace QC.Match.AI
 #if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(boardBlit.IsPositionInBoard(action), $"Generated an invalid action ({action}) for Piece: {tileBlit.Piece.PieceColour} - {tileBlit.Piece.PieceType} - {boardPosition}.");
 #endif
-                 Piece pieceToCapture = boardBlit.GetPieceAt(action);
+                 Piece pieceToCapture = boardBlit.GetPieceAt(action.x, action.y);
 #if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(outMoves.Capacity > outMoves.Count, $"Reallocation!  Capacity: {outMoves.Capacity}, Count: {outMoves.Count}.");
 #endif
-                 outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPosition, action));
+                 outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPositionX, boardPositionY, action.x, action.y));
               }
            }
            
-           //outMoves.Sort(s_moveComparer);
            outMoves.SortNoGC();
         }
         

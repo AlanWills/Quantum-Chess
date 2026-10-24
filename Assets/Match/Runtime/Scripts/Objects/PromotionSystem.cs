@@ -14,12 +14,12 @@ namespace QC.Match.Objects
                 return false;
             }
             
-            if (!boardLookup.DoesBoardTileExist(position))
+            if (!boardLookup.DoesBoardTileExist(position.x, position.y))
             {
                 return false;
             }
 
-            BoardTileInstance boardTileInstance = boardLookup.GetBoardTileAt(position);
+            BoardTileInstance boardTileInstance = boardLookup.GetBoardTileAt(position.x, position.y);
             if (!boardTileInstance.TryFindInterface<IPromotionZone>(out var promotionZone))
             {
                 return false;

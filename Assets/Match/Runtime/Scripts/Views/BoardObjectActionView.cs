@@ -50,7 +50,7 @@ namespace QC.Match.Views
 
             int activePlayerIndex = matchState.ActivePlayerIndex;
             IBoardActionMask opponentBoardActionMask = matchState.GetOpponentBoardActionMaskForPlayer(activePlayerIndex);
-            actionProvider.CalculateValidMoves(boardPosition, board, opponentBoardActionMask, boardPositionCache);
+            actionProvider.CalculateValidMoves(boardPosition.x, boardPosition.y, board, opponentBoardActionMask, boardPositionCache);
 
             foreach (Vector2Int validMove in boardPositionCache)
             {
@@ -73,7 +73,7 @@ namespace QC.Match.Views
             
             int activePlayerIndex = matchState.ActivePlayerIndex;
             IBoardActionMask opponentBoardActionMask = matchState.GetOpponentBoardActionMaskForPlayer(activePlayerIndex);
-            actionProvider.CalculateValidAttacks(boardPosition, board, opponentBoardActionMask, boardPositionCache);
+            actionProvider.CalculateValidAttacks(boardPosition.x, boardPosition.y, board, opponentBoardActionMask, boardPositionCache);
 
             foreach (Vector2Int validAttack in boardPositionCache)
             {
@@ -93,7 +93,7 @@ namespace QC.Match.Views
         private void CalculateValidThreats(Vector2Int boardPosition, InterfaceHandle<IActionProvider> actionProvider)
         {
             boardPositionCache.Clear();
-            actionProvider.CalculateValidThreats(boardPosition, board, boardPositionCache);
+            actionProvider.CalculateValidThreats(boardPosition.x, boardPosition.y, board, boardPositionCache);
 
             foreach (Vector2Int validAttack in boardPositionCache)
             {

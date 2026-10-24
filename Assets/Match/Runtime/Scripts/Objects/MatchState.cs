@@ -256,14 +256,14 @@ namespace QC.Match.Objects
                 validThreats.Clear();
 
                 Vector2Int position = instance.Grid2DTransform.GetPosition();
-                instance.ActionProvider.CalculateValidThreats(position, board, validThreats);
+                instance.ActionProvider.CalculateValidThreats(position.x, position.y, board, validThreats);
 
                 foreach (Vector2Int validThreat in validThreats)
                 {
 #if ULTRA_DEBUG_CHECKS
                     UnityEngine.Debug.Assert(board.IsPositionInBoard(validThreat), $"Calculated an invalid threat for piece: {piece.GetPieceColour()} - {piece.GetPieceType()} - {position}!");
 #endif
-                    actionMaskToUpdate.SetTileAttackable(validThreat);
+                    actionMaskToUpdate.SetTileAttackable(validThreat.x, validThreat.y);
                 }
             }
         }

@@ -10,19 +10,22 @@ namespace QC.Match
     {
         void CalculateValidMoves(
             Instance instance, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves);
         void CalculateValidAttacks(
             Instance instance, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup, 
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks);
         void CalculateValidThreats(
             Instance instance, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats);
     }
@@ -32,33 +35,36 @@ namespace QC.Match
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CalculateValidMoves(
             this InterfaceHandle<IActionProvider> provider, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
         {
-            provider.iFace.CalculateValidMoves(provider.instance, currentBoardPosition, boardLookup, opponentBoardActionMask, validMoves);
+            provider.iFace.CalculateValidMoves(provider.instance, currentPositionX, currentPositionY, boardLookup, opponentBoardActionMask, validMoves);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CalculateValidAttacks(
             this InterfaceHandle<IActionProvider> provider, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
         {
-            provider.iFace.CalculateValidAttacks(provider.instance, currentBoardPosition, boardLookup, opponentBoardActionMask, validAttacks);
+            provider.iFace.CalculateValidAttacks(provider.instance, currentPositionX, currentPositionY, boardLookup, opponentBoardActionMask, validAttacks);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CalculateValidThreats(
             this InterfaceHandle<IActionProvider> provider, 
-            Vector2Int currentBoardPosition,
+            int currentPositionX,
+            int currentPositionY,
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
-            provider.iFace.CalculateValidThreats(provider.instance, currentBoardPosition, boardLookup, validThreats);
+            provider.iFace.CalculateValidThreats(provider.instance, currentPositionX, currentPositionY, boardLookup, validThreats);
         }
     }
 }

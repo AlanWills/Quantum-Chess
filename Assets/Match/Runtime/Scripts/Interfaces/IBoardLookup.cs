@@ -5,9 +5,9 @@ namespace QC.Match
 {
     public interface IBoardLookup
     {
-        bool IsPositionInBoard(Vector2Int boardPosition);
-        bool DoesBoardTileExist(Vector2Int boardPosition);
-        BoardTileInstance GetBoardTileAt(Vector2Int boardTilePosition);
-        BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition);
+        bool IsPositionInBoard(int x, int y);
+        bool DoesBoardTileExist(int x, int y);
+        BoardTileInstance GetBoardTileAt(int x, int y);
+        BoardObjectInstance GetBoardObjectAt(int x, int y);
     }
 }

@@ -37,9 +37,9 @@ namespace QC.Match.Players
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetTileAttackable(Vector2Int position)
+        public void SetTileAttackable(int positionX, int positionY)
         {
-            int positionIndex = ToIndex(position);
+            int positionIndex = ToIndex(positionX, positionY);
 #if ULTRA_DEBUG_CHECKS
             UnityEngine.Debug.Assert(0 <= positionIndex && positionIndex < board.Length, $"Invalid position {position} entered into {nameof(SetTileAttackable)}.  Board array size is: {board.Length}.");
 #endif
@@ -47,16 +47,16 @@ namespace QC.Match.Players
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsTileAttackable(Vector2Int position)
+        public bool IsTileAttackable(int positionX, int positionY)
         {
-            int positionIndex = ToIndex(position);
+            int positionIndex = ToIndex(positionX, positionY);
             return 0 <= positionIndex && positionIndex < board.Length && board[positionIndex].CanPieceAttack;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int ToIndex(Vector2Int position)
+        private int ToIndex(int positionX, int positionY)
         {
-            int index = (position.x - xMin) + (position.y - yMin) * width;
+            int index = (positionX - xMin) + (positionY - yMin) * width;
             return index;
         }
 

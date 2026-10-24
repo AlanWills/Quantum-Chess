@@ -122,7 +122,8 @@ namespace QC.Match.Components
 
         public void CalculateValidMoves(
             Instance instance, 
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
@@ -133,7 +134,8 @@ namespace QC.Match.Components
                 saveData.movementPatterns,
                 (int)saveData.verticalDirection,
                 saveData.hasMoved,
-                currentBoardPosition,
+                currentBoardPositionX,
+                currentBoardPositionY,
                 boardLookup,
                 opponentBoardActionMask,
                 validMoves);
@@ -143,7 +145,8 @@ namespace QC.Match.Components
             IReadOnlyList<ActionPattern> movementPatterns,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
@@ -154,7 +157,8 @@ namespace QC.Match.Components
                     movementPatterns[i], 
                     verticalDirection, 
                     hasMoved, 
-                    currentBoardPosition, 
+                    currentBoardPositionX,
+                    currentBoardPositionY,
                     boardLookup, 
                     opponentBoardActionMask, 
                     validMoves);
@@ -165,7 +169,8 @@ namespace QC.Match.Components
             ActionPattern actionPattern,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition,
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validMoves)
@@ -177,8 +182,10 @@ namespace QC.Match.Components
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
             TryFindMovesInDirection(
-                currentBoardPosition, 
-                pattern,
+                currentBoardPositionX,
+                currentBoardPositionY,
+                pattern.x,
+                pattern.y,
                 actionPattern.moveType, 
                 actionPattern.mustBeSafe,
                 actionPattern.range == RangeType.Finite ? distanceToCheck : int.MaxValue,
@@ -189,7 +196,8 @@ namespace QC.Match.Components
 
         public void CalculateValidAttacks(
             Instance instance,
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
@@ -201,7 +209,8 @@ namespace QC.Match.Components
                 saveData.currentPieceColour,
                 (int)saveData.verticalDirection,
                 saveData.hasMoved,
-                currentBoardPosition,
+                currentBoardPositionX,
+                currentBoardPositionY,
                 boardLookup,
                 opponentBoardActionMask,
                 validAttacks);
@@ -212,7 +221,8 @@ namespace QC.Match.Components
             PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
@@ -224,7 +234,8 @@ namespace QC.Match.Components
                     currentColour, 
                     verticalDirection, 
                     hasMoved, 
-                    currentBoardPosition, 
+                    currentBoardPositionX,
+                    currentBoardPositionY,
                     boardLookup, 
                     opponentBoardActionMask, 
                     validAttacks);
@@ -236,7 +247,8 @@ namespace QC.Match.Components
             PieceColour currentColour,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition,
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IBoardActionMask opponentBoardActionMask,
             IList<Vector2Int> validAttacks)
@@ -248,8 +260,10 @@ namespace QC.Match.Components
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
             TryFindAttackablePiecesInDirection(
-                currentBoardPosition,
-                pattern, 
+                currentBoardPositionX,
+                currentBoardPositionY,
+                pattern.x,
+                pattern.y,
                 currentColour,
                 actionPattern.moveType,
                 actionPattern.mustBeSafe,
@@ -261,7 +275,8 @@ namespace QC.Match.Components
 
         public void CalculateValidThreats(
             Instance instance, 
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
@@ -271,7 +286,8 @@ namespace QC.Match.Components
                 saveData.attackPatterns,
                 (int)saveData.verticalDirection,
                 saveData.hasMoved,
-                currentBoardPosition,
+                currentBoardPositionX,
+                currentBoardPositionY,
                 boardLookup,
                 validThreats);
         }
@@ -280,7 +296,8 @@ namespace QC.Match.Components
             IReadOnlyList<ActionPattern> attackPatterns,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition, 
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
@@ -290,7 +307,8 @@ namespace QC.Match.Components
                     attackPatterns[i],
                     verticalDirection,
                     hasMoved,
-                    currentBoardPosition,
+                    currentBoardPositionX,
+                    currentBoardPositionY,
                     boardLookup,
                     validThreats);
             }
@@ -300,7 +318,8 @@ namespace QC.Match.Components
             ActionPattern actionPattern,
             int verticalDirection,
             bool hasMoved,
-            Vector2Int currentBoardPosition,
+            int currentBoardPositionX,
+            int currentBoardPositionY,
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
@@ -311,8 +330,10 @@ namespace QC.Match.Components
             int distanceToCheck = hasMoved ? actionPattern.distanceIfMoved : actionPattern.distanceIfNotMoved;
             
             TryFindThreatenedPositionsInDirection(
-                currentBoardPosition,
-                pattern,
+                currentBoardPositionX,
+                currentBoardPositionY,
+                pattern.x,
+                pattern.y,
                 actionPattern.moveType,
                 actionPattern.range == RangeType.Finite ? distanceToCheck : int.MaxValue,
                 boardLookup,
@@ -321,34 +342,38 @@ namespace QC.Match.Components
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsBoardPositionInBounds(
-            Vector2Int position,
+            int x, 
+            int y,
             IBoardLookup boardLookup)
         {
-            return boardLookup.IsPositionInBoard(position);
+            return boardLookup.IsPositionInBoard(x, y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsValidBoardPosition(
-            Vector2Int position,
+            int x,
+            int y,
             IBoardLookup boardLookup)
         {
-            return boardLookup.DoesBoardTileExist(position);
+            return boardLookup.DoesBoardTileExist(x, y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsVacantBoardPosition(
-            Vector2Int position,
+            int x,
+            int y,
             IBoardLookup boardLookup)
         {
-            return boardLookup.GetBoardObjectAt(position) == null;
+            return boardLookup.GetBoardObjectAt(x, y) == null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsSafeBoardPosition(
-            Vector2Int position,
+            int x,
+            int y,
             IBoardActionMask opponentBoardActionMask)
         {
-            return !opponentBoardActionMask.IsTileAttackable(position);
+            return !opponentBoardActionMask.IsTileAttackable(x, y);
         }
 
         private static bool IsAttackable(
@@ -369,8 +394,10 @@ namespace QC.Match.Components
         }
 
         private static void TryFindMovesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
+            int startingPositionX,
+            int startingPositionY,
+            int directionX,
+            int directionY,
             MoveType moveType,
             bool mustBeSafe,
             int maxDistanceToSearch,
@@ -380,17 +407,18 @@ namespace QC.Match.Components
         {
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                Vector2Int nextPosition = startingPosition + i * direction;
-
+                int nextPositionX = startingPositionX + i * directionX;
+                int nextPositionY = startingPositionY +i * directionY;
+                
                 // If this position is outside of our board bounds we stop searching immediately, no more valid moves exist in this direction
-                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
+                if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))
                 {
                     break;
                 }
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
 
-                if (!IsValidBoardPosition(nextPosition, boardLookup))
+                if (!IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -402,7 +430,7 @@ namespace QC.Match.Components
                     continue;
                 }
 
-                if (!IsVacantBoardPosition(nextPosition, boardLookup))
+                if (!IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -414,7 +442,7 @@ namespace QC.Match.Components
                     continue;
                 }
 
-                if (mustBeSafe && !IsSafeBoardPosition(nextPosition, opponentActionMask))
+                if (mustBeSafe && !IsSafeBoardPosition(nextPositionX, nextPositionY, opponentActionMask))
                 {
                     if (isContinousMovement)
                     {
@@ -426,13 +454,15 @@ namespace QC.Match.Components
                     continue;
                 }
                 
-                validMoves.Add(nextPosition);
+                validMoves.Add(new Vector2Int(nextPositionX, nextPositionY));
             }
         }
 
         private static void TryFindAttackablePiecesInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
+            int startingPositionX,
+            int startingPositionY,
+            int directionX,
+            int directionY,
             PieceColour currentColour,
             MoveType moveType,
             bool mustBeSafe,
@@ -443,17 +473,18 @@ namespace QC.Match.Components
         {
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                Vector2Int nextPosition = startingPosition + i * direction;
+                int nextPositionX = startingPositionX + i * directionX;
+                int nextPositionY = startingPositionY + i * directionY;
                 
                 // If this position is outside of our board bounds we stop searching immediately, no more valid attackable pieces exist in this direction
-                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
+                if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))
                 {
                     break;
                 }
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
 
-                if (!IsValidBoardPosition(nextPosition, boardLookup))
+                if (!IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
                 {
                     if (isContinousMovement)
                     {
@@ -465,7 +496,7 @@ namespace QC.Match.Components
                     continue;
                 }
 
-                if (mustBeSafe && !IsSafeBoardPosition(nextPosition, opponentActionMask))
+                if (mustBeSafe && !IsSafeBoardPosition(nextPositionX, nextPositionY, opponentActionMask))
                 {
                     if (isContinousMovement)
                     {   
@@ -478,14 +509,14 @@ namespace QC.Match.Components
                 }
                 
                 // If this board position is vacant it's not a valid attack target, but it shouldn't stop our search
-                if (IsVacantBoardPosition(nextPosition, boardLookup))
+                if (IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup))
                 {
                     continue;
                 }
 
-                BoardObjectInstance pieceToAttack = boardLookup.GetBoardObjectAt(nextPosition);
+                BoardObjectInstance pieceToAttack = boardLookup.GetBoardObjectAt(nextPositionX, nextPositionY);
 #if ULTRA_DEBUG_CHECKS
-                UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at {nextPosition}, we've not managed to retrieve it when calculating attacks...");
+                UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at ({nextPositionX}, {nextPositionY}), we've not managed to retrieve it when calculating attacks...");
 #endif
                 
                 if (!IsAttackable(pieceToAttack, currentColour))
@@ -500,13 +531,15 @@ namespace QC.Match.Components
                     continue;
                 }
 
-                validAttacks.Add(nextPosition);
+                validAttacks.Add(new Vector2Int(nextPositionX, nextPositionY));
             }
         }
 
         private static void TryFindThreatenedPositionsInDirection(
-            Vector2Int startingPosition,
-            Vector2Int direction,
+            int startingPositionX,
+            int startingPositionY,
+            int directionX,
+            int directionY,
             MoveType moveType,
             int maxDistanceToSearch,
             IBoardLookup boardLookup,
@@ -514,20 +547,21 @@ namespace QC.Match.Components
         {
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                Vector2Int nextPosition = startingPosition + i * direction;
-                
+                int nextPositionX = startingPositionX + i * directionX;
+                int nextPositionY = startingPositionY + i * directionY;
+
                 // If this position is outside of our board bounds we stop searching immediately, no more valid threats exist in this direction
-                if (!IsBoardPositionInBounds(nextPosition, boardLookup))
+                if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))
                 {
                     break;
                 }
                 
                 bool isContinousMovement = moveType == MoveType.Continuous;
                 
-                if (IsValidBoardPosition(nextPosition, boardLookup))
+                if (IsValidBoardPosition(nextPositionX, nextPositionY, boardLookup))
                 {
                     // If it's a valid board position that we can reach via a move, it's a valid threatened square, even if there's a piece there (even if it's one of ours!)
-                    validThreats.Add(nextPosition);
+                    validThreats.Add(new Vector2Int(nextPositionX, nextPositionY));
                 }
                 else if (isContinousMovement)
                 {
@@ -536,7 +570,7 @@ namespace QC.Match.Components
                 }
 
                 // There's a piece on this position, so if we're doing continuous movement we have reached the limit of what we can threaten
-                if (!IsVacantBoardPosition(nextPosition, boardLookup) && isContinousMovement)
+                if (!IsVacantBoardPosition(nextPositionX, nextPositionY, boardLookup) && isContinousMovement)
                 {
                     break;
                 }

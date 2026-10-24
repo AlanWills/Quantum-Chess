@@ -14,6 +14,8 @@ namespace QC.Match.AI.Internals
       private readonly int height;
       private readonly int xMin;
       private readonly int yMin;
+      private readonly int xMax;
+      private readonly int yMax;
 
       public BoardBlit(RectInt boardDimensions, IList<TileBlit> tileArray)
       {
@@ -21,6 +23,8 @@ namespace QC.Match.AI.Internals
          height = boardDimensions.size.y;
          xMin = boardDimensions.xMin;
          yMin = boardDimensions.yMin;
+         xMax = xMin + width;
+         yMax = yMax + height;
          board = tileArray;
       }
 
@@ -32,7 +36,7 @@ namespace QC.Match.AI.Internals
          foreach (var tile in tiles)
          {
             Vector2Int tilePosition = tile.Position;
-            int index = ToIndex(tilePosition);
+            int index = ToIndex(tilePosition.x, tilePosition.y);
 
             UnityEngine.Debug.Assert(index < board.Count,
                $"Incorrectly calculated index ({index}) for position ({tilePosition}).");
@@ -54,7 +58,7 @@ namespace QC.Match.AI.Internals
             var actionProvider = chessBoardObjectInstance.FindInterface<IActionProvider>();
             var transform = chessBoardObjectInstance.FindInterface<IGrid2DTransform>();
             Vector2Int piecePosition = transform.GetPosition();
-            int boardIndex = ToIndex(piecePosition);
+            int boardIndex = ToIndex(piecePosition.x, piecePosition.y);
 
             PieceType pieceType = chessPiece.GetPieceType();
             PieceColour pieceColour = chessPiece.GetPieceColour();
@@ -70,33 +74,39 @@ namespace QC.Match.AI.Internals
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public int ToIndex(Vector2Int position)
+      public int ToIndex(int x, int y)
       {
-         int index = (position.x - xMin) + (position.y - yMin) * width;
+         int index = (x - xMin) + (y - yMin) * width;
          return index;
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public Vector2Int ToVector2Int(int boardIndex)
+      public int ToX(int boardIndex)
       {
-         return new Vector2Int((boardIndex % width) + xMin, (boardIndex / width) + yMin);
+         return (boardIndex % width) + xMin;
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public Piece GetPieceAt(Vector2Int boardPosition)
+      public int ToY(int boardIndex)
       {
-         int index = ToIndex(boardPosition);
+         return (boardIndex / width) + yMin;
+      }
+
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      public Piece GetPieceAt(int x, int y)
+      {
+         int index = ToIndex(x, y);
          return 0 <= index && index < board.Count ? board[index].Piece : default;
       }
 
       public void MakeMove(Move moveToMake)
       {
 #if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Position), $"Attempting to make a move from position {moveToMake.Position}, but it is outside of board bounds.");
-         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.Destination), $"Attempting to make a move to destination {moveToMake.Destination}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.PositionX, moveToMake.PositionY), $"Attempting to make a move from position ({moveToMake.PositionX}, {moveToMake.PositionY}), but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.DestinationX, moveToMake.DestinationY), $"Attempting to make a move to destination ({moveToMake.DestinationX}, {moveToMake.DestinationY}), but it is outside of board bounds.");
 #endif
-         int indexOfPosition = ToIndex(moveToMake.Position);
-         int indexOfDestination = ToIndex(moveToMake.Destination);
+         int indexOfPosition = ToIndex(moveToMake.PositionX, moveToMake.PositionY);
+         int indexOfDestination = ToIndex(moveToMake.DestinationX, moveToMake.DestinationY);
 
          TileBlit tileBlit = board[indexOfPosition];
          TileBlit tileBlitWithoutPiece = tileBlit.WithoutPiece();
@@ -118,11 +128,11 @@ namespace QC.Match.AI.Internals
       public void UndoMove(Move moveToUndo)
       {
 #if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Position), $"Attempting to undo a move from position {moveToUndo.Position}, but it is outside of board bounds.");
-         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.Destination), $"Attempting to undo a move to destination {moveToUndo.Destination}, but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.PositionX, moveToUndo.PositionY), $"Attempting to undo a move from position ({moveToUndo.PositionX}, {moveToUndo.PositionY}), but it is outside of board bounds.");
+         UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.DestinationX, moveToUndo.DestinationY), $"Attempting to undo a move to destination ({moveToUndo.DestinationX}, {moveToUndo.DestinationY}), but it is outside of board bounds.");
 #endif
-         int indexOfPosition = ToIndex(moveToUndo.Position);
-         int indexOfDestination = ToIndex(moveToUndo.Destination);
+         int indexOfPosition = ToIndex(moveToUndo.PositionX, moveToUndo.PositionY);
+         int indexOfDestination = ToIndex(moveToUndo.DestinationX, moveToUndo.DestinationY);
 
          TileBlit tileBlit = board[indexOfPosition];
          TileBlit tileBlitPiece = tileBlit.WithPiece(moveToUndo.PieceToMove);
@@ -143,47 +153,47 @@ namespace QC.Match.AI.Internals
 #endif
       }
 
-      public bool DoesBoardTileExist(Vector2Int boardPosition)
+      public bool DoesBoardTileExist(int x, int y)
       {
-         if (!IsPositionInBoard(boardPosition))
+         if (!IsPositionInBoard(x, y))
          {
             return false;
          }
 
          // Now check if the tile within the board actually exists (could be a hole)
-         int index = ToIndex(boardPosition);
+         int index = ToIndex(x, y);
          return 0 <= index && index < board.Count && board[index].IsValid;
       }
 
-      public BoardTileInstance GetBoardTileAt(Vector2Int boardTilePosition)
+      public BoardTileInstance GetBoardTileAt(int x, int y)
       {
-         if (!IsPositionInBoard(boardTilePosition))
+         if (!IsPositionInBoard(x, y))
          {
             return null;
          }
          
-         int index = ToIndex(boardTilePosition);
+         int index = ToIndex(x, y);
          return 0 <= index && index < board.Count ? board[index].Instance : null;
       }
 
-      public BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition)
+      public BoardObjectInstance GetBoardObjectAt(int x, int y)
       {
-         if (!IsPositionInBoard(boardPosition))
+         if (!IsPositionInBoard(x, y))
          {
             return null;
          }
 
-         int index = ToIndex(boardPosition);
+         int index = ToIndex(x, y);
          return 0 <= index && index < board.Count ? board[index].Piece.Instance : null;
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public bool IsPositionInBoard(Vector2Int boardPosition)
+      public bool IsPositionInBoard(int x, int y)
       {
-         return boardPosition.x >= xMin &&
-                boardPosition.y >= yMin &&
-                boardPosition.x < (xMin + width) &&
-                boardPosition.y < (yMin + height);
+         return x >= xMin &&
+                y >= yMin &&
+                x < xMax &&
+                y < yMax;
       }
    }
 }

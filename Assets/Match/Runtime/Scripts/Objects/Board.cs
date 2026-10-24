@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Celeste.Components;
-using Celeste.DataStructures;
 using Celeste.Lua.Maths;
-using Celeste.Persistence.Wrappers;
 using Lua;
 using Lua.Unity;
 using QC.Match.Catalogue;
-using QC.Match.Components;
 using QC.Match.Events;
 using QC.Match.Persistence;
-using QC.Match.Players;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace QC.Match.Objects
 {
@@ -84,7 +78,7 @@ namespace QC.Match.Objects
                 return null;
             }
             
-            UnityEngine.Debug.Assert(!DoesBoardTileExist(position), $"Tile Instance at position {position} already exists!");
+            UnityEngine.Debug.Assert(!DoesBoardTileExist(position.x, position.y), $"Tile Instance at position {position} already exists!");
             return new BoardTileInstance(boardTile, position);
         }
 
@@ -128,9 +122,19 @@ namespace QC.Match.Objects
             onChanged?.Invoke();
         }
 
-        public bool IsPositionInBoard(Vector2Int boardPosition)
+        public bool IsPositionInBoard(int x, int y)
         {
-            return bounds.Contains(boardPosition);
+            return IsPositionInBoard(new Vector2Int(x, y));
+        }
+
+        public bool IsPositionInBoard(Vector2Int position)
+        {
+            return bounds.Contains(position);
+        }
+
+        public bool DoesBoardTileExist(int x, int y)
+        {
+            return DoesBoardTileExist(new Vector2Int(x, y));
         }
 
         public bool DoesBoardTileExist(Vector2Int boardPosition)
@@ -144,6 +148,11 @@ namespace QC.Match.Objects
             }
 
             return false;
+        }
+
+        public BoardTileInstance GetBoardTileAt(int x, int y)
+        {
+            return GetBoardTileAt(new Vector2Int(x, y));
         }
 
         public BoardTileInstance GetBoardTileAt(Vector2Int boardPosition)
@@ -191,6 +200,11 @@ namespace QC.Match.Objects
             
             onBoardObjectAdded?.Invoke(new BoardObjectAddedArgs(instance));
             onChanged?.Invoke();
+        }
+        
+        public BoardObjectInstance GetBoardObjectAt(int x, int y)
+        {
+            return GetBoardObjectAt(new Vector2Int(x, y));
         }
         
         public BoardObjectInstance GetBoardObjectAt(Vector2Int boardPosition)
@@ -292,7 +306,7 @@ namespace QC.Match.Objects
         [LuaMember("isChessPieceAt")]
         private bool IsChessPieceAt(LuaVector2Int boardPosition)
         {
-            return GetBoardObjectAt(boardPosition.v) != null;
+            return GetBoardObjectAt(boardPosition.v.x, boardPosition.v.y) != null;
         }
         
         [LuaMember("chessPieceExists")]
