@@ -196,45 +196,50 @@ namespace QC.Match.AI
            Move[] outMoves)
         {
            int generatedMoves = 0;
-           
+           int currentX = boardBlit.xMin;
+           int currentY = boardBlit.yMin;
+
            for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
               ref TileBlit tileBlit = ref boardBlit.board[boardIndex];
-              
-              if (!tileBlit.IsValid)
-              {
-                 continue;
-              }
-              
-              if (!tileBlit.Piece.IsValid)
-              {
-                 continue;
-              }
-              
-              if (!colourFunctor.IsAMatch(tileBlit.Piece.PieceColour))
-              {
-                 continue;
-              }
-              
-              int boardPositionX = boardBlit.ToX(boardIndex);
-              int boardPositionY = boardBlit.ToY(boardIndex);
-              s_validActionsCache.Clear();
-              
-              var actionProvider = tileBlit.Piece.ActionProvider;
-              actionProvider.CalculateValidAttacks(boardPositionX, boardPositionY, boardBlit, actionMask, s_validActionsCache);
-              actionProvider.CalculateValidMoves(boardPositionX, boardPositionY, boardBlit, actionMask, s_validActionsCache);
 
-              for (int i = 0, n = s_validActionsCache.Count; i < n; ++i)
+              if (tileBlit.IsValid && tileBlit.Piece.IsValid && colourFunctor.IsAMatch(tileBlit.Piece.PieceColour))
               {
-                 Vector2Int action = s_validActionsCache[i];
+                 s_validActionsCache.Clear();
+
+                 var actionProvider = tileBlit.Piece.ActionProvider;
+                 actionProvider.CalculateValidAttacks(currentX, currentY, boardBlit, actionMask, s_validActionsCache);
+                 actionProvider.CalculateValidMoves(currentX, currentY, boardBlit, actionMask, s_validActionsCache);
+
+                 for (int i = 0, n = s_validActionsCache.Count; i < n; ++i)
+                 {
+                    Vector2Int action = s_validActionsCache[i];
 #if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(boardBlit.IsPositionInBoard(action), $"Generated an invalid action ({action}) for Piece: {tileBlit.Piece.PieceColour} - {tileBlit.Piece.PieceType} - {boardPosition}.");
 #endif
-                 Piece pieceToCapture = boardBlit.GetPieceAt(action.x, action.y);
+                    int destinationBoardIndex = boardBlit.ToIndex(action.x, action.y);
+                    ref TileBlit destinationTile = ref boardBlit.board[destinationBoardIndex];
+                    ref Piece pieceToCapture = ref destinationTile.Piece;
+                    int destinationImportance = destinationTile.Importance;
 #if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(outMoves.Capacity > outMoves.Count, $"Reallocation!  Capacity: {outMoves.Capacity}, Count: {outMoves.Count}.");
 #endif
-                 outMoves[generatedMoves++] = new Move(tileBlit.Piece, pieceToCapture, boardPositionX, boardPositionY, action.x, action.y);
+                    outMoves[generatedMoves++] = new Move(
+                       tileBlit.Piece, 
+                       pieceToCapture, 
+                       currentX, 
+                       currentY, 
+                       action.x,
+                       action.y,
+                       destinationImportance);
+                 }
+              }
+              
+              currentX++;
+              if (currentX >= boardBlit.xMax)
+              {
+                 currentX = boardBlit.xMin;
+                 currentY++;
               }
            }
 

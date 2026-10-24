@@ -11,8 +11,9 @@ namespace QC.Match.AI.Internals
         public readonly int PositionY;
         public readonly int DestinationX;
         public readonly int DestinationY;
+        public readonly int DestinationImportance;
 
-        public Move(Piece pieceToMove, Piece pieceToCapture, int positionX, int positionY, int destinationX, int destinationY)
+        public Move(Piece pieceToMove, Piece pieceToCapture, int positionX, int positionY, int destinationX, int destinationY, int destinationImportance)
         {
             PieceToMove = pieceToMove;
             PieceToCapture = pieceToCapture;
@@ -20,6 +21,7 @@ namespace QC.Match.AI.Internals
             PositionY = positionY;
             DestinationX = destinationX;
             DestinationY = destinationY;
+            DestinationImportance = destinationImportance;
         }
 
         public int CompareTo(Move other)
@@ -34,17 +36,12 @@ namespace QC.Match.AI.Internals
         
         private static int GuessMoveScore(in Move move)
         {
-            int score = 0;
-
-            // MVV-LVA: Most Valuable Victim - Least Valuable Attacker
             if (move.PieceToCapture.IsValid)
             {
-                // Multiply the victim's value by a large number so capturing is always prioritized
-                // Subtract the attacker's value so cheaper pieces capturing are checked first
-                score = (100 * move.PieceToCapture.Value) - move.PieceToMove.Value;
+                return 10000 + (100 * move.PieceToCapture.Value) - move.PieceToMove.Value;
             }
 
-            return score;
+            return move.DestinationImportance;
         }
     }
 }

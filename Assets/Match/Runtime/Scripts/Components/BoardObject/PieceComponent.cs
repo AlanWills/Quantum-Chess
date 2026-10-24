@@ -388,11 +388,14 @@ namespace QC.Match.Components
             IBoardActionMask opponentActionMask,
             IList<Vector2Int> validMoves)
         {
+            int nextPositionX = startingPositionX;
+            int nextPositionY = startingPositionY;
+
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                int nextPositionX = startingPositionX + i * directionX;
-                int nextPositionY = startingPositionY +i * directionY;
-                
+                nextPositionX += directionX;
+                nextPositionY += directionY;
+
                 // If this position is outside of our board bounds we stop searching immediately, no more valid moves exist in this direction
                 if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))
                 {
@@ -454,11 +457,14 @@ namespace QC.Match.Components
             IBoardActionMask opponentActionMask,
             IList<Vector2Int> validAttacks)
         {
+            int nextPositionX = startingPositionX;
+            int nextPositionY = startingPositionY;
+
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                int nextPositionX = startingPositionX + i * directionX;
-                int nextPositionY = startingPositionY + i * directionY;
-                
+                nextPositionX += directionX;
+                nextPositionY += directionY;
+
                 // If this position is outside of our board bounds we stop searching immediately, no more valid attackable pieces exist in this direction
                 if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))
                 {
@@ -528,10 +534,13 @@ namespace QC.Match.Components
             IBoardLookup boardLookup,
             IList<Vector2Int> validThreats)
         {
+            int nextPositionX = startingPositionX;
+            int nextPositionY = startingPositionY;
+            
             for (int i = 1; i <= maxDistanceToSearch; ++i)
             {
-                int nextPositionX = startingPositionX + i * directionX;
-                int nextPositionY = startingPositionY + i * directionY;
+                nextPositionX += directionX;
+                nextPositionY += directionY;
 
                 // If this position is outside of our board bounds we stop searching immediately, no more valid threats exist in this direction
                 if (!IsBoardPositionInBounds(nextPositionX, nextPositionY, boardLookup))

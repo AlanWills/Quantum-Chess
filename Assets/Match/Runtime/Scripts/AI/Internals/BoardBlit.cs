@@ -10,12 +10,12 @@ namespace QC.Match.AI.Internals
    {
       // TODO: Oooffff, why public?
       public readonly TileBlit[] board;
-      private readonly int width;
-      private readonly int height;
-      private readonly int xMin;
-      private readonly int yMin;
-      private readonly int xMax;
-      private readonly int yMax;
+      public readonly int width;
+      public readonly int height;
+      public readonly int xMin;
+      public readonly int yMin;
+      public readonly int xMax;
+      public readonly int yMax;
 
       public BoardBlit(RectInt boardDimensions, TileBlit[] tileArray)
       {
@@ -79,19 +79,7 @@ namespace QC.Match.AI.Internals
          int index = (x - xMin) + (y - yMin) * width;
          return index;
       }
-
-      [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public int ToX(int boardIndex)
-      {
-         return (boardIndex % width) + xMin;
-      }
-
-      [MethodImpl(MethodImplOptions.AggressiveInlining)]
-      public int ToY(int boardIndex)
-      {
-         return (boardIndex / width) + yMin;
-      }
-
+      
       [MethodImpl(MethodImplOptions.AggressiveInlining)]
       public Piece GetPieceAt(int x, int y)
       {
@@ -101,6 +89,17 @@ namespace QC.Match.AI.Internals
             0 <= index && index < board.Length && 
 #endif
             board[index].Piece;
+      }
+      
+      [MethodImpl(MethodImplOptions.AggressiveInlining)]
+      public int GetImportance(int x, int y)
+      {
+         int index = ToIndex(x, y);
+         return
+#if ULTRA_DEBUG_CHECKS
+            0 <= index && index < board.Length && 
+#endif
+            board[index].Importance;
       }
 
       public void MakeMove(in Move moveToMake)
