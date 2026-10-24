@@ -19,7 +19,7 @@ namespace QC.Match.AI
        
        #region Properties and Fields
        
-        private const int k_defaultValidMovesAllocation = 30;
+        private const int k_defaultValidMovesAllocation = 256;
         private const int k_defaultValidMovesPoolCapacity = 3000;
         private const int k_defaultScoredMovesAllocation = 100;
 
@@ -27,9 +27,8 @@ namespace QC.Match.AI
         
         // Does this leak memory between domain reloads?
         private static readonly List<Vector2Int> s_validActionsCache = new(k_defaultValidMovesAllocation);
-        private static readonly ObjectPool<List<Move>> s_movesToCheckPool = new(
-           createFunc: () => new List<Move>(k_defaultScoredMovesAllocation),
-           actionOnRelease: l => l.Clear(),
+        private static readonly ObjectPool<Move[]> s_movesToCheckPool = new(
+           createFunc: () => new Move[k_defaultValidMovesAllocation],
            defaultCapacity: k_defaultValidMovesPoolCapacity);
         private static readonly List<ScoredMove> s_scoredMovesCache = new(k_defaultScoredMovesAllocation);
         private static TileBlit[] s_tilesCache = new TileBlit[64];
@@ -79,10 +78,10 @@ namespace QC.Match.AI
               boardBlit.SetObjects(args.Board.Objects, alphaBetaParameters, args.RNG);
               
               IBoardActionMask opponentBoardActionMask = args.BoardActionMaskLookup.GetOpponentBoardActionMaskForPlayer(args.PlayerIndex);
-              List<Move> moves = s_movesToCheckPool.Get();
-              GenerateMoves(boardBlit, matchActiveColour, opponentBoardActionMask, moves);
+              Move[] moves = s_movesToCheckPool.Get();
+              int generatedMoves = GenerateMoves(boardBlit, matchActiveColour, opponentBoardActionMask, moves);
 
-              for (int i = 0, n = moves.Count; i < n; ++i)
+              for (int i = 0; i < generatedMoves; ++i)
               {
                  Move move = moves[i];
 
@@ -165,14 +164,14 @@ namespace QC.Match.AI
 
            int maxValue = -int.MaxValue;
 
-           List<Move> moves = s_movesToCheckPool.Get();
+           Move[] moves = s_movesToCheckPool.Get();
     
            // Generate ALL moves for the current player in one go
-           GenerateMoves(boardBlit, colourFunctor, s_emptyBoardActionMask, moves);
+           int generatedMoves = GenerateMoves(boardBlit, colourFunctor, s_emptyBoardActionMask, moves);
 
-           for (int i = 0, n = moves.Count; i < n; ++i)
+           for (int i = 0; i < generatedMoves; ++i)
            {
-              Move move = moves[i];
+              ref Move move = ref moves[i];
 
               boardBlit.MakeMove(move);
               int score = -Negamax(boardBlit, colourFunctor.Invert(), -beta, -alpha, remainingDepth - 1, -colorModifier);
@@ -190,12 +189,14 @@ namespace QC.Match.AI
            return maxValue;
         }
         
-        private static void GenerateMoves(
+        private static int GenerateMoves(
            BoardBlit boardBlit,
            ColourFunctor colourFunctor,
            IBoardActionMask actionMask,
-           List<Move> outMoves)
+           Move[] outMoves)
         {
+           int generatedMoves = 0;
+           
            for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
               ref TileBlit tileBlit = ref boardBlit.board[boardIndex];
@@ -233,17 +234,17 @@ namespace QC.Match.AI
 #if ULTRA_DEBUG_CHECKS
                  UnityEngine.Debug.Assert(outMoves.Capacity > outMoves.Count, $"Reallocation!  Capacity: {outMoves.Capacity}, Count: {outMoves.Count}.");
 #endif
-                 outMoves.Add(new Move(tileBlit.Piece, pieceToCapture, boardPositionX, boardPositionY, action.x, action.y));
+                 outMoves[generatedMoves++] = new Move(tileBlit.Piece, pieceToCapture, boardPositionX, boardPositionY, action.x, action.y);
               }
            }
-           
-           SortNoGC(outMoves);
+
+           SortNoGC(outMoves, generatedMoves);
+           return generatedMoves;
         }
 
-        private static void SortNoGC(IList<Move> list)
+        private static void SortNoGC(Move[] list, int generatedMoves)
         {
-           int count = list.Count;
-           for (int i = 1; i < count; i++)
+           for (int i = 1; i < generatedMoves; i++)
            {
               Move key = list[i];
               int j = i - 1;
@@ -251,7 +252,9 @@ namespace QC.Match.AI
               // Shift elements until the correct position for 'key' is found
               while (j >= 0 && list[j].CompareTo(in key) > 0)
               {
-                 list[j + 1] = list[j];
+                 // Use ref to point directly to the destination slot
+                 ref Move dest = ref list[j + 1];
+                 dest = list[j];
                  j--;
               }
               list[j + 1] = key;
@@ -266,7 +269,7 @@ namespace QC.Match.AI
            {
               // Interestingly, we don't account for the cost of NOT occupying a tile
               
-              TileBlit tileBlit = boardBlit.board[tileIndex];
+              ref TileBlit tileBlit = ref boardBlit.board[tileIndex];
               if (!tileBlit.IsValid || !tileBlit.Piece.IsValid)
               {
                  continue;

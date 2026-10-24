@@ -103,7 +103,7 @@ namespace QC.Match.AI.Internals
             board[index].Piece;
       }
 
-      public void MakeMove(Move moveToMake)
+      public void MakeMove(in Move moveToMake)
       {
 #if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToMake.PositionX, moveToMake.PositionY), $"Attempting to make a move from position ({moveToMake.PositionX}, {moveToMake.PositionY}), but it is outside of board bounds.");
@@ -119,7 +119,7 @@ namespace QC.Match.AI.Internals
          destinationTileBlit.Piece = moveToMake.PieceToMove;
       }
 
-      public void UndoMove(Move moveToUndo)
+      public void UndoMove(in Move moveToUndo)
       {
 #if ULTRA_DEBUG_CHECKS
          UnityEngine.Debug.Assert(IsPositionInBoard(moveToUndo.PositionX, moveToUndo.PositionY), $"Attempting to undo a move from position ({moveToUndo.PositionX}, {moveToUndo.PositionY}), but it is outside of board bounds.");
