@@ -16,3 +16,4 @@ MonoBehaviour:
   loadTasks:
   - {fileID: 11400000, guid: 2deda5c2ff7a36147be32d14ce9a0f19, type: 2}
   - {fileID: 11400000, guid: 0b37a01300e07aa4b8213ebcd2ed1333, type: 2}
+  - {fileID: 11400000, guid: 0a872d288775ef34ea2560a0f6c9db2b, type: 2}
