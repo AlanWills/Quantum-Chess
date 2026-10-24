@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Celeste.DataStructures;
 using QC.Match.AI.Internals;
@@ -31,7 +32,7 @@ namespace QC.Match.AI
            actionOnRelease: l => l.Clear(),
            defaultCapacity: k_defaultValidMovesPoolCapacity);
         private static readonly List<ScoredMove> s_scoredMovesCache = new(k_defaultScoredMovesAllocation);
-        private static readonly List<TileBlit> s_tilesCache = new();
+        private static TileBlit[] s_tilesCache = new TileBlit[64];
         
         #endregion
 
@@ -63,14 +64,14 @@ namespace QC.Match.AI
               int beta = int.MaxValue;
               
               RectInt boundingBox = args.Board.Bounds;
-              s_tilesCache.Clear();
               s_scoredMovesCache.Clear();
               
-              if (s_tilesCache.Count != boundingBox.size.x * boundingBox.size.y)
+              if (s_tilesCache.Length != boundingBox.size.x * boundingBox.size.y)
               {
-                 s_tilesCache.Capacity = boundingBox.size.x * boundingBox.size.y;
-                 s_tilesCache.Fill(default);
+                 Array.Resize(ref s_tilesCache, boundingBox.size.x * boundingBox.size.y);
               }
+               
+              Array.Fill(s_tilesCache, default);
               
               ColourFunctor matchActiveColour = ColourFunctor.Match(args.PlayerColour);
               BoardBlit boardBlit = new BoardBlit(boundingBox, s_tilesCache);
@@ -195,9 +196,9 @@ namespace QC.Match.AI
            IBoardActionMask actionMask,
            List<Move> outMoves)
         {
-           for (int boardIndex = 0, numBoardIndices = boardBlit.board.Count; boardIndex < numBoardIndices; ++boardIndex)
+           for (int boardIndex = 0, numBoardIndices = boardBlit.board.Length; boardIndex < numBoardIndices; ++boardIndex)
            {
-              TileBlit tileBlit = boardBlit.board[boardIndex];
+              ref TileBlit tileBlit = ref boardBlit.board[boardIndex];
               
               if (!tileBlit.IsValid)
               {
@@ -261,7 +262,7 @@ namespace QC.Match.AI
         {
            int total = 0;
 
-           for (int tileIndex = 0, n = boardBlit.board.Count; tileIndex < n; ++tileIndex)
+           for (int tileIndex = 0, n = boardBlit.board.Length; tileIndex < n; ++tileIndex)
            {
               // Interestingly, we don't account for the cost of NOT occupying a tile
               

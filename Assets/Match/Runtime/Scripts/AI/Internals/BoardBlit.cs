@@ -9,7 +9,7 @@ namespace QC.Match.AI.Internals
    public class BoardBlit : IBoardLookup
    {
       // TODO: Oooffff, why public?
-      public readonly IList<TileBlit> board;
+      public readonly TileBlit[] board;
       private readonly int width;
       private readonly int height;
       private readonly int xMin;
@@ -17,14 +17,14 @@ namespace QC.Match.AI.Internals
       private readonly int xMax;
       private readonly int yMax;
 
-      public BoardBlit(RectInt boardDimensions, IList<TileBlit> tileArray)
+      public BoardBlit(RectInt boardDimensions, TileBlit[] tileArray)
       {
          width = boardDimensions.size.x;
          height = boardDimensions.size.y;
          xMin = boardDimensions.xMin;
          yMin = boardDimensions.yMin;
          xMax = xMin + width;
-         yMax = yMax + height;
+         yMax = yMin + height;
          board = tileArray;
       }
 
@@ -38,7 +38,7 @@ namespace QC.Match.AI.Internals
             Vector2Int tilePosition = tile.Position;
             int index = ToIndex(tilePosition.x, tilePosition.y);
 
-            UnityEngine.Debug.Assert(index < board.Count,
+            UnityEngine.Debug.Assert(index < board.Length,
                $"Incorrectly calculated index ({index}) for position ({tilePosition}).");
             int tileImportance = tile.FindInterface<ITileAIInfo>().GetImportance();
             int tileImportanceOverride =
@@ -66,10 +66,10 @@ namespace QC.Match.AI.Internals
             int pieceValueOverride = parameters.GetValueOverrideForPiece(pieceType, rng, pieceValue);
             Piece piece = new Piece(chessBoardObjectInstance, pieceType, pieceColour, pieceValueOverride,
                actionProvider);
-            TileBlit currentTile = board[boardIndex];
+            ref TileBlit currentTile = ref board[boardIndex];
             UnityEngine.Debug.Assert(!currentTile.Piece.IsValid,
                $"Attempting to set a piece to {nameof(TileBlit)} at {piecePosition}, but a piece is already there!");
-            board[boardIndex] = currentTile.WithPiece(piece);
+            currentTile.Piece = piece;
          }
       }
 
@@ -96,7 +96,11 @@ namespace QC.Match.AI.Internals
       public Piece GetPieceAt(int x, int y)
       {
          int index = ToIndex(x, y);
-         return 0 <= index && index < board.Count ? board[index].Piece : default;
+         return
+#if ULTRA_DEBUG_CHECKS
+            0 <= index && index < board.Length && 
+#endif
+            board[index].Piece;
       }
 
       public void MakeMove(Move moveToMake)
@@ -108,21 +112,11 @@ namespace QC.Match.AI.Internals
          int indexOfPosition = ToIndex(moveToMake.PositionX, moveToMake.PositionY);
          int indexOfDestination = ToIndex(moveToMake.DestinationX, moveToMake.DestinationY);
 
-         TileBlit tileBlit = board[indexOfPosition];
-         TileBlit tileBlitWithoutPiece = tileBlit.WithoutPiece();
-         board[indexOfPosition] = tileBlitWithoutPiece;
-#if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(tileBlit.Importance == tileBlitWithoutPiece.Importance);
-         UnityEngine.Debug.Assert(tileBlit.Importance == board[indexOfPosition].Importance);
-#endif
-
-         TileBlit destinationTileBlit = board[indexOfDestination];
-         TileBlit destinationTileBlitWithPiece = destinationTileBlit.WithPiece(moveToMake.PieceToMove);
-         board[indexOfDestination] = destinationTileBlitWithPiece;
-#if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(destinationTileBlit.Importance == destinationTileBlitWithPiece.Importance);
-         UnityEngine.Debug.Assert(destinationTileBlit.Importance == board[indexOfDestination].Importance);
-#endif
+         ref TileBlit tileBlit = ref board[indexOfPosition];
+         tileBlit.Piece = default;
+         
+         ref TileBlit destinationTileBlit = ref board[indexOfDestination];
+         destinationTileBlit.Piece = moveToMake.PieceToMove;
       }
 
       public void UndoMove(Move moveToUndo)
@@ -134,47 +128,41 @@ namespace QC.Match.AI.Internals
          int indexOfPosition = ToIndex(moveToUndo.PositionX, moveToUndo.PositionY);
          int indexOfDestination = ToIndex(moveToUndo.DestinationX, moveToUndo.DestinationY);
 
-         TileBlit tileBlit = board[indexOfPosition];
-         TileBlit tileBlitPiece = tileBlit.WithPiece(moveToUndo.PieceToMove);
-         board[indexOfPosition] = tileBlitPiece;
-#if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(tileBlit.Importance == tileBlitPiece.Importance);
-         UnityEngine.Debug.Assert(tileBlit.Importance == board[indexOfPosition].Importance);
-#endif
+         ref TileBlit tileBlit = ref board[indexOfPosition];
+         tileBlit.Piece = moveToUndo.PieceToMove;
 
-         TileBlit destinationTileBlit = board[indexOfDestination];
-         TileBlit destinationTileBlitWithPiece = moveToUndo.PieceToCapture.IsValid
-            ? destinationTileBlit.WithPiece(moveToUndo.PieceToCapture)
-            : destinationTileBlit.WithoutPiece();
-         board[indexOfDestination] = destinationTileBlitWithPiece;
-#if ULTRA_DEBUG_CHECKS
-         UnityEngine.Debug.Assert(destinationTileBlit.Importance == destinationTileBlitWithPiece.Importance);
-         UnityEngine.Debug.Assert(destinationTileBlit.Importance == board[indexOfDestination].Importance);
-#endif
+         ref TileBlit destinationTileBlit = ref board[indexOfDestination];
+         destinationTileBlit.Piece = moveToUndo.PieceToCapture.IsValid ? moveToUndo.PieceToCapture : default;
       }
 
       public bool DoesBoardTileExist(int x, int y)
       {
          int index = ToIndex(x, y);
-         return 0 <= index && index < board.Count && board[index].IsValid;
+         return
+#if ULTRA_DEBUG_CHECKS
+            0 <= index && index < board.Length && 
+#endif
+            board[index].IsValid;
       }
 
       public BoardTileInstance GetBoardTileAt(int x, int y)
       {  
          int index = ToIndex(x, y);
-         return 0 <= index && index < board.Count ? board[index].Instance : null;
+         return 
+#if ULTRA_DEBUG_CHECKS
+            0 <= index && index < board.Length && 
+#endif
+            board[index].Instance;
       }
 
       public BoardObjectInstance GetBoardObjectAt(int x, int y)
       {
          int index = ToIndex(x, y);
-         return 0 <= index && index < board.Count ? board[index].Piece.Instance : null;
-      }
-
-      public BoardObjectInstance GetBoardObjectAt_SkipBoundsCheck(int x, int y)
-      {
-         int index = ToIndex(x, y);
-         return 0 <= index && index < board.Count ? board[index].Piece.Instance : null;
+         return
+#if ULTRA_DEBUG_CHECKS
+            0 <= index && index < board.Length && 
+#endif
+            board[index].Piece.Instance;
       }
 
       [MethodImpl(MethodImplOptions.AggressiveInlining)]

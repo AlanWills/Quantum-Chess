@@ -376,23 +376,6 @@ namespace QC.Match.Components
             return !opponentBoardActionMask.IsTileAttackable(x, y);
         }
 
-        private static bool IsAttackable(
-            BoardObjectInstance objectInstance,
-            PieceColour currentColour)
-        {
-            if (!objectInstance.Piece.IsValid)
-            {
-                return false;
-            }
-
-            if (objectInstance.Piece.GetPieceColour() == currentColour)
-            {
-                return false;
-            }
-            
-            return true;
-        }
-
         private static void TryFindMovesInDirection(
             int startingPositionX,
             int startingPositionY,
@@ -519,7 +502,7 @@ namespace QC.Match.Components
                 UnityEngine.Debug.Assert(pieceToAttack != null, $"Despite checking that a piece is at ({nextPositionX}, {nextPositionY}), we've not managed to retrieve it when calculating attacks...");
 #endif
                 
-                if (!IsAttackable(pieceToAttack, currentColour))
+                if (pieceToAttack.Piece.GetPieceColour() == currentColour)
                 {
                     if (isContinousMovement)
                     {
