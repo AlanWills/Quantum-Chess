@@ -23,8 +23,8 @@ namespace QC.Match.Players
         {
             turnCalculationTimer.Restart();
 
-            await UniTask.SwitchToMainThread();
-            //await UniTask.SwitchToThreadPool();
+            //await UniTask.SwitchToMainThread();
+            await UniTask.SwitchToThreadPool();
             bool calculatedMoveSuccessfully = AlphaBeta.TryCalculate(args, parameters, out var command);
             await UniTask.SwitchToMainThread();
             
